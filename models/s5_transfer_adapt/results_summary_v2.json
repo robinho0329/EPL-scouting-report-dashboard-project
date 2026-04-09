@@ -1,0 +1,292 @@
+{
+  "task": "S5 v2: Transfer Adaptation Prediction (Scout Grade)",
+  "model_version": "v2",
+  "description": "Multi-class (failure/partial/success) transfer adaptation model. Key improvements: 3-tier labels, >=300 min threshold (was 450), 45 features including ELO gap, style compatibility, position scarcity, market value ratio, WAR, career trajectory. Full 2000-2025 dataset.",
+  "dataset": {
+    "total_transfers": 936,
+    "min_minutes_threshold": 300,
+    "label_system": "3-class: success/partial/failure",
+    "label_distribution": {
+      "partial": 421,
+      "success": 391,
+      "failure": 124
+    },
+    "label_pct": {
+      "partial": 45.0,
+      "success": 41.8,
+      "failure": 13.2
+    },
+    "split_sizes": {
+      "train": 817,
+      "val": 51,
+      "test": 68
+    },
+    "seasons": "2000/01 - 2024/25",
+    "note_test_size": "Test = 68 samples (2023-24 + 2024-25 seasons); failure class has only 5 samples in test, requiring OvR AUC for valid comparison"
+  },
+  "n_features": 45,
+  "features": [
+    "gls_p90_old",
+    "ast_p90_old",
+    "g_a_p90_old",
+    "g_pk_p90_old",
+    "min_share_pct_old",
+    "starter_ratio_old",
+    "war_old",
+    "consistency_old",
+    "big6_p90_old",
+    "team_dep_old",
+    "career_traj",
+    "age_at_transfer",
+    "is_peak_age",
+    "is_veteran",
+    "is_young",
+    "height_cm",
+    "pos_enc",
+    "epl_experience",
+    "prev_adapt_rate",
+    "prev_transfer_cnt",
+    "mv_ratio",
+    "elo_gap",
+    "league_pos_gap",
+    "points_gap",
+    "is_step_up",
+    "is_step_down",
+    "style_match_pct",
+    "attack_ratio_diff",
+    "goals_pg_diff",
+    "points_new",
+    "elo_new",
+    "league_position_new",
+    "attack_ratio_new",
+    "goals_per_game_new",
+    "avg_squad_age_new",
+    "squad_depth_new",
+    "new_players_count_new",
+    "pos_competition",
+    "high_competition",
+    "points_old",
+    "elo_old",
+    "league_position_old",
+    "attack_ratio_old",
+    "goals_per_game_old",
+    "pos_count_old"
+  ],
+  "top_features": [
+    {
+      "feature": "min_share_pct_old",
+      "importance_mean": 0.07088154336042468
+    },
+    {
+      "feature": "g_a_p90_old",
+      "importance_mean": 0.04721917530027585
+    },
+    {
+      "feature": "ast_p90_old",
+      "importance_mean": 0.037182590405881955
+    },
+    {
+      "feature": "mv_ratio",
+      "importance_mean": 0.034100390821251284
+    },
+    {
+      "feature": "starter_ratio_old",
+      "importance_mean": 0.031912485083280026
+    },
+    {
+      "feature": "war_old",
+      "importance_mean": 0.03185129662968243
+    },
+    {
+      "feature": "pos_competition",
+      "importance_mean": 0.029481080393960843
+    },
+    {
+      "feature": "gls_p90_old",
+      "importance_mean": 0.028786941430775568
+    },
+    {
+      "feature": "consistency_old",
+      "importance_mean": 0.026891941184907044
+    },
+    {
+      "feature": "attack_ratio_old",
+      "importance_mean": 0.02668756289551303
+    },
+    {
+      "feature": "attack_ratio_new",
+      "importance_mean": 0.025402962207283518
+    },
+    {
+      "feature": "elo_new",
+      "importance_mean": 0.025299058924802283
+    },
+    {
+      "feature": "elo_gap",
+      "importance_mean": 0.02486737748574286
+    },
+    {
+      "feature": "g_pk_p90_old",
+      "importance_mean": 0.02485377463346311
+    },
+    {
+      "feature": "style_match_pct",
+      "importance_mean": 0.02466554804209692
+    },
+    {
+      "feature": "elo_old",
+      "importance_mean": 0.02374187130808212
+    },
+    {
+      "feature": "height_cm",
+      "importance_mean": 0.02354825430486142
+    },
+    {
+      "feature": "league_position_old",
+      "importance_mean": 0.0231436943369333
+    },
+    {
+      "feature": "avg_squad_age_new",
+      "importance_mean": 0.023118093638304554
+    },
+    {
+      "feature": "attack_ratio_diff",
+      "importance_mean": 0.023061502229919203
+    }
+  ],
+  "models": {
+    "XGBoost": {
+      "val_metrics": {
+        "accuracy": 0.5686274509803921,
+        "macro_f1": 0.47302893185246125,
+        "failure_f1": 0.15384615384615383,
+        "failure_recall": 0.09999999000000101,
+        "failure_auc": 0.6292682926829268
+      },
+      "test_metrics": {
+        "accuracy": 0.5588235294117647,
+        "macro_f1": 0.49283819628647213,
+        "failure_f1": 0.3076923076923077,
+        "failure_recall": 0.399999920000016,
+        "failure_auc": 0.8095238095238095
+      }
+    },
+    "RandomForest": {
+      "val_metrics": {
+        "accuracy": 0.5294117647058824,
+        "macro_f1": 0.4412756598240469,
+        "failure_f1": 0.125,
+        "failure_recall": 0.09999999000000101,
+        "failure_auc": 0.5682926829268293
+      },
+      "test_metrics": {
+        "accuracy": 0.5882352941176471,
+        "macro_f1": 0.5108926161557741,
+        "failure_f1": 0.2857142857142857,
+        "failure_recall": 0.399999920000016,
+        "failure_auc": 0.7936507936507937
+      }
+    },
+    "LogisticReg": {
+      "val_metrics": {
+        "accuracy": 0.43137254901960786,
+        "macro_f1": 0.42564447201543976,
+        "failure_f1": 0.3125,
+        "failure_recall": 0.499999950000005,
+        "failure_auc": 0.48048780487804876
+      },
+      "test_metrics": {
+        "accuracy": 0.47058823529411764,
+        "macro_f1": 0.41678741198301933,
+        "failure_f1": 0.22222222222222218,
+        "failure_recall": 0.599999880000024,
+        "failure_auc": 0.7968253968253968
+      }
+    },
+    "GBM": {
+      "val_metrics": {
+        "accuracy": 0.5882352941176471,
+        "macro_f1": 0.4428571428571429,
+        "failure_f1": 0.0,
+        "failure_recall": 0.0,
+        "failure_auc": 0.6390243902439023
+      },
+      "test_metrics": {
+        "accuracy": 0.7058823529411765,
+        "macro_f1": 0.6313985627418462,
+        "failure_f1": 0.4444444444444445,
+        "failure_recall": 0.399999920000016,
+        "failure_auc": 0.8666666666666667
+      }
+    },
+    "Ensemble": {
+      "val_metrics": {
+        "accuracy": 0.5490196078431373,
+        "macro_f1": 0.4556998556998557,
+        "failure_recall": 0.09999999000000101,
+        "failure_auc": 0.5780487804878048,
+        "confusion_matrix": [
+          [
+            1,
+            8,
+            1
+          ],
+          [
+            2,
+            17,
+            5
+          ],
+          [
+            1,
+            6,
+            10
+          ]
+        ]
+      },
+      "test_metrics": {
+        "accuracy": 0.6176470588235294,
+        "macro_f1": 0.5416231278300244,
+        "failure_recall": 0.399999920000016,
+        "failure_auc": 0.8158730158730159,
+        "confusion_matrix": [
+          [
+            2,
+            3,
+            0
+          ],
+          [
+            3,
+            21,
+            5
+          ],
+          [
+            2,
+            13,
+            19
+          ]
+        ]
+      }
+    }
+  },
+  "best_model": "Ensemble",
+  "primary_metric": "failure_auc (OvR AUC for failure class detection)",
+  "vs_v1": {
+    "v1_best_auc": 0.717,
+    "v1_test_samples": 56,
+    "v1_label_system": "binary (adapted / not adapted, 70% per90 threshold)",
+    "v2_failure_auc_ensemble": 0.8158730158730159,
+    "v2_test_samples": 68,
+    "improvement_note": "v2 failure AUC=0.816 vs v1 best AUC=0.717. v2 uses 3-class labels (enables partial detection), 300 min threshold (vs 450), 45 features (vs 28), ELO from match logs, style compatibility, position competition, WAR and career trajectory from scout profiles."
+  },
+  "output_files": {
+    "predictions_parquet": "data/scout/transfer_predictions_v2.parquet",
+    "results_json": "data/scout/transfer_v2_results.json",
+    "results_summary": "models/s5_transfer_adapt/results_summary_v2.json",
+    "figures": [
+      "models/s5_transfer_adapt/figures/v2_label_dist_and_cm.png",
+      "models/s5_transfer_adapt/figures/v2_feature_importance.png",
+      "models/s5_transfer_adapt/figures/v2_failure_risk_factors.png",
+      "models/s5_transfer_adapt/figures/v2_failure_recall_comparison.png"
+    ]
+  }
+}

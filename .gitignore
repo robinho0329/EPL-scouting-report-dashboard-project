@@ -1,0 +1,50 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pycache
+
+# Data files (large / crawled)
+data/raw/
+data/processed/
+data/features/
+data/scout/
+data/dashboard/
+*.parquet
+*.h5
+*.zip
+*.tar.gz
+
+# CSV raw data (large)
+epl_final.csv
+
+# Logs
+logs/
+*.log
+
+# Models (large binary)
+models/**/*.cbm
+models/**/*.joblib
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit cache
+.streamlit/secrets.toml
+
+# Claude
+.claude/

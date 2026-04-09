@@ -1,0 +1,450 @@
+{
+  "version": "v4",
+  "script_file": "train_v3.py",
+  "description": "스카우트 검증 v3 피드백 반영: DEF possession-adjusted tackles/int, 팀 강도 티어별 2단계 정규화, 900분 필터 WAR 계산 전 명시적 적용, results_v3.json 저장",
+  "key_fixes_from_v3_feedback": [
+    "FIX 1: possession_proxy = points/(points+38) 로 팀 점유율 추정",
+    "FIX 2: tackles_p90_adj = tackles_p90 / (1 - possession_proxy), 동일하게 int_p90_adj",
+    "FIX 3: 팀 강도 티어(top6/mid/bottom6) 내 퍼센타일화 후 전체 DEF 재퍼센타일화",
+    "FIX 4: 900분 최소 출전 기준 필터링 → WAR 계산 전 명시적 수행 (v3 동일, 주석 강화)"
+  ],
+  "possession_proxy_formula": "points / (points + 38), 범위: 0~1",
+  "adj_factor_clip": "0.5 ~ 3.0 (과도한 보정 방지)",
+  "tier_normalization": {
+    "top6": "시즌별 points 상위 6팀",
+    "mid": "7~14위 8팀",
+    "bottom6": "하위 6팀",
+    "2_stage": "티어 내 퍼센타일 → 전체 DEF 재퍼센타일"
+  },
+  "total_rated_players": 8362,
+  "insufficient_data_players": 6618,
+  "hidden_gems_total": 374,
+  "minimum_threshold": "900분 이상 OR 15선발 이상 (WAR 계산 전 적용)",
+  "war_range": {
+    "min": 0.65,
+    "max": 99.35,
+    "mean": 50.0
+  },
+  "war_formula": {
+    "FW": "goals_p90(40%) + assists_p90(20%) + sot_p90(20%) + minutes_share(10%) + consistency(10%)",
+    "MID": "goals_p90(20%) + assists_p90(25%) + fouls_drawn_p90(15%) + tackles_p90(15%) + minutes_share(15%) + consistency(10%)",
+    "CB": "tackles_p90_adj(25%) + int_p90_adj(35%) + minutes_share(20%) + consistency(20%) [POSSESSION-ADJUSTED]",
+    "FB": "tackles_p90_adj(25%) + int_p90_adj(25%) + crosses_p90(20%) + minutes_share(15%) + consistency(15%) [POSSESSION-ADJUSTED]",
+    "GK": "save_pct(40%) + cs_pct(30%) + ga_p90_inv(10%) + minutes_share(10%) + consistency(10%)"
+  },
+  "key_player_comparison_2425": {
+    "Maxence Lacroix": {
+      "team": "Crystal Palace",
+      "tier": "mid",
+      "def_subpos": "CB",
+      "possession_proxy": 0.548,
+      "tackles_p90_raw": 1.213,
+      "tackles_p90_adj": 0.549,
+      "int_p90_raw": 1.56,
+      "int_p90_adj": 0.706,
+      "war": 99.15
+    },
+    "Jan Bednarek": {
+      "team": "Southampton",
+      "tier": "bottom6",
+      "def_subpos": "CB",
+      "possession_proxy": 0.224,
+      "tackles_p90_raw": 0.676,
+      "tackles_p90_adj": 0.507,
+      "int_p90_raw": 1.956,
+      "int_p90_adj": 1.467,
+      "war": 97.44
+    },
+    "Virgil van Dijk": {
+      "team": "Liverpool",
+      "tier": "top6",
+      "def_subpos": "CB",
+      "possession_proxy": 0.683,
+      "tackles_p90_raw": 0.541,
+      "tackles_p90_adj": 0.18,
+      "int_p90_raw": 1.459,
+      "int_p90_adj": 0.486,
+      "war": 74.36
+    },
+    "William Saliba": {
+      "team": "Arsenal",
+      "tier": "top6",
+      "def_subpos": "CB",
+      "possession_proxy": 0.638,
+      "tackles_p90_raw": 1.007,
+      "tackles_p90_adj": 0.364,
+      "int_p90_raw": 0.652,
+      "int_p90_adj": 0.236,
+      "war": 58.97
+    }
+  },
+  "top_players_by_season": {
+    "2023/24": {
+      "FW": [
+        {
+          "player": "Erling Haaland",
+          "team": "Man City",
+          "war": 97.92,
+          "total_min": 2552,
+          "tier": "top6",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Mohamed Salah",
+          "team": "Liverpool",
+          "war": 95.83,
+          "total_min": 2534,
+          "tier": "top6",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Alexander Isak",
+          "team": "Newcastle",
+          "war": 93.75,
+          "total_min": 2255,
+          "tier": "mid",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Ollie Watkins",
+          "team": "Aston Villa",
+          "war": 91.67,
+          "total_min": 3217,
+          "tier": "top6",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Diogo Jota",
+          "team": "Liverpool",
+          "war": 89.58,
+          "total_min": 1145,
+          "tier": "top6",
+          "def_subpos": "FW"
+        }
+      ],
+      "MID": [
+        {
+          "player": "Michael Olise",
+          "team": "Crystal Palace",
+          "war": 99.32,
+          "total_min": 1275,
+          "tier": "mid",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Cole Palmer",
+          "team": "Chelsea",
+          "war": 98.64,
+          "total_min": 2618,
+          "tier": "top6",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Phil Foden",
+          "team": "Man City",
+          "war": 97.96,
+          "total_min": 2857,
+          "tier": "top6",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Bruno Guimarães",
+          "team": "Newcastle",
+          "war": 97.28,
+          "total_min": 3263,
+          "tier": "mid",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Kevin De Bruyne",
+          "team": "Man City",
+          "war": 96.6,
+          "total_min": 1221,
+          "tier": "top6",
+          "def_subpos": "MID"
+        }
+      ],
+      "DEF": [
+        {
+          "player": "James Tarkowski",
+          "team": "Everton",
+          "war": 99.17,
+          "total_min": 3419,
+          "tier": "mid",
+          "def_subpos": "CB"
+        },
+        {
+          "player": "Antonee Robinson",
+          "team": "Fulham",
+          "war": 98.35,
+          "total_min": 3265,
+          "tier": "mid",
+          "def_subpos": "FB"
+        },
+        {
+          "player": "Cristian Romero",
+          "team": "Tottenham",
+          "war": 97.52,
+          "total_min": 2790,
+          "tier": "top6",
+          "def_subpos": "CB"
+        },
+        {
+          "player": "Teden Mengi",
+          "team": "Luton",
+          "war": 96.69,
+          "total_min": 2469,
+          "tier": "bottom6",
+          "def_subpos": "CB"
+        },
+        {
+          "player": "Pedro Porro",
+          "team": "Tottenham",
+          "war": 95.87,
+          "total_min": 3089,
+          "tier": "top6",
+          "def_subpos": "FB"
+        }
+      ],
+      "GK": [
+        {
+          "player": "David Raya",
+          "team": "Arsenal",
+          "war": 96.43,
+          "total_min": 2880,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Ederson",
+          "team": "Man City",
+          "war": 92.86,
+          "total_min": 2785,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Nick Pope",
+          "team": "Newcastle",
+          "war": 89.29,
+          "total_min": 1345,
+          "tier": "mid",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Alisson",
+          "team": "Liverpool",
+          "war": 85.71,
+          "total_min": 2520,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Jordan Pickford",
+          "team": "Everton",
+          "war": 82.14,
+          "total_min": 3420,
+          "tier": "mid",
+          "def_subpos": "GK"
+        }
+      ]
+    },
+    "2024/25": {
+      "FW": [
+        {
+          "player": "Erling Haaland",
+          "team": "Man City",
+          "war": 97.5,
+          "total_min": 2736,
+          "tier": "top6",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Alexander Isak",
+          "team": "Newcastle",
+          "war": 95.0,
+          "total_min": 2756,
+          "tier": "top6",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Ollie Watkins",
+          "team": "Aston Villa",
+          "war": 92.5,
+          "total_min": 2598,
+          "tier": "mid",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Yoane Wissa",
+          "team": "Brentford",
+          "war": 90.0,
+          "total_min": 2919,
+          "tier": "mid",
+          "def_subpos": "FW"
+        },
+        {
+          "player": "Rodrigo Muniz",
+          "team": "Fulham",
+          "war": 87.5,
+          "total_min": 964,
+          "tier": "mid",
+          "def_subpos": "FW"
+        }
+      ],
+      "MID": [
+        {
+          "player": "Mohamed Salah",
+          "team": "Liverpool",
+          "war": 99.32,
+          "total_min": 3371,
+          "tier": "top6",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "James Maddison",
+          "team": "Tottenham",
+          "war": 98.63,
+          "total_min": 1809,
+          "tier": "bottom6",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Matheus Cunha",
+          "team": "Wolves",
+          "war": 97.95,
+          "total_min": 2597,
+          "tier": "mid",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Bryan Mbeumo",
+          "team": "Brentford",
+          "war": 97.26,
+          "total_min": 3414,
+          "tier": "mid",
+          "def_subpos": "MID"
+        },
+        {
+          "player": "Bruno Fernandes",
+          "team": "Man United",
+          "war": 96.58,
+          "total_min": 3018,
+          "tier": "mid",
+          "def_subpos": "MID"
+        }
+      ],
+      "DEF": [
+        {
+          "player": "Maxence Lacroix",
+          "team": "Crystal Palace",
+          "war": 99.15,
+          "total_min": 3116,
+          "tier": "mid",
+          "def_subpos": "CB"
+        },
+        {
+          "player": "Trent Alexander-Arnold",
+          "team": "Liverpool",
+          "war": 98.29,
+          "total_min": 2365,
+          "tier": "top6",
+          "def_subpos": "FB"
+        },
+        {
+          "player": "Jan Bednarek",
+          "team": "Southampton",
+          "war": 97.44,
+          "total_min": 2531,
+          "tier": "bottom6",
+          "def_subpos": "CB"
+        },
+        {
+          "player": "Joško Gvardiol",
+          "team": "Man City",
+          "war": 96.58,
+          "total_min": 3277,
+          "tier": "top6",
+          "def_subpos": "CB"
+        },
+        {
+          "player": "Lisandro Martínez",
+          "team": "Man United",
+          "war": 95.73,
+          "total_min": 1751,
+          "tier": "mid",
+          "def_subpos": "CB"
+        }
+      ],
+      "GK": [
+        {
+          "player": "Matz Sels",
+          "team": "Nott'm Forest",
+          "war": 96.3,
+          "total_min": 3420,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Robert Sánchez",
+          "team": "Chelsea",
+          "war": 92.59,
+          "total_min": 2880,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Martin Dúbravka",
+          "team": "Newcastle",
+          "war": 88.89,
+          "total_min": 900,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "David Raya",
+          "team": "Arsenal",
+          "war": 85.19,
+          "total_min": 3420,
+          "tier": "top6",
+          "def_subpos": "GK"
+        },
+        {
+          "player": "Jordan Pickford",
+          "team": "Everton",
+          "war": 81.48,
+          "total_min": 3420,
+          "tier": "bottom6",
+          "def_subpos": "GK"
+        }
+      ]
+    }
+  },
+  "seasons_coverage": [
+    "2000/01",
+    "2001/02",
+    "2002/03",
+    "2003/04",
+    "2004/05",
+    "2005/06",
+    "2006/07",
+    "2007/08",
+    "2008/09",
+    "2009/10",
+    "2010/11",
+    "2011/12",
+    "2012/13",
+    "2013/14",
+    "2014/15",
+    "2015/16",
+    "2016/17",
+    "2017/18",
+    "2018/19",
+    "2019/20",
+    "2020/21",
+    "2021/22",
+    "2022/23",
+    "2023/24",
+    "2024/25"
+  ]
+}

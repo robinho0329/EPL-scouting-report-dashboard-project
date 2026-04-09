@@ -1,0 +1,189 @@
+{
+  "version": "v4",
+  "model_type": "XGBoost + RandomForest ensemble (classification)",
+  "target": "growth_direction (Improving/Stable/Declining)",
+  "classes": [
+    "Declining",
+    "Stable",
+    "Improving"
+  ],
+  "delta_threshold": 0.3,
+  "min_minutes": 1500,
+  "model_performance": {
+    "FW": {
+      "val": {
+        "accuracy_xgb": 0.339,
+        "accuracy_rf": 0.3729,
+        "accuracy_ensemble": 0.4068,
+        "balanced_accuracy": 0.3728,
+        "n_samples": 59,
+        "class_dist": {
+          "Improving": 27,
+          "Declining": 20,
+          "Stable": 12
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.4,
+        "accuracy_rf": 0.3429,
+        "accuracy_ensemble": 0.3429,
+        "balanced_accuracy": 0.3387,
+        "n_samples": 35,
+        "class_dist": {
+          "Improving": 16,
+          "Declining": 13,
+          "Stable": 6
+        }
+      },
+      "cv_balanced_accuracy": 0.3472
+    },
+    "MF": {
+      "val": {
+        "accuracy_xgb": 0.3056,
+        "accuracy_rf": 0.3472,
+        "accuracy_ensemble": 0.2917,
+        "balanced_accuracy": 0.2974,
+        "n_samples": 72,
+        "class_dist": {
+          "Declining": 27,
+          "Improving": 25,
+          "Stable": 20
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.3158,
+        "accuracy_rf": 0.4737,
+        "accuracy_ensemble": 0.4211,
+        "balanced_accuracy": 0.4306,
+        "n_samples": 38,
+        "class_dist": {
+          "Stable": 16,
+          "Improving": 12,
+          "Declining": 10
+        }
+      },
+      "cv_balanced_accuracy": 0.3472
+    },
+    "DF": {
+      "val": {
+        "accuracy_xgb": 0.3505,
+        "accuracy_rf": 0.3814,
+        "accuracy_ensemble": 0.3299,
+        "balanced_accuracy": 0.3294,
+        "n_samples": 97,
+        "class_dist": {
+          "Improving": 37,
+          "Stable": 31,
+          "Declining": 29
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.4259,
+        "accuracy_rf": 0.2963,
+        "accuracy_ensemble": 0.3148,
+        "balanced_accuracy": 0.3333,
+        "n_samples": 54,
+        "class_dist": {
+          "Declining": 27,
+          "Improving": 18,
+          "Stable": 9
+        }
+      },
+      "cv_balanced_accuracy": 0.3479
+    },
+    "GK": {
+      "val": {
+        "accuracy_xgb": 0.3478,
+        "accuracy_rf": 0.2174,
+        "accuracy_ensemble": 0.3478,
+        "balanced_accuracy": 0.354,
+        "n_samples": 23,
+        "class_dist": {
+          "Stable": 10,
+          "Improving": 7,
+          "Declining": 6
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.3077,
+        "accuracy_rf": 0.4615,
+        "accuracy_ensemble": 0.3846,
+        "balanced_accuracy": 0.4444,
+        "n_samples": 13,
+        "class_dist": {
+          "Declining": 6,
+          "Stable": 4,
+          "Improving": 3
+        }
+      },
+      "cv_balanced_accuracy": 0.3999
+    }
+  },
+  "peak_ages": {
+    "FW": {
+      "peak_age": 25,
+      "data_peak_age_raw": 23,
+      "data_peak_age": 25,
+      "prior_peak_age": 27,
+      "amplitude": 0.2705,
+      "w_data": 0.902,
+      "w_prior": 0.098,
+      "valid_age_buckets": 13,
+      "valid_age_range": [
+        20,
+        32
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    },
+    "MF": {
+      "peak_age": 27,
+      "data_peak_age_raw": 27,
+      "data_peak_age": 27,
+      "prior_peak_age": 27,
+      "amplitude": 0.2712,
+      "w_data": 0.904,
+      "w_prior": 0.096,
+      "valid_age_buckets": 14,
+      "valid_age_range": [
+        20,
+        33
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    },
+    "DF": {
+      "peak_age": 26,
+      "data_peak_age_raw": 19,
+      "data_peak_age": 26,
+      "prior_peak_age": 28,
+      "amplitude": 0.5161,
+      "w_data": 1.0,
+      "w_prior": 0.0,
+      "valid_age_buckets": 16,
+      "valid_age_range": [
+        19,
+        34
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    },
+    "GK": {
+      "peak_age": 28,
+      "data_peak_age_raw": 28,
+      "data_peak_age": 28,
+      "prior_peak_age": 30,
+      "amplitude": 0.355,
+      "w_data": 0.789,
+      "w_prior": 0.211,
+      "valid_age_buckets": 8,
+      "valid_age_range": [
+        26,
+        33
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    }
+  },
+  "output_files": {
+    "predictions": "data/scout/growth_predictions_v4.parquet",
+    "rows": 239
+  },
+  "note": "Individual 1-year performance regression is not reliable with this data (R^2 consistently negative in v1-v3). v4 pivots to 3-class trajectory classification using position-specific models with no absolute performance features and no position dummies — trajectory signals only."
+}

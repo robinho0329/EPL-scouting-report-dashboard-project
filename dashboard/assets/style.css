@@ -1,0 +1,124 @@
+/* EPL Stats Dashboard - Premier League inspired styling */
+
+/* Main background */
+[data-testid="stAppViewContainer"] {
+    background-color: #0d0d1a;
+    color: #ffffff;
+}
+
+/* 메인 컨텐츠 텍스트 기본색 */
+[data-testid="stAppViewContainer"] p,
+[data-testid="stAppViewContainer"] span,
+[data-testid="stAppViewContainer"] label,
+[data-testid="stAppViewContainer"] div {
+    color: #e0e0e0;
+}
+
+/* 메트릭 값 */
+[data-testid="stMetricValue"] {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* 메트릭 레이블 */
+[data-testid="stMetricLabel"] {
+    color: #aaaaaa !important;
+}
+
+/* 헤딩 */
+[data-testid="stAppViewContainer"] h1,
+[data-testid="stAppViewContainer"] h2,
+[data-testid="stAppViewContainer"] h3 {
+    color: #ffffff !important;
+}
+
+/* 캡션 */
+[data-testid="stAppViewContainer"] .stCaption {
+    color: #888888 !important;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #37003c;
+    color: #ffffff;
+}
+
+/* 사이드바 내 모든 텍스트 강제 흰색 */
+[data-testid="stSidebar"] * {
+    color: #ffffff !important;
+}
+
+[data-testid="stSidebar"] .stRadio label {
+    color: #ffffff !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stSidebar"] .stRadio label:hover {
+    color: #00ff87 !important;
+}
+
+[data-testid="stSidebar"] h1 {
+    color: #00ff87 !important;
+    font-weight: 800 !important;
+}
+
+[data-testid="stSidebar"] .stMarkdown p,
+[data-testid="stSidebar"] .stMarkdown strong {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div,
+[data-testid="stSidebar"] a {
+    color: #ffffff !important;
+}
+
+[data-testid="stSidebar"] hr {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 사이드바 파일 네비게이션 (위쪽 페이지 목록) */
+[data-testid="stSidebarNav"] a span {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+}
+
+[data-testid="stSidebarNav"] a:hover span {
+    color: #00ff87 !important;
+}
+
+/* Headers */
+h1 {
+    color: #37003c !important;
+    font-weight: 700 !important;
+}
+
+h2, h3 {
+    color: #37003c !important;
+}
+
+/* Metrics */
+[data-testid="stMetricValue"] {
+    color: #37003c !important;
+    font-weight: 700 !important;
+}
+
+/* DataFrames */
+[data-testid="stDataFrame"] {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+/* Buttons & selectbox */
+.stSelectbox [data-baseweb="select"] {
+    border-color: #37003c;
+}
+
+/* Accent colors matching PL brand */
+/* Primary: #37003c (dark purple) */
+/* Secondary: #e90052 (magenta) */
+/* Accent: #00ff87 (green) */
+/* Accent2: #04f5ff (cyan) */

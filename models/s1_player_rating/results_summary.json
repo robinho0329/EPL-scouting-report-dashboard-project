@@ -1,0 +1,557 @@
+{
+  "model_metrics": {
+    "Ridge": {
+      "val": {
+        "rmse": 18.0328,
+        "mae": 13.8001,
+        "r2": 0.3273
+      },
+      "test": {
+        "rmse": 18.1684,
+        "mae": 13.6283,
+        "r2": 0.3024
+      }
+    },
+    "XGBoost": {
+      "val": {
+        "rmse": 15.1012,
+        "mae": 11.6027,
+        "r2": 0.5282
+      },
+      "test": {
+        "rmse": 15.585,
+        "mae": 11.8426,
+        "r2": 0.4867
+      }
+    },
+    "MLP": {
+      "val": {
+        "rmse": 16.0092,
+        "mae": 12.0916,
+        "r2": 0.4698
+      },
+      "test": {
+        "rmse": 17.3085,
+        "mae": 12.7861,
+        "r2": 0.3668
+      }
+    },
+    "Ensemble": {
+      "test": {
+        "rmse": 16.0646,
+        "mae": 12.0107,
+        "r2": 0.4546
+      }
+    }
+  },
+  "top20_by_season": {
+    "2023/24": [
+      {
+        "player": "David Raya",
+        "team": "Arsenal",
+        "pos_group": "GK",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Man City",
+        "pos_group": "FW",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Sergio Reguilón",
+        "team": "Man United",
+        "pos_group": "DEF",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Son Heung-min",
+        "team": "Tottenham",
+        "pos_group": "MID",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Antonee Robinson",
+        "team": "Fulham",
+        "pos_group": "DEF",
+        "war_rating": 99.38
+      },
+      {
+        "player": "Cole Palmer",
+        "team": "Chelsea",
+        "pos_group": "FW",
+        "war_rating": 94.97
+      },
+      {
+        "player": "Julián Álvarez",
+        "team": "Man City",
+        "pos_group": "MID",
+        "war_rating": 88.89
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool",
+        "pos_group": "FW",
+        "war_rating": 88.32
+      },
+      {
+        "player": "Ollie Watkins",
+        "team": "Aston Villa",
+        "pos_group": "FW",
+        "war_rating": 83.84
+      },
+      {
+        "player": "Michael Olise",
+        "team": "Crystal Palace",
+        "pos_group": "FW",
+        "war_rating": 83.15
+      },
+      {
+        "player": "Sergio Reguilón",
+        "team": "Brentford",
+        "pos_group": "DEF",
+        "war_rating": 82.64
+      },
+      {
+        "player": "Alexander Isak",
+        "team": "Newcastle",
+        "pos_group": "FW",
+        "war_rating": 82.21
+      },
+      {
+        "player": "Emerson Palmieri",
+        "team": "West Ham",
+        "pos_group": "DEF",
+        "war_rating": 81.99
+      },
+      {
+        "player": "Phil Foden",
+        "team": "Man City",
+        "pos_group": "FW",
+        "war_rating": 81.8
+      },
+      {
+        "player": "Ederson",
+        "team": "Man City",
+        "pos_group": "GK",
+        "war_rating": 79.07
+      },
+      {
+        "player": "Darwin Núñez",
+        "team": "Liverpool",
+        "pos_group": "FW",
+        "war_rating": 78.78
+      },
+      {
+        "player": "Jordan Pickford",
+        "team": "Everton",
+        "pos_group": "GK",
+        "war_rating": 78.63
+      },
+      {
+        "player": "Enes Ünal",
+        "team": "Bournemouth",
+        "pos_group": "FW",
+        "war_rating": 78.59
+      },
+      {
+        "player": "Jeremy Doku",
+        "team": "Man City",
+        "pos_group": "MID",
+        "war_rating": 78.44
+      },
+      {
+        "player": "Conor Bradley",
+        "team": "Liverpool",
+        "pos_group": "DEF",
+        "war_rating": 78.39
+      }
+    ],
+    "2024/25": [
+      {
+        "player": "Marcus Rashford",
+        "team": "Aston Villa",
+        "pos_group": "FW",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Trevoh Chalobah",
+        "team": "Chelsea",
+        "pos_group": "DEF",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Martin Dúbravka",
+        "team": "Newcastle",
+        "pos_group": "GK",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Son Heung-min",
+        "team": "Tottenham",
+        "pos_group": "MID",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool",
+        "pos_group": "FW",
+        "war_rating": 97.9
+      },
+      {
+        "player": "Trevoh Chalobah",
+        "team": "Crystal Palace",
+        "pos_group": "DEF",
+        "war_rating": 94.56
+      },
+      {
+        "player": "Daniel Muñoz",
+        "team": "Crystal Palace",
+        "pos_group": "DEF",
+        "war_rating": 92.62
+      },
+      {
+        "player": "David Raya",
+        "team": "Arsenal",
+        "pos_group": "GK",
+        "war_rating": 91.31
+      },
+      {
+        "player": "Matz Sels",
+        "team": "Nott'm Forest",
+        "pos_group": "GK",
+        "war_rating": 91.31
+      },
+      {
+        "player": "Antonee Robinson",
+        "team": "Fulham",
+        "pos_group": "DEF",
+        "war_rating": 91.16
+      },
+      {
+        "player": "Ederson",
+        "team": "Man City",
+        "pos_group": "GK",
+        "war_rating": 90.31
+      },
+      {
+        "player": "Aaron Wan-Bissaka",
+        "team": "West Ham",
+        "pos_group": "DEF",
+        "war_rating": 89.51
+      },
+      {
+        "player": "Noussair Mazraoui",
+        "team": "Man United",
+        "pos_group": "DEF",
+        "war_rating": 89.45
+      },
+      {
+        "player": "Alisson",
+        "team": "Liverpool",
+        "pos_group": "GK",
+        "war_rating": 86.5
+      },
+      {
+        "player": "Jordan Pickford",
+        "team": "Everton",
+        "pos_group": "GK",
+        "war_rating": 86.25
+      },
+      {
+        "player": "Carlos Alcaraz",
+        "team": "Everton",
+        "pos_group": "MID",
+        "war_rating": 85.22
+      },
+      {
+        "player": "Ben Chilwell",
+        "team": "Crystal Palace",
+        "pos_group": "DEF",
+        "war_rating": 84.34
+      },
+      {
+        "player": "Victor Bernth Kristiansen",
+        "team": "Leicester",
+        "pos_group": "DEF",
+        "war_rating": 83.69
+      },
+      {
+        "player": "Kenny Tete",
+        "team": "Fulham",
+        "pos_group": "DEF",
+        "war_rating": 83.02
+      },
+      {
+        "player": "Ismaila Sarr",
+        "team": "Crystal Palace",
+        "pos_group": "MID",
+        "war_rating": 81.93
+      }
+    ]
+  },
+  "top_by_position": {
+    "FW": [
+      {
+        "player": "Erling Haaland",
+        "season": "2023/24",
+        "team": "Man City",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Marcus Rashford",
+        "season": "2024/25",
+        "team": "Aston Villa",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Mohamed Salah",
+        "season": "2024/25",
+        "team": "Liverpool",
+        "war_rating": 97.9
+      },
+      {
+        "player": "Cole Palmer",
+        "season": "2023/24",
+        "team": "Chelsea",
+        "war_rating": 94.97
+      },
+      {
+        "player": "Mohamed Salah",
+        "season": "2023/24",
+        "team": "Liverpool",
+        "war_rating": 88.32
+      },
+      {
+        "player": "Ollie Watkins",
+        "season": "2023/24",
+        "team": "Aston Villa",
+        "war_rating": 83.84
+      },
+      {
+        "player": "Michael Olise",
+        "season": "2023/24",
+        "team": "Crystal Palace",
+        "war_rating": 83.15
+      },
+      {
+        "player": "Alexander Isak",
+        "season": "2023/24",
+        "team": "Newcastle",
+        "war_rating": 82.21
+      },
+      {
+        "player": "Phil Foden",
+        "season": "2023/24",
+        "team": "Man City",
+        "war_rating": 81.8
+      },
+      {
+        "player": "Julio Enciso",
+        "season": "2024/25",
+        "team": "Brighton",
+        "war_rating": 81.1
+      }
+    ],
+    "MID": [
+      {
+        "player": "Son Heung-min",
+        "season": "2023/24",
+        "team": "Tottenham",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Son Heung-min",
+        "season": "2024/25",
+        "team": "Tottenham",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Julián Álvarez",
+        "season": "2023/24",
+        "team": "Man City",
+        "war_rating": 88.89
+      },
+      {
+        "player": "Carlos Alcaraz",
+        "season": "2024/25",
+        "team": "Everton",
+        "war_rating": 85.22
+      },
+      {
+        "player": "Ismaila Sarr",
+        "season": "2024/25",
+        "team": "Crystal Palace",
+        "war_rating": 81.93
+      },
+      {
+        "player": "James Ward-Prowse",
+        "season": "2024/25",
+        "team": "Nott'm Forest",
+        "war_rating": 81.48
+      },
+      {
+        "player": "Sávio",
+        "season": "2024/25",
+        "team": "Man City",
+        "war_rating": 80.92
+      },
+      {
+        "player": "Jeremy Doku",
+        "season": "2023/24",
+        "team": "Man City",
+        "war_rating": 78.44
+      },
+      {
+        "player": "Luke Berry",
+        "season": "2023/24",
+        "team": "Luton",
+        "war_rating": 74.89
+      },
+      {
+        "player": "Enzo Fernández",
+        "season": "2024/25",
+        "team": "Chelsea",
+        "war_rating": 73.2
+      }
+    ],
+    "DEF": [
+      {
+        "player": "Sergio Reguilón",
+        "season": "2023/24",
+        "team": "Man United",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Trevoh Chalobah",
+        "season": "2024/25",
+        "team": "Chelsea",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Antonee Robinson",
+        "season": "2023/24",
+        "team": "Fulham",
+        "war_rating": 99.38
+      },
+      {
+        "player": "Trevoh Chalobah",
+        "season": "2024/25",
+        "team": "Crystal Palace",
+        "war_rating": 94.56
+      },
+      {
+        "player": "Daniel Muñoz",
+        "season": "2024/25",
+        "team": "Crystal Palace",
+        "war_rating": 92.62
+      },
+      {
+        "player": "Antonee Robinson",
+        "season": "2024/25",
+        "team": "Fulham",
+        "war_rating": 91.16
+      },
+      {
+        "player": "Aaron Wan-Bissaka",
+        "season": "2024/25",
+        "team": "West Ham",
+        "war_rating": 89.51
+      },
+      {
+        "player": "Noussair Mazraoui",
+        "season": "2024/25",
+        "team": "Man United",
+        "war_rating": 89.45
+      },
+      {
+        "player": "Ben Chilwell",
+        "season": "2024/25",
+        "team": "Crystal Palace",
+        "war_rating": 84.34
+      },
+      {
+        "player": "Victor Bernth Kristiansen",
+        "season": "2024/25",
+        "team": "Leicester",
+        "war_rating": 83.69
+      }
+    ],
+    "GK": [
+      {
+        "player": "David Raya",
+        "season": "2023/24",
+        "team": "Arsenal",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Martin Dúbravka",
+        "season": "2024/25",
+        "team": "Newcastle",
+        "war_rating": 100.0
+      },
+      {
+        "player": "David Raya",
+        "season": "2024/25",
+        "team": "Arsenal",
+        "war_rating": 91.31
+      },
+      {
+        "player": "Matz Sels",
+        "season": "2024/25",
+        "team": "Nott'm Forest",
+        "war_rating": 91.31
+      },
+      {
+        "player": "Ederson",
+        "season": "2024/25",
+        "team": "Man City",
+        "war_rating": 90.31
+      },
+      {
+        "player": "Alisson",
+        "season": "2024/25",
+        "team": "Liverpool",
+        "war_rating": 86.5
+      },
+      {
+        "player": "Jordan Pickford",
+        "season": "2024/25",
+        "team": "Everton",
+        "war_rating": 86.25
+      },
+      {
+        "player": "Dean Henderson",
+        "season": "2024/25",
+        "team": "Crystal Palace",
+        "war_rating": 81.19
+      },
+      {
+        "player": "Robert Sánchez",
+        "season": "2024/25",
+        "team": "Chelsea",
+        "war_rating": 80.97
+      },
+      {
+        "player": "Caoimhín Kelleher",
+        "season": "2024/25",
+        "team": "Liverpool",
+        "war_rating": 80.77
+      }
+    ]
+  },
+  "features_used": [
+    "age",
+    "market_value",
+    "pos_group_enc",
+    "points",
+    "goal_diff",
+    "nineties",
+    "match_count",
+    "season_year"
+  ],
+  "train_size": 10299,
+  "val_size": 984,
+  "test_size": 1000,
+  "total_players_rated": 12283
+}

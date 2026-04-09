@@ -1,0 +1,13 @@
+feature,importance
+team_points,0.20228234
+consistency_cv,0.19241191
+min,0.13229659
+shots_p90,0.11906755
+age_used,0.06332361
+age_sq,0.061398845
+goals_p90,0.061042625
+assists_p90,0.04369447
+nationality_freq,0.03734372
+epl_experience,0.033605017
+yellow_p90,0.031196402
+log_mv_lag,0.022336885

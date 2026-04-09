@@ -1,0 +1,317 @@
+{
+  "version": "v3",
+  "description": "Scout review v2 피드백 반영: WAR=100 버그 수정, GK save% 실제 계산, 팀강도/market_value 피처 완전 제거, CB/FB 분리 평가, MID crosses 편향 제거",
+  "total_rated_players": 8362,
+  "insufficient_data_players": 6618,
+  "hidden_gems_total": 363,
+  "minimum_threshold": "900분 이상 OR 15선발 이상",
+  "war_range": {
+    "min": 0.65,
+    "max": 99.35,
+    "mean": 50.0
+  },
+  "war_formula": {
+    "FW": "goals_p90(40%) + assists_p90(20%) + sot_p90(20%) + minutes_share(10%) + consistency(10%)",
+    "MID": "goals_p90(20%) + assists_p90(25%) + fouls_drawn_p90(15%) + tackles_p90(15%) + minutes_share(15%) + consistency(10%)",
+    "CB": "tackles_p90(25%) + int_p90(35%) + minutes_share(20%) + consistency(20%)",
+    "FB": "tackles_p90(25%) + int_p90(25%) + crosses_p90(20%) + minutes_share(15%) + consistency(15%)",
+    "GK": "save_pct(40%) + cs_pct(30%) + ga_p90_inv(10%) + minutes_share(10%) + consistency(10%)"
+  },
+  "key_fixes_from_v2": [
+    "WAR=100 불가 (rank/(n+1)*100 방식으로 최대값 < 100 보장)",
+    "GK save%: 단순 실점률 대신 match_features SoT 역산으로 실제 세이브율 계산",
+    "market_value, points, goal_diff 피처에서 완전 제거",
+    "CB/FB 분리 평가: 크로스가 CB 점수에 영향 없음",
+    "MID crosses 편향 제거: Alfie Doughty류 왜곡 방지",
+    "팀 강도 보정(team_adj) 완전 제거"
+  ],
+  "top_players_by_season": {
+    "2023/24": {
+      "FW": [
+        {
+          "player": "Erling Haaland",
+          "team": "Man City",
+          "war": 97.92,
+          "total_min": 2552
+        },
+        {
+          "player": "Mohamed Salah",
+          "team": "Liverpool",
+          "war": 95.83,
+          "total_min": 2534
+        },
+        {
+          "player": "Alexander Isak",
+          "team": "Newcastle",
+          "war": 93.75,
+          "total_min": 2255
+        },
+        {
+          "player": "Ollie Watkins",
+          "team": "Aston Villa",
+          "war": 91.67,
+          "total_min": 3217
+        },
+        {
+          "player": "Diogo Jota",
+          "team": "Liverpool",
+          "war": 89.58,
+          "total_min": 1145
+        }
+      ],
+      "MID": [
+        {
+          "player": "Michael Olise",
+          "team": "Crystal Palace",
+          "war": 99.32,
+          "total_min": 1275
+        },
+        {
+          "player": "Cole Palmer",
+          "team": "Chelsea",
+          "war": 98.64,
+          "total_min": 2618
+        },
+        {
+          "player": "Phil Foden",
+          "team": "Man City",
+          "war": 97.96,
+          "total_min": 2857
+        },
+        {
+          "player": "Bruno Guimarães",
+          "team": "Newcastle",
+          "war": 97.28,
+          "total_min": 3263
+        },
+        {
+          "player": "Kevin De Bruyne",
+          "team": "Man City",
+          "war": 96.6,
+          "total_min": 1221
+        }
+      ],
+      "DEF": [
+        {
+          "player": "Emerson Palmieri",
+          "team": "West Ham",
+          "war": 99.17,
+          "total_min": 3137
+        },
+        {
+          "player": "Antonee Robinson",
+          "team": "Fulham",
+          "war": 98.35,
+          "total_min": 3265
+        },
+        {
+          "player": "James Tarkowski",
+          "team": "Everton",
+          "war": 97.52,
+          "total_min": 3419
+        },
+        {
+          "player": "Teden Mengi",
+          "team": "Luton",
+          "war": 96.69,
+          "total_min": 2469
+        },
+        {
+          "player": "Pedro Porro",
+          "team": "Tottenham",
+          "war": 95.87,
+          "total_min": 3089
+        }
+      ],
+      "GK": [
+        {
+          "player": "David Raya",
+          "team": "Arsenal",
+          "war": 96.43,
+          "total_min": 2880
+        },
+        {
+          "player": "Ederson",
+          "team": "Man City",
+          "war": 92.86,
+          "total_min": 2785
+        },
+        {
+          "player": "Nick Pope",
+          "team": "Newcastle",
+          "war": 89.29,
+          "total_min": 1345
+        },
+        {
+          "player": "Alisson",
+          "team": "Liverpool",
+          "war": 85.71,
+          "total_min": 2520
+        },
+        {
+          "player": "Jordan Pickford",
+          "team": "Everton",
+          "war": 82.14,
+          "total_min": 3420
+        }
+      ]
+    },
+    "2024/25": {
+      "FW": [
+        {
+          "player": "Erling Haaland",
+          "team": "Man City",
+          "war": 97.5,
+          "total_min": 2736
+        },
+        {
+          "player": "Alexander Isak",
+          "team": "Newcastle",
+          "war": 95.0,
+          "total_min": 2756
+        },
+        {
+          "player": "Ollie Watkins",
+          "team": "Aston Villa",
+          "war": 92.5,
+          "total_min": 2598
+        },
+        {
+          "player": "Yoane Wissa",
+          "team": "Brentford",
+          "war": 90.0,
+          "total_min": 2919
+        },
+        {
+          "player": "Rodrigo Muniz",
+          "team": "Fulham",
+          "war": 87.5,
+          "total_min": 964
+        }
+      ],
+      "MID": [
+        {
+          "player": "Mohamed Salah",
+          "team": "Liverpool",
+          "war": 99.32,
+          "total_min": 3371
+        },
+        {
+          "player": "James Maddison",
+          "team": "Tottenham",
+          "war": 98.63,
+          "total_min": 1809
+        },
+        {
+          "player": "Matheus Cunha",
+          "team": "Wolves",
+          "war": 97.95,
+          "total_min": 2597
+        },
+        {
+          "player": "Bryan Mbeumo",
+          "team": "Brentford",
+          "war": 97.26,
+          "total_min": 3414
+        },
+        {
+          "player": "Bruno Fernandes",
+          "team": "Man United",
+          "war": 96.58,
+          "total_min": 3018
+        }
+      ],
+      "DEF": [
+        {
+          "player": "Maxence Lacroix",
+          "team": "Crystal Palace",
+          "war": 99.15,
+          "total_min": 3116
+        },
+        {
+          "player": "Antonee Robinson",
+          "team": "Fulham",
+          "war": 98.29,
+          "total_min": 3167
+        },
+        {
+          "player": "Victor Bernth Kristiansen",
+          "team": "Leicester",
+          "war": 97.44,
+          "total_min": 2482
+        },
+        {
+          "player": "Jan Bednarek",
+          "team": "Southampton",
+          "war": 96.58,
+          "total_min": 2531
+        },
+        {
+          "player": "Trent Alexander-Arnold",
+          "team": "Liverpool",
+          "war": 95.73,
+          "total_min": 2365
+        }
+      ],
+      "GK": [
+        {
+          "player": "Matz Sels",
+          "team": "Nott'm Forest",
+          "war": 96.3,
+          "total_min": 3420
+        },
+        {
+          "player": "Robert Sánchez",
+          "team": "Chelsea",
+          "war": 92.59,
+          "total_min": 2880
+        },
+        {
+          "player": "Martin Dúbravka",
+          "team": "Newcastle",
+          "war": 88.89,
+          "total_min": 900
+        },
+        {
+          "player": "David Raya",
+          "team": "Arsenal",
+          "war": 85.19,
+          "total_min": 3420
+        },
+        {
+          "player": "Jordan Pickford",
+          "team": "Everton",
+          "war": 81.48,
+          "total_min": 3420
+        }
+      ]
+    }
+  },
+  "seasons_coverage": [
+    "2000/01",
+    "2001/02",
+    "2002/03",
+    "2003/04",
+    "2004/05",
+    "2005/06",
+    "2006/07",
+    "2007/08",
+    "2008/09",
+    "2009/10",
+    "2010/11",
+    "2011/12",
+    "2012/13",
+    "2013/14",
+    "2014/15",
+    "2015/16",
+    "2016/17",
+    "2017/18",
+    "2018/19",
+    "2019/20",
+    "2020/21",
+    "2021/22",
+    "2022/23",
+    "2023/24",
+    "2024/25"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "match_goals": {
+    "xgboost_val": {
+      "mae": 1.3452,
+      "rmse": 1.68,
+      "r2": 0.0331
+    },
+    "xgboost_test": {
+      "mae": 1.3767,
+      "rmse": 1.7439,
+      "r2": -0.1214
+    },
+    "poisson_val": {
+      "mae": 1.3571,
+      "rmse": 1.6872,
+      "r2": 0.0248
+    },
+    "poisson_test": {
+      "mae": 1.3275,
+      "rmse": 1.6738,
+      "r2": -0.033
+    },
+    "mlp_val": {
+      "mae": 1.3721,
+      "rmse": 1.7055,
+      "r2": 0.0035
+    },
+    "mlp_test": {
+      "mae": 1.3513,
+      "rmse": 1.6907,
+      "r2": -0.0539
+    },
+    "best_model": "Poisson"
+  },
+  "player_goals": {
+    "xgboost_val": {
+      "auc": 0.791,
+      "f1": 0.3064,
+      "avg_precision": 0.2753,
+      "precision_at_500": 0.426
+    },
+    "xgboost_test": {
+      "auc": 0.785,
+      "f1": 0.3032,
+      "avg_precision": 0.2927,
+      "precision_at_500": 0.468
+    },
+    "mlp_val": {
+      "auc": 0.7826,
+      "f1": 0.0359,
+      "avg_precision": 0.2638,
+      "precision_at_500": 0.412
+    },
+    "mlp_test": {
+      "auc": 0.7764,
+      "f1": 0.054,
+      "avg_precision": 0.2737,
+      "precision_at_500": 0.432
+    },
+    "best_model": "XGBoost"
+  },
+  "meta": {
+    "train_seasons": "2000/01 \u2013 2020/21",
+    "val_seasons": "2021/22 \u2013 2022/23",
+    "test_seasons": "2023/24 \u2013 2024/25",
+    "match_features": [
+      "HomeTeam_AvgScored_5",
+      "HomeTeam_AvgScored_10",
+      "HomeTeam_AvgScored_20",
+      "HomeTeam_AvgConceded_5",
+      "HomeTeam_AvgConceded_10",
+      "HomeTeam_AvgConceded_20",
+      "AwayTeam_AvgScored_5",
+      "AwayTeam_AvgScored_10",
+      "AwayTeam_AvgScored_20",
+      "AwayTeam_AvgConceded_5",
+      "AwayTeam_AvgConceded_10",
+      "AwayTeam_AvgConceded_20",
+      "H2H_AvgTotalGoals",
+      "H2H_Count",
+      "SeasonMatchIdx",
+      "SeasonCumAvgGoals"
+    ],
+    "player_features": [
+      "player_goal_rate_5",
+      "player_goal_rate_10",
+      "player_min_avg_5",
+      "player_min_avg_10",
+      "player_season_goal_rate",
+      "pos_score",
+      "log_mv",
+      "opp_avg_conceded",
+      "is_home",
+      "min"
+    ],
+    "match_train_rows": 7879,
+    "match_val_rows": 760,
+    "match_test_rows": 730,
+    "player_train_rows": 228274,
+    "player_val_rows": 23015,
+    "player_test_rows": 23586,
+    "player_positive_rate": 0.0869
+  }
+}

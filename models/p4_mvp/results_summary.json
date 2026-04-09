@@ -1,0 +1,246 @@
+{
+  "pipeline": "P4_MVP_Scoring",
+  "created": "2026-03-22T19:42:17.876884",
+  "data_splits": {
+    "train": "2000-2021 (12118 samples)",
+    "val": "2021-2023 (1414 samples)",
+    "test": "2023-2025 (1448 samples)"
+  },
+  "features": [
+    "goals_p90",
+    "assists_p90",
+    "goal_contributions_p90",
+    "yellow_cards_p90",
+    "red_cards_p90",
+    "log_mv_norm",
+    "consistency_score",
+    "minutes_share",
+    "ga_total_scaled",
+    "gc_p90_scaled",
+    "min_gate",
+    "mp",
+    "starts",
+    "90s",
+    "gls",
+    "ast",
+    "g_a",
+    "age_used",
+    "epl_experience",
+    "pos_GK",
+    "pos_DEF",
+    "pos_MID",
+    "pos_FWD"
+  ],
+  "target": "mvp_score (composite, 0-100)",
+  "mvp_formula": {
+    "description": "Position-aware weighted composite of per-90 goal contributions, market value, consistency, minutes share, and total goal+assist",
+    "weights": {
+      "goal_contributions_p90 * pos_weight": 0.3,
+      "log_market_value_norm": 0.2,
+      "consistency_score": 0.15,
+      "minutes_share": 0.2,
+      "ga_total_scaled": 0.15
+    },
+    "minutes_threshold": "Soft sigmoid gate at 1000 minutes",
+    "position_weights": {
+      "GK": 0.15,
+      "DEF": 0.5,
+      "MID": 0.8,
+      "FWD": 1.0
+    }
+  },
+  "models": {
+    "linear_regression": {
+      "train": {
+        "MAE": 3.2753,
+        "RMSE": 3.9653,
+        "Spearman": 0.9775,
+        "NDCG@10": 0.9987
+      },
+      "val": {
+        "MAE": 2.9905,
+        "RMSE": 3.5875,
+        "Spearman": 0.9705,
+        "NDCG@10": 0.9945
+      },
+      "test": {
+        "MAE": 3.0529,
+        "RMSE": 3.6723,
+        "Spearman": 0.9586,
+        "NDCG@10": 0.9858
+      }
+    },
+    "xgboost": {
+      "train": {
+        "MAE": 0.1069,
+        "RMSE": 0.1669,
+        "Spearman": 0.9997,
+        "NDCG@10": 1.0
+      },
+      "val": {
+        "MAE": 0.1753,
+        "RMSE": 0.3111,
+        "Spearman": 0.9984,
+        "NDCG@10": 1.0
+      },
+      "test": {
+        "MAE": 0.1888,
+        "RMSE": 0.3826,
+        "Spearman": 0.9987,
+        "NDCG@10": 0.9993
+      }
+    },
+    "neural_network": {
+      "train": {
+        "MAE": 0.4115,
+        "RMSE": 0.5986,
+        "Spearman": 0.9871,
+        "NDCG@10": 1.0
+      },
+      "val": {
+        "MAE": 0.3316,
+        "RMSE": 0.5186,
+        "Spearman": 0.9566,
+        "NDCG@10": 0.9999
+      },
+      "test": {
+        "MAE": 0.3203,
+        "RMSE": 0.5284,
+        "Spearman": 0.9577,
+        "NDCG@10": 0.9951
+      }
+    },
+    "lambdarank": {
+      "train": {
+        "MAE": 29.2362,
+        "RMSE": 37.1797,
+        "Spearman": 0.4237,
+        "NDCG@10": 0.9884
+      },
+      "val": {
+        "MAE": 27.013,
+        "RMSE": 36.2302,
+        "Spearman": 0.5671,
+        "NDCG@10": 0.9801
+      },
+      "test": {
+        "MAE": 26.6952,
+        "RMSE": 36.4383,
+        "Spearman": 0.5758,
+        "NDCG@10": 0.984
+      }
+    }
+  },
+  "top10_mvp_2023_2025_ensemble": [
+    {
+      "player": "Mohamed Salah",
+      "season": "2024/25",
+      "team": "Liverpool",
+      "pos_group": "MID",
+      "gls": 29.0,
+      "ast": 18.0,
+      "min": 3371.0,
+      "mvp_score": 98.60262511877137,
+      "pred_ensemble": 77.69031524658203
+    },
+    {
+      "player": "Erling Haaland",
+      "season": "2023/24",
+      "team": "Man City",
+      "pos_group": "FWD",
+      "gls": 27.0,
+      "ast": 5.0,
+      "min": 2552.0,
+      "mvp_score": 100.0,
+      "pred_ensemble": 75.03417205810547
+    },
+    {
+      "player": "Ollie Watkins",
+      "season": "2023/24",
+      "team": "Aston Villa",
+      "pos_group": "FWD",
+      "gls": 19.0,
+      "ast": 13.0,
+      "min": 3217.0,
+      "mvp_score": 98.94943230637382,
+      "pred_ensemble": 74.43405151367188
+    },
+    {
+      "player": "Alexander Isak",
+      "season": "2024/25",
+      "team": "Newcastle",
+      "pos_group": "FWD",
+      "gls": 23.0,
+      "ast": 6.0,
+      "min": 2756.0,
+      "mvp_score": 98.61923429932203,
+      "pred_ensemble": 73.72846221923828
+    },
+    {
+      "player": "Cole Palmer",
+      "season": "2023/24",
+      "team": "Chelsea",
+      "pos_group": "MID",
+      "gls": 22.0,
+      "ast": 11.0,
+      "min": 2607.0,
+      "mvp_score": 93.8258624642337,
+      "pred_ensemble": 72.62663269042969
+    },
+    {
+      "player": "Mohamed Salah",
+      "season": "2023/24",
+      "team": "Liverpool",
+      "pos_group": "FWD",
+      "gls": 18.0,
+      "ast": 10.0,
+      "min": 2534.0,
+      "mvp_score": 98.26753461506851,
+      "pred_ensemble": 72.185302734375
+    },
+    {
+      "player": "Bukayo Saka",
+      "season": "2023/24",
+      "team": "Arsenal",
+      "pos_group": "FWD",
+      "gls": 16.0,
+      "ast": 9.0,
+      "min": 2919.0,
+      "mvp_score": 94.97791224408844,
+      "pred_ensemble": 71.48663330078125
+    },
+    {
+      "player": "Erling Haaland",
+      "season": "2024/25",
+      "team": "Man City",
+      "pos_group": "FWD",
+      "gls": 22.0,
+      "ast": 3.0,
+      "min": 2736.0,
+      "mvp_score": 95.31288472848506,
+      "pred_ensemble": 71.45758056640625
+    },
+    {
+      "player": "Phil Foden",
+      "season": "2023/24",
+      "team": "Man City",
+      "pos_group": "MID",
+      "gls": 19.0,
+      "ast": 8.0,
+      "min": 2857.0,
+      "mvp_score": 91.78697473411336,
+      "pred_ensemble": 70.68569946289062
+    },
+    {
+      "player": "Bryan Mbeumo",
+      "season": "2024/25",
+      "team": "Brentford",
+      "pos_group": "MID",
+      "gls": 20.0,
+      "ast": 7.0,
+      "min": 3414.0,
+      "mvp_score": 89.61492929436584,
+      "pred_ensemble": 70.4172592163086
+    }
+  ]
+}

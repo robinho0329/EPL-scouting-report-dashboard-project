@@ -1,0 +1,191 @@
+{
+  "task": "P8: Transfer Adaptation Prediction",
+  "description": "Predict whether a player will adapt well after transferring to a new EPL team",
+  "dataset": {
+    "total_transfers": 852,
+    "train_size": 753,
+    "val_size": 43,
+    "test_size": 56,
+    "adaptation_rate_overall": 0.6972,
+    "adaptation_rate_train": 0.7039,
+    "adaptation_rate_val": 0.5349,
+    "adaptation_rate_test": 0.7321,
+    "min_minutes_threshold": 450,
+    "adaptation_threshold": "80% of previous per-90 output (composite metric)"
+  },
+  "features_used": [
+    "age",
+    "pos_code",
+    "age_bucket",
+    "epl_experience",
+    "transfer_count",
+    "g_a_per90_old",
+    "gls_per90_old",
+    "ast_per90_old",
+    "90s_old",
+    "was_starter",
+    "market_value",
+    "mv_vs_squad",
+    "elo_old",
+    "elo_new",
+    "elo_diff",
+    "moving_up",
+    "style_match_pct",
+    "hist_adapt_rate",
+    "height_cm",
+    "old_team_points",
+    "new_team_points",
+    "points_diff",
+    "team_cluster_0_pct",
+    "team_cluster_1_pct",
+    "team_cluster_2_pct",
+    "team_cluster_3_pct",
+    "team_cluster_4_pct",
+    "team_cluster_5_pct"
+  ],
+  "top_features": [
+    {
+      "feature": "g_a_per90_old",
+      "importance": 0.2140072460488229
+    },
+    {
+      "feature": "points_diff",
+      "importance": 0.07311166958000755
+    },
+    {
+      "feature": "mv_vs_squad",
+      "importance": 0.07194421692826992
+    },
+    {
+      "feature": "was_starter",
+      "importance": 0.06756125573003614
+    },
+    {
+      "feature": "ast_per90_old",
+      "importance": 0.052902037751397644
+    },
+    {
+      "feature": "team_cluster_1_pct",
+      "importance": 0.04273470659057686
+    },
+    {
+      "feature": "pos_code",
+      "importance": 0.04160332464052305
+    },
+    {
+      "feature": "elo_diff",
+      "importance": 0.04022173816903884
+    },
+    {
+      "feature": "gls_per90_old",
+      "importance": 0.03912570853950213
+    },
+    {
+      "feature": "market_value",
+      "importance": 0.036748554379665385
+    }
+  ],
+  "models": {
+    "Logistic Regression": {
+      "val_metrics": {
+        "accuracy": 0.6279,
+        "f1": 0.7419,
+        "precision": 0.5897,
+        "recall": 1.0,
+        "auc_roc": 0.5196
+      },
+      "test_metrics": {
+        "accuracy": 0.8036,
+        "f1": 0.8817,
+        "precision": 0.7885,
+        "recall": 1.0,
+        "auc_roc": 0.6992
+      }
+    },
+    "Random Forest": {
+      "val_metrics": {
+        "accuracy": 0.6279,
+        "f1": 0.6923,
+        "precision": 0.6207,
+        "recall": 0.7826,
+        "auc_roc": 0.6261
+      },
+      "test_metrics": {
+        "accuracy": 0.7857,
+        "f1": 0.8605,
+        "precision": 0.8222,
+        "recall": 0.9024,
+        "auc_roc": 0.7171
+      }
+    },
+    "XGBoost": {
+      "val_metrics": {
+        "accuracy": 0.5814,
+        "f1": 0.6897,
+        "precision": 0.5714,
+        "recall": 0.8696,
+        "auc_roc": 0.6457
+      },
+      "test_metrics": {
+        "accuracy": 0.7143,
+        "f1": 0.8261,
+        "precision": 0.7451,
+        "recall": 0.9268,
+        "auc_roc": 0.6976
+      }
+    },
+    "MLP": {
+      "val_metrics": {
+        "accuracy": 0.5349,
+        "f1": 0.697,
+        "precision": 0.5349,
+        "recall": 1.0,
+        "auc_roc": 0.4913
+      },
+      "test_metrics": {
+        "accuracy": 0.75,
+        "f1": 0.8542,
+        "precision": 0.7455,
+        "recall": 1.0,
+        "auc_roc": 0.6423
+      }
+    }
+  },
+  "best_model": "XGBoost",
+  "scout_examples": [
+    {
+      "player": "Albert Sambi Lokonga",
+      "from_team": "Crystal Palace",
+      "to_team": "Luton",
+      "season": "2023/24",
+      "adaptation_probability": 0.994,
+      "prediction": "Will adapt",
+      "actual_outcome": "Adapted"
+    },
+    {
+      "player": "Alexis Mac Allister",
+      "from_team": "Brighton",
+      "to_team": "Liverpool",
+      "season": "2023/24",
+      "adaptation_probability": 0.975,
+      "prediction": "Will adapt",
+      "actual_outcome": "Adapted"
+    },
+    {
+      "player": "Amadou Onana",
+      "from_team": "Everton",
+      "to_team": "Aston Villa",
+      "season": "2024/25",
+      "adaptation_probability": 0.807,
+      "prediction": "Will adapt",
+      "actual_outcome": "Adapted"
+    }
+  ],
+  "key_findings": [
+    "Best model: XGBoost with test AUC of 0.6976",
+    "Top predictive feature: g_a_per90_old (importance: 0.2140)",
+    "Overall adaptation rate: 69.7% of transfers result in successful adaptation",
+    "Age effect: Young (<=23): 74.3%, Prime (24-29): 67.8%, Senior (30+): 70.3% adaptation rate",
+    "Moving up vs down: Players moving to stronger teams adapt 70.3% vs 69.0% for weaker teams"
+  ]
+}

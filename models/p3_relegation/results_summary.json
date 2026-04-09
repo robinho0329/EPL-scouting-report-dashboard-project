@@ -1,0 +1,263 @@
+{
+  "task": "P3 Relegation Prediction",
+  "target": "relegated (binary: bottom 3 in final standings)",
+  "data_split": {
+    "train": "2000-2021",
+    "val": "2021-2023",
+    "test": "2023-2025"
+  },
+  "class_balance": "0.150 (15% relegated)",
+  "imbalance_handling": "class_weight=balanced / scale_pos_weight for XGBoost",
+  "features_full_season": [
+    "points",
+    "goal_diff",
+    "goals_for",
+    "goals_against",
+    "wins",
+    "draws",
+    "losses",
+    "ppg",
+    "win_rate",
+    "shots",
+    "sot",
+    "corners",
+    "fouls",
+    "yellows",
+    "reds",
+    "form_5",
+    "games_played",
+    "avg_elo",
+    "last_elo",
+    "squad_size",
+    "avg_age",
+    "avg_market_value",
+    "total_market_value",
+    "avg_minutes",
+    "avg_goals_p90",
+    "avg_assists_p90",
+    "avg_gc_p90",
+    "avg_epl_experience",
+    "total_minutes",
+    "promoted"
+  ],
+  "features_mid_season": [
+    "points",
+    "goal_diff",
+    "goals_for",
+    "goals_against",
+    "wins",
+    "draws",
+    "losses",
+    "ppg",
+    "win_rate",
+    "shots",
+    "sot",
+    "corners",
+    "fouls",
+    "yellows",
+    "reds",
+    "form_5",
+    "games_played",
+    "avg_elo",
+    "last_elo",
+    "squad_size",
+    "avg_age",
+    "avg_market_value",
+    "total_market_value",
+    "avg_minutes",
+    "avg_goals_p90",
+    "avg_assists_p90",
+    "avg_gc_p90",
+    "avg_epl_experience",
+    "total_minutes",
+    "promoted"
+  ],
+  "results_full_season": {
+    "LogisticRegression": {
+      "train": {
+        "accuracy": 0.9714,
+        "f1": 0.913,
+        "auc_roc": 0.9953,
+        "precision": 0.84,
+        "recall": 1.0
+      },
+      "val": {
+        "accuracy": 0.975,
+        "f1": 0.9091,
+        "auc_roc": 0.9902,
+        "precision": 1.0,
+        "recall": 0.8333
+      },
+      "test": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "XGBoost": {
+      "train": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "val": {
+        "accuracy": 0.975,
+        "f1": 0.9091,
+        "auc_roc": 0.9853,
+        "precision": 1.0,
+        "recall": 0.8333
+      },
+      "test": {
+        "accuracy": 0.975,
+        "f1": 0.9231,
+        "auc_roc": 1.0,
+        "precision": 0.8571,
+        "recall": 1.0
+      }
+    },
+    "RandomForest": {
+      "train": {
+        "accuracy": 0.9786,
+        "f1": 0.9323,
+        "auc_roc": 0.998,
+        "precision": 0.8857,
+        "recall": 0.9841
+      },
+      "val": {
+        "accuracy": 0.975,
+        "f1": 0.9231,
+        "auc_roc": 0.9902,
+        "precision": 0.8571,
+        "recall": 1.0
+      },
+      "test": {
+        "accuracy": 0.975,
+        "f1": 0.9231,
+        "auc_roc": 1.0,
+        "precision": 0.8571,
+        "recall": 1.0
+      }
+    },
+    "MLP": {
+      "train": {
+        "accuracy": 0.9571,
+        "f1": 0.8475,
+        "auc_roc": 0.9822,
+        "precision": 0.9091,
+        "recall": 0.7937
+      },
+      "val": {
+        "accuracy": 0.9,
+        "f1": 0.6,
+        "auc_roc": 0.9706,
+        "precision": 0.75,
+        "recall": 0.5
+      },
+      "test": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    }
+  },
+  "results_mid_season": {
+    "LogisticRegression": {
+      "train": {
+        "accuracy": 0.9143,
+        "f1": 0.7722,
+        "auc_roc": 0.9792,
+        "precision": 0.6421,
+        "recall": 0.9683
+      },
+      "val": {
+        "accuracy": 0.875,
+        "f1": 0.6154,
+        "auc_roc": 0.951,
+        "precision": 0.5714,
+        "recall": 0.6667
+      },
+      "test": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "XGBoost": {
+      "train": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "val": {
+        "accuracy": 0.9,
+        "f1": 0.6,
+        "auc_roc": 0.9265,
+        "precision": 0.75,
+        "recall": 0.5
+      },
+      "test": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "RandomForest": {
+      "train": {
+        "accuracy": 0.9595,
+        "f1": 0.8794,
+        "auc_roc": 0.996,
+        "precision": 0.7949,
+        "recall": 0.9841
+      },
+      "val": {
+        "accuracy": 0.9,
+        "f1": 0.6,
+        "auc_roc": 0.9265,
+        "precision": 0.75,
+        "recall": 0.5
+      },
+      "test": {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "MLP": {
+      "train": {
+        "accuracy": 0.9024,
+        "f1": 0.6019,
+        "auc_roc": 0.9401,
+        "precision": 0.775,
+        "recall": 0.4921
+      },
+      "val": {
+        "accuracy": 0.85,
+        "f1": 0.4,
+        "auc_roc": 0.8725,
+        "precision": 0.5,
+        "recall": 0.3333
+      },
+      "test": {
+        "accuracy": 0.975,
+        "f1": 0.9091,
+        "auc_roc": 1.0,
+        "precision": 1.0,
+        "recall": 0.8333
+      }
+    }
+  }
+}

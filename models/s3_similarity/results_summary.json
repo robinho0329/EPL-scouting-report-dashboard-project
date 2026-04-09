@@ -1,0 +1,1671 @@
+{
+  "metadata": {
+    "version": "v2",
+    "best_k": 11,
+    "best_silhouette": 0.115187,
+    "silhouette_scores": {
+      "10": 0.114575,
+      "11": 0.115187,
+      "12": 0.087472,
+      "13": 0.099713,
+      "14": 0.095273,
+      "15": 0.096342,
+      "16": 0.099424,
+      "17": 0.094206,
+      "18": 0.088656
+    },
+    "archetypes": {
+      "0": "Centre-Back",
+      "1": "Attacking Full-Back",
+      "2": "Ball-Winning Defender",
+      "3": "Centre-Back",
+      "4": "Attacking Full-Back",
+      "5": "Centre-Back",
+      "6": "Centre-Forward",
+      "7": "Attacking Wide Forward",
+      "8": "Ball-Winning Defender",
+      "9": "Attacking Full-Back",
+      "10": "Attacking Full-Back"
+    },
+    "n_players": 12303,
+    "seasons_covered": [
+      "2000/01",
+      "2001/02",
+      "2002/03",
+      "2003/04",
+      "2004/05",
+      "2005/06",
+      "2006/07",
+      "2007/08",
+      "2008/09",
+      "2009/10",
+      "2010/11",
+      "2011/12",
+      "2012/13",
+      "2013/14",
+      "2014/15",
+      "2015/16",
+      "2016/17",
+      "2017/18",
+      "2018/19",
+      "2019/20",
+      "2020/21",
+      "2021/22",
+      "2022/23",
+      "2023/24",
+      "2024/25"
+    ],
+    "improvements": [
+      "포지션별 전용 피처셋 + 핵심 스탯 1.3 가중치",
+      "One-Hot 가중치 2.0 → 1.5 하향 (포지션 편향 완화)",
+      "K 탐색 범위 8~12 → 10~18 확장",
+      "n_init 10 → 20 증가",
+      "필터링 기능 추가 (시장가치, 나이, 포지션)",
+      "클러스터별 저가 대안 자동 목록"
+    ]
+  },
+  "cluster_profiles": {
+    "0": {
+      "goals_p90": 0.08397546941470012,
+      "assists_p90": 0.05410322749419497,
+      "shots_p90": 0.0,
+      "tackles_p90": 0.0,
+      "interc_p90": 0.0,
+      "key_passes_p90": 0.0,
+      "age_filled": 26.52377762893503,
+      "height_cm": 182.15070328198257,
+      "market_value_log": 0.0,
+      "starter_ratio": 0.8285078199804282,
+      "gls": 1.4728734092431346,
+      "ast": 1.0073677160080374,
+      "def_actions_p90": 0.0,
+      "g_plus_a_p90": 0.1380786969088951,
+      "count": 1493,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.38,
+        "FW": 0.171,
+        "AM": 0.153,
+        "CM": 0.131,
+        "GK": 0.098,
+        "DM": 0.066
+      }
+    },
+    "1": {
+      "goals_p90": 0.1316868395092307,
+      "assists_p90": 0.29712820099974835,
+      "shots_p90": 0.036912463575903144,
+      "tackles_p90": 0.01788338173044886,
+      "interc_p90": 0.021112221204587788,
+      "key_passes_p90": 0.03145054187077693,
+      "age_filled": 25.51300578034682,
+      "height_cm": 180.85982658959537,
+      "market_value_log": 11.704275002571475,
+      "starter_ratio": 0.760259148408134,
+      "gls": 2.598265895953757,
+      "ast": 4.463872832369942,
+      "def_actions_p90": 0.03899560293503665,
+      "g_plus_a_p90": 0.42881504050897906,
+      "count": 692,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.282,
+        "AM": 0.194,
+        "FW": 0.159,
+        "CM": 0.153,
+        "DM": 0.081,
+        "GK": 0.074,
+        "Unknown": 0.058
+      }
+    },
+    "2": {
+      "goals_p90": 0.04988699248027141,
+      "assists_p90": 0.04460408535200434,
+      "shots_p90": 0.8601532949928146,
+      "tackles_p90": 1.8095111860766517,
+      "interc_p90": 1.9046794900559498,
+      "key_passes_p90": 1.0833674609065416,
+      "age_filled": 25.991347342398022,
+      "height_cm": 183.04697156983931,
+      "market_value_log": 14.768507768011503,
+      "starter_ratio": 0.742731362591673,
+      "gls": 0.7503090234857849,
+      "ast": 0.6860321384425216,
+      "def_actions_p90": 3.7141906761326013,
+      "g_plus_a_p90": 0.09449107783227574,
+      "count": 809,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.429,
+        "DM": 0.129,
+        "CM": 0.119,
+        "AM": 0.109,
+        "FW": 0.093,
+        "GK": 0.072,
+        "Unknown": 0.051
+      }
+    },
+    "3": {
+      "goals_p90": 0.04458658657964177,
+      "assists_p90": 0.02144219531004283,
+      "shots_p90": 0.023286977347177624,
+      "tackles_p90": 0.024232513553223346,
+      "interc_p90": 0.018994351264492088,
+      "key_passes_p90": 0.03097139118370424,
+      "age_filled": 23.87189148455162,
+      "height_cm": 181.65109269027883,
+      "market_value_log": 12.18140985947457,
+      "starter_ratio": 0.41836613778143655,
+      "gls": 0.2908816880180859,
+      "ast": 0.15975885455915598,
+      "def_actions_p90": 0.04322686481771544,
+      "g_plus_a_p90": 0.06602878188968461,
+      "count": 1327,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.28,
+        "FW": 0.233,
+        "AM": 0.17,
+        "CM": 0.13,
+        "DM": 0.072,
+        "Unknown": 0.063,
+        "GK": 0.052
+      }
+    },
+    "4": {
+      "goals_p90": 0.10363461001511454,
+      "assists_p90": 0.24836845966286786,
+      "shots_p90": 1.5557703885726446,
+      "tackles_p90": 1.3146459636089542,
+      "interc_p90": 1.1350629183715684,
+      "key_passes_p90": 6.046942422407869,
+      "age_filled": 25.93979933110368,
+      "height_cm": 178.80602006688963,
+      "market_value_log": 15.70151540148259,
+      "starter_ratio": 0.7892618604279875,
+      "gls": 2.3745819397993313,
+      "ast": 4.929765886287625,
+      "def_actions_p90": 2.4497088819805226,
+      "g_plus_a_p90": 0.35200306967798234,
+      "count": 299,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.391,
+        "CM": 0.181,
+        "AM": 0.161,
+        "FW": 0.11,
+        "DM": 0.08,
+        "Unknown": 0.05,
+        "GK": 0.027
+      }
+    },
+    "5": {
+      "goals_p90": 0.0663794597940946,
+      "assists_p90": 0.0459612979409274,
+      "shots_p90": 0.0025075715195802496,
+      "tackles_p90": 0.004081317815419822,
+      "interc_p90": 0.0048080180819507195,
+      "key_passes_p90": 0.002504891510667726,
+      "age_filled": 27.03452490070272,
+      "height_cm": 183.26733883287503,
+      "market_value_log": 13.386406356320212,
+      "starter_ratio": 0.8879624402764964,
+      "gls": 1.241063244729606,
+      "ast": 0.8869538649556982,
+      "def_actions_p90": 0.00888933589737054,
+      "g_plus_a_p90": 0.11229742013293485,
+      "count": 3273,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.351,
+        "GK": 0.136,
+        "FW": 0.116,
+        "AM": 0.115,
+        "Unknown": 0.11,
+        "CM": 0.103,
+        "DM": 0.068
+      }
+    },
+    "6": {
+      "goals_p90": 0.13764966829619324,
+      "assists_p90": 0.07680730430844937,
+      "shots_p90": 8.41088662957333,
+      "tackles_p90": 5.62130665347378,
+      "interc_p90": 4.12500957059755,
+      "key_passes_p90": 9.464704550562995,
+      "age_filled": 25.19047619047619,
+      "height_cm": 178.8095238095238,
+      "market_value_log": 15.392460428066101,
+      "starter_ratio": 0.449776678348107,
+      "gls": 0.6666666666666666,
+      "ast": 0.42857142857142855,
+      "def_actions_p90": 9.74631622407133,
+      "g_plus_a_p90": 0.2144569726046426,
+      "count": 21,
+      "top_pos": "FW",
+      "pos_dist": {
+        "FW": 0.333,
+        "DEF": 0.286,
+        "AM": 0.19,
+        "CM": 0.095,
+        "DM": 0.048,
+        "Unknown": 0.048
+      }
+    },
+    "7": {
+      "goals_p90": 0.3492627378913952,
+      "assists_p90": 0.15171115307824534,
+      "shots_p90": 2.1890703423585216,
+      "tackles_p90": 0.9061553659129374,
+      "interc_p90": 0.7750102349411855,
+      "key_passes_p90": 1.5234893082539303,
+      "age_filled": 25.69501133786848,
+      "height_cm": 182.5702947845805,
+      "market_value_log": 15.530963060135345,
+      "starter_ratio": 0.7625581374946857,
+      "gls": 6.928571428571429,
+      "ast": 3.179138321995465,
+      "def_actions_p90": 1.681165600854123,
+      "g_plus_a_p90": 0.5009738909696406,
+      "count": 882,
+      "top_pos": "AM",
+      "pos_dist": {
+        "AM": 0.268,
+        "DEF": 0.255,
+        "FW": 0.211,
+        "CM": 0.104,
+        "DM": 0.078,
+        "Unknown": 0.078,
+        "GK": 0.006
+      }
+    },
+    "8": {
+      "goals_p90": 0.08586724312293753,
+      "assists_p90": 0.04800599439140225,
+      "shots_p90": 1.094785896092208,
+      "tackles_p90": 0.8421759113704157,
+      "interc_p90": 0.8456868091725798,
+      "key_passes_p90": 0.6868599090079055,
+      "age_filled": 25.99174917491749,
+      "height_cm": 184.61496149614962,
+      "market_value_log": 15.119862138068031,
+      "starter_ratio": 0.7347737628908937,
+      "gls": 1.4042904290429044,
+      "ast": 0.7964796479647965,
+      "def_actions_p90": 1.6878627205429952,
+      "g_plus_a_p90": 0.1338732375143398,
+      "count": 1818,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.32,
+        "FW": 0.163,
+        "AM": 0.16,
+        "CM": 0.139,
+        "DM": 0.086,
+        "GK": 0.074,
+        "Unknown": 0.059
+      }
+    },
+    "9": {
+      "goals_p90": 0.39928664456793866,
+      "assists_p90": 0.10953003278763287,
+      "shots_p90": 0.0004278135873595346,
+      "tackles_p90": 0.000499115851919457,
+      "interc_p90": 0.0010338828361188752,
+      "key_passes_p90": 7.130226455992242e-05,
+      "age_filled": 25.534574468085108,
+      "height_cm": 182.16356382978722,
+      "market_value_log": 11.442584460068007,
+      "starter_ratio": 0.7844721164173241,
+      "gls": 6.888297872340425,
+      "ast": 2.3058510638297873,
+      "def_actions_p90": 0.0015329986880383323,
+      "g_plus_a_p90": 0.5088166773555716,
+      "count": 752,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.315,
+        "FW": 0.253,
+        "AM": 0.142,
+        "CM": 0.14,
+        "Unknown": 0.081,
+        "DM": 0.064,
+        "GK": 0.005
+      }
+    },
+    "10": {
+      "goals_p90": 0.0763607594358216,
+      "assists_p90": 0.1040110633371803,
+      "shots_p90": 1.2175303795218253,
+      "tackles_p90": 1.2143478615086318,
+      "interc_p90": 0.9968431135503364,
+      "key_passes_p90": 3.573933006745118,
+      "age_filled": 25.562433297758805,
+      "height_cm": 177.95837780149412,
+      "market_value_log": 14.80389542457782,
+      "starter_ratio": 0.6979594681312452,
+      "gls": 1.3703308431163288,
+      "ast": 1.7716115261472785,
+      "def_actions_p90": 2.211190975058968,
+      "g_plus_a_p90": 0.1803718227730019,
+      "count": 937,
+      "top_pos": "DEF",
+      "pos_dist": {
+        "DEF": 0.37,
+        "AM": 0.266,
+        "CM": 0.143,
+        "FW": 0.1,
+        "Unknown": 0.069,
+        "DM": 0.05,
+        "GK": 0.001
+      }
+    }
+  },
+  "cheap_alternatives": {
+    "0": {
+      "archetype": "Centre-Back",
+      "top5_cheapest": []
+    },
+    "1": {
+      "archetype": "Attacking Full-Back",
+      "top5_cheapest": [
+        {
+          "player": "Mark Gower",
+          "season": "2011/12",
+          "team": "Swansea",
+          "position": "Central Midfield",
+          "age": 32.0,
+          "goals": 0.0,
+          "assists": 5.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Brian McBride",
+          "season": "2004/05",
+          "team": "Fulham",
+          "position": "Centre-Forward",
+          "age": 32.0,
+          "goals": 6.0,
+          "assists": 4.0,
+          "market_value_m": 1.0
+        },
+        {
+          "player": "Mathias Svensson",
+          "season": "2004/05",
+          "team": "Norwich",
+          "position": "Centre-Forward",
+          "age": 29.0,
+          "goals": 4.0,
+          "assists": 3.0,
+          "market_value_m": 1.0
+        },
+        {
+          "player": "Ricardo Vaz Tê",
+          "season": "2005/06",
+          "team": "Bolton",
+          "position": "Right Winger",
+          "age": 18.0,
+          "goals": 3.0,
+          "assists": 4.0,
+          "market_value_m": 1.0
+        },
+        {
+          "player": "Dean Whitehead",
+          "season": "2005/06",
+          "team": "Sunderland",
+          "position": "Central Midfield",
+          "age": 23.0,
+          "goals": 3.0,
+          "assists": 6.0,
+          "market_value_m": 1.0
+        }
+      ]
+    },
+    "2": {
+      "archetype": "Ball-Winning Defender",
+      "top5_cheapest": [
+        {
+          "player": "Marcin Wasilewski",
+          "season": "2014/15",
+          "team": "Leicester",
+          "position": "Centre-Back",
+          "age": 34.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Clint Hill",
+          "season": "2014/15",
+          "team": "QPR",
+          "position": "Centre-Back",
+          "age": 35.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Jazz Richards",
+          "season": "2014/15",
+          "team": "Swansea",
+          "position": "Right-Back",
+          "age": 23.0,
+          "goals": 0.0,
+          "assists": 1.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Adam Lallana",
+          "season": "2024/25",
+          "team": "Southampton",
+          "position": "Attacking Midfield",
+          "age": 36.0,
+          "goals": 0.0,
+          "assists": 2.0,
+          "market_value_m": 0.8
+        },
+        {
+          "player": "Phil Bardsley",
+          "season": "2019/20",
+          "team": "Burnley",
+          "position": "Right-Back",
+          "age": 34.0,
+          "goals": 0.0,
+          "assists": 1.0,
+          "market_value_m": 0.8
+        }
+      ]
+    },
+    "3": {
+      "archetype": "Centre-Back",
+      "top5_cheapest": [
+        {
+          "player": "Nedum Onuoha",
+          "season": "2004/05",
+          "team": "Man City",
+          "position": "Centre-Back",
+          "age": 17.0,
+          "goals": 0.0,
+          "assists": 0.0,
+          "market_value_m": 0.0
+        },
+        {
+          "player": "Kevin Poole",
+          "season": "2004/05",
+          "team": "Bolton",
+          "position": "Goalkeeper",
+          "age": 41.0,
+          "goals": 0.0,
+          "assists": 0.0,
+          "market_value_m": 0.0
+        },
+        {
+          "player": "Tom Soares",
+          "season": "2004/05",
+          "team": "Crystal Palace",
+          "position": "Central Midfield",
+          "age": 18.0,
+          "goals": 0.0,
+          "assists": 2.0,
+          "market_value_m": 0.0
+        },
+        {
+          "player": "Ben Watson",
+          "season": "2004/05",
+          "team": "Crystal Palace",
+          "position": "Central Midfield",
+          "age": 19.0,
+          "goals": 0.0,
+          "assists": 0.0,
+          "market_value_m": 0.0
+        },
+        {
+          "player": "Willo Flood",
+          "season": "2004/05",
+          "team": "Man City",
+          "position": "Central Midfield",
+          "age": 19.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.0
+        }
+      ]
+    },
+    "4": {
+      "archetype": "Attacking Full-Back",
+      "top5_cheapest": [
+        {
+          "player": "Jamie Vardy",
+          "season": "2014/15",
+          "team": "Leicester",
+          "position": "Centre-Forward",
+          "age": 27.0,
+          "goals": 5.0,
+          "assists": 8.0,
+          "market_value_m": 2.0
+        },
+        {
+          "player": "Charlie Daniels",
+          "season": "2015/16",
+          "team": "Bournemouth",
+          "position": "Left-Back",
+          "age": 28.0,
+          "goals": 3.0,
+          "assists": 5.0,
+          "market_value_m": 2.0
+        },
+        {
+          "player": "Matt Phillips",
+          "season": "2014/15",
+          "team": "QPR",
+          "position": "Right Winger",
+          "age": 23.0,
+          "goals": 3.0,
+          "assists": 8.0,
+          "market_value_m": 3.0
+        },
+        {
+          "player": "Chris Brunt",
+          "season": "2017/18",
+          "team": "West Brom",
+          "position": "Central Midfield",
+          "age": 32.0,
+          "goals": 0.0,
+          "assists": 7.0,
+          "market_value_m": 3.0
+        },
+        {
+          "player": "Charlie Adam",
+          "season": "2014/15",
+          "team": "Stoke",
+          "position": "Central Midfield",
+          "age": 28.0,
+          "goals": 7.0,
+          "assists": 1.0,
+          "market_value_m": 4.0
+        }
+      ]
+    },
+    "5": {
+      "archetype": "Centre-Back",
+      "top5_cheapest": [
+        {
+          "player": "Mikele Leigertwood",
+          "season": "2004/05",
+          "team": "Crystal Palace",
+          "position": "Defensive Midfield",
+          "age": 21.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.0
+        },
+        {
+          "player": "Dexter Blackstock",
+          "season": "2004/05",
+          "team": "Southampton",
+          "position": "Centre-Forward",
+          "age": 18.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.2
+        },
+        {
+          "player": "Jason Roberts",
+          "season": "2011/12",
+          "team": "Blackburn",
+          "position": "Centre-Forward",
+          "age": 33.0,
+          "goals": 0.0,
+          "assists": 1.0,
+          "market_value_m": 0.2
+        },
+        {
+          "player": "Jason Roberts",
+          "season": "2012/13",
+          "team": "Reading",
+          "position": "Centre-Forward",
+          "age": 34.0,
+          "goals": 0.0,
+          "assists": 1.0,
+          "market_value_m": 0.2
+        },
+        {
+          "player": "Youri Djorkaeff",
+          "season": "2004/05",
+          "team": "Blackburn",
+          "position": "Attacking Midfield",
+          "age": 36.0,
+          "goals": 0.0,
+          "assists": 1.0,
+          "market_value_m": 0.3
+        }
+      ]
+    },
+    "6": {
+      "archetype": "Centre-Forward",
+      "top5_cheapest": [
+        {
+          "player": "Jack Cork",
+          "season": "2014/15",
+          "team": "Southampton",
+          "position": "Defensive Midfield",
+          "age": 25.0,
+          "goals": 2.0,
+          "assists": 0.0,
+          "market_value_m": 4.0
+        },
+        {
+          "player": "Lewis Grabban",
+          "season": "2015/16",
+          "team": "Norwich",
+          "position": "Centre-Forward",
+          "age": 27.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 4.0
+        },
+        {
+          "player": "Steven Naismith",
+          "season": "2015/16",
+          "team": "Everton",
+          "position": "Second Striker",
+          "age": 28.0,
+          "goals": 3.0,
+          "assists": 1.0,
+          "market_value_m": 6.0
+        },
+        {
+          "player": "Robert Snodgrass",
+          "season": "2016/17",
+          "team": "West Ham",
+          "position": "Right Winger",
+          "age": 28.0,
+          "goals": 0.0,
+          "assists": 2.0,
+          "market_value_m": 8.0
+        },
+        {
+          "player": "Cédric Soares",
+          "season": "2019/20",
+          "team": "Arsenal",
+          "position": "Right-Back",
+          "age": 27.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 8.0
+        }
+      ]
+    },
+    "7": {
+      "archetype": "Attacking Wide Forward",
+      "top5_cheapest": [
+        {
+          "player": "Glenn Murray",
+          "season": "2014/15",
+          "team": "Crystal Palace",
+          "position": "Centre-Forward",
+          "age": 30.0,
+          "goals": 7.0,
+          "assists": 3.0,
+          "market_value_m": 2.5
+        },
+        {
+          "player": "Jonathan Walters",
+          "season": "2014/15",
+          "team": "Stoke",
+          "position": "Right Winger",
+          "age": 30.0,
+          "goals": 8.0,
+          "assists": 4.0,
+          "market_value_m": 3.5
+        },
+        {
+          "player": "Steven Gerrard",
+          "season": "2014/15",
+          "team": "Liverpool",
+          "position": "Central Midfield",
+          "age": 34.0,
+          "goals": 9.0,
+          "assists": 1.0,
+          "market_value_m": 4.0
+        },
+        {
+          "player": "Junior Stanislas",
+          "season": "2016/17",
+          "team": "Bournemouth",
+          "position": "Left Winger",
+          "age": 26.0,
+          "goals": 7.0,
+          "assists": 5.0,
+          "market_value_m": 4.5
+        },
+        {
+          "player": "Sam Vokes",
+          "season": "2016/17",
+          "team": "Burnley",
+          "position": "Centre-Forward",
+          "age": 26.0,
+          "goals": 10.0,
+          "assists": 3.0,
+          "market_value_m": 4.5
+        }
+      ]
+    },
+    "8": {
+      "archetype": "Ball-Winning Defender",
+      "top5_cheapest": [
+        {
+          "player": "Gareth McAuley",
+          "season": "2014/15",
+          "team": "West Brom",
+          "position": "Centre-Back",
+          "age": 34.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Joe Lolley",
+          "season": "2017/18",
+          "team": "Huddersfield",
+          "position": "Right Winger",
+          "age": 24.0,
+          "goals": 1.0,
+          "assists": 0.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Billy Sharp",
+          "season": "2020/21",
+          "team": "Sheffield United",
+          "position": "Centre-Forward",
+          "age": 34.0,
+          "goals": 3.0,
+          "assists": 0.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Sam Morsy",
+          "season": "2024/25",
+          "team": "Ipswich",
+          "position": "Central Midfield",
+          "age": 32.0,
+          "goals": 1.0,
+          "assists": 1.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Jonathan Rowe",
+          "season": "2021/22",
+          "team": "Norwich",
+          "position": "Left Winger",
+          "age": 18.0,
+          "goals": 0.0,
+          "assists": 1.0,
+          "market_value_m": 0.8
+        }
+      ]
+    },
+    "9": {
+      "archetype": "Attacking Full-Back",
+      "top5_cheapest": [
+        {
+          "player": "Damien Francis",
+          "season": "2004/05",
+          "team": "Norwich",
+          "position": "Central Midfield",
+          "age": 25.0,
+          "goals": 7.0,
+          "assists": 1.0,
+          "market_value_m": 0.6
+        },
+        {
+          "player": "Gary Speed",
+          "season": "2006/07",
+          "team": "Bolton",
+          "position": "Central Midfield",
+          "age": 36.0,
+          "goals": 8.0,
+          "assists": 3.0,
+          "market_value_m": 0.9
+        },
+        {
+          "player": "Lee McCulloch",
+          "season": "2006/07",
+          "team": "Wigan",
+          "position": "Centre-Back",
+          "age": 28.0,
+          "goals": 4.0,
+          "assists": 5.0,
+          "market_value_m": 0.9
+        },
+        {
+          "player": "Aki Riihilahti",
+          "season": "2004/05",
+          "team": "Crystal Palace",
+          "position": "Defensive Midfield",
+          "age": 27.0,
+          "goals": 4.0,
+          "assists": 4.0,
+          "market_value_m": 1.2
+        },
+        {
+          "player": "Leon Osman",
+          "season": "2004/05",
+          "team": "Everton",
+          "position": "Central Midfield",
+          "age": 23.0,
+          "goals": 6.0,
+          "assists": 2.0,
+          "market_value_m": 1.2
+        }
+      ]
+    },
+    "10": {
+      "archetype": "Attacking Full-Back",
+      "top5_cheapest": [
+        {
+          "player": "Paul Konchesky",
+          "season": "2014/15",
+          "team": "Leicester",
+          "position": "Left-Back",
+          "age": 33.0,
+          "goals": 1.0,
+          "assists": 1.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Sheyi Ojo",
+          "season": "2015/16",
+          "team": "Liverpool",
+          "position": "Right Winger",
+          "age": 18.0,
+          "goals": 0.0,
+          "assists": 3.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Ashley Young",
+          "season": "2024/25",
+          "team": "Everton",
+          "position": "Right-Back",
+          "age": 39.0,
+          "goals": 1.0,
+          "assists": 3.0,
+          "market_value_m": 0.5
+        },
+        {
+          "player": "Michail Antonio",
+          "season": "2024/25",
+          "team": "West Ham",
+          "position": "Centre-Forward",
+          "age": 34.0,
+          "goals": 1.0,
+          "assists": 1.0,
+          "market_value_m": 0.7
+        },
+        {
+          "player": "Pablo Hernández",
+          "season": "2020/21",
+          "team": "Leeds",
+          "position": "Right Winger",
+          "age": 35.0,
+          "goals": 0.0,
+          "assists": 2.0,
+          "market_value_m": 0.8
+        }
+      ]
+    }
+  },
+  "demo_searches": {
+    "Erling Haaland_2023/24": [
+      {
+        "rank": 1,
+        "player": "Erling Haaland",
+        "season": "2022/23",
+        "team": "Man City",
+        "position": "Centre-Forward",
+        "age": 22.0,
+        "market_value_m": 180.0,
+        "similarity": 0.9764514940918494,
+        "goals": 36.0,
+        "assists": 8.0
+      },
+      {
+        "rank": 2,
+        "player": "Alexander Isak",
+        "season": "2024/25",
+        "team": "Newcastle",
+        "position": "Centre-Forward",
+        "age": 24.0,
+        "market_value_m": 120.0,
+        "similarity": 0.975980151321028,
+        "goals": 23.0,
+        "assists": 6.0
+      },
+      {
+        "rank": 3,
+        "player": "Erling Haaland",
+        "season": "2024/25",
+        "team": "Man City",
+        "position": "Centre-Forward",
+        "age": 24.0,
+        "market_value_m": 180.0,
+        "similarity": 0.9636522259026827,
+        "goals": 22.0,
+        "assists": 3.0
+      },
+      {
+        "rank": 4,
+        "player": "Alexander Isak",
+        "season": "2023/24",
+        "team": "Newcastle",
+        "position": "Centre-Forward",
+        "age": 23.0,
+        "market_value_m": 75.0,
+        "similarity": 0.9636434076504995,
+        "goals": 21.0,
+        "assists": 2.0
+      },
+      {
+        "rank": 5,
+        "player": "Harry Kane",
+        "season": "2016/17",
+        "team": "Tottenham",
+        "position": "Centre-Forward",
+        "age": 23.0,
+        "market_value_m": 60.0,
+        "similarity": 0.9582058262149933,
+        "goals": 29.0,
+        "assists": 5.0
+      },
+      {
+        "rank": 6,
+        "player": "Harry Kane",
+        "season": "2018/19",
+        "team": "Tottenham",
+        "position": "Centre-Forward",
+        "age": 25.0,
+        "market_value_m": 150.0,
+        "similarity": 0.9379970860861415,
+        "goals": 17.0,
+        "assists": 4.0
+      },
+      {
+        "rank": 7,
+        "player": "Harry Kane",
+        "season": "2017/18",
+        "team": "Tottenham",
+        "position": "Centre-Forward",
+        "age": 24.0,
+        "market_value_m": 150.0,
+        "similarity": 0.9367974055600528,
+        "goals": 30.0,
+        "assists": 2.0
+      },
+      {
+        "rank": 8,
+        "player": "Tammy Abraham",
+        "season": "2019/20",
+        "team": "Chelsea",
+        "position": "Centre-Forward",
+        "age": 21.0,
+        "market_value_m": 40.0,
+        "similarity": 0.9359164067212798,
+        "goals": 15.0,
+        "assists": 3.0
+      },
+      {
+        "rank": 9,
+        "player": "Romelu Lukaku",
+        "season": "2016/17",
+        "team": "Everton",
+        "position": "Centre-Forward",
+        "age": 23.0,
+        "market_value_m": 50.0,
+        "similarity": 0.933228190449654,
+        "goals": 25.0,
+        "assists": 6.0
+      },
+      {
+        "rank": 10,
+        "player": "Diego Costa",
+        "season": "2014/15",
+        "team": "Chelsea",
+        "position": "Centre-Forward",
+        "age": 25.0,
+        "market_value_m": 50.0,
+        "similarity": 0.9248903642549103,
+        "goals": 20.0,
+        "assists": 3.0
+      }
+    ],
+    "Bukayo Saka_2023/24": [
+      {
+        "rank": 1,
+        "player": "Bukayo Saka",
+        "season": "2022/23",
+        "team": "Arsenal",
+        "position": "Right Winger",
+        "age": 20.0,
+        "market_value_m": 120.0,
+        "similarity": 0.9769277890874879,
+        "goals": 14.0,
+        "assists": 11.0
+      },
+      {
+        "rank": 2,
+        "player": "Bruno Fernandes",
+        "season": "2020/21",
+        "team": "Man United",
+        "position": "Attacking Midfield",
+        "age": 25.0,
+        "market_value_m": 90.0,
+        "similarity": 0.966152116511758,
+        "goals": 18.0,
+        "assists": 12.0
+      },
+      {
+        "rank": 3,
+        "player": "James Maddison",
+        "season": "2021/22",
+        "team": "Leicester",
+        "position": "Attacking Midfield",
+        "age": 24.0,
+        "market_value_m": 50.0,
+        "similarity": 0.9583975891413067,
+        "goals": 12.0,
+        "assists": 8.0
+      },
+      {
+        "rank": 4,
+        "player": "Bukayo Saka",
+        "season": "2021/22",
+        "team": "Arsenal",
+        "position": "Right Winger",
+        "age": 19.0,
+        "market_value_m": 65.0,
+        "similarity": 0.9503399812758822,
+        "goals": 11.0,
+        "assists": 7.0
+      },
+      {
+        "rank": 5,
+        "player": "Jarrod Bowen",
+        "season": "2021/22",
+        "team": "West Ham",
+        "position": "Right Winger",
+        "age": 24.0,
+        "market_value_m": 42.0,
+        "similarity": 0.9485484919356706,
+        "goals": 12.0,
+        "assists": 10.0
+      },
+      {
+        "rank": 6,
+        "player": "Philippe Coutinho",
+        "season": "2016/17",
+        "team": "Liverpool",
+        "position": "Attacking Midfield",
+        "age": 24.0,
+        "market_value_m": 45.0,
+        "similarity": 0.9435298491876581,
+        "goals": 13.0,
+        "assists": 8.0
+      },
+      {
+        "rank": 7,
+        "player": "James Maddison",
+        "season": "2022/23",
+        "team": "Leicester",
+        "position": "Attacking Midfield",
+        "age": 25.0,
+        "market_value_m": 60.0,
+        "similarity": 0.9420506024118853,
+        "goals": 10.0,
+        "assists": 9.0
+      },
+      {
+        "rank": 8,
+        "player": "Gabriel Martinelli",
+        "season": "2022/23",
+        "team": "Arsenal",
+        "position": "Left Winger",
+        "age": 21.0,
+        "market_value_m": 80.0,
+        "similarity": 0.9414243363556671,
+        "goals": 15.0,
+        "assists": 5.0
+      },
+      {
+        "rank": 9,
+        "player": "Mason Mount",
+        "season": "2021/22",
+        "team": "Chelsea",
+        "position": "Attacking Midfield",
+        "age": 22.0,
+        "market_value_m": 75.0,
+        "similarity": 0.9398947086136904,
+        "goals": 11.0,
+        "assists": 10.0
+      },
+      {
+        "rank": 10,
+        "player": "Riyad Mahrez",
+        "season": "2017/18",
+        "team": "Leicester",
+        "position": "Right Winger",
+        "age": 26.0,
+        "market_value_m": 50.0,
+        "similarity": 0.9376461827383397,
+        "goals": 12.0,
+        "assists": 10.0
+      }
+    ],
+    "Virgil van Dijk_2023/24": [
+      {
+        "rank": 1,
+        "player": "Lewis Dunk",
+        "season": "2023/24",
+        "team": "Brighton",
+        "position": "Centre-Back",
+        "age": 31.0,
+        "market_value_m": 12.0,
+        "similarity": 0.9517330006659679,
+        "goals": 3.0,
+        "assists": 1.0
+      },
+      {
+        "rank": 2,
+        "player": "Virgil van Dijk",
+        "season": "2021/22",
+        "team": "Liverpool",
+        "position": "Centre-Back",
+        "age": 30.0,
+        "market_value_m": 55.0,
+        "similarity": 0.9409013595492608,
+        "goals": 3.0,
+        "assists": 1.0
+      },
+      {
+        "rank": 3,
+        "player": "Virgil van Dijk",
+        "season": "2022/23",
+        "team": "Liverpool",
+        "position": "Centre-Back",
+        "age": 31.0,
+        "market_value_m": 35.0,
+        "similarity": 0.9356146939749358,
+        "goals": 3.0,
+        "assists": 1.0
+      },
+      {
+        "rank": 4,
+        "player": "David Luiz",
+        "season": "2019/20",
+        "team": "Arsenal",
+        "position": "Centre-Back",
+        "age": 32.0,
+        "market_value_m": 12.0,
+        "similarity": 0.9178874486763244,
+        "goals": 2.0,
+        "assists": 1.0
+      },
+      {
+        "rank": 5,
+        "player": "Yerry Mina",
+        "season": "2019/20",
+        "team": "Everton",
+        "position": "Centre-Back",
+        "age": 24.0,
+        "market_value_m": 20.0,
+        "similarity": 0.906781034489319,
+        "goals": 2.0,
+        "assists": 1.0
+      },
+      {
+        "rank": 6,
+        "player": "Joël Matip",
+        "season": "2021/22",
+        "team": "Liverpool",
+        "position": "Centre-Back",
+        "age": 29.0,
+        "market_value_m": 18.0,
+        "similarity": 0.9061904089245896,
+        "goals": 3.0,
+        "assists": 3.0
+      },
+      {
+        "rank": 7,
+        "player": "Scott Dann",
+        "season": "2017/18",
+        "team": "Crystal Palace",
+        "position": "Centre-Back",
+        "age": 30.0,
+        "market_value_m": 5.0,
+        "similarity": 0.9040566517938154,
+        "goals": 1.0,
+        "assists": 0.0
+      },
+      {
+        "rank": 8,
+        "player": "Shane Duffy",
+        "season": "2021/22",
+        "team": "Brighton",
+        "position": "Centre-Back",
+        "age": 29.0,
+        "market_value_m": 5.0,
+        "similarity": 0.9032963196284172,
+        "goals": 1.0,
+        "assists": 0.0
+      },
+      {
+        "rank": 9,
+        "player": "James Tomkins",
+        "season": "2018/19",
+        "team": "Crystal Palace",
+        "position": "Centre-Back",
+        "age": 29.0,
+        "market_value_m": 8.0,
+        "similarity": 0.9030853188760386,
+        "goals": 1.0,
+        "assists": 1.0
+      },
+      {
+        "rank": 10,
+        "player": "Sean Morrison",
+        "season": "2018/19",
+        "team": "Cardiff",
+        "position": "Centre-Back",
+        "age": 27.0,
+        "market_value_m": 5.0,
+        "similarity": 0.8984218313873142,
+        "goals": 1.0,
+        "assists": 3.0
+      }
+    ]
+  },
+  "filtered_searches": {
+    "Bukayo Saka_2023/24_시장가치 ≤€20M, 나이 ≤25": {
+      "filter_applied": "시장가치 ≤€20M, 나이 ≤25",
+      "max_market_value_m": 20.0,
+      "max_age": 25,
+      "results": [
+        {
+          "rank": 1,
+          "player": "Matheus Pereira",
+          "season": "2020/21",
+          "team": "West Brom",
+          "position": "Attacking Midfield",
+          "age": 24.0,
+          "market_value_m": 15.0,
+          "similarity": 0.9293445941658222,
+          "goals": 11.0,
+          "assists": 6.0
+        },
+        {
+          "rank": 2,
+          "player": "Riyad Mahrez",
+          "season": "2015/16",
+          "team": "Leicester",
+          "position": "Right Winger",
+          "age": 24.0,
+          "market_value_m": 20.0,
+          "similarity": 0.9287435315071926,
+          "goals": 17.0,
+          "assists": 11.0
+        },
+        {
+          "rank": 3,
+          "player": "Bertrand Traoré",
+          "season": "2020/21",
+          "team": "Aston Villa",
+          "position": "Right Winger",
+          "age": 24.0,
+          "market_value_m": 20.0,
+          "similarity": 0.8946224463272878,
+          "goals": 7.0,
+          "assists": 6.0
+        },
+        {
+          "rank": 4,
+          "player": "Jack Harrison",
+          "season": "2020/21",
+          "team": "Leeds",
+          "position": "Left Winger",
+          "age": 23.0,
+          "market_value_m": 15.0,
+          "similarity": 0.8565004578939821,
+          "goals": 8.0,
+          "assists": 8.0
+        },
+        {
+          "rank": 5,
+          "player": "Sadio Mané",
+          "season": "2015/16",
+          "team": "Southampton",
+          "position": "Left Winger",
+          "age": 23.0,
+          "market_value_m": 20.0,
+          "similarity": 0.8470698156625974,
+          "goals": 11.0,
+          "assists": 6.0
+        },
+        {
+          "rank": 6,
+          "player": "Marcus Tavernier",
+          "season": "2022/23",
+          "team": "Bournemouth",
+          "position": "Attacking Midfield",
+          "age": 23.0,
+          "market_value_m": 17.0,
+          "similarity": 0.8379089115120872,
+          "goals": 5.0,
+          "assists": 4.0
+        },
+        {
+          "rank": 7,
+          "player": "Nacer Chadli",
+          "season": "2014/15",
+          "team": "Tottenham",
+          "position": "Left Winger",
+          "age": 24.0,
+          "market_value_m": 10.0,
+          "similarity": 0.8132461957489566,
+          "goals": 11.0,
+          "assists": 5.0
+        },
+        {
+          "rank": 8,
+          "player": "Xherdan Shaqiri",
+          "season": "2017/18",
+          "team": "Stoke",
+          "position": "Attacking Midfield",
+          "age": 25.0,
+          "market_value_m": 18.0,
+          "similarity": 0.8108092345246477,
+          "goals": 8.0,
+          "assists": 7.0
+        },
+        {
+          "rank": 9,
+          "player": "Sadio Mané",
+          "season": "2014/15",
+          "team": "Southampton",
+          "position": "Left Winger",
+          "age": 22.0,
+          "market_value_m": 14.0,
+          "similarity": 0.7973240828717081,
+          "goals": 10.0,
+          "assists": 3.0
+        },
+        {
+          "rank": 10,
+          "player": "Harvey Barnes",
+          "season": "2019/20",
+          "team": "Leicester",
+          "position": "Left Winger",
+          "age": 21.0,
+          "market_value_m": 17.5,
+          "similarity": 0.7514951360376647,
+          "goals": 6.0,
+          "assists": 8.0
+        }
+      ]
+    },
+    "Erling Haaland_2023/24_시장가치 ≤€40M": {
+      "filter_applied": "시장가치 ≤€40M",
+      "max_market_value_m": 40.0,
+      "max_age": null,
+      "results": [
+        {
+          "rank": 1,
+          "player": "Tammy Abraham",
+          "season": "2019/20",
+          "team": "Chelsea",
+          "position": "Centre-Forward",
+          "age": 21.0,
+          "market_value_m": 40.0,
+          "similarity": 0.9359164067212798,
+          "goals": 15.0,
+          "assists": 3.0
+        },
+        {
+          "rank": 2,
+          "player": "Romelu Lukaku",
+          "season": "2015/16",
+          "team": "Everton",
+          "position": "Centre-Forward",
+          "age": 22.0,
+          "market_value_m": 40.0,
+          "similarity": 0.8970626661012072,
+          "goals": 18.0,
+          "assists": 6.0
+        },
+        {
+          "rank": 3,
+          "player": "Callum Wilson",
+          "season": "2022/23",
+          "team": "Newcastle",
+          "position": "Centre-Forward",
+          "age": 30.0,
+          "market_value_m": 16.0,
+          "similarity": 0.8927777379267547,
+          "goals": 18.0,
+          "assists": 5.0
+        },
+        {
+          "rank": 4,
+          "player": "Dominic Solanke",
+          "season": "2023/24",
+          "team": "Bournemouth",
+          "position": "Centre-Forward",
+          "age": 25.0,
+          "market_value_m": 40.0,
+          "similarity": 0.8869083938810166,
+          "goals": 19.0,
+          "assists": 3.0
+        },
+        {
+          "rank": 5,
+          "player": "Kelechi Iheanacho",
+          "season": "2020/21",
+          "team": "Leicester",
+          "position": "Centre-Forward",
+          "age": 23.0,
+          "market_value_m": 20.0,
+          "similarity": 0.8813317569135601,
+          "goals": 12.0,
+          "assists": 2.0
+        },
+        {
+          "rank": 6,
+          "player": "Patrick Bamford",
+          "season": "2020/21",
+          "team": "Leeds",
+          "position": "Centre-Forward",
+          "age": 26.0,
+          "market_value_m": 22.0,
+          "similarity": 0.8645238957649418,
+          "goals": 17.0,
+          "assists": 7.0
+        },
+        {
+          "rank": 7,
+          "player": "Jean-Philippe Mateta",
+          "season": "2023/24",
+          "team": "Crystal Palace",
+          "position": "Centre-Forward",
+          "age": 26.0,
+          "market_value_m": 20.0,
+          "similarity": 0.8609719370001905,
+          "goals": 16.0,
+          "assists": 5.0
+        },
+        {
+          "rank": 8,
+          "player": "Charlie Austin",
+          "season": "2014/15",
+          "team": "QPR",
+          "position": "Centre-Forward",
+          "age": 25.0,
+          "market_value_m": 9.0,
+          "similarity": 0.860021447888776,
+          "goals": 18.0,
+          "assists": 6.0
+        },
+        {
+          "rank": 9,
+          "player": "Chris Wood",
+          "season": "2024/25",
+          "team": "Nott'm Forest",
+          "position": "Centre-Forward",
+          "age": 32.0,
+          "market_value_m": 10.0,
+          "similarity": 0.8539983810458124,
+          "goals": 20.0,
+          "assists": 3.0
+        },
+        {
+          "rank": 10,
+          "player": "Nicolas Jackson",
+          "season": "2023/24",
+          "team": "Chelsea",
+          "position": "Centre-Forward",
+          "age": 22.0,
+          "market_value_m": 35.0,
+          "similarity": 0.8529915307366078,
+          "goals": 14.0,
+          "assists": 5.0
+        }
+      ]
+    },
+    "Virgil van Dijk_2023/24_시장가치 ≤€15M, 나이 ≤25": {
+      "filter_applied": "시장가치 ≤€15M, 나이 ≤25",
+      "max_market_value_m": 15.0,
+      "max_age": 25,
+      "results": [
+        {
+          "rank": 1,
+          "player": "Lewis Dunk",
+          "season": "2017/18",
+          "team": "Brighton",
+          "position": "Centre-Back",
+          "age": 25.0,
+          "market_value_m": 10.0,
+          "similarity": 0.7725893949868669,
+          "goals": 1.0,
+          "assists": 1.0
+        },
+        {
+          "rank": 2,
+          "player": "Kortney Hause",
+          "season": "2020/21",
+          "team": "Aston Villa",
+          "position": "Centre-Back",
+          "age": 25.0,
+          "market_value_m": 5.0,
+          "similarity": 0.7703471991661924,
+          "goals": 1.0,
+          "assists": 0.0
+        },
+        {
+          "rank": 3,
+          "player": "Jack Rodwell",
+          "season": "2014/15",
+          "team": "Sunderland",
+          "position": "Centre-Back",
+          "age": 23.0,
+          "market_value_m": 10.0,
+          "similarity": 0.7569279530078501,
+          "goals": 3.0,
+          "assists": 0.0
+        },
+        {
+          "rank": 4,
+          "player": "Adam Webster",
+          "season": "2019/20",
+          "team": "Brighton",
+          "position": "Centre-Back",
+          "age": 24.0,
+          "market_value_m": 12.0,
+          "similarity": 0.7450207868397402,
+          "goals": 3.0,
+          "assists": 1.0
+        },
+        {
+          "rank": 5,
+          "player": "Alfie Mawson",
+          "season": "2017/18",
+          "team": "Swansea",
+          "position": "Centre-Back",
+          "age": 23.0,
+          "market_value_m": 15.0,
+          "similarity": 0.740118001288971,
+          "goals": 2.0,
+          "assists": 1.0
+        },
+        {
+          "rank": 6,
+          "player": "Harry Maguire",
+          "season": "2016/17",
+          "team": "Hull",
+          "position": "Centre-Back",
+          "age": 23.0,
+          "market_value_m": 8.0,
+          "similarity": 0.735521321185414,
+          "goals": 2.0,
+          "assists": 1.0
+        },
+        {
+          "rank": 7,
+          "player": "Kortney Hause",
+          "season": "2019/20",
+          "team": "Aston Villa",
+          "position": "Centre-Back",
+          "age": 24.0,
+          "market_value_m": 6.5,
+          "similarity": 0.7334621947868772,
+          "goals": 1.0,
+          "assists": 0.0
+        },
+        {
+          "rank": 8,
+          "player": "Kristoffer Ajer",
+          "season": "2023/24",
+          "team": "Brentford",
+          "position": "Centre-Back",
+          "age": 25.0,
+          "market_value_m": 15.0,
+          "similarity": 0.7330633349117133,
+          "goals": 2.0,
+          "assists": 1.0
+        },
+        {
+          "rank": 9,
+          "player": "James Tomkins",
+          "season": "2014/15",
+          "team": "West Ham",
+          "position": "Centre-Back",
+          "age": 25.0,
+          "market_value_m": 6.0,
+          "similarity": 0.7246661174086855,
+          "goals": 1.0,
+          "assists": 3.0
+        },
+        {
+          "rank": 10,
+          "player": "Daniel Ayala",
+          "season": "2016/17",
+          "team": "Middlesbrough",
+          "position": "Centre-Back",
+          "age": 25.0,
+          "market_value_m": 2.0,
+          "similarity": 0.7074756754761199,
+          "goals": 1.0,
+          "assists": 0.0
+        }
+      ]
+    }
+  }
+}

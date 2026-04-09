@@ -1,0 +1,101 @@
+{
+  "version": "v2",
+  "description": "스카우트 피드백 완전 반영: 팀스탯/market_value 제거, 퍼센타일 랭크, 팀강도 보정",
+  "total_rated_players": 8362,
+  "insufficient_data_players": 6618,
+  "hidden_gems_total": 389,
+  "minimum_threshold": "900분 이상 OR 15선발 이상",
+  "war_formula": {
+    "FW": "goals_p90(35%) + assists_p90(20%) + sot_p90(15%) + minutes_share(15%) + consistency(15%)",
+    "MID": "assists_p90(25%) + goals_p90(20%) + crosses_p90(20%) + tackles_p90(10%) + minutes_share(15%) + consistency(10%)",
+    "DEF": "tackles_p90(30%) + int_p90(25%) + fouls_drawn_p90(15%) + minutes_share(15%) + consistency(15%)",
+    "GK": "gk_concede_score(35%) + clean_sheet_pct(25%) + minutes_share(20%) + consistency(20%)"
+  },
+  "team_strength_adj": {
+    "weak_team_bonus": "+5pts max (bottom-half team + high WAR)",
+    "strong_team_penalty": "-3pts max (top-30% team + high WAR)"
+  },
+  "removed_features": [
+    "market_value (circular logic)",
+    "points",
+    "goal_diff",
+    "nineties"
+  ],
+  "seasons": [
+    "2000/01",
+    "2001/02",
+    "2002/03",
+    "2003/04",
+    "2004/05",
+    "2005/06",
+    "2006/07",
+    "2007/08",
+    "2008/09",
+    "2009/10",
+    "2010/11",
+    "2011/12",
+    "2012/13",
+    "2013/14",
+    "2014/15",
+    "2015/16",
+    "2016/17",
+    "2017/18",
+    "2018/19",
+    "2019/20",
+    "2020/21",
+    "2021/22",
+    "2022/23",
+    "2023/24",
+    "2024/25"
+  ],
+  "war_stats_by_season_2324": {
+    "FW": {
+      "n": 47,
+      "mean_war": 51.14,
+      "max_war": 97.0,
+      "top5": [
+        "Erling Haaland",
+        "Mohamed Salah",
+        "Ollie Watkins",
+        "Alexander Isak",
+        "Son Heung-min"
+      ]
+    },
+    "MID": {
+      "n": 146,
+      "mean_war": 50.57,
+      "max_war": 100.0,
+      "top5": [
+        "Alfie Doughty",
+        "Michael Olise",
+        "Cole Palmer",
+        "Bruno Fernandes",
+        "Pedro Neto"
+      ]
+    },
+    "DEF": {
+      "n": 120,
+      "mean_war": 50.73,
+      "max_war": 100.0,
+      "top5": [
+        "Antonee Robinson",
+        "Neco Williams",
+        "Emerson Palmieri",
+        "Joël Veltman",
+        "Marc Cucurella"
+      ]
+    },
+    "GK": {
+      "n": 27,
+      "mean_war": 51.81,
+      "max_war": 97.5,
+      "top5": [
+        "David Raya",
+        "Ederson",
+        "Jordan Pickford",
+        "Alisson",
+        "Nick Pope"
+      ]
+    }
+  }
+}

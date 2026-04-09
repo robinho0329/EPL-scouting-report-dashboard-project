@@ -1,0 +1,11 @@
+feature,importance
+min,0.23285845
+clean_sheets,0.20812604
+gk_matches,0.19248809
+age_sq,0.079563916
+team_points,0.07041596
+age_used,0.06791558
+clean_sheet_pct,0.054414496
+epl_experience,0.03912162
+nationality_freq,0.031375326
+log_mv_lag,0.02372059

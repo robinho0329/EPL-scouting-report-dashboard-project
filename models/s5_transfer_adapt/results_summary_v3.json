@@ -1,0 +1,80 @@
+{
+  "version": "v3",
+  "model_type": "XGBoost + RF + LR + MLP ensemble (Binary + Platt calibration)",
+  "target": "transfer_success (success/failure)",
+  "total_transfers": 1723,
+  "split_sizes": {
+    "train": 1357,
+    "val": 46,
+    "test": 173
+  },
+  "n_features": 46,
+  "top_features": [
+    {
+      "feature": "g_a_p90_old",
+      "importance_mean": 0.08469074208203156
+    },
+    {
+      "feature": "war_old",
+      "importance_mean": 0.060994930131224825
+    },
+    {
+      "feature": "min_share_pct_old",
+      "importance_mean": 0.050816389746422524
+    },
+    {
+      "feature": "gls_p90_old",
+      "importance_mean": 0.04140279401072881
+    },
+    {
+      "feature": "consistency_old",
+      "importance_mean": 0.037472818232168206
+    },
+    {
+      "feature": "starter_ratio_old",
+      "importance_mean": 0.03354877523179573
+    },
+    {
+      "feature": "pos_competition",
+      "importance_mean": 0.03172689278943618
+    },
+    {
+      "feature": "g_pk_p90_old",
+      "importance_mean": 0.03163233136046824
+    },
+    {
+      "feature": "ast_p90_old",
+      "importance_mean": 0.028383211693661498
+    },
+    {
+      "feature": "big6_p90_old",
+      "importance_mean": 0.0267710715995595
+    }
+  ],
+  "test_metrics": {
+    "accuracy": 0.6994219653179191,
+    "macro_f1": 0.6754689754689754,
+    "failure_f1": 0.7636363636363637,
+    "failure_recall": 0.8484848399142946,
+    "failure_precision": 0.6942148702957449,
+    "roc_auc": 0.7253617253617254,
+    "failure_brier": 0.20585622211438656,
+    "n_failure": 99,
+    "threshold": 0.5000000000000002
+  },
+  "val_metrics": {
+    "accuracy": 0.8043478260869565,
+    "macro_f1": 0.7810682178741406,
+    "failure_f1": 0.8524590163934426,
+    "failure_recall": 0.9285713954081645,
+    "failure_precision": 0.7878787640036738,
+    "roc_auc": 0.8253968253968254,
+    "failure_brier": 0.16687130306211168,
+    "n_failure": 28,
+    "threshold": 0.5000000000000002
+  },
+  "output_files": {
+    "predictions": "data/scout/transfer_predictions_v3.parquet",
+    "rows": 1723
+  }
+}

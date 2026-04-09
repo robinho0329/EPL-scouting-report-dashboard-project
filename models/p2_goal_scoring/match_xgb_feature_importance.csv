@@ -1,0 +1,17 @@
+feature,importance
+HomeTeam_AvgScored_20,0.07157731
+HomeTeam_AvgScored_10,0.06740979
+H2H_AvgTotalGoals,0.06638629
+SeasonMatchIdx,0.066053726
+SeasonCumAvgGoals,0.06526369
+AwayTeam_AvgScored_20,0.06516716
+AwayTeam_AvgConceded_20,0.06484731
+H2H_Count,0.06253002
+AwayTeam_AvgScored_5,0.061483808
+HomeTeam_AvgScored_5,0.061184123
+AwayTeam_AvgScored_10,0.060258027
+AwayTeam_AvgConceded_10,0.059921976
+AwayTeam_AvgConceded_5,0.058047667
+HomeTeam_AvgConceded_20,0.057785135
+HomeTeam_AvgConceded_5,0.057033848
+HomeTeam_AvgConceded_10,0.055050068

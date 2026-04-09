@@ -1,0 +1,85 @@
+{
+  "model": "P8 Transfer Adaptation",
+  "status": "완료",
+  "metrics": {
+    "mae": 0.0953,
+    "r2": 0.1942,
+    "train_size": 173,
+    "test_size": 44
+  },
+  "features_used": [
+    "style_distance",
+    "age",
+    "pos_code",
+    "epl_experience",
+    "transfer_count",
+    "g_a_per90_old",
+    "gls_per90_old",
+    "ast_per90_old",
+    "90s_old",
+    "was_starter",
+    "market_value",
+    "mv_vs_squad",
+    "elo_diff",
+    "moving_up",
+    "points_diff",
+    "style_match_pct",
+    "hist_adapt_rate",
+    "age_bucket"
+  ],
+  "top_features": [
+    {
+      "feature": "gls_per90_old",
+      "importance": 0.1449
+    },
+    {
+      "feature": "g_a_per90_old",
+      "importance": 0.1362
+    },
+    {
+      "feature": "ast_per90_old",
+      "importance": 0.0974
+    },
+    {
+      "feature": "points_diff",
+      "importance": 0.0879
+    },
+    {
+      "feature": "mv_vs_squad",
+      "importance": 0.0867
+    },
+    {
+      "feature": "elo_diff",
+      "importance": 0.068
+    },
+    {
+      "feature": "pos_code",
+      "importance": 0.0657
+    },
+    {
+      "feature": "style_match_pct",
+      "importance": 0.0482
+    },
+    {
+      "feature": "was_starter",
+      "importance": 0.0457
+    },
+    {
+      "feature": "market_value",
+      "importance": 0.044
+    }
+  ],
+  "adapt_risk_distribution": {
+    "low": 72,
+    "medium": 73,
+    "high": 72
+  },
+  "style_distance_stats": {
+    "mean": 0.0124,
+    "median": 0.011,
+    "std": 0.0091
+  },
+  "scout_validation": "style_distance(팀 스타일 코사인 거리)가 상위 피처로 등장. 이적 전 공격 기여(g_a_per90_old)와 팀 포인트 차이(points_diff)도 핵심 예측 인자. 'adapt_risk=high' 선수는 영입 회의에서 적응 실패 위험 경고로 활용 가능.",
+  "output_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\scout\\transfer_adapt_predictions.parquet",
+  "row_count": 217
+}

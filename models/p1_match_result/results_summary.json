@@ -1,0 +1,263 @@
+{
+  "task": "P1 Match Result Prediction (3-class: H/D/A)",
+  "features_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\features\\match_features.parquet",
+  "n_features": 49,
+  "feature_columns": [
+    "season_year",
+    "home_elo_pre",
+    "away_elo_pre",
+    "elo_diff",
+    "home_form_5",
+    "home_form_10",
+    "home_win_rate_5",
+    "home_goals_scored_3",
+    "home_goals_conceded_3",
+    "home_gd_rolling_3",
+    "home_goals_scored_5",
+    "home_goals_conceded_5",
+    "home_gd_rolling_5",
+    "home_goals_scored_10",
+    "home_goals_conceded_10",
+    "home_gd_rolling_10",
+    "home_clean_sheet_5",
+    "home_sot_rolling_5",
+    "home_days_rest",
+    "home_venue_form_5",
+    "home_momentum_5",
+    "away_form_5",
+    "away_form_10",
+    "away_win_rate_5",
+    "away_goals_scored_3",
+    "away_goals_conceded_3",
+    "away_gd_rolling_3",
+    "away_goals_scored_5",
+    "away_goals_conceded_5",
+    "away_gd_rolling_5",
+    "away_goals_scored_10",
+    "away_goals_conceded_10",
+    "away_gd_rolling_10",
+    "away_clean_sheet_5",
+    "away_sot_rolling_5",
+    "away_days_rest",
+    "away_venue_form_5",
+    "away_momentum_5",
+    "h2h_home_wins",
+    "h2h_away_wins",
+    "h2h_draws",
+    "home_promoted",
+    "away_promoted",
+    "matchweek",
+    "form_diff_5",
+    "form_diff_10",
+    "gd_trend_diff",
+    "is_derby",
+    "is_weekend"
+  ],
+  "splits": {
+    "train": 7890,
+    "val": 760,
+    "test": 730
+  },
+  "class_mapping": {
+    "A": 0,
+    "D": 1,
+    "H": 2
+  },
+  "models": {
+    "xgboost": {
+      "train": {
+        "accuracy": 0.6039,
+        "f1_macro": 0.492,
+        "confusion_matrix": [
+          [
+            1326,
+            6,
+            957
+          ],
+          [
+            458,
+            183,
+            1327
+          ],
+          [
+            370,
+            7,
+            3256
+          ]
+        ]
+      },
+      "val": {
+        "accuracy": 0.5395,
+        "f1_macro": 0.411,
+        "confusion_matrix": [
+          [
+            142,
+            2,
+            94
+          ],
+          [
+            73,
+            4,
+            98
+          ],
+          [
+            81,
+            2,
+            264
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.5384,
+        "f1_macro": 0.4037,
+        "confusion_matrix": [
+          [
+            153,
+            3,
+            85
+          ],
+          [
+            74,
+            0,
+            96
+          ],
+          [
+            76,
+            3,
+            240
+          ]
+        ]
+      }
+    },
+    "mlp": {
+      "train": {
+        "accuracy": 0.5243,
+        "f1_macro": 0.5089,
+        "confusion_matrix": [
+          [
+            1284,
+            613,
+            392
+          ],
+          [
+            551,
+            822,
+            595
+          ],
+          [
+            627,
+            975,
+            2031
+          ]
+        ]
+      },
+      "val": {
+        "accuracy": 0.4934,
+        "f1_macro": 0.4644,
+        "confusion_matrix": [
+          [
+            152,
+            49,
+            37
+          ],
+          [
+            77,
+            49,
+            49
+          ],
+          [
+            97,
+            76,
+            174
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.5014,
+        "f1_macro": 0.4609,
+        "confusion_matrix": [
+          [
+            162,
+            47,
+            32
+          ],
+          [
+            76,
+            36,
+            58
+          ],
+          [
+            84,
+            67,
+            168
+          ]
+        ]
+      }
+    },
+    "lstm": {
+      "train": {
+        "accuracy": 0.5603,
+        "f1_macro": 0.5463,
+        "confusion_matrix": [
+          [
+            1355,
+            557,
+            350
+          ],
+          [
+            434,
+            927,
+            572
+          ],
+          [
+            826,
+            684,
+            2080
+          ]
+        ]
+      },
+      "val": {
+        "accuracy": 0.4709,
+        "f1_macro": 0.434,
+        "confusion_matrix": [
+          [
+            149,
+            31,
+            56
+          ],
+          [
+            77,
+            38,
+            60
+          ],
+          [
+            119,
+            57,
+            169
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.4437,
+        "f1_macro": 0.3995,
+        "confusion_matrix": [
+          [
+            99,
+            51,
+            90
+          ],
+          [
+            53,
+            33,
+            83
+          ],
+          [
+            77,
+            51,
+            191
+          ]
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+feature,importance
+player_goal_rate_10,0.42699307
+player_goal_rate_5,0.1389684
+player_season_goal_rate,0.12733121
+min,0.0750838
+pos_score,0.06314894
+player_min_avg_10,0.04158487
+is_home,0.039658792
+opp_avg_conceded,0.030035134
+player_min_avg_5,0.02936019
+log_mv,0.027835686

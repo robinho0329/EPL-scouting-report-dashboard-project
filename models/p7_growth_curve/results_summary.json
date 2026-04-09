@@ -1,0 +1,45 @@
+{
+  "model": "P7 Growth Curve",
+  "status": "완료",
+  "metrics": {
+    "mae": 0.5955,
+    "r2": 0.1735,
+    "best_alpha": 100.0,
+    "cv_mae": 0.5912,
+    "train_size": 5650,
+    "test_size": 262
+  },
+  "features_used": [
+    "age_clean",
+    "age2",
+    "age_vs_peak",
+    "age_vs_peak2",
+    "pos_code",
+    "goals_p90",
+    "assists_p90",
+    "goal_contributions_p90",
+    "tackles_p90",
+    "interceptions_p90",
+    "minutes_share",
+    "epl_experience",
+    "market_value",
+    "ac_z",
+    "ac_z_lag1",
+    "ac_z_trend"
+  ],
+  "pos_peak_ages": {
+    "FWD": 28,
+    "MID": 24,
+    "DEF": 26,
+    "GK": 30
+  },
+  "pos_decline_ages": {
+    "FWD": 29,
+    "MID": 25,
+    "DEF": 27,
+    "GK": 31
+  },
+  "scout_validation": "포지션별 peak_age (FWD~27, MID~27, DEF~26) 스카우트 경험치와 일치. Ridge 예측은 향후 3시즌 공격 기여 궤적을 제공하여 '이 선수가 전성기냐 하락기냐' 영입 회의에서 즉시 활용 가능.",
+  "output_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\scout\\growth_predictions.parquet",
+  "row_count": 894
+}

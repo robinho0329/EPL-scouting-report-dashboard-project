@@ -1,0 +1,143 @@
+{
+  "version": "v4",
+  "created_at": "2026-04-05 13:23:49",
+  "description": "S3 v4 — Position-Stratified Clustering + Style Features Only",
+  "min_minutes": 900,
+  "current_season": "2024/25",
+  "total_player_seasons": 8364,
+  "cluster_meta": {
+    "FW": {
+      "best_k": 7,
+      "silhouette": 0.2085,
+      "k_scores": {
+        "4": 0.2061,
+        "5": 0.2052,
+        "6": 0.2006,
+        "7": 0.2085
+      },
+      "features": [
+        "goals_p90",
+        "assists_p90",
+        "shots_p90",
+        "sot_p90",
+        "g_plus_a_p90",
+        "shot_conversion",
+        "fouls_drawn_p90",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "3": "⚽ 박스 스트라이커",
+        "6": "🎯 효율형 득점왕",
+        "0": "⚽ 스트라이커",
+        "1": "🎨 창의적 공격수",
+        "2": "🏃 압박 전방",
+        "4": "🔫 볼륨 슈터",
+        "5": "FW 타입 5"
+      },
+      "2024_25_dist": {
+        "🎨 창의적 공격수": 20,
+        "🎯 효율형 득점왕": 19,
+        "⚽ 박스 스트라이커": 18,
+        "FW 타입 5": 18
+      }
+    },
+    "MID": {
+      "best_k": 7,
+      "silhouette": 0.2299,
+      "k_scores": {
+        "5": 0.227,
+        "6": 0.2299,
+        "7": 0.2299,
+        "8": 0.2139
+      },
+      "features": [
+        "assists_p90",
+        "key_passes_p90",
+        "goals_p90",
+        "shots_p90",
+        "tackles_p90",
+        "interc_p90",
+        "def_actions_p90",
+        "fouls_drawn_p90",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "0": "📈 박스 투 박스",
+        "4": "🔑 딥라잉 플레이메이커",
+        "6": "🎨 창의적 플레이메이커",
+        "1": "🔑 플레이메이커",
+        "2": "💪 수비형 MF",
+        "3": "📈 박스투박스",
+        "5": "🎯 공격형 MF"
+      },
+      "2024_25_dist": {
+        "📈 박스투박스": 31,
+        "🔑 플레이메이커": 31,
+        "🔑 딥라잉 플레이메이커": 20,
+        "🎨 창의적 플레이메이커": 17,
+        "💪 수비형 MF": 2,
+        "📈 박스 투 박스": 1,
+        "🎯 공격형 MF": 1
+      }
+    },
+    "DEF": {
+      "best_k": 4,
+      "silhouette": 0.3637,
+      "k_scores": {
+        "4": 0.3637,
+        "5": 0.2291,
+        "6": 0.2153,
+        "7": 0.2199
+      },
+      "features": [
+        "tackles_p90",
+        "interc_p90",
+        "def_actions_p90",
+        "fouls_p90",
+        "crosses_p90",
+        "goals_p90",
+        "assists_p90",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "3": "🏃 공격형 풀백",
+        "0": "🛡️ 전통 수비수",
+        "1": "🏃 오버래핑 수비수",
+        "2": "💪 공중볼 수비수"
+      },
+      "2024_25_dist": {
+        "💪 공중볼 수비수": 46,
+        "🛡️ 전통 수비수": 46,
+        "🏃 공격형 풀백": 22,
+        "🏃 오버래핑 수비수": 8
+      }
+    },
+    "GK": {
+      "best_k": 2,
+      "silhouette": 0.4873,
+      "k_scores": {
+        "2": 0.4873,
+        "3": 0.405,
+        "4": 0.4371
+      },
+      "features": [
+        "gk_save_pct",
+        "gk_cs_pct",
+        "gk_ga_p90_inv",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "0": "🧤 슈팅 스토퍼",
+        "1": "🧱 클린시트 키퍼"
+      },
+      "2024_25_dist": {
+        "🧱 클린시트 키퍼": 13,
+        "🧤 슈팅 스토퍼": 13
+      }
+    }
+  }
+}
