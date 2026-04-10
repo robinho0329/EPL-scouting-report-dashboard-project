@@ -108,16 +108,17 @@ def get_team_logo(team_name: str, size: tuple = (40, 40)) -> Optional[Image.Imag
     normalized = normalize_team_name(team_name)
     logo_map = _load_logo_map()
 
-    # 1순위: logo_map에서 직접 찾기
-    logo_path = logo_map.get(normalized) or logo_map.get(team_name)
+    # 1순위: logo_map에서 직접 찾기 (경로가 존재하는 경우만)
+    raw_path = logo_map.get(normalized) or logo_map.get(team_name)
+    logo_path = raw_path if raw_path and Path(raw_path).exists() else None
 
-    # 2순위: 파일명 기반 탐색 (공백→언더스코어)
+    # 2순위: 파일명 기반 탐색 (공백→언더스코어) - 절대 경로가 없거나 존재하지 않을 때
     if not logo_path:
         candidate = LOGOS_DIR / f"{normalized.replace(' ', '_')}.png"
         if candidate.exists():
             logo_path = str(candidate)
 
-    if not logo_path or not Path(logo_path).exists():
+    if not logo_path:
         return None
     try:
         img = Image.open(logo_path).convert("RGBA")
