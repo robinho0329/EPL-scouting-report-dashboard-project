@@ -8,6 +8,7 @@ import io
 import json
 import base64
 import logging
+import unicodedata
 from pathlib import Path
 from functools import lru_cache
 from typing import Optional, Tuple
@@ -25,29 +26,78 @@ LOGO_MAP_PATH  = ROOT / "data" / "images" / "logo_map.json"
 PLAYERS_DIR    = ROOT / "data" / "images" / "players"
 LOGOS_DIR      = ROOT / "data" / "images" / "team_logos"
 
-# 팀명 별칭 테이블 (대시보드 표시명 → 파일명 기준 팀명)
-TEAM_ALIASES = {
-    "Man City":        "Manchester City",
-    "Man United":      "Manchester United",
-    "Man Utd":         "Manchester United",
-    "Wolves":          "Wolverhampton Wanderers",
-    "Spurs":           "Tottenham Hotspur",
-    "Nott'm Forest":   "Nottingham Forest",
-    "West Brom":       "West Bromwich Albion",
-    "Brighton":        "Brighton  Hove Albion",
-    "Bournemouth":     "AFC Bournemouth",
-    "Sheffield Utd":   "Sheffield United",
-    "QPR":             "Queens Park Rangers",
-    "Ipswich":         "Ipswich Town",
-    "Leicester":       "Leicester City",
-    "Newcastle":       "Newcastle United",
-    "Nottingham Forest": "Nottingham Forest",
+# 팀명 → 로고 파일명 직접 매핑 (데이터 표시명 → team_logos/ 파일 stem)
+# 파일명 규칙: 공백→언더스코어, 특수문자 제거
+TEAM_LOGO_FILEMAP = {
+    # 데이터 단축명
+    "Arsenal":          "Arsenal_FC",
+    "Aston Villa":      "Aston_Villa",
+    "Birmingham":       "Birmingham_City",
+    "Blackburn":        "Blackburn_Rovers",
+    "Blackpool":        "Blackpool_FC",
+    "Bolton":           "Bolton_Wanderers",
+    "Bournemouth":      "AFC_Bournemouth",
+    "Bradford":         "Bradford_City",
+    "Brentford":        "Brentford_FC",
+    "Brighton":         "Brighton__Hove_Albion",
+    "Burnley":          "Burnley_FC",
+    "Cardiff":          "Cardiff_City",
+    "Charlton":         "Charlton_Athletic",
+    "Chelsea":          "Chelsea_FC",
+    "Coventry":         "Coventry_City",
+    "Crystal Palace":   "Crystal_Palace",
+    "Derby":            "Derby_County",
+    "Everton":          "Everton_FC",
+    "Fulham":           "Fulham_FC",
+    "Ipswich":          "Ipswich_Town",
+    "Leeds":            "Leeds_United",
+    "Leicester":        "Leicester_City",
+    "Liverpool":        "Liverpool_FC",
+    "Luton":            "Luton_Town",
+    "Man City":         "Manchester_City",
+    "Man United":       "Manchester_United",
+    "Man Utd":          "Manchester_United",
+    "Middlesbrough":    "Middlesbrough_FC",
+    "Newcastle":        "Newcastle_United",
+    "Nott'm Forest":    "Nottingham_Forest",
+    "Nottingham Forest":"Nottingham_Forest",
+    "Portsmouth":       "Portsmouth_FC",
+    "QPR":              "Queens_Park_Rangers",
+    "Reading":          "Reading_FC",
+    "Sheffield United": "Sheffield_United",
+    "Sheffield Utd":    "Sheffield_United",
+    "Southampton":      "Southampton_FC",
+    "Spurs":            "Tottenham_Hotspur",
+    "Stoke":            "Stoke_City",
+    "Sunderland":       "Sunderland_AFC",
+    "Tottenham":        "Tottenham_Hotspur",
+    "Watford":          "Watford_FC",
+    "West Brom":        "West_Bromwich_Albion",
+    "West Ham":         "West_Ham_United",
+    "Wigan":            "Wigan_Athletic",
+    "Wolves":           "Wolverhampton_Wanderers",
+    # 풀네임
+    "Arsenal FC":               "Arsenal_FC",
+    "AFC Bournemouth":          "AFC_Bournemouth",
+    "Brighton & Hove Albion":   "Brighton__Hove_Albion",
+    "Brighton  Hove Albion":    "Brighton__Hove_Albion",
+    "Manchester City":          "Manchester_City",
+    "Manchester United":        "Manchester_United",
+    "Wolverhampton Wanderers":  "Wolverhampton_Wanderers",
+    "West Bromwich Albion":     "West_Bromwich_Albion",
+    "West Ham United":          "West_Ham_United",
+    "Newcastle United":         "Newcastle_United",
+    "Leicester City":           "Leicester_City",
+    "Ipswich Town":             "Ipswich_Town",
+    "Leeds United":             "Leeds_United",
+    "Luton Town":               "Luton_Town",
 }
 
 
 def normalize_team_name(name: str) -> str:
     """팀명 정규화: 대시보드 표시명 → 파일명 기준 팀명."""
-    return TEAM_ALIASES.get(name, name)
+    # TEAM_LOGO_FILEMAP에 있으면 파일 stem 반환, 없으면 원본
+    return TEAM_LOGO_FILEMAP.get(name, name)
 
 
 @st.cache_data(show_spinner=False)
@@ -74,18 +124,42 @@ def _img_to_b64(img: Image.Image, fmt: str = "PNG") -> str:
     return base64.b64encode(buf.getvalue()).decode()
 
 
+def _normalize_player_name(name: str) -> str:
+    """선수명 정규화: 유니코드 → ASCII 근사, 특수문자 → 언더스코어."""
+    # NFD 분해 후 비ASCII 결합문자 제거 (é→e, ć→c 등)
+    nfd = unicodedata.normalize("NFD", name)
+    ascii_approx = "".join(c for c in nfd if unicodedata.category(c) != "Mn")
+    # 알파벳, 숫자, 공백, 하이픈, 언더스코어 외 문자 → 언더스코어
+    safe = "".join(c if c.isalnum() or c in " -_" else "_" for c in ascii_approx)
+    return safe.strip()
+
+
 def get_player_image(player_name: str, size: tuple = (80, 80)) -> Optional[Image.Image]:
-    """선수 이름으로 PIL Image 반환. 없으면 None."""
+    """선수 이름으로 PIL Image 반환. 없으면 None.
+
+    탐색 순서:
+    1. image_map.parquet 직접 매핑 (정확한 선수명 일치)
+    2. 특수문자 → 언더스코어 변환 후 파일 탐색
+    3. 유니코드 정규화(NFD→ASCII 근사) 후 파일 탐색
+    """
     image_map = _load_image_map()
     img_path = image_map.get(player_name)
+
     if not img_path or not Path(img_path).exists():
-        # 파일명 기반 직접 탐색 (이름이 약간 다를 경우)
-        safe = "".join(c if c.isalnum() or c in " -_" else "_" for c in player_name)
+        # 2순위: 특수문자만 언더스코어로 변환
+        safe = "".join(c if c.isalnum() or c in " -_." else "_" for c in player_name)
         candidate = PLAYERS_DIR / f"{safe}.jpg"
         if candidate.exists():
             img_path = str(candidate)
         else:
-            return None
+            # 3순위: 유니코드 정규화 후 탐색
+            normalized = _normalize_player_name(player_name)
+            candidate2 = PLAYERS_DIR / f"{normalized}.jpg"
+            if candidate2.exists():
+                img_path = str(candidate2)
+            else:
+                return None
+
     try:
         img = Image.open(img_path).convert("RGB")
         img = img.resize(size, Image.LANCZOS)
@@ -104,29 +178,47 @@ def get_player_image_b64(player_name: str, size: tuple = (80, 80)) -> Optional[s
 
 
 def get_team_logo(team_name: str, size: tuple = (40, 40)) -> Optional[Image.Image]:
-    """팀명으로 PIL Image 로고 반환. 없으면 None."""
-    normalized = normalize_team_name(team_name)
+    """팀명으로 PIL Image 로고 반환. 없으면 None.
+
+    탐색 순서:
+    1. TEAM_LOGO_FILEMAP → team_logos/{stem}.png 직접 탐색 (가장 신뢰도 높음)
+    2. logo_map.json 경로 (절대 경로가 존재하는 경우)
+    3. 팀명 공백→언더스코어 변환 후 파일 탐색
+    """
+    # 1순위: TEAM_LOGO_FILEMAP 직접 파일 탐색
+    stem = TEAM_LOGO_FILEMAP.get(team_name)
+    if stem:
+        direct = LOGOS_DIR / f"{stem}.png"
+        if direct.exists():
+            try:
+                img = Image.open(direct).convert("RGBA")
+                img = img.resize(size, Image.LANCZOS)
+                return img
+            except Exception as e:
+                logger.debug(f"로고 로드 실패 ({team_name}): {e}")
+
+    # 2순위: logo_map.json 절대 경로
     logo_map = _load_logo_map()
+    raw_path = logo_map.get(team_name)
+    if raw_path and Path(raw_path).exists():
+        try:
+            img = Image.open(raw_path).convert("RGBA")
+            img = img.resize(size, Image.LANCZOS)
+            return img
+        except Exception as e:
+            logger.debug(f"로고 로드 실패 ({team_name}): {e}")
 
-    # 1순위: logo_map에서 직접 찾기 (경로가 존재하는 경우만)
-    raw_path = logo_map.get(normalized) or logo_map.get(team_name)
-    logo_path = raw_path if raw_path and Path(raw_path).exists() else None
+    # 3순위: 공백→언더스코어 파일 탐색
+    candidate = LOGOS_DIR / f"{team_name.replace(' ', '_')}.png"
+    if candidate.exists():
+        try:
+            img = Image.open(candidate).convert("RGBA")
+            img = img.resize(size, Image.LANCZOS)
+            return img
+        except Exception as e:
+            logger.debug(f"로고 로드 실패 ({team_name}): {e}")
 
-    # 2순위: 파일명 기반 탐색 (공백→언더스코어) - 절대 경로가 없거나 존재하지 않을 때
-    if not logo_path:
-        candidate = LOGOS_DIR / f"{normalized.replace(' ', '_')}.png"
-        if candidate.exists():
-            logo_path = str(candidate)
-
-    if not logo_path:
-        return None
-    try:
-        img = Image.open(logo_path).convert("RGBA")
-        img = img.resize(size, Image.LANCZOS)
-        return img
-    except Exception as e:
-        logger.debug(f"로고 로드 실패 ({team_name}): {e}")
-        return None
+    return None
 
 
 def get_team_logo_b64(team_name: str, size: tuple = (40, 40)) -> Optional[str]:
