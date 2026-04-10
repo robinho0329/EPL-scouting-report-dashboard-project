@@ -1,0 +1,689 @@
+{
+  "version": "v2",
+  "model_performance": {
+    "XGBoost": {
+      "val_r2": 0.7096114098644963,
+      "val_rmse": 0.6578827975164973,
+      "val_mae": 0.48399723379231424,
+      "test_r2": 0.04634488630770173,
+      "test_rmse": 1.3623973448062874,
+      "test_mae": 0.7229939507049622
+    },
+    "RandomForest": {
+      "val_r2": 0.7149910856367216,
+      "val_rmse": 0.6517604127595126,
+      "val_mae": 0.479089290023041,
+      "test_r2": 0.06217265282061968,
+      "test_rmse": 1.3510442203981057,
+      "test_mae": 0.6948476120968573
+    },
+    "GradientBoosting": {
+      "val_r2": 0.7204941963956115,
+      "val_rmse": 0.6454374658275727,
+      "val_mae": 0.4708823814040021,
+      "test_r2": 0.07469021786451802,
+      "test_rmse": 1.341997461491284,
+      "test_mae": 0.6904166136199499
+    }
+  },
+  "best_model": "GradientBoosting",
+  "peak_ages": {
+    "FW": {
+      "peak_age": 30,
+      "peak_mean_z": 0.1377223726223802,
+      "peak_n": 159,
+      "valid_age_range": [
+        18,
+        33
+      ],
+      "valid_age_buckets": 16
+    },
+    "MF": {
+      "peak_age": 22,
+      "peak_mean_z": 0.08222277447327518,
+      "peak_n": 201,
+      "valid_age_range": [
+        19,
+        33
+      ],
+      "valid_age_buckets": 15
+    },
+    "DF": {
+      "peak_age": 25,
+      "peak_mean_z": 0.1466695161365898,
+      "peak_n": 382,
+      "valid_age_range": [
+        18,
+        34
+      ],
+      "valid_age_buckets": 17
+    }
+  },
+  "top_u23_prospects": [
+    {
+      "player": "Liam Delap",
+      "age": 21.0,
+      "position": "FW",
+      "team": "Ipswich",
+      "current_perf_z": -0.10235759817056278,
+      "ensemble_growth": 0.2660526605780351,
+      "min": 2593.0
+    },
+    {
+      "player": "Nicolas Jackson",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Chelsea",
+      "current_perf_z": -0.09716877003836505,
+      "ensemble_growth": 0.23706877759053038,
+      "min": 2220.0
+    },
+    {
+      "player": "Tyler Dibling",
+      "age": 18.0,
+      "position": "FW",
+      "team": "Southampton",
+      "current_perf_z": -0.13994941924312537,
+      "ensemble_growth": 0.18234300949594687,
+      "min": 1874.0
+    },
+    {
+      "player": "Gabriel Martinelli",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Arsenal",
+      "current_perf_z": -0.12524367443318238,
+      "ensemble_growth": 0.18136067631899574,
+      "min": 2290.0
+    },
+    {
+      "player": "Yankuba Minteh",
+      "age": 20.0,
+      "position": "MF",
+      "team": "Brighton",
+      "current_perf_z": 0.11319507093031689,
+      "ensemble_growth": 0.1598332668534187,
+      "min": 1838.0
+    },
+    {
+      "player": "Pape Matar Sarr",
+      "age": 21.0,
+      "position": "MF",
+      "team": "Tottenham",
+      "current_perf_z": -0.0055235070223380815,
+      "ensemble_growth": 0.14359355545014732,
+      "min": 1913.0
+    },
+    {
+      "player": "Dango Ouattara",
+      "age": 22.0,
+      "position": "FW",
+      "team": "Bournemouth",
+      "current_perf_z": -0.11726551722455932,
+      "ensemble_growth": 0.12706497851646545,
+      "min": 2005.0
+    },
+    {
+      "player": "Anthony Gordon",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Newcastle",
+      "current_perf_z": -0.1014828140114338,
+      "ensemble_growth": 0.1200904909574186,
+      "min": 2434.0
+    },
+    {
+      "player": "Brennan Johnson",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Tottenham",
+      "current_perf_z": -0.10816595688219655,
+      "ensemble_growth": 0.09364370023566315,
+      "min": 2177.0
+    },
+    {
+      "player": "Brennan Johnson",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Tottenham",
+      "current_perf_z": -0.10816595688219655,
+      "ensemble_growth": 0.09364370023566315,
+      "min": 2177.0
+    },
+    {
+      "player": "Mohammed Kudus",
+      "age": 23.0,
+      "position": "FW",
+      "team": "West Ham",
+      "current_perf_z": -0.11511146067748991,
+      "ensemble_growth": 0.08155767282275296,
+      "min": 2590.0
+    },
+    {
+      "player": "João Pedro",
+      "age": 22.0,
+      "position": "FW",
+      "team": "Brighton",
+      "current_perf_z": -0.07917990573008946,
+      "ensemble_growth": 0.06835266780759765,
+      "min": 1948.0
+    },
+    {
+      "player": "Alejandro Garnacho",
+      "age": 20.0,
+      "position": "MF",
+      "team": "Man United",
+      "current_perf_z": -0.034747578067982045,
+      "ensemble_growth": 0.06393441162701413,
+      "min": 2199.0
+    },
+    {
+      "player": "Lewis Hall",
+      "age": 19.0,
+      "position": "DF",
+      "team": "Newcastle",
+      "current_perf_z": 0.17625550461538814,
+      "ensemble_growth": 0.05176155731713509,
+      "min": 2189.0
+    },
+    {
+      "player": "Kevin Schade",
+      "age": 22.0,
+      "position": "FW",
+      "team": "Brentford",
+      "current_perf_z": -0.1072845710734085,
+      "ensemble_growth": 0.018306745854960126,
+      "min": 2293.0
+    }
+  ],
+  "top_u25_prospects": [
+    {
+      "player": "Erling Haaland",
+      "age": 24.0,
+      "position": "FW",
+      "team": "Man City",
+      "current_perf_z": -0.07850864980867224,
+      "ensemble_growth": 0.7927372727519036,
+      "min": 2736.0
+    },
+    {
+      "player": "Alexander Isak",
+      "age": 24.0,
+      "position": "FW",
+      "team": "Newcastle",
+      "current_perf_z": -0.07185076302248879,
+      "ensemble_growth": 0.5780974452381332,
+      "min": 2756.0
+    },
+    {
+      "player": "Liam Delap",
+      "age": 21.0,
+      "position": "FW",
+      "team": "Ipswich",
+      "current_perf_z": -0.10235759817056278,
+      "ensemble_growth": 0.2660526605780351,
+      "min": 2593.0
+    },
+    {
+      "player": "Nicolas Jackson",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Chelsea",
+      "current_perf_z": -0.09716877003836505,
+      "ensemble_growth": 0.23706877759053038,
+      "min": 2220.0
+    },
+    {
+      "player": "Cody Gakpo",
+      "age": 25.0,
+      "position": "MF",
+      "team": "Liverpool",
+      "current_perf_z": 0.06351237015530709,
+      "ensemble_growth": 0.1879321994702422,
+      "min": 1935.0
+    },
+    {
+      "player": "Tyler Dibling",
+      "age": 18.0,
+      "position": "FW",
+      "team": "Southampton",
+      "current_perf_z": -0.13994941924312537,
+      "ensemble_growth": 0.18234300949594687,
+      "min": 1874.0
+    },
+    {
+      "player": "Gabriel Martinelli",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Arsenal",
+      "current_perf_z": -0.12524367443318238,
+      "ensemble_growth": 0.18136067631899574,
+      "min": 2290.0
+    },
+    {
+      "player": "Yankuba Minteh",
+      "age": 20.0,
+      "position": "MF",
+      "team": "Brighton",
+      "current_perf_z": 0.11319507093031689,
+      "ensemble_growth": 0.1598332668534187,
+      "min": 1838.0
+    },
+    {
+      "player": "Pape Matar Sarr",
+      "age": 21.0,
+      "position": "MF",
+      "team": "Tottenham",
+      "current_perf_z": -0.0055235070223380815,
+      "ensemble_growth": 0.14359355545014732,
+      "min": 1913.0
+    },
+    {
+      "player": "Dango Ouattara",
+      "age": 22.0,
+      "position": "FW",
+      "team": "Bournemouth",
+      "current_perf_z": -0.11726551722455932,
+      "ensemble_growth": 0.12706497851646545,
+      "min": 2005.0
+    },
+    {
+      "player": "Anthony Gordon",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Newcastle",
+      "current_perf_z": -0.1014828140114338,
+      "ensemble_growth": 0.1200904909574186,
+      "min": 2434.0
+    },
+    {
+      "player": "Brennan Johnson",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Tottenham",
+      "current_perf_z": -0.10816595688219655,
+      "ensemble_growth": 0.09364370023566315,
+      "min": 2177.0
+    },
+    {
+      "player": "Brennan Johnson",
+      "age": 23.0,
+      "position": "FW",
+      "team": "Tottenham",
+      "current_perf_z": -0.10816595688219655,
+      "ensemble_growth": 0.09364370023566315,
+      "min": 2177.0
+    },
+    {
+      "player": "Jørgen Strand Larsen",
+      "age": 24.0,
+      "position": "FW",
+      "team": "Wolves",
+      "current_perf_z": -0.11454273275613101,
+      "ensemble_growth": 0.09208565265750823,
+      "min": 2587.0
+    },
+    {
+      "player": "Mohammed Kudus",
+      "age": 23.0,
+      "position": "FW",
+      "team": "West Ham",
+      "current_perf_z": -0.11511146067748991,
+      "ensemble_growth": 0.08155767282275296,
+      "min": 2590.0
+    }
+  ],
+  "late_bloomers": [
+    {
+      "player": "Luis Díaz",
+      "age": 27.0,
+      "position": "FW",
+      "team": "Liverpool",
+      "current_perf_z": -0.09420455101698805,
+      "ensemble_growth": 0.31342202100459365,
+      "min": 2399.0
+    },
+    {
+      "player": "Ollie Watkins",
+      "age": 28.0,
+      "position": "FW",
+      "team": "Aston Villa",
+      "current_perf_z": -0.07852472993455126,
+      "ensemble_growth": 0.2203296995577401,
+      "min": 2598.0
+    },
+    {
+      "player": "James Maddison",
+      "age": 27.0,
+      "position": "MF",
+      "team": "Tottenham",
+      "current_perf_z": 0.20728295550407438,
+      "ensemble_growth": 0.15762211078308466,
+      "min": 1809.0
+    },
+    {
+      "player": "Yoane Wissa",
+      "age": 27.0,
+      "position": "FW",
+      "team": "Brentford",
+      "current_perf_z": -0.07961593521750575,
+      "ensemble_growth": 0.13170696600044088,
+      "min": 2919.0
+    },
+    {
+      "player": "Wilfred Ndidi",
+      "age": 27.0,
+      "position": "MF",
+      "team": "Leicester",
+      "current_perf_z": -0.021051570334626873,
+      "ensemble_growth": 0.12023375204542298,
+      "min": 2324.0
+    },
+    {
+      "player": "Daniel Muñoz",
+      "age": 28.0,
+      "position": "MF",
+      "team": "Crystal Palace",
+      "current_perf_z": 0.0430145867272939,
+      "ensemble_growth": 0.11542908759618453,
+      "min": 3228.0
+    },
+    {
+      "player": "Kyle Walker-Peters",
+      "age": 27.0,
+      "position": "DF",
+      "team": "Southampton",
+      "current_perf_z": -0.03268430395178602,
+      "ensemble_growth": 0.0661599884918394,
+      "min": 2918.0
+    },
+    {
+      "player": "Jarrod Bowen",
+      "age": 27.0,
+      "position": "FW",
+      "team": "West Ham",
+      "current_perf_z": -0.09361049981135385,
+      "ensemble_growth": 0.015700305202638185,
+      "min": 2973.0
+    },
+    {
+      "player": "Leandro Trossard",
+      "age": 29.0,
+      "position": "FW",
+      "team": "Arsenal",
+      "current_perf_z": -0.1046148307676878,
+      "ensemble_growth": -0.023452938211029766,
+      "min": 2546.0
+    },
+    {
+      "player": "Jean-Philippe Mateta",
+      "age": 27.0,
+      "position": "FW",
+      "team": "Crystal Palace",
+      "current_perf_z": -0.11015357181834103,
+      "ensemble_growth": -0.024439854681952547,
+      "min": 2648.0
+    },
+    {
+      "player": "Dominic Solanke",
+      "age": 26.0,
+      "position": "FW",
+      "team": "Tottenham",
+      "current_perf_z": -0.1082314826493222,
+      "ensemble_growth": -0.04487977207767979,
+      "min": 2201.0
+    },
+    {
+      "player": "Lucas Paquetá",
+      "age": 26.0,
+      "position": "FW",
+      "team": "West Ham",
+      "current_perf_z": -0.1337182758209002,
+      "ensemble_growth": -0.04825859490421158,
+      "min": 2380.0
+    },
+    {
+      "player": "Kaoru Mitoma",
+      "age": 27.0,
+      "position": "MF",
+      "team": "Brighton",
+      "current_perf_z": -0.019094183708643075,
+      "ensemble_growth": -0.05225324638772655,
+      "min": 2603.0
+    },
+    {
+      "player": "Alex Iwobi",
+      "age": 28.0,
+      "position": "MF",
+      "team": "Fulham",
+      "current_perf_z": 0.01070896927851383,
+      "ensemble_growth": -0.07451782423662195,
+      "min": 2981.0
+    },
+    {
+      "player": "Alex Iwobi",
+      "age": 28.0,
+      "position": "MF",
+      "team": "Fulham",
+      "current_perf_z": 0.01070896927851383,
+      "ensemble_growth": -0.07451782423662195,
+      "min": 2981.0
+    }
+  ],
+  "declining_stars": [
+    {
+      "player": "Matz Sels",
+      "age": 32.0,
+      "position": "GK",
+      "team": "Nott'm Forest",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.8090224408260334,
+      "min": 3420.0
+    },
+    {
+      "player": "Bernd Leno",
+      "age": 32.0,
+      "position": "GK",
+      "team": "Fulham",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.7886366353251806,
+      "min": 3420.0
+    },
+    {
+      "player": "Dean Henderson",
+      "age": 27.0,
+      "position": "GK",
+      "team": "Crystal Palace",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.783490699821409,
+      "min": 3420.0
+    },
+    {
+      "player": "Dean Henderson",
+      "age": 27.0,
+      "position": "GK",
+      "team": "Crystal Palace",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.783490699821409,
+      "min": 3420.0
+    },
+    {
+      "player": "Dean Henderson",
+      "age": 27.0,
+      "position": "GK",
+      "team": "Crystal Palace",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.76702579261402,
+      "min": 3420.0
+    },
+    {
+      "player": "Dean Henderson",
+      "age": 27.0,
+      "position": "GK",
+      "team": "Crystal Palace",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.76702579261402,
+      "min": 3420.0
+    },
+    {
+      "player": "Kepa Arrizabalaga",
+      "age": 29.0,
+      "position": "GK",
+      "team": "Bournemouth",
+      "current_perf_z": 1.5548145197567027,
+      "ensemble_growth": -1.6665540404641828,
+      "min": 2790.0
+    },
+    {
+      "player": "André Onana",
+      "age": 28.0,
+      "position": "GK",
+      "team": "Man United",
+      "current_perf_z": 1.7760279676895672,
+      "ensemble_growth": -1.6265064053630152,
+      "min": 3060.0
+    },
+    {
+      "player": "Mark Flekken",
+      "age": 31.0,
+      "position": "GK",
+      "team": "Brentford",
+      "current_perf_z": 1.9529987260358583,
+      "ensemble_growth": -1.5991300268671729,
+      "min": 3275.0
+    },
+    {
+      "player": "Emiliano Martínez",
+      "age": 31.0,
+      "position": "GK",
+      "team": "Aston Villa",
+      "current_perf_z": 1.886634691655999,
+      "ensemble_growth": -1.5830845390994608,
+      "min": 3194.0
+    },
+    {
+      "player": "Bart Verbruggen",
+      "age": 21.0,
+      "position": "GK",
+      "team": "Brighton",
+      "current_perf_z": 1.9235035996448098,
+      "ensemble_growth": -1.5335792614341297,
+      "min": 3240.0
+    },
+    {
+      "player": "Jordan Pickford",
+      "age": 30.0,
+      "position": "GK",
+      "team": "Everton",
+      "current_perf_z": 2.070979231600053,
+      "ensemble_growth": -1.4680826625840588,
+      "min": 3420.0
+    },
+    {
+      "player": "Mads Hermansen",
+      "age": 24.0,
+      "position": "GK",
+      "team": "Leicester",
+      "current_perf_z": 1.2229943478574066,
+      "ensemble_growth": -1.3617810127884227,
+      "min": 2385.0
+    },
+    {
+      "player": "Nick Pope",
+      "age": 32.0,
+      "position": "GK",
+      "team": "Newcastle",
+      "current_perf_z": 1.3336010718238387,
+      "ensemble_growth": -1.3298415012347522,
+      "min": 2520.0
+    },
+    {
+      "player": "Alphonse Areola",
+      "age": 31.0,
+      "position": "GK",
+      "team": "West Ham",
+      "current_perf_z": 1.1197614054887366,
+      "ensemble_growth": -1.237446842130925,
+      "min": 2260.0
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "age_x_z",
+      "importance": 0.2564602196216583
+    },
+    {
+      "feature": "current_z",
+      "importance": 0.15640991926193237
+    },
+    {
+      "feature": "current_z_sq",
+      "importance": 0.04646316543221474
+    },
+    {
+      "feature": "int_p90",
+      "importance": 0.03575578331947327
+    },
+    {
+      "feature": "perf_trend",
+      "importance": 0.03199020028114319
+    },
+    {
+      "feature": "crs_p90",
+      "importance": 0.029368028044700623
+    },
+    {
+      "feature": "pos_FW",
+      "importance": 0.025499332696199417
+    },
+    {
+      "feature": "age_x_trend",
+      "importance": 0.023014454171061516
+    },
+    {
+      "feature": "tklw_p90",
+      "importance": 0.021570760756731033
+    },
+    {
+      "feature": "peak_perf",
+      "importance": 0.020278306677937508
+    },
+    {
+      "feature": "sh_p90",
+      "importance": 0.020190097391605377
+    },
+    {
+      "feature": "pos_GK",
+      "importance": 0.019689708948135376
+    },
+    {
+      "feature": "90s",
+      "importance": 0.019631696864962578
+    },
+    {
+      "feature": "gls_p90",
+      "importance": 0.019057245925068855
+    },
+    {
+      "feature": "mv_change_rate",
+      "importance": 0.01890910416841507
+    }
+  ],
+  "dataset_info": {
+    "train_rows": 7305,
+    "val_rows": 637,
+    "test_rows": 329,
+    "prediction_pool_total": 207,
+    "prediction_pool_healthy": 207,
+    "min_threshold": 1800,
+    "injury_proxy_threshold": 0.4,
+    "sustained_improvement_rate": 0.3537661709587716
+  },
+  "fixes_applied": [
+    "peak_age_min50_samples",
+    "sustained_improvement_target_2plus_seasons",
+    "min_1800_prediction_filter",
+    "current_z_and_z_squared_features",
+    "injury_proxy_exclusion"
+  ]
+}

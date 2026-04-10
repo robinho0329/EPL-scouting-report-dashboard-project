@@ -1,0 +1,732 @@
+{
+  "model_performance": {
+    "XGBoost": {
+      "val_rmse": 0.9230420879514528,
+      "val_mae": 0.6236943886800262,
+      "val_r2": 0.5653990047263868,
+      "test_rmse": 1.091465213830278,
+      "test_mae": 0.6472949513105397,
+      "test_r2": 0.16253828542360105
+    },
+    "RandomForest": {
+      "val_rmse": 0.8776274532985766,
+      "val_mae": 0.5873132602335743,
+      "val_r2": 0.6071125931496246,
+      "test_rmse": 1.0580941257671694,
+      "test_mae": 0.6035221006770441,
+      "test_r2": 0.21296549883096982
+    },
+    "GradientBoosting": {
+      "val_rmse": 0.8910810158354029,
+      "val_mae": 0.5954112878083238,
+      "val_r2": 0.5949747571355826,
+      "test_rmse": 1.0680453752234491,
+      "test_mae": 0.6240055480597604,
+      "test_r2": 0.19809195239527677
+    },
+    "MLP": {
+      "val_rmse": 0.9026376300078289,
+      "val_mae": 0.624344416724183,
+      "val_r2": 0.5844009193037577,
+      "test_rmse": 1.0868980931635692,
+      "test_mae": 0.6845964050512113,
+      "test_r2": 0.16953216199263277
+    }
+  },
+  "best_model": "RandomForest",
+  "u23_model_performance": {
+    "val_r2": 0.3856171147411923,
+    "test_r2": 0.18304455063901715,
+    "val_rmse": 0.8394653544769242
+  },
+  "feature_count": 28,
+  "features_used": [
+    "age",
+    "age_sq",
+    "age_peak_gap",
+    "is_u23",
+    "perf_score",
+    "gls_p90",
+    "ast_p90",
+    "tklw_p90",
+    "int_p90",
+    "sh_p90",
+    "min",
+    "90s",
+    "starter_ratio",
+    "consistency",
+    "market_value",
+    "mv_change_rate",
+    "perf_trend",
+    "peak_perf",
+    "lag1_perf",
+    "lag2_perf",
+    "points",
+    "epl_seasons",
+    "age_x_perf",
+    "age_x_trend",
+    "pos_FW",
+    "pos_MF",
+    "pos_DF",
+    "pos_GK"
+  ],
+  "data_split": {
+    "train": 6466,
+    "val": 605,
+    "test": 303
+  },
+  "peak_age_by_position": {
+    "FW": {
+      "peak_age": 35,
+      "avg_growth_at_peak": 0.4349978950392023,
+      "sample_count": 10
+    },
+    "MF": {
+      "peak_age": 17,
+      "avg_growth_at_peak": 0.32590979133766157,
+      "sample_count": 6
+    },
+    "DF": {
+      "peak_age": 17,
+      "avg_growth_at_peak": 0.4859399639021042,
+      "sample_count": 11
+    }
+  },
+  "scout_lists": {
+    "hot_prospects": [
+      {
+        "player": "Emile Smith Rowe",
+        "age": 23.0,
+        "pos_simple": "MF",
+        "team": "Arsenal",
+        "market_value": 22000000.0,
+        "perf_score": -1.5908675182540295,
+        "predicted_growth": 1.7668264417110853
+      },
+      {
+        "player": "Joe Willock",
+        "age": 23.0,
+        "pos_simple": "MF",
+        "team": "Newcastle",
+        "market_value": 30000000.0,
+        "perf_score": -0.8470909027371215,
+        "predicted_growth": 0.8540236312282633
+      },
+      {
+        "player": "Julio Enciso",
+        "age": 19.0,
+        "pos_simple": "MF",
+        "team": "Brighton",
+        "market_value": 22000000.0,
+        "perf_score": -0.7850807136750647,
+        "predicted_growth": 0.84073950601315
+      },
+      {
+        "player": "Reece James",
+        "age": 23.0,
+        "pos_simple": "DF",
+        "team": "Chelsea",
+        "market_value": 40000000.0,
+        "perf_score": 0.20026630043199975,
+        "predicted_growth": 0.8316625011922019
+      },
+      {
+        "player": "Lesley Ugochukwu",
+        "age": 19.0,
+        "pos_simple": "MF",
+        "team": "Chelsea",
+        "market_value": 25000000.0,
+        "perf_score": -0.6554843205265964,
+        "predicted_growth": 0.8013259467316739
+      },
+      {
+        "player": "Jacob Ramsey",
+        "age": 22.0,
+        "pos_simple": "MF",
+        "team": "Aston Villa",
+        "market_value": 35000000.0,
+        "perf_score": -1.0121699724060997,
+        "predicted_growth": 0.7120159723870402
+      },
+      {
+        "player": "Julio Enciso",
+        "age": 19.0,
+        "pos_simple": "MF",
+        "team": "Brighton",
+        "market_value": 22000000.0,
+        "perf_score": -0.7850807136750647,
+        "predicted_growth": 0.7098538470949277
+      },
+      {
+        "player": "Dejan Kulusevski",
+        "age": 23.0,
+        "pos_simple": "FW",
+        "team": "Tottenham",
+        "market_value": 55000000.0,
+        "perf_score": -0.8965293115020009,
+        "predicted_growth": 0.6682613410661228
+      },
+      {
+        "player": "Amad Diallo",
+        "age": 21.0,
+        "pos_simple": "MF",
+        "team": "Man United",
+        "market_value": 18000000.0,
+        "perf_score": -1.02819952872878,
+        "predicted_growth": 0.6295493596303842
+      },
+      {
+        "player": "Rayan Aït-Nouri",
+        "age": 22.0,
+        "pos_simple": "DF",
+        "team": "Wolves",
+        "market_value": 35000000.0,
+        "perf_score": 0.09904119982011889,
+        "predicted_growth": 0.6070867359149075
+      },
+      {
+        "player": "Morgan Rogers",
+        "age": 21.0,
+        "pos_simple": "MF",
+        "team": "Aston Villa",
+        "market_value": 15000000.0,
+        "perf_score": -1.1703612583763863,
+        "predicted_growth": 0.6009164484468934
+      },
+      {
+        "player": "Wilson Odobert",
+        "age": 18.0,
+        "pos_simple": "FW",
+        "team": "Burnley",
+        "market_value": 10000000.0,
+        "perf_score": -1.312398515244251,
+        "predicted_growth": 0.5956532034817269
+      },
+      {
+        "player": "Elliot Anderson",
+        "age": 20.0,
+        "pos_simple": "FW",
+        "team": "Newcastle",
+        "market_value": 15000000.0,
+        "perf_score": -1.2234886299105887,
+        "predicted_growth": 0.5868950167661546
+      },
+      {
+        "player": "Malo Gusto",
+        "age": 20.0,
+        "pos_simple": "DF",
+        "team": "Chelsea",
+        "market_value": 35000000.0,
+        "perf_score": 0.09553424531788342,
+        "predicted_growth": 0.5786914296920901
+      },
+      {
+        "player": "Cameron Archer",
+        "age": 22.0,
+        "pos_simple": "FW",
+        "team": "Sheffield United",
+        "market_value": 13000000.0,
+        "perf_score": -1.1119940700959452,
+        "predicted_growth": 0.5448576276968522
+      },
+      {
+        "player": "Ryan Gravenberch",
+        "age": 21.0,
+        "pos_simple": "MF",
+        "team": "Liverpool",
+        "market_value": 35000000.0,
+        "perf_score": -0.9754088565727526,
+        "predicted_growth": 0.5304128219251221
+      },
+      {
+        "player": "Tommy Doyle",
+        "age": 21.0,
+        "pos_simple": "MF",
+        "team": "Wolves",
+        "market_value": 10000000.0,
+        "perf_score": -0.8816321441587963,
+        "predicted_growth": 0.5172590983379254
+      },
+      {
+        "player": "Yehor Yarmoliuk",
+        "age": 19.0,
+        "pos_simple": "MF",
+        "team": "Brentford",
+        "market_value": NaN,
+        "perf_score": -0.6123044696515438,
+        "predicted_growth": 0.5172385305131979
+      },
+      {
+        "player": "James Mcatee",
+        "age": 20.0,
+        "pos_simple": "FW",
+        "team": "Sheffield United",
+        "market_value": NaN,
+        "perf_score": -1.058819980768644,
+        "predicted_growth": 0.5127551894565768
+      },
+      {
+        "player": "Jakub Kiwior",
+        "age": 23.0,
+        "pos_simple": "DF",
+        "team": "Arsenal",
+        "market_value": 30000000.0,
+        "perf_score": -0.21783665042917819,
+        "predicted_growth": 0.5055669405467069
+      }
+    ],
+    "late_bloomers": [
+      {
+        "player": "Mark Travers",
+        "age": 24.0,
+        "pos_simple": "GK",
+        "team": "Bournemouth",
+        "market_value": 3500000.0,
+        "perf_score": -1.4818055614365606,
+        "predicted_growth": 0.9266523149081642
+      },
+      {
+        "player": "Aaron Ramsdale",
+        "age": 25.0,
+        "pos_simple": "GK",
+        "team": "Arsenal",
+        "market_value": 25000000.0,
+        "perf_score": -1.3132269992708538,
+        "predicted_growth": 0.853402996993855
+      },
+      {
+        "player": "Arijanet Muric",
+        "age": 24.0,
+        "pos_simple": "GK",
+        "team": "Burnley",
+        "market_value": NaN,
+        "perf_score": -0.9760698749394408,
+        "predicted_growth": 0.6114386528545862
+      },
+      {
+        "player": "Youri Tielemans",
+        "age": 26.0,
+        "pos_simple": "FW",
+        "team": "Aston Villa",
+        "market_value": 25000000.0,
+        "perf_score": -0.8636874846934127,
+        "predicted_growth": 0.5918497041164363
+      },
+      {
+        "player": "Joe Gomez",
+        "age": 26.0,
+        "pos_simple": "DF",
+        "team": "Liverpool",
+        "market_value": 28000000.0,
+        "perf_score": 0.08369584562965955,
+        "predicted_growth": 0.5886206951109596
+      },
+      {
+        "player": "Caoimhín Kelleher",
+        "age": 24.0,
+        "pos_simple": "GK",
+        "team": "Liverpool",
+        "market_value": 20000000.0,
+        "perf_score": -0.9760698749394408,
+        "predicted_growth": 0.5876283898045933
+      },
+      {
+        "player": "Gabriel Jesus",
+        "age": 26.0,
+        "pos_simple": "FW",
+        "team": "Arsenal",
+        "market_value": 65000000.0,
+        "perf_score": 0.43914383119341327,
+        "predicted_growth": 0.5737853814734046
+      },
+      {
+        "player": "Pau Torres",
+        "age": 26.0,
+        "pos_simple": "DF",
+        "team": "Aston Villa",
+        "market_value": 45000000.0,
+        "perf_score": -0.7863541616756744,
+        "predicted_growth": 0.5604069943232372
+      },
+      {
+        "player": "Sander Berge",
+        "age": 25.0,
+        "pos_simple": "MF",
+        "team": "Burnley",
+        "market_value": 20000000.0,
+        "perf_score": -1.1522360042043338,
+        "predicted_growth": 0.510918323541395
+      },
+      {
+        "player": "Ibrahima Konaté",
+        "age": 24.0,
+        "pos_simple": "DF",
+        "team": "Liverpool",
+        "market_value": 45000000.0,
+        "perf_score": 0.029567299855189563,
+        "predicted_growth": 0.5051860791434106
+      },
+      {
+        "player": "Diogo Dalot",
+        "age": 24.0,
+        "pos_simple": "DF",
+        "team": "Man United",
+        "market_value": 35000000.0,
+        "perf_score": 0.08661142883899382,
+        "predicted_growth": 0.5047836405915108
+      },
+      {
+        "player": "Rodrigo Bentancur",
+        "age": 26.0,
+        "pos_simple": "MF",
+        "team": "Tottenham",
+        "market_value": 35000000.0,
+        "perf_score": 0.005482998100660162,
+        "predicted_growth": 0.4995711823701274
+      },
+      {
+        "player": "Lisandro Martínez",
+        "age": 25.0,
+        "pos_simple": "DF",
+        "team": "Man United",
+        "market_value": 45000000.0,
+        "perf_score": -0.22819049365649935,
+        "predicted_growth": 0.46990032220903505
+      },
+      {
+        "player": "Orel Mangala",
+        "age": 25.0,
+        "pos_simple": "MF",
+        "team": "Nott'm Forest",
+        "market_value": 20000000.0,
+        "perf_score": -1.042337002143345,
+        "predicted_growth": 0.4658289920222065
+      },
+      {
+        "player": "Marcus Rashford",
+        "age": 25.0,
+        "pos_simple": "FW",
+        "team": "Man United",
+        "market_value": 60000000.0,
+        "perf_score": -0.7541920001519943,
+        "predicted_growth": 0.4279805708247735
+      },
+      {
+        "player": "Sean Longstaff",
+        "age": 25.0,
+        "pos_simple": "MF",
+        "team": "Newcastle",
+        "market_value": 25000000.0,
+        "perf_score": -0.8874406189520021,
+        "predicted_growth": 0.3990463725930101
+      },
+      {
+        "player": "Joelinton",
+        "age": 26.0,
+        "pos_simple": "FW",
+        "team": "Newcastle",
+        "market_value": 40000000.0,
+        "perf_score": -1.1674648806524075,
+        "predicted_growth": 0.3988718345494347
+      },
+      {
+        "player": "Marcus Rashford",
+        "age": 25.0,
+        "pos_simple": "FW",
+        "team": "Man United",
+        "market_value": 60000000.0,
+        "perf_score": -0.7541920001519943,
+        "predicted_growth": 0.39602659134485585
+      },
+      {
+        "player": "Luis Díaz",
+        "age": 26.0,
+        "pos_simple": "FW",
+        "team": "Liverpool",
+        "market_value": 75000000.0,
+        "perf_score": -0.04155594720641166,
+        "predicted_growth": 0.35512433176357966
+      },
+      {
+        "player": "Leandro Trossard",
+        "age": 28.0,
+        "pos_simple": "FW",
+        "team": "Arsenal",
+        "market_value": 35000000.0,
+        "perf_score": 0.7266235601330137,
+        "predicted_growth": 0.34621967738361215
+      }
+    ],
+    "declining_stars": [
+      {
+        "player": "Kevin De Bruyne",
+        "age": 32.0,
+        "pos_simple": "MF",
+        "team": "Man City",
+        "market_value": 50000000.0,
+        "perf_score": 4.050410590092835,
+        "predicted_growth": -3.2099603913467223
+      },
+      {
+        "player": "Enes Ünal",
+        "age": 26.0,
+        "pos_simple": "FW",
+        "team": "Bournemouth",
+        "market_value": 18000000.0,
+        "perf_score": 3.0982778052207025,
+        "predicted_growth": -2.5952508284982465
+      },
+      {
+        "player": "Adama Traoré",
+        "age": 27.0,
+        "pos_simple": "MF",
+        "team": "Fulham",
+        "market_value": 9000000.0,
+        "perf_score": 2.758832082774063,
+        "predicted_growth": -2.5769695820593244
+      },
+      {
+        "player": "David Brooks",
+        "age": 26.0,
+        "pos_simple": "MF",
+        "team": "Bournemouth",
+        "market_value": 8000000.0,
+        "perf_score": 1.5601959494310844,
+        "predicted_growth": -1.3384855381357326
+      },
+      {
+        "player": "Jáder Durán",
+        "age": 19.0,
+        "pos_simple": "FW",
+        "team": "Aston Villa",
+        "market_value": NaN,
+        "perf_score": 1.853085675939339,
+        "predicted_growth": -1.2070051733601124
+      },
+      {
+        "player": "James Maddison",
+        "age": 26.0,
+        "pos_simple": "MF",
+        "team": "Tottenham",
+        "market_value": 70000000.0,
+        "perf_score": 2.339589790665002,
+        "predicted_growth": -0.9424863057303661
+      },
+      {
+        "player": "Armando Broja",
+        "age": 21.0,
+        "pos_simple": "FW",
+        "team": "Chelsea",
+        "market_value": 22000000.0,
+        "perf_score": 1.4909485012612351,
+        "predicted_growth": -0.9202864065700787
+      },
+      {
+        "player": "Harvey Barnes",
+        "age": 25.0,
+        "pos_simple": "FW",
+        "team": "Newcastle",
+        "market_value": 35000000.0,
+        "perf_score": 1.5816785005801872,
+        "predicted_growth": -0.879319479045686
+      },
+      {
+        "player": "Mikkel Damsgaard",
+        "age": 23.0,
+        "pos_simple": "MF",
+        "team": "Brentford",
+        "market_value": 10000000.0,
+        "perf_score": 1.0730343808556375,
+        "predicted_growth": -0.8713660073299088
+      },
+      {
+        "player": "Lewis Cook",
+        "age": 26.0,
+        "pos_simple": "MF",
+        "team": "Bournemouth",
+        "market_value": 12000000.0,
+        "perf_score": 1.4410415882466923,
+        "predicted_growth": -0.8320575055262879
+      },
+      {
+        "player": "Andreas Pereira",
+        "age": 27.0,
+        "pos_simple": "MF",
+        "team": "Fulham",
+        "market_value": 20000000.0,
+        "perf_score": 1.447204744859679,
+        "predicted_growth": -0.7933480516520827
+      },
+      {
+        "player": "James Ward-Prowse",
+        "age": 28.0,
+        "pos_simple": "MF",
+        "team": "West Ham",
+        "market_value": 30000000.0,
+        "perf_score": 1.651928217664768,
+        "predicted_growth": -0.7651167632807575
+      },
+      {
+        "player": "Kevin Schade",
+        "age": 21.0,
+        "pos_simple": "FW",
+        "team": "Brentford",
+        "market_value": 22000000.0,
+        "perf_score": 0.7419053845151787,
+        "predicted_growth": -0.7018416882874786
+      },
+      {
+        "player": "Mark Flekken",
+        "age": 30.0,
+        "pos_simple": "GK",
+        "team": "Brentford",
+        "market_value": 12000000.0,
+        "perf_score": 1.257596073756172,
+        "predicted_growth": -0.6996392097422942
+      },
+      {
+        "player": "Bernd Leno",
+        "age": 31.0,
+        "pos_simple": "GK",
+        "team": "Fulham",
+        "market_value": 13000000.0,
+        "perf_score": 1.3840299953804518,
+        "predicted_growth": -0.6846003345516493
+      },
+      {
+        "player": "Mohammed Kudus",
+        "age": 22.0,
+        "pos_simple": "MF",
+        "team": "West Ham",
+        "market_value": 50000000.0,
+        "perf_score": 1.5895331974499687,
+        "predicted_growth": -0.6735490755851191
+      },
+      {
+        "player": "Dwight McNeil",
+        "age": 23.0,
+        "pos_simple": "MF",
+        "team": "Everton",
+        "market_value": 22000000.0,
+        "perf_score": 1.7745624403469271,
+        "predicted_growth": -0.6563661642688776
+      },
+      {
+        "player": "Joël Veltman",
+        "age": 31.0,
+        "pos_simple": "DF",
+        "team": "Brighton",
+        "market_value": 10000000.0,
+        "perf_score": 0.6870287872402777,
+        "predicted_growth": -0.6441635302979829
+      },
+      {
+        "player": "Conor Bradley",
+        "age": 20.0,
+        "pos_simple": "DF",
+        "team": "Liverpool",
+        "market_value": 15000000.0,
+        "perf_score": 1.1552189974100173,
+        "predicted_growth": -0.6432849939044044
+      },
+      {
+        "player": "Mason Mount",
+        "age": 24.0,
+        "pos_simple": "MF",
+        "team": "Man United",
+        "market_value": 35000000.0,
+        "perf_score": 1.1145548378243915,
+        "predicted_growth": -0.6426192744622916
+      }
+    ]
+  },
+  "top_features_xgb": [
+    {
+      "feature": "perf_score",
+      "importance": 0.19535031914710999
+    },
+    {
+      "feature": "age_x_perf",
+      "importance": 0.1553402990102768
+    },
+    {
+      "feature": "is_u23",
+      "importance": 0.03895767033100128
+    },
+    {
+      "feature": "tklw_p90",
+      "importance": 0.036011066287755966
+    },
+    {
+      "feature": "int_p90",
+      "importance": 0.035020336508750916
+    },
+    {
+      "feature": "lag1_perf",
+      "importance": 0.03166341409087181
+    },
+    {
+      "feature": "peak_perf",
+      "importance": 0.02902974933385849
+    },
+    {
+      "feature": "market_value",
+      "importance": 0.028621425852179527
+    },
+    {
+      "feature": "min",
+      "importance": 0.027586977928876877
+    },
+    {
+      "feature": "age_x_trend",
+      "importance": 0.026910722255706787
+    }
+  ],
+  "top_features_rf": [
+    {
+      "feature": "perf_score",
+      "importance": 0.5113504290923682
+    },
+    {
+      "feature": "age_x_perf",
+      "importance": 0.2345217125247348
+    },
+    {
+      "feature": "lag1_perf",
+      "importance": 0.033821221350177434
+    },
+    {
+      "feature": "market_value",
+      "importance": 0.02383952335948985
+    },
+    {
+      "feature": "peak_perf",
+      "importance": 0.020142324276957377
+    },
+    {
+      "feature": "min",
+      "importance": 0.01920336889632623
+    },
+    {
+      "feature": "perf_trend",
+      "importance": 0.015195345123187529
+    },
+    {
+      "feature": "starter_ratio",
+      "importance": 0.014529310027098431
+    },
+    {
+      "feature": "lag2_perf",
+      "importance": 0.014372679753180479
+    },
+    {
+      "feature": "points",
+      "importance": 0.012946672950916898
+    }
+  ],
+  "growth_stats": {
+    "mean": -0.0754061011120468,
+    "std": 1.199649743436576,
+    "pct_positive": 0.4755899104963385
+  }
+}

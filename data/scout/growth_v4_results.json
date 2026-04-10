@@ -1,0 +1,827 @@
+{
+  "version": "v4",
+  "approach": "classification_3class",
+  "classes": [
+    "Declining",
+    "Stable",
+    "Improving"
+  ],
+  "delta_threshold": 0.3,
+  "min_minutes": 1500,
+  "smoothing_method": "lowess_frac0.4",
+  "note": "Individual 1-year performance regression is not reliable with this data (R^2 consistently negative in v1-v3). v4 pivots to 3-class trajectory classification using position-specific models with no absolute performance features and no position dummies \u2014 trajectory signals only.",
+  "model_performance": {
+    "FW": {
+      "val": {
+        "accuracy_xgb": 0.339,
+        "accuracy_rf": 0.3729,
+        "accuracy_ensemble": 0.4068,
+        "balanced_accuracy": 0.3728,
+        "n_samples": 59,
+        "class_dist": {
+          "Improving": 27,
+          "Declining": 20,
+          "Stable": 12
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.4,
+        "accuracy_rf": 0.3429,
+        "accuracy_ensemble": 0.3429,
+        "balanced_accuracy": 0.3387,
+        "n_samples": 35,
+        "class_dist": {
+          "Improving": 16,
+          "Declining": 13,
+          "Stable": 6
+        }
+      },
+      "cv_balanced_accuracy": 0.3472
+    },
+    "MF": {
+      "val": {
+        "accuracy_xgb": 0.3056,
+        "accuracy_rf": 0.3472,
+        "accuracy_ensemble": 0.2917,
+        "balanced_accuracy": 0.2974,
+        "n_samples": 72,
+        "class_dist": {
+          "Declining": 27,
+          "Improving": 25,
+          "Stable": 20
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.3158,
+        "accuracy_rf": 0.4737,
+        "accuracy_ensemble": 0.4211,
+        "balanced_accuracy": 0.4306,
+        "n_samples": 38,
+        "class_dist": {
+          "Stable": 16,
+          "Improving": 12,
+          "Declining": 10
+        }
+      },
+      "cv_balanced_accuracy": 0.3472
+    },
+    "DF": {
+      "val": {
+        "accuracy_xgb": 0.3505,
+        "accuracy_rf": 0.3814,
+        "accuracy_ensemble": 0.3299,
+        "balanced_accuracy": 0.3294,
+        "n_samples": 97,
+        "class_dist": {
+          "Improving": 37,
+          "Stable": 31,
+          "Declining": 29
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.4259,
+        "accuracy_rf": 0.2963,
+        "accuracy_ensemble": 0.3148,
+        "balanced_accuracy": 0.3333,
+        "n_samples": 54,
+        "class_dist": {
+          "Declining": 27,
+          "Improving": 18,
+          "Stable": 9
+        }
+      },
+      "cv_balanced_accuracy": 0.3479
+    },
+    "GK": {
+      "val": {
+        "accuracy_xgb": 0.3478,
+        "accuracy_rf": 0.2174,
+        "accuracy_ensemble": 0.3478,
+        "balanced_accuracy": 0.354,
+        "n_samples": 23,
+        "class_dist": {
+          "Stable": 10,
+          "Improving": 7,
+          "Declining": 6
+        }
+      },
+      "test": {
+        "accuracy_xgb": 0.3077,
+        "accuracy_rf": 0.4615,
+        "accuracy_ensemble": 0.3846,
+        "balanced_accuracy": 0.4444,
+        "n_samples": 13,
+        "class_dist": {
+          "Declining": 6,
+          "Stable": 4,
+          "Improving": 3
+        }
+      },
+      "cv_balanced_accuracy": 0.3999
+    }
+  },
+  "peak_ages": {
+    "FW": {
+      "peak_age": 25,
+      "data_peak_age_raw": 23,
+      "data_peak_age": 25,
+      "prior_peak_age": 27,
+      "amplitude": 0.2705,
+      "w_data": 0.902,
+      "w_prior": 0.098,
+      "valid_age_buckets": 13,
+      "valid_age_range": [
+        20,
+        32
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    },
+    "MF": {
+      "peak_age": 27,
+      "data_peak_age_raw": 27,
+      "data_peak_age": 27,
+      "prior_peak_age": 27,
+      "amplitude": 0.2712,
+      "w_data": 0.904,
+      "w_prior": 0.096,
+      "valid_age_buckets": 14,
+      "valid_age_range": [
+        20,
+        33
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    },
+    "DF": {
+      "peak_age": 26,
+      "data_peak_age_raw": 19,
+      "data_peak_age": 26,
+      "prior_peak_age": 28,
+      "amplitude": 0.5161,
+      "w_data": 1.0,
+      "w_prior": 0.0,
+      "valid_age_buckets": 16,
+      "valid_age_range": [
+        19,
+        34
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    },
+    "GK": {
+      "peak_age": 28,
+      "data_peak_age_raw": 28,
+      "data_peak_age": 28,
+      "prior_peak_age": 30,
+      "amplitude": 0.355,
+      "w_data": 0.789,
+      "w_prior": 0.211,
+      "valid_age_buckets": 8,
+      "valid_age_range": [
+        26,
+        33
+      ],
+      "smoothing_method": "lowess_frac0.4"
+    }
+  },
+  "peak_age_curves": {
+    "FW": {
+      "ages": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "mean_z": [
+        -0.0251,
+        -0.0249,
+        0.0408,
+        0.1595,
+        0.0806,
+        0.0306,
+        -0.0712,
+        0.0126,
+        0.0184,
+        -0.0627,
+        0.0687,
+        -0.1576,
+        -0.2045
+      ],
+      "smoothed": [
+        -0.0448,
+        0.0045,
+        0.0518,
+        0.0775,
+        0.0688,
+        0.0284,
+        0.0005,
+        -0.0132,
+        -0.0078,
+        -0.0102,
+        -0.0554,
+        -0.12,
+        -0.193
+      ],
+      "n": [
+        46,
+        81,
+        121,
+        124,
+        151,
+        148,
+        153,
+        131,
+        121,
+        104,
+        65,
+        54,
+        30
+      ]
+    },
+    "MF": {
+      "ages": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "mean_z": [
+        -0.0663,
+        0.152,
+        0.0438,
+        0.0151,
+        -0.0317,
+        0.0449,
+        0.0244,
+        0.138,
+        0.1344,
+        -0.0857,
+        -0.0792,
+        -0.1964,
+        -0.255,
+        -0.1355
+      ],
+      "smoothed": [
+        0.0161,
+        0.032,
+        0.0456,
+        0.0271,
+        0.0131,
+        0.0263,
+        0.0642,
+        0.0763,
+        0.0465,
+        -0.0163,
+        -0.1071,
+        -0.1642,
+        -0.1808,
+        -0.1949
+      ],
+      "n": [
+        57,
+        74,
+        101,
+        130,
+        143,
+        172,
+        149,
+        150,
+        133,
+        116,
+        98,
+        62,
+        52,
+        36
+      ]
+    },
+    "DF": {
+      "ages": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "mean_z": [
+        0.1361,
+        0.2955,
+        0.0343,
+        0.0374,
+        0.1459,
+        0.0829,
+        0.0602,
+        0.1161,
+        -0.0221,
+        0.0246,
+        -0.0765,
+        -0.2269,
+        -0.1547,
+        -0.1417,
+        -0.2945,
+        -0.3528
+      ],
+      "smoothed": [
+        0.1881,
+        0.1551,
+        0.1291,
+        0.0948,
+        0.0822,
+        0.092,
+        0.0807,
+        0.0539,
+        0.0281,
+        -0.0293,
+        -0.0915,
+        -0.1361,
+        -0.1761,
+        -0.2248,
+        -0.2738,
+        -0.328
+      ],
+      "n": [
+        33,
+        63,
+        99,
+        133,
+        198,
+        231,
+        239,
+        252,
+        237,
+        224,
+        202,
+        156,
+        138,
+        95,
+        53,
+        38
+      ]
+    },
+    "GK": {
+      "ages": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "mean_z": [
+        -0.1908,
+        0.0313,
+        0.2941,
+        -0.0085,
+        0.1223,
+        -0.1924,
+        -0.4605,
+        0.1015
+      ],
+      "smoothed": [
+        -0.1957,
+        0.043,
+        0.1322,
+        0.1156,
+        -0.0053,
+        -0.1791,
+        -0.2228,
+        0.0021
+      ],
+      "n": [
+        35,
+        47,
+        48,
+        45,
+        45,
+        40,
+        35,
+        32
+      ]
+    }
+  },
+  "likely_improvers": [
+    {
+      "player": "Phil Foden",
+      "age": 24.0,
+      "pos_simple": "FW",
+      "team": "Man City",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.7589525580406189,
+      "prob_stable": 0.10529297590255737,
+      "prob_declining": 0.13575445115566254,
+      "min": 1777.0,
+      "perf_z": -0.10246155634308605
+    },
+    {
+      "player": "Mohammed Kudus",
+      "age": 23.0,
+      "pos_simple": "FW",
+      "team": "West Ham",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.736799418926239,
+      "prob_stable": 0.1680963784456253,
+      "prob_declining": 0.09510420262813568,
+      "min": 2590.0,
+      "perf_z": -0.11511146067748991
+    },
+    {
+      "player": "Bukayo Saka",
+      "age": 22.0,
+      "pos_simple": "FW",
+      "team": "Arsenal",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.6604491472244263,
+      "prob_stable": 0.20946580171585083,
+      "prob_declining": 0.1300850361585617,
+      "min": 1729.0,
+      "perf_z": -0.06495444370313225
+    },
+    {
+      "player": "Mads Hermansen",
+      "age": 24.0,
+      "pos_simple": "GK",
+      "team": "Leicester",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.6394903063774109,
+      "prob_stable": 0.22341039776802063,
+      "prob_declining": 0.13709932565689087,
+      "min": 2385.0,
+      "perf_z": 1.2229943478574066
+    },
+    {
+      "player": "Brennan Johnson",
+      "age": 23.0,
+      "pos_simple": "FW",
+      "team": "Tottenham",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.6122324466705322,
+      "prob_stable": 0.18206532299518585,
+      "prob_declining": 0.20570224523544312,
+      "min": 2177.0,
+      "perf_z": -0.10816595688219655
+    },
+    {
+      "player": "Yasin Ayari",
+      "age": 20.0,
+      "pos_simple": "MF",
+      "team": "Brighton",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5974696278572083,
+      "prob_stable": 0.2285088449716568,
+      "prob_declining": 0.17402155697345734,
+      "min": 1965.0,
+      "perf_z": 0.027449476796700102
+    },
+    {
+      "player": "Yankuba Minteh",
+      "age": 20.0,
+      "pos_simple": "MF",
+      "team": "Brighton",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5888918042182922,
+      "prob_stable": 0.2247028797864914,
+      "prob_declining": 0.1864052712917328,
+      "min": 1838.0,
+      "perf_z": 0.11319507093031689
+    },
+    {
+      "player": "Anthony Elanga",
+      "age": 22.0,
+      "pos_simple": "FW",
+      "team": "Nott'm Forest",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5883592367172241,
+      "prob_stable": 0.21456658840179443,
+      "prob_declining": 0.19707423448562622,
+      "min": 2501.0,
+      "perf_z": -0.11025641741686319
+    },
+    {
+      "player": "Amad Diallo",
+      "age": 22.0,
+      "pos_simple": "FW",
+      "team": "Man United",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.577815055847168,
+      "prob_stable": 0.25946182012557983,
+      "prob_declining": 0.16272316873073578,
+      "min": 1901.0,
+      "perf_z": -0.10040534588470934
+    },
+    {
+      "player": "Rasmus H\u00f8jlund",
+      "age": 21.0,
+      "pos_simple": "FW",
+      "team": "Man United",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5727055072784424,
+      "prob_stable": 0.23970472812652588,
+      "prob_declining": 0.18758970499038696,
+      "min": 2004.0,
+      "perf_z": -0.1513168783158377
+    },
+    {
+      "player": "Gabriel Martinelli",
+      "age": 23.0,
+      "pos_simple": "FW",
+      "team": "Arsenal",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5680580735206604,
+      "prob_stable": 0.2542762756347656,
+      "prob_declining": 0.17766569554805756,
+      "min": 2290.0,
+      "perf_z": -0.12524367443318238
+    },
+    {
+      "player": "Manuel Ugarte",
+      "age": 23.0,
+      "pos_simple": "MF",
+      "team": "Man United",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5642098784446716,
+      "prob_stable": 0.14652758836746216,
+      "prob_declining": 0.2892625331878662,
+      "min": 1785.0,
+      "perf_z": 0.025777947719838514
+    },
+    {
+      "player": "Facundo Buonanotte",
+      "age": 19.0,
+      "pos_simple": "FW",
+      "team": "Leicester",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5625596046447754,
+      "prob_stable": 0.12551350891590118,
+      "prob_declining": 0.31192687153816223,
+      "min": 1523.0,
+      "perf_z": -0.10884990630947249
+    },
+    {
+      "player": "Rayan A\u00eft-Nouri",
+      "age": 23.0,
+      "pos_simple": "DF",
+      "team": "Wolves",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5520293116569519,
+      "prob_stable": 0.12881089746952057,
+      "prob_declining": 0.31915971636772156,
+      "min": 3109.0,
+      "perf_z": 0.1877686372531482
+    },
+    {
+      "player": "Tyler Dibling",
+      "age": 18.0,
+      "pos_simple": "FW",
+      "team": "Southampton",
+      "pred_ensemble": "Improving",
+      "prob_improving": 0.5458812117576599,
+      "prob_stable": 0.17401842772960663,
+      "prob_declining": 0.2801003158092499,
+      "min": 1874.0,
+      "perf_z": -0.13994941924312537
+    }
+  ],
+  "stability_picks": [
+    {
+      "player": "Kepa Arrizabalaga",
+      "age": 29.0,
+      "pos_simple": "GK",
+      "team": "Bournemouth",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.05836924538016319,
+      "prob_stable": 0.599453866481781,
+      "prob_declining": 0.3421768844127655,
+      "min": 2790.0,
+      "perf_z": 1.5548145197567027
+    },
+    {
+      "player": "Nikola Milenkovi\u0107",
+      "age": 26.0,
+      "pos_simple": "DF",
+      "team": "Nott'm Forest",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.13862591981887817,
+      "prob_stable": 0.5483219027519226,
+      "prob_declining": 0.3130522072315216,
+      "min": 3330.0,
+      "perf_z": -0.10347455784317906
+    },
+    {
+      "player": "Dean Henderson",
+      "age": 27.0,
+      "pos_simple": "GK",
+      "team": "Crystal Palace",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.1312592327594757,
+      "prob_stable": 0.49760276079177856,
+      "prob_declining": 0.37113797664642334,
+      "min": 3420.0,
+      "perf_z": 2.070979231600053
+    },
+    {
+      "player": "Robert S\u00e1nchez",
+      "age": 26.0,
+      "pos_simple": "GK",
+      "team": "Chelsea",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.10533935576677322,
+      "prob_stable": 0.4974970519542694,
+      "prob_declining": 0.3971635699272156,
+      "min": 2880.0,
+      "perf_z": 1.6285523357343241
+    },
+    {
+      "player": "Tom\u00e1\u0161 Sou\u010dek",
+      "age": 29.0,
+      "pos_simple": "MF",
+      "team": "West Ham",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.19280099868774414,
+      "prob_stable": 0.49447259306907654,
+      "prob_declining": 0.3127264082431793,
+      "min": 2567.0,
+      "perf_z": -0.11463856550622172
+    },
+    {
+      "player": "Alex Iwobi",
+      "age": 28.0,
+      "pos_simple": "MF",
+      "team": "Fulham",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.14826026558876038,
+      "prob_stable": 0.4767947196960449,
+      "prob_declining": 0.3749450445175171,
+      "min": 2981.0,
+      "perf_z": 0.01070896927851383
+    },
+    {
+      "player": "Wilfred Ndidi",
+      "age": 27.0,
+      "pos_simple": "MF",
+      "team": "Leicester",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.24548283219337463,
+      "prob_stable": 0.47485488653182983,
+      "prob_declining": 0.2796623408794403,
+      "min": 2324.0,
+      "perf_z": -0.021051570334626873
+    },
+    {
+      "player": "Lucas Paquet\u00e1",
+      "age": 26.0,
+      "pos_simple": "FW",
+      "team": "West Ham",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.3237527310848236,
+      "prob_stable": 0.45510053634643555,
+      "prob_declining": 0.22114677727222443,
+      "min": 2380.0,
+      "perf_z": -0.1337182758209002
+    },
+    {
+      "player": "Joachim Andersen",
+      "age": 28.0,
+      "pos_simple": "DF",
+      "team": "Fulham",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.312245637178421,
+      "prob_stable": 0.4455350637435913,
+      "prob_declining": 0.24221934378147125,
+      "min": 2583.0,
+      "perf_z": -0.016160400104083972
+    },
+    {
+      "player": "N\u00e9lson Semedo",
+      "age": 30.0,
+      "pos_simple": "DF",
+      "team": "Wolves",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.3557898998260498,
+      "prob_stable": 0.44320258498191833,
+      "prob_declining": 0.20100745558738708,
+      "min": 2886.0,
+      "perf_z": 0.04685208079292908
+    },
+    {
+      "player": "Jordan Pickford",
+      "age": 30.0,
+      "pos_simple": "GK",
+      "team": "Everton",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.13086630403995514,
+      "prob_stable": 0.4067303538322449,
+      "prob_declining": 0.46240338683128357,
+      "min": 3420.0,
+      "perf_z": 2.070979231600053
+    },
+    {
+      "player": "Max Kilman",
+      "age": 27.0,
+      "pos_simple": "DF",
+      "team": "West Ham",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.26078200340270996,
+      "prob_stable": 0.3913496434688568,
+      "prob_declining": 0.3478683531284332,
+      "min": 3348.0,
+      "perf_z": -0.04486029090387274
+    },
+    {
+      "player": "Bruno Fernandes",
+      "age": 29.0,
+      "pos_simple": "MF",
+      "team": "Man United",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.28061628341674805,
+      "prob_stable": 0.36035019159317017,
+      "prob_declining": 0.3590335547924042,
+      "min": 3018.0,
+      "perf_z": 0.18715028265419023
+    },
+    {
+      "player": "Jan Bednarek",
+      "age": 28.0,
+      "pos_simple": "DF",
+      "team": "Southampton",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.32495978474617004,
+      "prob_stable": 0.35160210728645325,
+      "prob_declining": 0.3234381079673767,
+      "min": 2531.0,
+      "perf_z": 0.24180679333463173
+    },
+    {
+      "player": "David Raya",
+      "age": 28.0,
+      "pos_simple": "GK",
+      "team": "Arsenal",
+      "pred_ensemble": "Stable",
+      "prob_improving": 0.05944027751684189,
+      "prob_stable": 0.33191540837287903,
+      "prob_declining": 0.6086443662643433,
+      "min": 3420.0,
+      "perf_z": 2.070979231600053
+    }
+  ],
+  "decline_risk": [
+    {
+      "player": "Danny Welbeck",
+      "age": 33.0,
+      "pos_simple": "FW",
+      "team": "Brighton",
+      "pred_ensemble": "Declining",
+      "prob_improving": 0.23417668044567108,
+      "prob_stable": 0.3588678240776062,
+      "prob_declining": 0.4069555103778839,
+      "min": 2115.0,
+      "perf_z": -0.106253162148231
+    },
+    {
+      "player": "Mateo Kova\u010di\u0107",
+      "age": 30.0,
+      "pos_simple": "DF",
+      "team": "Man City",
+      "pred_ensemble": "Declining",
+      "prob_improving": 0.32690921425819397,
+      "prob_stable": 0.33257704973220825,
+      "prob_declining": 0.3405137062072754,
+      "min": 2198.0,
+      "perf_z": 0.24380764335309787
+    }
+  ],
+  "candidate_counts": {
+    "total": 239,
+    "likely_improvers": 15,
+    "stability_picks": 15,
+    "decline_risk": 2
+  }
+}

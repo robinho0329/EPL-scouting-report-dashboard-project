@@ -1,0 +1,269 @@
+{
+  "model_version": "v3",
+  "description": "Binary classification (success/failure) + Platt scaling calibration. Uncertain cases dropped from training. Test window 2022-2025 (3 seasons).",
+  "key_fixes": [
+    "Binary labels (not 3-class): success vs failure, uncertain dropped",
+    "Lower min threshold: 270 min (was 300)",
+    "Window transfers: gap ≤ 2 seasons (was consecutive only)",
+    "Test window: 2022-2025 (3 seasons) — statistically meaningful failure count",
+    "Platt scaling calibration on all models",
+    "Scout output: prob + risk factors + 3 similar historical transfers"
+  ],
+  "total_transfers_identified": 1723,
+  "label_distribution_all": {
+    "failure": 851,
+    "success": 679,
+    "uncertain": 193
+  },
+  "binary_eligible": 1530,
+  "uncertain_count": 193,
+  "binary_label_counts": {
+    "failure": 851,
+    "success": 679
+  },
+  "split_sizes": {
+    "train": 1357,
+    "val": 46,
+    "test": 173
+  },
+  "n_features": 46,
+  "features": [
+    "gls_p90_old",
+    "ast_p90_old",
+    "g_a_p90_old",
+    "g_pk_p90_old",
+    "min_share_pct_old",
+    "starter_ratio_old",
+    "war_old",
+    "consistency_old",
+    "big6_p90_old",
+    "team_dep_old",
+    "career_traj",
+    "age_at_transfer",
+    "is_peak_age",
+    "is_veteran",
+    "is_young",
+    "height_cm",
+    "pos_enc",
+    "epl_experience",
+    "prev_adapt_rate",
+    "prev_transfer_cnt",
+    "mv_ratio",
+    "season_gap",
+    "elo_gap",
+    "league_pos_gap",
+    "points_gap",
+    "is_step_up",
+    "is_step_down",
+    "style_match_pct",
+    "attack_ratio_diff",
+    "goals_pg_diff",
+    "points_new",
+    "elo_new",
+    "league_position_new",
+    "attack_ratio_new",
+    "goals_per_game_new",
+    "avg_squad_age_new",
+    "squad_depth_new",
+    "new_players_count_new",
+    "pos_competition",
+    "high_competition",
+    "points_old",
+    "elo_old",
+    "league_position_old",
+    "attack_ratio_old",
+    "goals_per_game_old",
+    "pos_count_old"
+  ],
+  "ensemble_threshold": 0.5000000000000002,
+  "val_metrics": {
+    "XGBoost_cal": {
+      "accuracy": 0.782608695652174,
+      "macro_f1": 0.7604166666666667,
+      "failure_f1": 0.8333333333333334,
+      "failure_recall": 0.8928571109693889,
+      "failure_precision": 0.7812499755859383,
+      "roc_auc": 0.8134920634920634,
+      "failure_brier": 0.16643158787795437,
+      "n_failure_test": 28
+    },
+    "RandomForest_cal": {
+      "accuracy": 0.717391304347826,
+      "macro_f1": 0.6928608115048793,
+      "failure_f1": 0.7796610169491526,
+      "failure_recall": 0.8214285420918378,
+      "failure_precision": 0.7419354599375658,
+      "roc_auc": 0.7837301587301587,
+      "failure_brier": 0.18355178524321197,
+      "n_failure_test": 28
+    },
+    "LogReg_cal": {
+      "accuracy": 0.6956521739130435,
+      "macro_f1": 0.640625,
+      "failure_f1": 0.78125,
+      "failure_recall": 0.8928571109693889,
+      "failure_precision": 0.6944444251543216,
+      "roc_auc": 0.7142857142857143,
+      "failure_brier": 0.197463768115942,
+      "n_failure_test": 28
+    },
+    "GBM_cal": {
+      "accuracy": 0.782608695652174,
+      "macro_f1": 0.7667342799188641,
+      "failure_f1": 0.8275862068965518,
+      "failure_recall": 0.8571428265306134,
+      "failure_precision": 0.7999999733333342,
+      "roc_auc": 0.8432539682539683,
+      "failure_brier": 0.15405357654584695,
+      "n_failure_test": 28
+    }
+  },
+  "test_metrics": {
+    "XGBoost_cal": {
+      "accuracy": 0.6936416184971098,
+      "macro_f1": 0.67245382774265,
+      "failure_f1": 0.7557603686635945,
+      "failure_recall": 0.8282828199163351,
+      "failure_precision": 0.6949152483481759,
+      "roc_auc": 0.733961233961234,
+      "failure_brier": 0.20733887092286077,
+      "n_failure_test": 99
+    },
+    "RandomForest_cal": {
+      "accuracy": 0.6647398843930635,
+      "macro_f1": 0.6354984016274339,
+      "failure_f1": 0.7387387387387387,
+      "failure_recall": 0.8282828199163351,
+      "failure_precision": 0.6666666612466126,
+      "roc_auc": 0.6928746928746929,
+      "failure_brier": 0.2172863692994541,
+      "n_failure_test": 99
+    },
+    "LogReg_cal": {
+      "accuracy": 0.6647398843930635,
+      "macro_f1": 0.6380230880230882,
+      "failure_f1": 0.7363636363636364,
+      "failure_recall": 0.8181818099173555,
+      "failure_precision": 0.6694214820708969,
+      "roc_auc": 0.6812721812721811,
+      "failure_brier": 0.22381157683382427,
+      "n_failure_test": 99
+    },
+    "GBM_cal": {
+      "accuracy": 0.6878612716763006,
+      "macro_f1": 0.6711489721205295,
+      "failure_f1": 0.7452830188679246,
+      "failure_recall": 0.7979797899193961,
+      "failure_precision": 0.6991150380609289,
+      "roc_auc": 0.7280917280917282,
+      "failure_brier": 0.21103250050909209,
+      "n_failure_test": 99
+    }
+  },
+  "ensemble_val": {
+    "accuracy": 0.8043478260869565,
+    "macro_f1": 0.7810682178741406,
+    "failure_f1": 0.8524590163934426,
+    "failure_recall": 0.9285713954081645,
+    "failure_precision": 0.7878787640036738,
+    "roc_auc": 0.8253968253968254,
+    "failure_brier": 0.16687130306211168,
+    "n_failure": 28,
+    "threshold": 0.5000000000000002
+  },
+  "ensemble_test": {
+    "accuracy": 0.6994219653179191,
+    "macro_f1": 0.6754689754689754,
+    "failure_f1": 0.7636363636363637,
+    "failure_recall": 0.8484848399142946,
+    "failure_precision": 0.6942148702957449,
+    "roc_auc": 0.7253617253617254,
+    "failure_brier": 0.20585622211438656,
+    "n_failure": 99,
+    "threshold": 0.5000000000000002
+  },
+  "top_features": [
+    {
+      "feature": "g_a_p90_old",
+      "importance_mean": 0.08469074208203156
+    },
+    {
+      "feature": "war_old",
+      "importance_mean": 0.060994930131224825
+    },
+    {
+      "feature": "min_share_pct_old",
+      "importance_mean": 0.050816389746422524
+    },
+    {
+      "feature": "gls_p90_old",
+      "importance_mean": 0.04140279401072881
+    },
+    {
+      "feature": "consistency_old",
+      "importance_mean": 0.037472818232168206
+    },
+    {
+      "feature": "starter_ratio_old",
+      "importance_mean": 0.03354877523179573
+    },
+    {
+      "feature": "pos_competition",
+      "importance_mean": 0.03172689278943618
+    },
+    {
+      "feature": "g_pk_p90_old",
+      "importance_mean": 0.03163233136046824
+    },
+    {
+      "feature": "ast_p90_old",
+      "importance_mean": 0.028383211693661498
+    },
+    {
+      "feature": "big6_p90_old",
+      "importance_mean": 0.0267710715995595
+    },
+    {
+      "feature": "mv_ratio",
+      "importance_mean": 0.026679559190684213
+    },
+    {
+      "feature": "pos_enc",
+      "importance_mean": 0.02324206575809342
+    },
+    {
+      "feature": "elo_gap",
+      "importance_mean": 0.02304183127348947
+    },
+    {
+      "feature": "points_gap",
+      "importance_mean": 0.020818623548525178
+    },
+    {
+      "feature": "attack_ratio_new",
+      "importance_mean": 0.019971560861292932
+    },
+    {
+      "feature": "avg_squad_age_new",
+      "importance_mean": 0.019938731255596823
+    },
+    {
+      "feature": "attack_ratio_old",
+      "importance_mean": 0.019220015068398495
+    },
+    {
+      "feature": "goals_per_game_old",
+      "importance_mean": 0.01899003394879964
+    },
+    {
+      "feature": "epl_experience",
+      "importance_mean": 0.01862647373331148
+    },
+    {
+      "feature": "elo_new",
+      "importance_mean": 0.01816658144799313
+    }
+  ],
+  "n_scout_records": 193,
+  "n_high_risk_recent": 126
+}

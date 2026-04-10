@@ -10,19 +10,18 @@ __pycache__/
 *.pyd
 *.pycache
 
-# Data files (large / crawled)
+# Data files (raw/large - excluded from repo)
 data/raw/
-data/processed/
-data/features/
-data/scout/
-data/dashboard/
-*.parquet
+data/images/players/
 *.h5
 *.zip
 *.tar.gz
 
 # CSV raw data (large)
 epl_final.csv
+
+# Checkpoints (DB files)
+data/*.db
 
 # Logs
 logs/

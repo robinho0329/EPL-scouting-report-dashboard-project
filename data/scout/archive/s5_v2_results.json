@@ -1,0 +1,391 @@
+{
+  "generated": "2026-03-24",
+  "model": "S5 v2 Transfer Adaptation",
+  "version": "v2",
+  "summary": {
+    "total_transfers_modeled": 936,
+    "seasons": "2000/01 - 2024/25",
+    "label_system": "3-class: failure / partial / success",
+    "label_distribution": {
+      "partial": 421,
+      "success": 391,
+      "failure": 124
+    },
+    "test_set_size": 68,
+    "ensemble_test_accuracy": 0.6176470588235294,
+    "ensemble_test_macro_f1": 0.5416231278300244,
+    "ensemble_failure_recall": 0.399999920000016,
+    "ensemble_failure_auc": 0.8158730158730159
+  },
+  "vs_v1_comparison": {
+    "v1_auc": 0.717,
+    "v1_test_n": 56,
+    "v1_label_type": "binary (70% per90 threshold)",
+    "v2_failure_auc": 0.8158730158730159,
+    "v2_test_n": 68,
+    "v2_label_type": "3-class (success/partial/failure)",
+    "auc_improvement": 0.099,
+    "conclusion": "AUC improved from 0.717 (v1 binary) to 0.816 (v2 failure OvR). v2 also gains partial class for nuanced scout decisions."
+  },
+  "top_features": [
+    {
+      "feature": "min_share_pct_old",
+      "importance_mean": 0.07088154336042468
+    },
+    {
+      "feature": "g_a_p90_old",
+      "importance_mean": 0.04721917530027585
+    },
+    {
+      "feature": "ast_p90_old",
+      "importance_mean": 0.037182590405881955
+    },
+    {
+      "feature": "mv_ratio",
+      "importance_mean": 0.034100390821251284
+    },
+    {
+      "feature": "starter_ratio_old",
+      "importance_mean": 0.031912485083280026
+    },
+    {
+      "feature": "war_old",
+      "importance_mean": 0.03185129662968243
+    },
+    {
+      "feature": "pos_competition",
+      "importance_mean": 0.029481080393960843
+    },
+    {
+      "feature": "gls_p90_old",
+      "importance_mean": 0.028786941430775568
+    },
+    {
+      "feature": "consistency_old",
+      "importance_mean": 0.026891941184907044
+    },
+    {
+      "feature": "attack_ratio_old",
+      "importance_mean": 0.02668756289551303
+    }
+  ],
+  "high_risk_transfers_recent": [
+    {
+      "player": "Charlie Taylor",
+      "from": "Burnley",
+      "to": "Southampton",
+      "season": "2024/25",
+      "actual_label": "failure",
+      "pred_label": "failure",
+      "prob_failure": 0.727,
+      "prob_partial": 0.183,
+      "prob_success": 0.09
+    },
+    {
+      "player": "David Raya",
+      "from": "Brentford",
+      "to": "Arsenal",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "failure",
+      "prob_failure": 0.579,
+      "prob_partial": 0.08,
+      "prob_success": 0.342
+    },
+    {
+      "player": "Ben Brereton",
+      "from": "Sheffield United",
+      "to": "Southampton",
+      "season": "2024/25",
+      "actual_label": "failure",
+      "pred_label": "failure",
+      "prob_failure": 0.553,
+      "prob_partial": 0.284,
+      "prob_success": 0.163
+    },
+    {
+      "player": "Luke Thomas",
+      "from": "Sheffield United",
+      "to": "Leicester",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "failure",
+      "prob_failure": 0.548,
+      "prob_partial": 0.063,
+      "prob_success": 0.388
+    },
+    {
+      "player": "Cameron Archer",
+      "from": "Sheffield United",
+      "to": "Southampton",
+      "season": "2024/25",
+      "actual_label": "partial",
+      "pred_label": "failure",
+      "prob_failure": 0.495,
+      "prob_partial": 0.268,
+      "prob_success": 0.236
+    },
+    {
+      "player": "Max Kilman",
+      "from": "Wolves",
+      "to": "West Ham",
+      "season": "2024/25",
+      "actual_label": "partial",
+      "pred_label": "failure",
+      "prob_failure": 0.491,
+      "prob_partial": 0.371,
+      "prob_success": 0.138
+    },
+    {
+      "player": "Dara O'Shea",
+      "from": "Burnley",
+      "to": "Ipswich",
+      "season": "2024/25",
+      "actual_label": "partial",
+      "pred_label": "partial",
+      "prob_failure": 0.42,
+      "prob_partial": 0.481,
+      "prob_success": 0.099
+    },
+    {
+      "player": "Axel Disasi",
+      "from": "Chelsea",
+      "to": "Aston Villa",
+      "season": "2024/25",
+      "actual_label": "failure",
+      "pred_label": "partial",
+      "prob_failure": 0.383,
+      "prob_partial": 0.481,
+      "prob_success": 0.136
+    },
+    {
+      "player": "Clément Lenglet",
+      "from": "Tottenham",
+      "to": "Aston Villa",
+      "season": "2023/24",
+      "actual_label": "partial",
+      "pred_label": "failure",
+      "prob_failure": 0.372,
+      "prob_partial": 0.361,
+      "prob_success": 0.267
+    },
+    {
+      "player": "James Milner",
+      "from": "Liverpool",
+      "to": "Brighton",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_failure": 0.333,
+      "prob_partial": 0.279,
+      "prob_success": 0.387
+    },
+    {
+      "player": "Arijanet Muric",
+      "from": "Burnley",
+      "to": "Ipswich",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_failure": 0.332,
+      "prob_partial": 0.043,
+      "prob_success": 0.625
+    },
+    {
+      "player": "Orel Mangala",
+      "from": "Nott'm Forest",
+      "to": "Everton",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "partial",
+      "prob_failure": 0.321,
+      "prob_partial": 0.369,
+      "prob_success": 0.31
+    },
+    {
+      "player": "Jack Harrison",
+      "from": "Leeds",
+      "to": "Everton",
+      "season": "2023/24",
+      "actual_label": "partial",
+      "pred_label": "partial",
+      "prob_failure": 0.293,
+      "prob_partial": 0.645,
+      "prob_success": 0.062
+    },
+    {
+      "player": "Bobby De Cordova-Reid",
+      "from": "Fulham",
+      "to": "Leicester",
+      "season": "2024/25",
+      "actual_label": "partial",
+      "pred_label": "partial",
+      "prob_failure": 0.273,
+      "prob_partial": 0.433,
+      "prob_success": 0.294
+    },
+    {
+      "player": "Moisés Caicedo",
+      "from": "Brighton",
+      "to": "Chelsea",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "partial",
+      "prob_failure": 0.269,
+      "prob_partial": 0.417,
+      "prob_success": 0.314
+    },
+    {
+      "player": "Ross Barkley",
+      "from": "Luton",
+      "to": "Aston Villa",
+      "season": "2024/25",
+      "actual_label": "partial",
+      "pred_label": "partial",
+      "prob_failure": 0.262,
+      "prob_partial": 0.652,
+      "prob_success": 0.086
+    },
+    {
+      "player": "Dean Henderson",
+      "from": "Nott'm Forest",
+      "to": "Crystal Palace",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_failure": 0.256,
+      "prob_partial": 0.055,
+      "prob_success": 0.689
+    },
+    {
+      "player": "Timothy Castagne",
+      "from": "Leicester",
+      "to": "Fulham",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "partial",
+      "prob_failure": 0.235,
+      "prob_partial": 0.649,
+      "prob_success": 0.116
+    },
+    {
+      "player": "Dominic Solanke",
+      "from": "Bournemouth",
+      "to": "Tottenham",
+      "season": "2024/25",
+      "actual_label": "partial",
+      "pred_label": "partial",
+      "prob_failure": 0.227,
+      "prob_partial": 0.674,
+      "prob_success": 0.099
+    },
+    {
+      "player": "Robert Sánchez",
+      "from": "Brighton",
+      "to": "Chelsea",
+      "season": "2023/24",
+      "actual_label": "partial",
+      "pred_label": "success",
+      "prob_failure": 0.221,
+      "prob_partial": 0.09,
+      "prob_success": 0.689
+    }
+  ],
+  "top_success_transfers_recent": [
+    {
+      "player": "Ben Johnson",
+      "from": "West Ham",
+      "to": "Ipswich",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.915
+    },
+    {
+      "player": "Oliver Skipp",
+      "from": "Tottenham",
+      "to": "Leicester",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.892
+    },
+    {
+      "player": "Lesley Ugochukwu",
+      "from": "Chelsea",
+      "to": "Southampton",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.889
+    },
+    {
+      "player": "Albert Sambi Lokonga",
+      "from": "Crystal Palace",
+      "to": "Luton",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.888
+    },
+    {
+      "player": "Mason Holgate",
+      "from": "Everton",
+      "to": "Sheffield United",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.856
+    },
+    {
+      "player": "Kalvin Phillips",
+      "from": "West Ham",
+      "to": "Ipswich",
+      "season": "2024/25",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.85
+    },
+    {
+      "player": "Lewis Hall",
+      "from": "Chelsea",
+      "to": "Newcastle",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.835
+    },
+    {
+      "player": "Jonny Evans",
+      "from": "Leicester",
+      "to": "Man United",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.726
+    },
+    {
+      "player": "Luke Thomas",
+      "from": "Leicester",
+      "to": "Sheffield United",
+      "season": "2023/24",
+      "actual_label": "success",
+      "pred_label": "success",
+      "prob_success": 0.702
+    },
+    {
+      "player": "Robert Sánchez",
+      "from": "Brighton",
+      "to": "Chelsea",
+      "season": "2023/24",
+      "actual_label": "partial",
+      "pred_label": "success",
+      "prob_success": 0.689
+    }
+  ],
+  "output_files": {
+    "predictions": "data/scout/transfer_predictions_v2.parquet",
+    "full_results": "data/scout/transfer_v2_results.json",
+    "model_summary": "models/s5_transfer_adapt/results_summary_v2.json"
+  }
+}
