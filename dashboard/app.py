@@ -46,7 +46,6 @@ MENU_OPTIONS = [
     "스카우트 개요",
     "선수 분석",
     "이적 인텔리전스",
-    "🔄 이적 시나리오",
     "💎 S2 저평가 탐색기",
     "🏟️ 팀 프로파일",
     "선수 통계 순위",
@@ -96,10 +95,6 @@ elif page == "선수 분석":
     from dashboard.pages.scout_players import render
     render()
 elif page == "이적 인텔리전스":
-    from dashboard.pages.scout_transfer import render
-    render()
-elif page == "🔄 이적 시나리오":
-    # 이적 시나리오 시뮬레이터 탭(탭4)으로 직접 이동
     from dashboard.pages.scout_transfer import render
     render()
 elif page == "💎 S2 저평가 탐색기":
