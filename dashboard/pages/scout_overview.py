@@ -24,7 +24,7 @@ def render():
     st.markdown("**김태현 스카우트** | 중위권 구단 (에버턴급)")
     st.info(
         "📋 **사용 가이드**: "
-        "①WAR 순위로 고효율 선수 발굴 → ②시장가치로 저평가 확인 → "
+        "①PIS 순위로 고효율 선수 발굴 → ②시장가치로 저평가 확인 → "
         "③유사 선수로 대체재 탐색 → ④성장 곡선으로 피크 타이밍 → "
         "⑤이적 리스크로 적응 성공률 검증 → ⑥하락 감지로 계약 연장 판단"
     )
@@ -78,7 +78,7 @@ def render():
 
     st.caption(
         "💡 WAR(0~100 백분위, 평균=50·살라급=99) | "
-        "숨은 보석=WAR 상위+시장가치 하위 | "
+        "숨은 보석=PIS 상위+시장가치 하위 | "
         "저평가=예측가 1.5배 이상 | "
         "하락 주의보=28세++60%+"
     )
@@ -103,7 +103,7 @@ def render():
             st.info("조건에 맞는 선수가 없습니다. 예산 범위 또는 나이 조건을 조정해보세요.")
         else:
             # ── 종합 영입 추천 스코어 계산 ──────────────────────────────
-            # WAR 점수 (0~40): WAR 백분위를 그대로 0.4 스케일로
+            # PIS 점수 (0~40): WAR 백분위를 그대로 0.4 스케일로
             # S2 저평가 보너스 (0~20): 저평가 목록에 있으면 +20
             # 성장 예측 보너스 (0~25): Improving=25, Stable=12, Declining=0
             # 나이 보너스 (0~15): ≤22=15, 23-24=10, 25-26=5, ≥27=0
@@ -149,11 +149,11 @@ def render():
                 rec_disp["war"] = rec_disp["war"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
             rec_disp = rec_disp.rename(columns={
                 "player": "선수", "team": "팀", "pos_group": "포지션",
-                "age": "나이", "war": "WAR", "market_value": "시장가치",
+                "age": "나이", "war": "PIS", "market_value": "시장가치",
             })
             st.dataframe(rec_disp, use_container_width=True, hide_index=True)
             st.caption(
-                f"💡 {len(rec)}명 조건 충족 | **종합점수** = WAR(40) + S2저평가(20) + 성장예측(25) + 나이보너스(15) "
+                f"💡 {len(rec)}명 조건 충족 | **종합점수** = PIS(40) + S2저평가(20) + 성장예측(25) + 나이보너스(15) "
                 f"| 💎=S2저평가 🟢=Improving | '선수 즉시 분석'에서 개별 리포트 확인"
             )
     else:
@@ -221,7 +221,7 @@ def render():
                         ))
                     max_war = pos_df["war"].max()
                     fig.update_layout(
-                        xaxis=dict(range=[0, max_war * 1.2], title="WAR (대체불가 가치)"),
+                        xaxis=dict(range=[0, max_war * 1.2], title="PIS (선수 임팩트 기여도)"),
                         height=400,
                         yaxis=dict(automargin=True),
                         margin=dict(l=0, r=80, t=10, b=10),
@@ -230,7 +230,7 @@ def render():
                     )
                     st.plotly_chart(fig, use_container_width=True, theme=None)
 
-        st.caption("💡 WAR(0~100 백분위) 상위 선수는 해당 포지션에서 가장 높은 대체불가 가치를 지닌 선수입니다. WAR 80+(상위 20%)은 리그 최상위급")
+        st.caption("💡 PIS(0~100 백분위) 상위 선수는 해당 포지션에서 가장 높은 대체불가 가치를 지닌 선수입니다. PIS 80+(상위 20%)은 리그 최상위급")
 
     st.markdown("---")
 

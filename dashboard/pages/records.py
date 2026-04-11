@@ -31,10 +31,10 @@ def render():
     match_data = load_match_data()
     scout_ratings = load_scout_ratings()
 
-    # ── 🏆 역대 WAR 명전 (스카우팅 핵심 섹션) ─────────────────────────────
+    # ── 🏆 역대 PIS 명전 (스카우팅 핵심 섹션) ─────────────────────────────
     if not scout_ratings.empty and "war" in scout_ratings.columns and "player" in scout_ratings.columns:
-        st.markdown("### 🏆 역대 WAR 명전")
-        st.caption("전 시즌 WAR 기준 역대 최고 선수들 — 스카우팅 레퍼런스 기준")
+        st.markdown("### 🏆 역대 PIS 명전")
+        st.caption("전 시즌 PIS 기준 역대 최고 선수들 — 스카우팅 레퍼런스 기준")
 
         # 선수별 최고 WAR 시즌 기준 집계
         war_best = (
@@ -55,11 +55,11 @@ def render():
         if "war" in top_war_all.columns:
             top_war_all["war"] = top_war_all["war"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
 
-        rename_m = {"player": "선수", "team": "팀", "pos_group": "포지션", "season": "최고 시즌", "war": "WAR", "tier": "등급", "market_value": "시장가치"}
+        rename_m = {"player": "선수", "team": "팀", "pos_group": "포지션", "season": "최고 시즌", "war": "PIS", "tier": "등급", "market_value": "시장가치"}
         top_war_all = top_war_all.rename(columns=rename_m)
         st.dataframe(top_war_all, use_container_width=True, height=460)
 
-        # WAR 명전 바 차트 (Top 15)
+        # PIS 명전 바 차트 (Top 15)
         top15 = war_best.head(15).sort_values("war", ascending=True)
         if len(top15):
             colors = [EPL_MAGENTA if i >= len(top15) - 3 else EPL_PURPLE for i in range(len(top15))]
@@ -72,12 +72,13 @@ def render():
                 textposition="outside",
             ))
             fig.update_layout(
-                xaxis=dict(title="WAR (최고 시즌 기준)"),
-                height=420, margin=dict(l=10, r=60, t=10, b=10),
+                xaxis=dict(title="PIS (최고 시즌 기준)"),
+                yaxis=dict(automargin=True),
+                height=460, margin=dict(l=0, r=80, t=10, b=10),
                 plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff",
             )
             st.plotly_chart(fig, use_container_width=True, theme=None)
-            st.caption("💡 붉은 막대 = 역대 Top 3. WAR은 0~100 백분위 (100 = 리그 절대 최고)")
+            st.caption("💡 붉은 막대 = 역대 Top 3. PIS는 0~100 백분위 (100 = 리그 절대 최고)")
 
         # 즉시 분석 연동
         st.markdown("---")
@@ -176,10 +177,10 @@ def render():
                 show_cols = [c for c in ["player", col_name, "war", "tier"] if c in alltime.columns]
                 top = alltime.nlargest(10, col_name)[show_cols].copy()
                 top.index = range(1, len(top) + 1)
-                rename_r = {"player": "선수", col_name: title.split()[-1], "war": "WAR", "tier": "등급"}
+                rename_r = {"player": "선수", col_name: title.split()[-1], "war": "PIS", "tier": "등급"}
                 top = top.rename(columns=rename_r)
-                if "WAR" in top.columns:
-                    top["WAR"] = top["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+                if "PIS" in top.columns:
+                    top["PIS"] = top["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
                 st.dataframe(top, use_container_width=True)
 
         # 선수 역대 기록 → 즉시 분석 연동

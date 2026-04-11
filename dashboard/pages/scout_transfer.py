@@ -987,8 +987,8 @@ def render():
                     _sh_disp["포지션"] = _sh_disp["포지션"].replace({"MF":"MID","DF":"DEF"})
                 if "개선확률" in _sh_disp.columns:
                     _sh_disp["개선확률"] = _sh_disp["개선확률"].apply(lambda x: f"{x:.1%}" if pd.notna(x) else "-")
-                if "WAR" in _sh_disp.columns:
-                    _sh_disp["WAR"] = _sh_disp["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+                if "PIS" in _sh_disp.columns:
+                    _sh_disp["PIS"] = _sh_disp["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
                 if "가치비율" in _sh_disp.columns:
                     _sh_disp["가치비율"] = _sh_disp["가치비율"].apply(lambda x: f"{x:.2f}x" if pd.notna(x) else "-")
 
@@ -1167,7 +1167,7 @@ def render():
                     ("Declining",     EPL_MAGENTA,"circle"),
                     ("🔘 불확실",     "#888888",  "diamond"),
                 ]
-                # 탑클래스 + WAR 상위 10명만 이름 표시 (라벨 겹침 방지)
+                # 탑클래스 + PIS 상위 10명만 이름 표시 (라벨 겹침 방지)
                 war_top10 = set(
                     scatter_data.nlargest(10, "war")["player"].tolist()
                     if "war" in scatter_data.columns else []
@@ -1179,7 +1179,7 @@ def render():
                     sub = scatter_data[scatter_data["분류"] == cat_label].copy()
                     if sub.empty:
                         continue
-                    # 라벨: 탑클래스 or WAR 상위 10명만, 나머지 빈 문자열
+                    # 라벨: 탑클래스 or PIS 상위 10명만, 나머지 빈 문자열
                     sub["_label"] = sub["player"].apply(
                         lambda p: p if (p in elite_set or p in war_top10) else ""
                     )
@@ -1202,7 +1202,7 @@ def render():
                     ))
 
                 sc_fig.update_layout(
-                    title=dict(text="나이 vs 개선 확률  (버블 크기 = WAR | ★ = 탑클래스 | 이름 = WAR 상위 10)", font=dict(size=13)),
+                    title=dict(text="나이 vs 개선 확률  (버블 크기 = WAR | ★ = 탑클래스 | 이름 = PIS 상위 10)", font=dict(size=13)),
                     xaxis=dict(title="나이", gridcolor="#333"),
                     yaxis=dict(
                         title="개선 확률", tickformat=".0%", gridcolor="#333",
@@ -1265,7 +1265,7 @@ def render():
                     "분류": "성장 분류",
                     "prob_improving": "개선확률", "prob_stable": "유지확률",
                     "prob_declining": "하락확률",
-                    "war": "WAR", "injury_risk": "부상",
+                    "war": "PIS", "injury_risk": "부상",
                 }
                 tbl = tbl.rename(columns={k: v for k, v in _rename.items() if k in tbl.columns})
                 # 포지션 표시명 통일 (MF→MID, DF→DEF)
@@ -1275,8 +1275,8 @@ def render():
                 for col in ["개선확률", "유지확률", "하락확률"]:
                     if col in tbl.columns:
                         tbl[col] = tbl[col].apply(lambda x: f"{x:.1%}" if pd.notna(x) else "-")
-                if "WAR" in tbl.columns:
-                    tbl["WAR"] = tbl["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+                if "PIS" in tbl.columns:
+                    tbl["PIS"] = tbl["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
 
                 st.dataframe(tbl, use_container_width=True, hide_index=True)
                 st.caption(f"📋 총 **{len(tbl)}명** | 성장 분류 기준: XGBoost + RF 앙상블 예측")
@@ -1532,210 +1532,607 @@ def render():
             )
 
     # ══════════════════════════════════════════
-    # TAB 4: 이적 시뮬레이터
+    # TAB 4: 이적 시나리오 시뮬레이터 (What-if 슬라이더 기반)
     # ══════════════════════════════════════════
     with tab4:
-        st.subheader("🎮 이적 시뮬레이터")
-        st.caption("선수와 영입 희망 팀을 선택하면 유사 사례 기반으로 적응 성공 가능성을 시뮬레이션합니다.")
+        st.subheader("🔄 이적 시나리오 시뮬레이터")
+        st.caption(
+            "선수와 목적지 팀을 선택하고 슬라이더로 이적 조건을 조정하면 "
+            "적응 점수와 리스크를 실시간으로 예측합니다."
+        )
 
         adapt_sim = load_transfer_adapt_predictions()
         ratings_sim = load_scout_ratings()
+
+        # ── 팀 순위 데이터 로드 ───────────────────────────────────────────
+        @st.cache_data(ttl=3600)
+        def _load_team_rank() -> pd.DataFrame:
+            """팀 순위/스탯 데이터 로드."""
+            p = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "scout_team_profiles.parquet"
+            if not p.exists():
+                return pd.DataFrame()
+            df = pd.read_parquet(p)
+            latest = df["season"].max() if "season" in df.columns else None
+            if latest:
+                df = df[df["season"] == latest].copy()
+            df = df.sort_values("points", ascending=False).reset_index(drop=True)
+            df["rank"] = range(1, len(df) + 1)
+            return df
+
+        @st.cache_data(ttl=3600)
+        def _load_player_profiles_full() -> pd.DataFrame:
+            """선수 프로파일 전체 로드."""
+            p = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "scout_player_profiles.parquet"
+            if not p.exists():
+                return pd.DataFrame()
+            return pd.read_parquet(p)
+
+        team_rank_df = _load_team_rank()
+        player_profiles_full = _load_player_profiles_full()
 
         if ratings_sim.empty:
             st.info("선수 데이터를 불러올 수 없습니다.")
         else:
             # 최신 시즌 선수 목록
             latest_season = ratings_sim["season"].max() if "season" in ratings_sim.columns else None
-            if latest_season:
-                latest_ratings = ratings_sim[ratings_sim["season"] == latest_season].copy()
-            else:
-                latest_ratings = ratings_sim.copy()
-
+            latest_ratings = (
+                ratings_sim[ratings_sim["season"] == latest_season].copy()
+                if latest_season else ratings_sim.copy()
+            )
             all_sim_players = sorted(latest_ratings["player"].dropna().unique().tolist())
-            all_target_teams = sorted(adapt_sim["to_team"].dropna().unique().tolist()) if not adapt_sim.empty else []
 
-            sim_c1, sim_c2 = st.columns(2)
-            with sim_c1:
-                sim_player = st.selectbox("📌 선수 선택", [""] + all_sim_players, key="tab4_sim_player")
-            with sim_c2:
-                sim_target_team = st.selectbox("🏟️ 영입 희망 팀", [""] + all_target_teams, key="tab4_sim_target")
+            # 팀 목록: 팀 순위 데이터 우선, 없으면 adapt_sim
+            if not team_rank_df.empty and "team" in team_rank_df.columns:
+                all_target_teams = sorted(team_rank_df["team"].dropna().unique().tolist())
+            elif not adapt_sim.empty:
+                all_target_teams = sorted(adapt_sim["to_team"].dropna().unique().tolist())
+            else:
+                all_target_teams = []
 
-            if sim_player and sim_target_team:
-                # 선수 현재 정보
+            # ── 선수/팀 선택 ──────────────────────────────────────────────
+            sel_c1, sel_c2 = st.columns(2)
+            with sel_c1:
+                sim_player = st.selectbox(
+                    "선수 선택 (A팀)",
+                    [""] + all_sim_players,
+                    key="tab4_sim_player",
+                )
+            with sel_c2:
+                sim_target_team = st.selectbox(
+                    "이적 목적지 (B팀)",
+                    [""] + all_target_teams,
+                    key="tab4_sim_target",
+                )
+
+            if not (sim_player and sim_target_team):
+                st.info("선수와 이적 목적지를 모두 선택하면 시뮬레이션이 시작됩니다.")
+            else:
+                # ── 선수 기본 정보 추출 ───────────────────────────────────
                 p_row = latest_ratings[latest_ratings["player"] == sim_player]
                 if p_row.empty:
                     p_row = ratings_sim[ratings_sim["player"] == sim_player].sort_values("season", ascending=False)
 
-                if not p_row.empty:
+                if p_row.empty:
+                    st.warning("선수 데이터를 찾을 수 없습니다.")
+                else:
                     pr = p_row.iloc[0]
-                    p_war = pr.get("war", None)
-                    p_team = pr.get("team", "")
-                    p_age = pr.get("age", pr.get("age_tm", None))
-                    p_pos = pr.get("pos_group", pr.get("pos", ""))
-                    p_tier = pr.get("tier", "")
-                    p_mv = pr.get("market_value", None)
+                    p_war = float(pr.get("war", 0) or 0)
+                    p_team = str(pr.get("team", "") or "")
+                    p_age_raw = pr.get("age", pr.get("age_tm", 25))
+                    p_age = int(p_age_raw) if p_age_raw and not pd.isna(p_age_raw) else 25
+                    p_pos = str(pr.get("pos_group", pr.get("pos", "MID")) or "MID")
+                    p_mv = float(pr.get("market_value", 0) or 0)
+                    p_tier = str(pr.get("tier", "") or "")
 
-                    # ── 선수 현황 카드 ──────────────────────────────────────
+                    # 팀 순위 조회
+                    def _get_team_rank(team_name: str) -> int:
+                        if team_rank_df.empty:
+                            return 10
+                        row = team_rank_df[team_rank_df["team"] == team_name]
+                        if row.empty:
+                            return 10
+                        return int(row.iloc[0]["rank"])
+
+                    from_rank = _get_team_rank(p_team) if p_team else 10
+                    to_rank = _get_team_rank(sim_target_team)
+
+                    # 팀 스탯 조회
+                    def _get_team_stat(team_name: str, col: str, default=0.0):
+                        if team_rank_df.empty:
+                            return default
+                        row = team_rank_df[team_rank_df["team"] == team_name]
+                        if row.empty or col not in row.columns:
+                            return default
+                        v = row.iloc[0][col]
+                        return float(v) if pd.notna(v) else default
+
+                    # 선수 프로파일 스탯 (최신 시즌)
+                    p_prof = pd.DataFrame()
+                    if not player_profiles_full.empty:
+                        prof_rows = player_profiles_full[player_profiles_full["player"] == sim_player]
+                        if not prof_rows.empty:
+                            p_prof = prof_rows.sort_values("season", ascending=False).head(1)
+
+                    def _pstat(col, default=0.0):
+                        if p_prof.empty or col not in p_prof.columns:
+                            return default
+                        v = p_prof.iloc[0][col]
+                        return float(v) if pd.notna(v) else default
+
+                    # ── 선수 현황 카드 ────────────────────────────────────
                     st.markdown("### 📋 선수 현황")
-                    sc1, sc2, sc3, sc4 = st.columns(4)
+                    sc1, sc2, sc3, sc4, sc5 = st.columns(5)
                     sc1.metric("현 팀", p_team or "-")
-                    sc2.metric("나이", f"{int(p_age)}" if p_age and not pd.isna(p_age) else "-")
-                    sc3.metric("WAR", f"{p_war:.1f}" if p_war and not pd.isna(p_war) else "-")
-                    sc4.metric("등급", p_tier or "-")
-                    if p_mv and not pd.isna(p_mv):
-                        st.caption(f"💰 시장가치: €{p_mv/1_000_000:.1f}M  |  포지션: {p_pos}")
-
-                    st.markdown(f"**{sim_player}** → **{sim_target_team}** 이적 시뮬레이션")
+                    sc2.metric("현 팀 순위", f"{from_rank}위" if p_team else "-")
+                    sc3.metric("나이", f"{p_age}세")
+                    sc4.metric("WAR", f"{p_war:.1f}")
+                    sc5.metric("등급", p_tier or "-")
+                    if p_mv > 0:
+                        st.caption(
+                            f"시장가치: €{p_mv/1_000_000:.1f}M  |  포지션: {p_pos}"
+                            f"  |  목적지 팀 순위: {to_rank}위"
+                        )
                     st.markdown("---")
 
-                if not adapt_sim.empty:
-                    # ── 유사 이적 사례 검색 ──────────────────────────────────
-                    # 1) 해당 팀으로의 이적 사례
-                    to_team_cases = adapt_sim[adapt_sim["to_team"] == sim_target_team].copy()
+                    # ── What-if 슬라이더 ─────────────────────────────────
+                    st.markdown("### 슬라이더로 이적 조건 조정")
+                    sl_c1, sl_c2 = st.columns([1, 2])
 
-                    # 2) 선수 나이/포지션 필터
-                    p_age_val = p_age if (p_age and not pd.isna(p_age)) else 25
-                    age_similar = to_team_cases[
-                        (to_team_cases["age"] >= p_age_val - 3) &
-                        (to_team_cases["age"] <= p_age_val + 3)
-                    ] if "age" in to_team_cases.columns else to_team_cases
+                    with sl_c1:
+                        st.markdown("**이적 조건 설정**")
 
-                    # 3) 같은 팀에서의 이적 사례 (현팀 → 동일팀 경로)
-                    same_from_cases = to_team_cases[to_team_cases["from_team"] == p_team] if p_team else pd.DataFrame()
+                        # 나이 슬라이더 (자동 입력, 수동 조정 가능)
+                        sim_age = st.slider(
+                            "나이 (이적 시점)",
+                            min_value=16,
+                            max_value=40,
+                            value=p_age,
+                            step=1,
+                            key="tab4_age_slider",
+                            help="선수의 이적 시점 나이. 기본값은 현재 나이.",
+                        )
 
-                    # ── 시뮬레이션 결과 요약 ────────────────────────────────
-                    st.markdown("### 🔮 시뮬레이션 결과")
+                        # 예상 출전 시간 비율
+                        minutes_default = int(min(100, max(0, _pstat("minutes_share", 50))))
+                        sim_minutes_pct = st.slider(
+                            "예상 출전 시간 비율 (%)",
+                            min_value=0,
+                            max_value=100,
+                            value=minutes_default,
+                            step=5,
+                            key="tab4_minutes_slider",
+                            help="새 팀에서 예상되는 출전 시간 비율 (100% = 풀타임 주전)",
+                        )
 
-                    if len(to_team_cases) == 0:
-                        st.warning(f"'{sim_target_team}' 팀으로의 이적 사례가 데이터에 없습니다.")
-                    else:
-                        # 위험 분포
-                        risk_map = {"low": "🟢 저위험", "medium": "🟡 중위험", "high": "🔴 고위험"}
-                        risk_counts = to_team_cases["adapt_risk"].value_counts() if "adapt_risk" in to_team_cases.columns else pd.Series()
+                        # 리그 순위 차이
+                        rank_diff = to_rank - from_rank
+                        sim_rank_gap = st.slider(
+                            "리그 순위 차이 (목적지 - 현재팀)",
+                            min_value=-19,
+                            max_value=19,
+                            value=rank_diff,
+                            step=1,
+                            key="tab4_rank_gap_slider",
+                            help="양수=하위팀 이적, 음수=상위팀 이적. 기본값은 실제 순위 차이.",
+                        )
 
-                        # 평균 WAR 변화
-                        avg_war_change = to_team_cases["predicted_war_change"].mean() if "predicted_war_change" in to_team_cases.columns else None
-                        actual_avg = to_team_cases["actual_war_change"].mean() if "actual_war_change" in to_team_cases.columns else None
-                        success_rate = (to_team_cases["adapted_actual"] == 1).mean() * 100 if "adapted_actual" in to_team_cases.columns else None
+                        # 전술 스타일 거리 (실제 데이터에서 추정)
+                        style_dist_default = 0.05
+                        if not adapt_sim.empty:
+                            from_cases = adapt_sim[
+                                (adapt_sim["from_team"] == p_team) &
+                                (adapt_sim["to_team"] == sim_target_team)
+                            ]
+                            if not from_cases.empty and "style_distance" in from_cases.columns:
+                                style_dist_default = float(from_cases["style_distance"].mean())
 
-                        # 나이 유사 그룹 지표
-                        age_avg_war = age_similar["predicted_war_change"].mean() if "predicted_war_change" in age_similar.columns and len(age_similar) > 0 else None
-                        age_risk = age_similar["adapt_risk"].mode().iloc[0] if "adapt_risk" in age_similar.columns and len(age_similar) > 0 else None
+                        sim_style_dist = st.slider(
+                            "전술 스타일 거리 (0=유사, 0.2=이질적)",
+                            min_value=0.0,
+                            max_value=0.20,
+                            value=round(min(0.20, style_dist_default), 3),
+                            step=0.005,
+                            format="%.3f",
+                            key="tab4_style_slider",
+                            help="두 팀의 전술 스타일 유사도. 낮을수록 적응 용이.",
+                        )
 
-                        # 종합 위험 평가
-                        if age_risk:
-                            risk_display = risk_map.get(age_risk, age_risk)
-                        elif avg_war_change is not None:
-                            if avg_war_change < -2:
-                                risk_display = "🔴 고위험"
-                            elif avg_war_change < 0:
-                                risk_display = "🟡 중위험"
+                    with sl_c2:
+                        # ── 적응 점수 계산 (통계 기반 What-if) ──────────
+                        st.markdown("**실시간 적응 점수 예측**")
+
+                        def _compute_adapt_score(
+                            war: float,
+                            age: int,
+                            minutes_pct: float,
+                            rank_gap: int,
+                            style_dist: float,
+                            pos: str,
+                        ) -> float:
+                            """슬라이더 입력값으로 적응 점수(0~100) 계산.
+                            S5 모델 피처 중요도 기반 가중치 적용."""
+                            score = 50.0
+
+                            # WAR 기여 (war_old 중요도 0.061)
+                            war_bonus = min(20, max(-10, (war - 3.0) * 5))
+                            score += war_bonus
+
+                            # 출전 시간 비율 (min_share_pct 중요도 0.051)
+                            min_bonus = (minutes_pct - 50) * 0.3
+                            score += min_bonus
+
+                            # 나이 패널티
+                            if age < 24:
+                                age_factor = 5
+                            elif age < 28:
+                                age_factor = 2
+                            elif age < 32:
+                                age_factor = -3
                             else:
-                                risk_display = "🟢 저위험"
-                        else:
-                            risk_display = "⚪ 데이터 부족"
+                                age_factor = -10
+                            score += age_factor
 
-                        # 메트릭 표시
-                        rm1, rm2, rm3, rm4 = st.columns(4)
-                        rm1.metric("종합 리스크", risk_display)
-                        rm2.metric(
-                            "예상 WAR 변화",
-                            f"{age_avg_war:+.2f}" if age_avg_war is not None else (f"{avg_war_change:+.2f}" if avg_war_change is not None else "-"),
-                            help="나이 유사 사례 기준 예상 WAR 변화량"
-                        )
-                        rm3.metric(
-                            f"{sim_target_team} 적응 성공률",
-                            f"{success_rate:.0f}%" if success_rate is not None else "-",
-                            help="해당 팀으로의 이적 사례 중 적응 성공 비율"
-                        )
-                        rm4.metric("유사 사례 수", f"{len(age_similar)}건" if len(age_similar) > 0 else f"{len(to_team_cases)}건")
+                            # 리그 순위 차이 (상위팀 이적 = 어려움)
+                            if rank_gap < 0:
+                                rank_penalty = rank_gap * 1.5
+                            else:
+                                rank_penalty = rank_gap * 0.5
+                            score += rank_penalty
 
-                        # 스카우트 조언
-                        if age_risk == "high" or (avg_war_change is not None and avg_war_change < -2):
-                            advice_color = EPL_MAGENTA
-                            advice = "⚠️ **고위험 이적**: 임대 먼저 제안하거나 성과 연동 계약 구조를 검토하세요. 이적료 20~30% 할인 협상 근거로 활용 가능합니다."
-                        elif age_risk == "medium" or (avg_war_change is not None and -2 <= avg_war_change < 0):
-                            advice_color = "#FFD700"
-                            advice = "🔍 **중간 리스크**: 첫 시즌 벤치 역할부터 적응 기간을 고려한 다년 계약을 권장합니다."
-                        else:
-                            advice_color = EPL_GREEN
-                            advice = "✅ **저위험 이적**: 유사 사례 기준 적응 성공 가능성이 높습니다. 즉시 주전 투입을 검토하세요."
+                            # 전술 스타일 거리
+                            style_penalty = style_dist * -200
+                            score += style_penalty
 
-                        st.markdown(
-                            f'<div style="background:#1a1a2e;border-left:4px solid {advice_color};'
-                            f'padding:12px 16px;border-radius:8px;margin:8px 0;">{advice}</div>',
-                            unsafe_allow_html=True,
+                            # 포지션별 보정
+                            if pos in ("FW",):
+                                score -= 3
+                            elif pos in ("GK",):
+                                score -= 5
+
+                            return max(0, min(100, score))
+
+                        adapt_score = _compute_adapt_score(
+                            war=p_war,
+                            age=sim_age,
+                            minutes_pct=sim_minutes_pct,
+                            rank_gap=sim_rank_gap,
+                            style_dist=sim_style_dist,
+                            pos=p_pos,
                         )
 
-                        # ── 같은 경로 이적 사례 ──────────────────────────────
-                        if len(same_from_cases) > 0:
-                            st.markdown(f"#### 🔄 {p_team} → {sim_target_team} 이적 사례 ({len(same_from_cases)}건)")
-                            sfc_cols = [c for c in ["player", "season_new", "age", "predicted_war_change", "actual_war_change", "adapt_risk"] if c in same_from_cases.columns]
-                            sfc_disp = same_from_cases[sfc_cols].copy()
-                            if "adapt_risk" in sfc_disp.columns:
-                                sfc_disp["adapt_risk"] = sfc_disp["adapt_risk"].map(risk_map).fillna(sfc_disp["adapt_risk"])
-                            if "predicted_war_change" in sfc_disp.columns:
-                                sfc_disp["predicted_war_change"] = sfc_disp["predicted_war_change"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-                            if "actual_war_change" in sfc_disp.columns:
-                                sfc_disp["actual_war_change"] = sfc_disp["actual_war_change"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-                            sfc_rename = {"player": "선수", "season_new": "시즌", "age": "나이", "predicted_war_change": "예측 WAR 변화", "actual_war_change": "실제 WAR 변화", "adapt_risk": "적응 리스크"}
-                            sfc_disp = sfc_disp.rename(columns={k: v for k, v in sfc_rename.items() if k in sfc_disp.columns})
-                            st.dataframe(sfc_disp, use_container_width=True, hide_index=True)
-
-                        # ── 나이 유사 이적 사례 ──────────────────────────────
-                        st.markdown(f"#### 👥 {sim_target_team}으로의 유사 연령대 이적 사례 (나이 ±3세, {len(age_similar)}건)")
-                        if len(age_similar) > 0:
-                            ac_cols = [c for c in ["player", "from_team", "season_new", "age", "style_distance", "predicted_war_change", "actual_war_change", "adapt_risk"] if c in age_similar.columns]
-                            ac_disp = age_similar[ac_cols].sort_values("season_new", ascending=False).copy()
-                            if "adapt_risk" in ac_disp.columns:
-                                ac_disp["adapt_risk"] = ac_disp["adapt_risk"].map(risk_map).fillna(ac_disp["adapt_risk"])
-                            if "predicted_war_change" in ac_disp.columns:
-                                ac_disp["predicted_war_change"] = ac_disp["predicted_war_change"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-                            if "actual_war_change" in ac_disp.columns:
-                                ac_disp["actual_war_change"] = ac_disp["actual_war_change"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-                            if "style_distance" in ac_disp.columns:
-                                ac_disp["style_distance"] = ac_disp["style_distance"].apply(lambda x: f"{x:.3f}" if pd.notna(x) else "-")
-                            ac_rename = {"player": "선수", "from_team": "이전팀", "season_new": "시즌", "age": "나이", "style_distance": "전술 거리", "predicted_war_change": "예측 WAR 변화", "actual_war_change": "실제 WAR 변화", "adapt_risk": "적응 리스크"}
-                            ac_disp = ac_disp.rename(columns={k: v for k, v in ac_rename.items() if k in ac_disp.columns})
-                            st.dataframe(ac_disp, use_container_width=True, hide_index=True)
+                        # 리스크 등급 결정
+                        if adapt_score >= 65:
+                            risk_label = "🟢 저위험"
+                            risk_color = EPL_GREEN
+                        elif adapt_score >= 45:
+                            risk_label = "🟡 중위험"
+                            risk_color = "#FFD700"
                         else:
-                            st.info("나이 유사 사례가 없어 전체 해당 팀 이적 사례를 표시합니다.")
-                            tc_cols = [c for c in ["player", "from_team", "season_new", "age", "predicted_war_change", "adapt_risk"] if c in to_team_cases.columns]
-                            tc_disp = to_team_cases[tc_cols].sort_values("season_new", ascending=False).head(10).copy()
-                            if "adapt_risk" in tc_disp.columns:
-                                tc_disp["adapt_risk"] = tc_disp["adapt_risk"].map(risk_map).fillna(tc_disp["adapt_risk"])
-                            if "predicted_war_change" in tc_disp.columns:
-                                tc_disp["predicted_war_change"] = tc_disp["predicted_war_change"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "-")
-                            tc_rename = {"player": "선수", "from_team": "이전팀", "season_new": "시즌", "age": "나이", "predicted_war_change": "예측 WAR 변화", "adapt_risk": "적응 리스크"}
-                            tc_disp = tc_disp.rename(columns={k: v for k, v in tc_rename.items() if k in tc_disp.columns})
-                            st.dataframe(tc_disp, use_container_width=True, hide_index=True)
+                            risk_label = "🔴 고위험"
+                            risk_color = EPL_MAGENTA
 
-                        # ── 리스크 분포 파이차트 ─────────────────────────────
-                        if len(risk_counts) > 0:
-                            st.markdown(f"#### 📊 {sim_target_team} 이적 적응 리스크 분포")
-                            risk_labels = [risk_map.get(r, r) for r in risk_counts.index]
-                            risk_colors = {"🟢 저위험": EPL_GREEN, "🟡 중위험": "#FFD700", "🔴 고위험": EPL_MAGENTA}
-                            fig_risk = px.pie(
-                                values=risk_counts.values,
-                                names=risk_labels,
-                                color=risk_labels,
-                                color_discrete_map=risk_colors,
-                                hole=0.4,
+                        # 게이지 차트
+                        fig_gauge = go.Figure(go.Indicator(
+                            mode="gauge+number",
+                            value=adapt_score,
+                            title={"text": "적응 점수", "font": {"color": "#fff", "size": 16}},
+                            gauge={
+                                "axis": {"range": [0, 100], "tickcolor": "#888"},
+                                "bar": {"color": risk_color},
+                                "steps": [
+                                    {"range": [0, 45], "color": "#2d0a14"},
+                                    {"range": [45, 65], "color": "#1a1a00"},
+                                    {"range": [65, 100], "color": "#001a0a"},
+                                ],
+                                "threshold": {
+                                    "line": {"color": "white", "width": 2},
+                                    "thickness": 0.75,
+                                    "value": adapt_score,
+                                },
+                            },
+                            number={"suffix": "/100", "font": {"color": "#fff", "size": 28}},
+                        ))
+                        fig_gauge.update_layout(
+                            paper_bgcolor="#0d0d1a",
+                            font_color="#fff",
+                            height=220,
+                            margin=dict(t=30, b=10, l=20, r=20),
+                        )
+                        st.plotly_chart(fig_gauge, use_container_width=True, theme=None)
+
+                        # 메트릭 요약
+                        m1, m2, m3 = st.columns(3)
+                        m1.metric("적응 점수", f"{adapt_score:.0f}/100")
+                        m2.metric("리스크 등급", risk_label)
+                        m3.metric(
+                            "리그 이동",
+                            (
+                                f"상위 {abs(sim_rank_gap)}단계" if sim_rank_gap < 0
+                                else f"하위 {sim_rank_gap}단계" if sim_rank_gap > 0
+                                else "동급"
+                            ),
+                        )
+
+                    st.markdown("---")
+
+                    # ── 레이더 차트: 현재팀 vs 목적지팀 스탯 비교 ─────────
+                    st.markdown("### 팀 환경 비교 (레이더 차트)")
+
+                    radar_cols_def = [
+                        ("points", "팀 포인트", 100),
+                        ("goals_per_game", "경기당 득점", 3.0),
+                        ("goals_against_per_game", "경기당 실점(역)", 3.0),
+                        ("attack_defense_ratio", "공격/수비 비율", 3.0),
+                        ("home_strength", "홈 강점", 1.0),
+                        ("away_strength", "원정 강점", 1.0),
+                    ]
+                    radar_labels = [r[1] for r in radar_cols_def]
+
+                    def _team_radar_vals(team_name: str) -> list:
+                        vals = []
+                        for col, _, max_v in radar_cols_def:
+                            raw = _get_team_stat(team_name, col, 0)
+                            if col == "goals_against_per_game":
+                                raw = max_v - raw
+                            vals.append(min(100, max(0, (raw / max_v) * 100)))
+                        return vals
+
+                    from_vals = _team_radar_vals(p_team) if p_team else [50] * len(radar_cols_def)
+                    to_vals = _team_radar_vals(sim_target_team)
+
+                    fig_radar = go.Figure()
+                    fig_radar.add_trace(go.Scatterpolar(
+                        r=from_vals + [from_vals[0]],
+                        theta=radar_labels + [radar_labels[0]],
+                        fill="toself",
+                        name=p_team or "현재팀",
+                        line_color=EPL_CYAN,
+                        fillcolor="rgba(4,245,255,0.15)",
+                    ))
+                    fig_radar.add_trace(go.Scatterpolar(
+                        r=to_vals + [to_vals[0]],
+                        theta=radar_labels + [radar_labels[0]],
+                        fill="toself",
+                        name=sim_target_team,
+                        line_color=EPL_MAGENTA,
+                        fillcolor="rgba(233,0,82,0.15)",
+                    ))
+                    fig_radar.update_layout(
+                        polar=dict(
+                            radialaxis=dict(
+                                visible=True,
+                                range=[0, 100],
+                                tickfont=dict(color="#888"),
+                            ),
+                            angularaxis=dict(tickfont=dict(color="#ccc")),
+                            bgcolor="#0d0d1a",
+                        ),
+                        paper_bgcolor="#0d0d1a",
+                        font_color="#fff",
+                        legend=dict(orientation="h", y=-0.15, font=dict(color="#fff")),
+                        height=380,
+                        margin=dict(t=30, b=40, l=40, r=40),
+                        showlegend=True,
+                    )
+                    st.plotly_chart(fig_radar, use_container_width=True, theme=None)
+
+                    # ── 김태현 스카우트 코멘트 ────────────────────────────
+                    st.markdown("---")
+                    st.markdown("### 김태현 스카우트 종합 의견")
+
+                    # 나이/포지션별 리스크 코멘트
+                    age_risk_note = ""
+                    if sim_age >= 32:
+                        age_risk_note = (
+                            f"**나이 리스크**: {sim_age}세는 EPL 이적 후 적응 성공률이 통계적으로 낮습니다 "
+                            "(30세 이상 성공률 -20%). 계약 기간을 1~2년으로 제한하고 "
+                            "성과 연동 조항을 넣는 것을 강권합니다."
+                        )
+                    elif sim_age >= 28:
+                        age_risk_note = (
+                            f"**나이 고려**: {sim_age}세는 전성기 후반입니다. "
+                            "3년 이상 장기 계약 시 WAR 하락 리스크를 반드시 검토하세요."
+                        )
+                    elif sim_age <= 21:
+                        age_risk_note = (
+                            f"**유망주 잠재력**: {sim_age}세는 새 환경 적응 후 성장 가속 가능성이 있습니다. "
+                            "임대 후 완전 영입 옵션을 권장합니다."
+                        )
+
+                    rank_note = ""
+                    if sim_rank_gap <= -5:
+                        rank_note = (
+                            "**상위팀 도약 이적**: 빅클럽 이적은 출전 시간 감소로 적응 점수가 하락할 수 있습니다. "
+                            "주전 보장 여부가 계약의 핵심 조건이 되어야 합니다."
+                        )
+                    elif sim_rank_gap >= 5:
+                        rank_note = (
+                            "**하위팀 이적**: 팀 수준 하락은 적응은 용이하나 WAR 지표 자체가 낮아질 수 있습니다. "
+                            "개인 성과 지표로 재계약 조건을 설정하세요."
+                        )
+
+                    minutes_note = ""
+                    if sim_minutes_pct < 40:
+                        minutes_note = (
+                            "**출전 시간 경고**: 예상 출전 비율이 40% 미만이면 WAR 통계 신뢰도가 낮아집니다. "
+                            "주전 경쟁 환경을 사전에 파악하세요."
+                        )
+
+                    if adapt_score >= 70:
+                        final_verdict = (
+                            "이 이적은 **실행 가능한 수준**입니다. 감독에게 바로 제안할 수 있는 옵션이며, "
+                            "제시한 조건이 유지된다면 첫 시즌부터 주전 활용이 가능합니다."
+                        )
+                        border_color = EPL_GREEN
+                        verdict_icon = "✅"
+                    elif adapt_score >= 55:
+                        final_verdict = (
+                            "조건에 따라 성사 가능한 이적입니다. "
+                            "출전 시간 보장과 전술 적합성을 추가로 확인한 뒤 감독에게 보고하세요."
+                        )
+                        border_color = "#FFD700"
+                        verdict_icon = "🔍"
+                    elif adapt_score >= 40:
+                        final_verdict = (
+                            "상당한 리스크가 있는 이적입니다. "
+                            "임대 후 완전 영입 구조나 성과 연동 계약을 강력히 권장합니다."
+                        )
+                        border_color = "#FF8C00"
+                        verdict_icon = "⚠️"
+                    else:
+                        final_verdict = (
+                            "현 조건에서는 이적 추천을 보류합니다. "
+                            "슬라이더를 조정해 조건이 개선되는 시나리오를 탐색하세요."
+                        )
+                        border_color = EPL_MAGENTA
+                        verdict_icon = "🚫"
+
+                    comment_html = (
+                        f'<div style="background:#0d0d1a;border-left:4px solid {border_color};'
+                        f'padding:16px 20px;border-radius:8px;margin:8px 0;">'
+                        f'<p style="font-size:1.1em;font-weight:bold;color:{border_color};">'
+                        f'{verdict_icon} 최종 의견</p>'
+                        f'<p style="color:#eee;">{final_verdict}</p>'
+                    )
+                    extra_notes = [n for n in [age_risk_note, rank_note, minutes_note] if n]
+                    if extra_notes:
+                        comment_html += '<hr style="border-color:#333;margin:10px 0;">'
+                        for note in extra_notes:
+                            comment_html += f'<p style="color:#bbb;font-size:0.92em;">{note}</p>'
+                    comment_html += "</div>"
+                    st.markdown(comment_html, unsafe_allow_html=True)
+
+                    # ── 리스크 지표: 포지션/나이별 이적 성공률 ───────────
+                    st.markdown("---")
+                    st.markdown("### 리스크 지표 — 유사 이적 사례 통계")
+
+                    if not adapt_sim.empty:
+                        to_team_cases = adapt_sim[adapt_sim["to_team"] == sim_target_team].copy()
+                        risk_map_labels = {"low": "🟢 저위험", "medium": "🟡 중위험", "high": "🔴 고위험"}
+
+                        ri_c1, ri_c2 = st.columns(2)
+
+                        with ri_c1:
+                            if len(to_team_cases) > 0 and "adapt_risk" in to_team_cases.columns:
+                                risk_counts = to_team_cases["adapt_risk"].value_counts()
+                                risk_labels_pie = [risk_map_labels.get(r, r) for r in risk_counts.index]
+                                risk_colors_map = {
+                                    "🟢 저위험": EPL_GREEN,
+                                    "🟡 중위험": "#FFD700",
+                                    "🔴 고위험": EPL_MAGENTA,
+                                }
+                                fig_pie = px.pie(
+                                    values=risk_counts.values,
+                                    names=risk_labels_pie,
+                                    color=risk_labels_pie,
+                                    color_discrete_map=risk_colors_map,
+                                    hole=0.4,
+                                    title=f"{sim_target_team} 이적 리스크 분포",
+                                )
+                                fig_pie.update_layout(
+                                    paper_bgcolor="#0d0d1a",
+                                    plot_bgcolor="#0d0d1a",
+                                    font_color="#fff",
+                                    height=280,
+                                    margin=dict(t=40, b=10, l=10, r=10),
+                                    legend=dict(orientation="h", y=-0.1),
+                                    title_font_color="#fff",
+                                )
+                                st.plotly_chart(fig_pie, use_container_width=True, theme=None)
+                            else:
+                                st.info(f"{sim_target_team} 이적 사례 데이터가 부족합니다.")
+
+                        with ri_c2:
+                            age_similar = (
+                                to_team_cases[
+                                    (to_team_cases["age"] >= sim_age - 3) &
+                                    (to_team_cases["age"] <= sim_age + 3)
+                                ]
+                                if "age" in to_team_cases.columns
+                                else pd.DataFrame()
                             )
-                            fig_risk.update_layout(
-                                paper_bgcolor="#0d0d1a",
-                                plot_bgcolor="#0d0d1a",
-                                font_color="#fff",
-                                margin=dict(t=10, b=10, l=10, r=10),
-                                legend=dict(orientation="h", y=-0.1),
-                                height=280,
-                            )
-                            st.plotly_chart(fig_risk, use_container_width=True, theme=None)
 
-                        st.caption(
-                            "💡 **시뮬레이터 해석**: 전술 거리가 클수록 적응이 어렵습니다. "
-                            "예측 WAR 변화가 음수면 이적 후 성과 하락 가능성이 있습니다. "
-                            "최소 3~5건 이상의 유사 사례가 있을 때 시뮬레이션 신뢰도가 높아집니다."
-                        )
-            else:
-                st.info("선수와 영입 희망 팀을 모두 선택하면 시뮬레이션 결과가 표시됩니다.")
+                            success_rate_all = (
+                                (to_team_cases["adapted_actual"] == 1).mean() * 100
+                                if "adapted_actual" in to_team_cases.columns and len(to_team_cases) > 0
+                                else None
+                            )
+                            success_rate_age = (
+                                (age_similar["adapted_actual"] == 1).mean() * 100
+                                if "adapted_actual" in age_similar.columns and len(age_similar) > 0
+                                else None
+                            )
+                            avg_war_all = (
+                                to_team_cases["predicted_war_change"].mean()
+                                if "predicted_war_change" in to_team_cases.columns and len(to_team_cases) > 0
+                                else None
+                            )
+                            avg_war_age = (
+                                age_similar["predicted_war_change"].mean()
+                                if "predicted_war_change" in age_similar.columns and len(age_similar) > 0
+                                else None
+                            )
+
+                            st.markdown(f"**{sim_target_team} 이적 사례 통계**")
+                            rs1, rs2 = st.columns(2)
+                            rs1.metric(
+                                "전체 적응 성공률",
+                                f"{success_rate_all:.0f}%" if success_rate_all is not None else "-",
+                                help=f"총 {len(to_team_cases)}건",
+                            )
+                            rs2.metric(
+                                "나이 ±3세 성공률",
+                                f"{success_rate_age:.0f}%" if success_rate_age is not None else "-",
+                                help=f"{sim_age}±3세 {len(age_similar)}건",
+                            )
+                            rs1.metric(
+                                "예상 WAR 변화 (전체)",
+                                f"{avg_war_all:+.2f}" if avg_war_all is not None else "-",
+                            )
+                            rs2.metric(
+                                "예상 WAR 변화 (유사 연령)",
+                                f"{avg_war_age:+.2f}" if avg_war_age is not None else "-",
+                            )
+
+                            if len(age_similar) > 0:
+                                st.markdown(f"**유사 연령대 이적 사례 ({len(age_similar)}건)**")
+                                show_cols = [
+                                    c for c in
+                                    ["player", "from_team", "season_new", "age",
+                                     "predicted_war_change", "adapt_risk"]
+                                    if c in age_similar.columns
+                                ]
+                                disp = (
+                                    age_similar[show_cols]
+                                    .sort_values("season_new", ascending=False)
+                                    .head(8)
+                                    .copy()
+                                )
+                                if "adapt_risk" in disp.columns:
+                                    disp["adapt_risk"] = disp["adapt_risk"].map(
+                                        risk_map_labels
+                                    ).fillna(disp["adapt_risk"])
+                                if "predicted_war_change" in disp.columns:
+                                    disp["predicted_war_change"] = disp["predicted_war_change"].apply(
+                                        lambda x: f"{x:+.2f}" if pd.notna(x) else "-"
+                                    )
+                                rename_d = {
+                                    "player": "선수",
+                                    "from_team": "이전팀",
+                                    "season_new": "시즌",
+                                    "age": "나이",
+                                    "predicted_war_change": "예측 WAR 변화",
+                                    "adapt_risk": "적응 리스크",
+                                }
+                                disp = disp.rename(
+                                    columns={k: v for k, v in rename_d.items() if k in disp.columns}
+                                )
+                                st.dataframe(disp, use_container_width=True, hide_index=True)
+                            else:
+                                st.info("나이 유사 사례(±3세)가 없습니다.")
+
+                    st.caption(
+                        "적응 점수: WAR(27%), 출전 시간(18%), 나이(20%), 리그 수준 차이(20%), "
+                        "전술 거리(15%) 기반 통계 모델 추정값. S5 모델 피처 중요도 적용."
+                    )
+

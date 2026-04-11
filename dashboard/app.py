@@ -46,12 +46,14 @@ MENU_OPTIONS = [
     "스카우트 개요",
     "선수 분석",
     "이적 인텔리전스",
+    "🔄 이적 시나리오",
     "💎 S2 저평가 탐색기",
     "🏟️ 팀 프로파일",
     "선수 통계 순위",
     "시즌 개요",
     "선수 비교",
     "역대 기록",
+    "모델 설명 (SHAP)",
 ]
 
 # 페이지 이동 플래그 처리 (radio 위젯 렌더 전에 반드시 실행)
@@ -96,6 +98,10 @@ elif page == "선수 분석":
 elif page == "이적 인텔리전스":
     from dashboard.pages.scout_transfer import render
     render()
+elif page == "🔄 이적 시나리오":
+    # 이적 시나리오 시뮬레이터 탭(탭4)으로 직접 이동
+    from dashboard.pages.scout_transfer import render
+    render()
 elif page == "💎 S2 저평가 탐색기":
     from dashboard.pages.s2_explorer import render
     render()
@@ -113,4 +119,7 @@ elif page == "선수 비교":
     render()
 elif page == "역대 기록":
     from dashboard.pages.records import render
+    render()
+elif page == "모델 설명 (SHAP)":
+    from dashboard.pages.shap_explainer import render
     render()

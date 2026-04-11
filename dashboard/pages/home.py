@@ -95,9 +95,9 @@ def render():
     # ── 3열 레이아웃 ─────────────────────────────────────────────────────
     left_col, mid_col, right_col = st.columns(3)
 
-    # ── [LEFT] WAR 리더 Top 5 ──────────────────────────────────────────
+    # ── [LEFT] PIS 리더 Top 5 ──────────────────────────────────────────
     with left_col:
-        st.markdown("### 🏆 WAR 리더 Top 5")
+        st.markdown("### 🏆 PIS 리더 Top 5")
         st.caption(f"{latest_season} 시즌 전체 포지션")
         if "war" in latest.columns:
             top5_war = latest.nlargest(5, "war")[["player", "team", "war", "tier", "pos_group"]]
@@ -106,7 +106,7 @@ def render():
                 _mini_player_card(
                     player=row["player"],
                     team=f"{row.get('team','')} · {row.get('pos_group','')}",
-                    label="WAR",
+                    label="PIS",
                     value=f"{row['war']:.1f}",
                     color=color,
                     key=f"home_war_{rank}",
@@ -168,7 +168,7 @@ def render():
                 _mini_player_card(
                     player=row["player"],
                     team=f"{team} · {int(age)}세" if (age and not pd.isna(age)) else str(team),
-                    label="WAR",
+                    label="PIS",
                     value=f"{war:.1f}" if (war and not pd.isna(war)) else "-",
                     color="#FFD700",
                     key=f"home_grow_{rank}",
@@ -235,9 +235,9 @@ def render():
 
     st.markdown("---")
 
-    # ── 하락 주의 선수 (WAR 상위 내 하락 위험 상위) ─────────────────────────────
+    # ── 하락 주의 선수 (PIS 상위 내 하락 위험 상위) ─────────────────────────────
     st.markdown("### ⚠️ 하락 주의 선수 Top 5 (S6 하락 감지)")
-    st.caption("WAR Top 50 내에서 하락 위험 확률이 높은 선수 — 계약 연장 또는 판매 검토 대상")
+    st.caption("PIS Top 50 내에서 하락 위험 확률이 높은 선수 — 계약 연장 또는 판매 검토 대상")
     if not decline.empty and "decline_prob_ensemble" in decline.columns:
         # 시즌별 중복 제거: player_key 기준 최신 시즌만 유지
         _key_col = "player_key" if "player_key" in decline.columns else "player"
@@ -286,7 +286,7 @@ def render():
                     key=f"home_dec_{rank}",
                 )
         else:
-            st.info("WAR Top 50과 하락 예측 데이터 교차 분석 결과가 없습니다.")
+            st.info("PIS Top 50과 하락 예측 데이터 교차 분석 결과가 없습니다.")
     else:
         st.info("하락 예측 데이터 없음 (decline_predictions 파일 확인)")
 

@@ -4,12 +4,16 @@
 S1~S6, P6, P7 모델 결과를 하나의 페이지에 종합.
 """
 
+import json
+import logging
+from pathlib import Path
 from typing import Optional
 
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+from config.settings import SHORTLIST_PATH
 from dashboard.components.data_loader import (
     load_scout_ratings,
     load_decline_predictions,
@@ -30,6 +34,259 @@ GROWTH_ICON = {"Improving": "🟢", "Stable": "🟡", "Declining": "🔴"}
 EPL_PURPLE = "#37003c"
 EPL_MAGENTA = "#e90052"
 EPL_GREEN = "#00ff87"
+
+logger = logging.getLogger(__name__)
+
+
+def _save_shortlist(shortlist: dict) -> None:
+    """쇼트리스트를 shortlist.json 에 저장."""
+    try:
+        path = Path(SHORTLIST_PATH)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(shortlist, f, ensure_ascii=False, indent=2)
+    except OSError as e:
+        logger.error(f"쇼트리스트 파일 저장 실패: {e}")
+
+
+# ── PDF 생성 ─────────────────────────────────────────────────────────────
+
+def _generate_scout_pdf(data: dict) -> bytes:
+    """선수 스카우트 리포트 PDF 생성 (fpdf2 사용).
+
+    Args:
+        data: 선수 정보 및 모델 결과 dict
+
+    Returns:
+        PDF 바이트 데이터
+    """
+    from fpdf import FPDF
+
+    # 한국어 → 영어 변환 (Helvetica는 Latin-1만 지원)
+    _kor_map = {
+        "영입 강력 권고": "STRONGLY RECOMMENDED",
+        "영입 긍정 검토": "POSITIVE CONSIDERATION",
+        "추가 검토 필요": "FURTHER REVIEW NEEDED",
+        "데이터 부족": "INSUFFICIENT DATA",
+        "WAR 평가": "WAR Score",
+        "S2 가치 평가": "S2 Value",
+        "하락 안정성": "Decline Stability",
+        "성장 전망": "Growth Outlook",
+        "🔴 즉시": "[URGENT]",
+        "🟡 모니터링": "[MONITOR]",
+        "🟢 장기": "[LONG-TERM]",
+        "하락확률": "Decline Prob",
+        "가치비율": "Value Ratio",
+        "내년 예측": "Next Yr Pred",
+        "WAR ": "WAR ",
+    }
+
+    def _to_latin(text: str) -> str:
+        """한국어 텍스트를 영어로 변환 (Latin-1 안전 처리)."""
+        if not text:
+            return text
+        for kor, eng in _kor_map.items():
+            text = text.replace(kor, eng)
+        # 변환 후 남은 비 ASCII 문자 제거
+        return text.encode("latin-1", errors="replace").decode("latin-1")
+
+    class ScoutPDF(FPDF):
+        """EPL 스카우트 리포트 PDF 레이아웃."""
+
+        def header(self):
+            # EPL 보라색 배경 헤더
+            self.set_fill_color(55, 0, 60)
+            self.rect(0, 0, 210, 22, "F")
+            self.set_text_color(233, 0, 82)
+            self.set_font("Helvetica", "B", 14)
+            self.set_xy(10, 5)
+            self.cell(0, 12, "EPL SCOUT REPORT", align="L")
+            self.set_text_color(0, 255, 135)
+            self.set_font("Helvetica", "", 9)
+            self.set_xy(0, 5)
+            self.cell(200, 12, "Powered by EPL Analytics", align="R")
+            self.ln(18)
+
+        def footer(self):
+            self.set_y(-12)
+            self.set_text_color(150, 150, 150)
+            self.set_font("Helvetica", "I", 8)
+            self.cell(0, 8, f"EPL Scouting Dashboard  |  Page {self.page_no()}", align="C")
+
+    pdf = ScoutPDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # ── 생성일 / 시즌 ────────────────────────────────────────────────
+    import datetime as _dt
+    pdf.set_font("Helvetica", "", 8)
+    pdf.set_text_color(150, 150, 150)
+    pdf.cell(0, 6, f"Generated: {_dt.datetime.now().strftime('%Y-%m-%d %H:%M')}  |  Season: {data.get('season', '')}", ln=True)
+    pdf.ln(2)
+
+    # ── 선수 기본 정보 박스 ──────────────────────────────────────────
+    pdf.set_fill_color(26, 26, 46)
+    pdf.set_draw_color(55, 0, 60)
+    pdf.rect(10, pdf.get_y(), 190, 36, "FD")
+
+    pdf.set_text_color(255, 255, 255)
+    pdf.set_font("Helvetica", "B", 18)
+    pdf.set_xy(14, pdf.get_y() + 4)
+    pdf.cell(0, 10, data.get("player", ""), ln=True)
+
+    pdf.set_font("Helvetica", "", 10)
+    pdf.set_text_color(200, 200, 200)
+    pdf.set_x(14)
+    pdf.cell(0, 6, f"{data.get('team', '')}  |  {data.get('pos', '')}  |  Age {data.get('age', '')}", ln=True)
+
+    pdf.set_x(14)
+    pdf.set_text_color(0, 255, 135)
+    pdf.set_font("Helvetica", "B", 11)
+    pdf.cell(0, 6, f"Market Value: {data.get('market_value', 'N/A')}", ln=True)
+
+    pdf.ln(10)
+
+    # ── 헬퍼: 섹션 제목 ─────────────────────────────────────────────
+    def section_title(title: str):
+        pdf.set_fill_color(55, 0, 60)
+        pdf.set_text_color(233, 0, 82)
+        pdf.set_font("Helvetica", "B", 11)
+        pdf.set_x(10)
+        pdf.cell(190, 8, f"  {title}", fill=True, ln=True)
+        pdf.ln(2)
+
+    # ── 헬퍼: 2열 지표 행 ──────────────────────────────────────────
+    def metric_row(label1: str, val1: str, label2: str = "", val2: str = ""):
+        pdf.set_x(14)
+        pdf.set_text_color(150, 150, 150)
+        pdf.set_font("Helvetica", "", 9)
+        pdf.cell(45, 7, label1)
+        pdf.set_text_color(255, 255, 255)
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.cell(50, 7, val1)
+        if label2:
+            pdf.set_text_color(150, 150, 150)
+            pdf.set_font("Helvetica", "", 9)
+            pdf.cell(45, 7, label2)
+            pdf.set_text_color(255, 255, 255)
+            pdf.set_font("Helvetica", "B", 9)
+            pdf.cell(50, 7, val2)
+        pdf.ln()
+
+    # ── S1 WAR 평가 ─────────────────────────────────────────────────
+    section_title("S1  WAR Assessment (Wins Above Replacement)")
+    metric_row("WAR (Percentile)", data.get("war", "N/A"), "Tier", data.get("tier", "N/A"))
+    metric_row("Goals/90", data.get("goals_p90", "N/A"), "Assists/90", data.get("assists_p90", "N/A"))
+    metric_row("Tackles/90", data.get("tackles_p90", "N/A"), "", "")
+    pdf.ln(3)
+
+    # ── S2 시장가치 평가 ─────────────────────────────────────────────
+    section_title("S2  Market Value Assessment")
+    s2_status_map = {
+        "undervalued_strong": "STRONGLY UNDERVALUED - Immediate signing recommended",
+        "undervalued_soft":   "UNDERVALUED CANDIDATE - Cross-check with other metrics",
+        "overvalued":         "OVERVALUED - Use as negotiation leverage",
+        "neutral":            "Neutral - Not in undervalued/overvalued list",
+    }
+    s2_label = s2_status_map.get(data.get("s2_status", "neutral"), "N/A")
+    metric_row("Status", s2_label[:45] if len(s2_label) > 45 else s2_label, "", "")
+    metric_row("Estimated Fair Value", data.get("s2_pred_mv", "N/A"), "Value Ratio", data.get("s2_ratio", "N/A"))
+    pdf.ln(3)
+
+    # ── S6 하락 위험 ─────────────────────────────────────────────────
+    section_title("S6  Decline Risk Detection")
+    decline_prob = data.get("decline_prob", "N/A")
+    metric_row("Decline Probability", decline_prob, "Growth Classification (P7)", data.get("growth_class", "N/A"))
+    # 위험 판정 텍스트
+    pdf.set_x(14)
+    try:
+        prob_f = float(decline_prob.replace("%", "")) / 100
+        if prob_f >= 0.7:
+            risk_text = "HIGH RISK: Short-term contract + performance clauses recommended"
+            pdf.set_text_color(233, 0, 82)
+        elif prob_f >= 0.5:
+            risk_text = "MEDIUM RISK: Include performance monitoring clauses"
+            pdf.set_text_color(255, 215, 0)
+        else:
+            risk_text = "LOW RISK: Stable. Long-term contract feasible"
+            pdf.set_text_color(0, 255, 135)
+    except (ValueError, AttributeError):
+        risk_text = "Risk level: N/A"
+        pdf.set_text_color(200, 200, 200)
+    pdf.set_font("Helvetica", "B", 9)
+    pdf.cell(0, 7, risk_text, ln=True)
+    pdf.ln(3)
+
+    # ── 종합 판정 ────────────────────────────────────────────────────
+    section_title("Overall Scout Verdict")
+    pdf.set_x(14)
+    verdict_raw = data.get("verdict", "N/A")
+    verdict_en = _to_latin(verdict_raw)
+    overall = data.get("overall_score", "N/A")
+    if "강력" in verdict_raw or "STRONGLY" in verdict_en:
+        pdf.set_text_color(0, 255, 135)
+    elif "긍정" in verdict_raw or "POSITIVE" in verdict_en:
+        pdf.set_text_color(255, 215, 0)
+    else:
+        pdf.set_text_color(233, 0, 82)
+    pdf.set_font("Helvetica", "B", 13)
+    pdf.cell(0, 9, f"{verdict_en}  ({overall})", ln=True)
+    pdf.ln(2)
+
+    # 항목별 점수
+    score_items = data.get("score_items", [])
+    for label, score, note in score_items:
+        label_en = _to_latin(str(label))
+        note_en = _to_latin(str(note))
+        pdf.set_x(14)
+        bar_w = int(score * 120)
+        y_bar = pdf.get_y() + 1
+        # 배경 바
+        pdf.set_fill_color(50, 50, 70)
+        pdf.rect(60, y_bar, 120, 4, "F")
+        # 점수 바
+        color = (0, 200, 100) if score >= 0.7 else ((255, 200, 0) if score >= 0.5 else (200, 0, 60))
+        pdf.set_fill_color(*color)
+        if bar_w > 0:
+            pdf.rect(60, y_bar, bar_w, 4, "F")
+        # 레이블
+        pdf.set_text_color(180, 180, 180)
+        pdf.set_font("Helvetica", "", 8)
+        pdf.cell(44, 6, label_en)
+        pdf.set_text_color(255, 255, 255)
+        pdf.set_font("Helvetica", "B", 8)
+        pdf.cell(120, 6, "")
+        pdf.set_text_color(200, 200, 200)
+        pdf.set_font("Helvetica", "", 8)
+        pdf.cell(0, 6, f"  {note_en}", ln=True)
+    pdf.ln(4)
+
+    # ── 쇼트리스트 메모 (있을 때만) ─────────────────────────────────
+    note = _to_latin(data.get("shortlist_note", ""))
+    priority = _to_latin(data.get("shortlist_priority", ""))
+    if note or priority:
+        section_title("Scout Notes")
+        if priority:
+            metric_row("Priority", priority, "", "")
+        if note:
+            pdf.set_x(14)
+            pdf.set_text_color(220, 220, 220)
+            pdf.set_font("Helvetica", "", 9)
+            pdf.multi_cell(182, 6, f"Memo: {note}")
+        pdf.ln(2)
+
+    # ── 면책 문구 ────────────────────────────────────────────────────
+    pdf.set_text_color(100, 100, 100)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_x(10)
+    pdf.multi_cell(
+        190, 5,
+        "This report is generated by the EPL Analytics Scouting Dashboard for internal use only. "
+        "Model predictions are based on historical data and should be used as supporting evidence, "
+        "not as the sole basis for transfer decisions.",
+    )
+
+    return bytes(pdf.output())
 
 
 # ── 헬퍼 ────────────────────────────────────────────────────────────────
@@ -184,16 +441,19 @@ def render():
         if _is_in_sl:
             if st.button("⭐ 쇼트리스트 제거", key="sl_remove_btn", use_container_width=True):
                 shortlist.pop(selected_player, None)
+                _save_shortlist(shortlist)
                 st.rerun()
         else:
             if st.button("☆ 쇼트리스트 추가", key="sl_add_btn", use_container_width=True):
+                import datetime as _dt
                 team = player_row.get("team", "")
                 shortlist[selected_player] = {
                     "team": team,
                     "note": "",
                     "priority": "🟡 모니터링",
-                    "added": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "added": _dt.datetime.now().strftime("%Y-%m-%d %H:%M"),
                 }
+                _save_shortlist(shortlist)
                 st.success(f"✅ {selected_player} 쇼트리스트 추가 완료")
     with cmp_btn_col:
         if st.button("📊 비교 페이지", key="goto_compare_btn", use_container_width=True):
@@ -227,7 +487,7 @@ def render():
     # ──────────────────────────────────────────────────────────────────
     st.markdown("---")
     st.markdown("### 📊 WAR 평가 (S1)")
-    st.caption("WAR은 0~100 백분위(percentile) 스케일입니다. 리그 평균=50, 최상위(살라급)≈99")
+    st.caption("PIS는 0~100 백분위(percentile) 스케일입니다. 리그 평균=50, 최상위(살라급)≈99")
 
     s1_col1, s1_col2, s1_col3, s1_col4, s1_col5, s1_col6 = st.columns(6)
     war_val = player_row.get("war", None)
@@ -271,7 +531,7 @@ def render():
                 line=dict(color=EPL_GREEN, width=2),
                 marker=dict(size=8, color=EPL_GREEN),
                 hovertemplate="%{x}<br>WAR: %{y:.1f}<extra></extra>",
-                name="WAR",
+                name="PIS",
             ))
             # 리그 평균선 (포지션 기준)
             pos_grp = player_row.get("pos_group", None)
@@ -294,7 +554,7 @@ def render():
             fig_war.update_layout(
                 title=dict(text="시즌별 WAR 추이", font=dict(size=13)),
                 xaxis=dict(title="시즌", tickangle=-30),
-                yaxis=dict(title="WAR", range=[0, 100]),
+                yaxis=dict(title="PIS (포지션 내 기여 백분위)", range=[0, 100]),
                 height=240,
                 margin=dict(l=10, r=10, t=36, b=40),
                 legend=dict(orientation="h", y=-0.35),
@@ -310,13 +570,13 @@ def render():
     pos_grp = player_row.get("pos_group", None)
     _radar_metrics_map = {
         "FW":  [("goals_p90", "골/90분"), ("assists_p90", "어시/90분"), ("shots_p90", "슈팅/90분"),
-                ("consistency", "일관성"), ("war", "WAR"), ("minutes_share", "출전 비중")],
+                ("consistency", "일관성"), ("war", "PIS"), ("minutes_share", "출전 비중")],
         "MID": [("assists_p90", "어시/90분"), ("tackles_p90", "태클/90분"), ("int_p90", "인터셉트/90분"),
-                ("consistency", "일관성"), ("war", "WAR"), ("minutes_share", "출전 비중")],
+                ("consistency", "일관성"), ("war", "PIS"), ("minutes_share", "출전 비중")],
         "DEF": [("tackles_p90", "태클/90분"), ("int_p90", "인터셉트/90분"), ("goals_p90", "골/90분"),
-                ("consistency", "일관성"), ("war", "WAR"), ("minutes_share", "출전 비중")],
+                ("consistency", "일관성"), ("war", "PIS"), ("minutes_share", "출전 비중")],
         "GK":  [("gk_save_pct", "선방률"), ("gk_cs_pct", "클린시트율"), ("gk_ga_p90", "실점/90분(역)"),
-                ("consistency", "일관성"), ("war", "WAR"), ("minutes_share", "출전 비중")],
+                ("consistency", "일관성"), ("war", "PIS"), ("minutes_share", "출전 비중")],
     }
     _radar_metrics = _radar_metrics_map.get(pos_grp, _radar_metrics_map.get("MID"))
 
@@ -429,7 +689,7 @@ def render():
     elif _s2_status == "overvalued":
         st.warning(f"⚠️ **고평가 주의**: 예측 적정가가 현재 몸값의 {_s2_ratio:.1f}x — 협상 시 가격 인하 요구 근거로 활용")
     else:
-        st.caption("이 선수는 S2 저평가/고평가 목록에 없습니다. '🎯 WAR 기반 저평가' 탭에서 순위 역전 분석을 확인하세요.")
+        st.caption("이 선수는 S2 저평가/고평가 목록에 없습니다. '🎯 PIS 기반 저평가' 탭에서 순위 역전 분석을 확인하세요.")
 
     # ──────────────────────────────────────────────────────────────────
     # 섹션 3: 하락 위험 (S6)
@@ -614,7 +874,7 @@ def render():
                 _war_slim = ratings.sort_values("season", ascending=False).drop_duplicates("player")[["player", "war"]] if "season" in ratings.columns else ratings[["player", "war"]].drop_duplicates("player")
                 sim_disp = sim_disp.merge(_war_slim, left_on="neighbor", right_on="player", how="left").drop(columns=["player"], errors="ignore")
                 sim_disp["war"] = sim_disp["war"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
-                sim_disp = sim_disp.rename(columns={"war": "WAR"})
+                sim_disp = sim_disp.rename(columns={"war": "PIS"})
 
             rename_map = {"neighbor": "유사 선수", "nbr_season": "시즌", "cosine_sim": "유사도"}
             sim_disp = sim_disp.rename(columns={k: v for k, v in rename_map.items() if k in sim_disp.columns})
@@ -715,3 +975,44 @@ def render():
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("종합 판정을 위한 데이터가 충분하지 않습니다.")
+
+    # ──────────────────────────────────────────────────────────────────
+    # 섹션 9: PDF 내보내기
+    # ──────────────────────────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown("### 📄 PDF 리포트 내보내기")
+    st.caption("선수 기본정보, S1 WAR, S2 가치 평가, S6 하락 위험, 종합 판정을 PDF로 저장합니다.")
+
+    # PDF 생성에 필요한 데이터 구성
+    _pdf_data = {
+        "player": selected_player,
+        "season": selected_season,
+        "team": str(player_row.get("team", "N/A")),
+        "pos": str(player_row.get("pos_group", player_row.get("pos", "N/A"))),
+        "age": _safe_val(player_row.get("age", player_row.get("age_tm", None)), ".0f"),
+        "market_value": mv_str,
+        "war": _safe_val(war_val, ".1f"),
+        "tier": str(tier_val) if tier_val and not pd.isna(tier_val) else "N/A",
+        "goals_p90": _safe_val(player_row.get("goals_p90")),
+        "assists_p90": _safe_val(player_row.get("assists_p90")),
+        "tackles_p90": _safe_val(player_row.get("tackles_p90")),
+        "s2_status": _s2_status or "neutral",
+        "s2_ratio": f"{_s2_ratio:.2f}x" if _s2_ratio and not pd.isna(_s2_ratio) else "N/A",
+        "s2_pred_mv": f"EUR{_s2_pred_mv/1_000_000:.1f}M" if _s2_pred_mv and not pd.isna(_s2_pred_mv) else "N/A",
+        "decline_prob": _safe_val(decline_row.get("decline_prob_ensemble"), ".1%") if decline_row is not None else "N/A",
+        "growth_class": str(v4_row.get("pred_xgb", v4_row.get("pred_ensemble", "N/A"))) if v4_row is not None else "N/A",
+        "verdict": locals().get("verdict", "데이터 부족") if score_items else "데이터 부족",
+        "overall_score": f"{locals().get('overall', 0):.0%}" if score_items else "N/A",
+        "score_items": score_items if score_items else [],
+        "shortlist_note": shortlist.get(selected_player, {}).get("note", ""),
+        "shortlist_priority": shortlist.get(selected_player, {}).get("priority", ""),
+    }
+
+    _pdf_bytes = _generate_scout_pdf(_pdf_data)
+    st.download_button(
+        label="📄 PDF 다운로드",
+        data=_pdf_bytes,
+        file_name=f"scout_report_{selected_player.replace(' ', '_')}_{selected_season.replace('/', '-')}.pdf",
+        mime="application/pdf",
+        use_container_width=True,
+    )

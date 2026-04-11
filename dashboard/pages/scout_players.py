@@ -35,7 +35,7 @@ COL_RENAME = {
     "pos_group": "포지션",
     "def_subpos": "세부포지션",
     "age": "나이",
-    "war": "WAR",
+    "war": "PIS",
     "total_min": "출전시간",
     "goals_p90": "골/90분",
     "assists_p90": "어시/90분",
@@ -55,26 +55,26 @@ def render():
     )
 
     tab1, tab2, tab3, tab4 = st.tabs([
-        "WAR 순위", "숨은 보석", "시장 가치", "하락 주의보"
+        "PIS 순위", "숨은 보석", "시장 가치", "하락 주의보"
     ])
 
     # ══════════════════════════════════════════
-    # TAB 1: WAR 순위 (S1)
+    # TAB 1: PIS 순위 (S1)
     # ══════════════════════════════════════════
     with tab1:
-        st.subheader("S1. 선수 WAR 순위")
-        with st.expander("📖 WAR 지표 해석 가이드 (스카우터 필독)", expanded=False):
+        st.subheader("S1. 선수 PIS 순위")
+        with st.expander("📖 PIS 지표 해석 가이드 (스카우터 필독)", expanded=False):
             st.markdown("""
-**WAR (Wins Above Replacement)** 는 해당 선수를 EPL 리그 평균 대체 선수로 바꿨을 때 팀이 잃게 되는 기여 가치를 종합 압축한 **1차 스크리닝 지표**입니다.
+**PIS (Player Impact Score)** 는 해당 선수를 EPL 리그 평균 대체 선수로 바꿨을 때 팀이 잃게 되는 기여 가치를 종합 압축한 **1차 스크리닝 지표**입니다.
 
-> ⚠️ **WAR 스케일 안내**: WAR은 **포지션 내 0~100 백분위(percentile)** 기준으로 산출됩니다.
+> ⚠️ **PIS 스케일 안내**: PIS는 **포지션 내 0~100 백분위(percentile)** 기준으로 산출됩니다.
 > 즉, FW 99는 FW 중 최상위, DEF 99는 DEF 중 최상위로 **포지션 간 직접 비교는 하지 않습니다.**
 > 리그 최고값 ≈ 99 (살라급), 리그 평균 = 50. 절댓값이 아닌 상대적 순위 지표입니다.
 
 > 💡 **스카우터 활용법**: WAR은 **후보군 추리기(1차 스크리닝)** 용도입니다.
 > 최종 영입 판단은 저평가(S2) · 유사선수(S3) · 성장(S4) · 리스크(S5/S6) 탭을 함께 확인하세요.
 
-| WAR 구간 (백분위) | 해석 | 스카우팅 판단 |
+| PIS 구간 (백분위) | 해석 | 스카우팅 판단 |
 |-----------------|------|------------|
 | **80+ (상위 20%)** | 리그 최상위급 | 빅클럽 핵심 자원, 영입 불가 영역 |
 | **65 ~ 80 (상위 20~35%)** | 리그 상위급 | 주전 자원, 높은 이적료 예상 |
@@ -131,19 +131,19 @@ def render():
             max_war = top20["war"].max()
             fig.update_layout(
                 height=560,
-                xaxis=dict(range=[0, max_war * 1.2], title="WAR 점수 (높을수록 대체불가 가치↑)"),
+                xaxis=dict(range=[0, max_war * 1.2], title="PIS 점수 (높을수록 대체불가 가치↑)"),
                 yaxis=dict(automargin=True),
                 margin=dict(l=0, r=80, t=10, b=10),
                 plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff",
             )
             st.plotly_chart(fig, use_container_width=True, theme=None)
         st.caption(
-            "💡 **스카우터 포인트**: WAR 50~65 구간(상위 35~50%, 백분위 기준) 선수가 중위권 구단 예산으로 확보 가능한 최적 타겟입니다. "
-            "bottom6 팀의 WAR 상위 선수는 '숨은 보석' 탭에서 더 자세히 확인하세요."
+            "💡 **스카우터 포인트**: PIS 50~65 구간(상위 35~50%, 백분위 기준) 선수가 중위권 구단 예산으로 확보 가능한 최적 타겟입니다. "
+            "bottom6 팀의 PIS 상위 선수는 '숨은 보석' 탭에서 더 자세히 확인하세요."
         )
 
-        # ── WAR Top 10 선수 카드 ──────────────────────────────
-        st.markdown("#### WAR Top 10 선수")
+        # ── PIS Top 10 선수 카드 ──────────────────────────────
+        st.markdown("#### PIS Top 10 선수")
         top10 = df.head(10).copy()
         for rank, (_, row) in enumerate(top10.iterrows(), start=1):
             p_name  = row.get("player", "")
@@ -228,7 +228,7 @@ def render():
         st.subheader("S1. 숨은 보석")
         with st.expander("📖 숨은 보석 발굴 기준 (스카우터 필독)", expanded=False):
             st.markdown("""
-**숨은 보석** = WAR 상위 25% + 시장가치 하위 50% 교집합 선수
+**숨은 보석** = PIS 상위 25% + 시장가치 하위 50% 교집합 선수
 
 스카우팅 관점에서 가장 중요한 탭입니다. 실력은 상위권이지만 이름값·팀 인지도 부족으로 시장에서 저평가된 선수를 발굴합니다.
 
@@ -285,7 +285,7 @@ def render():
                     font=dict(size=11, color=EPL_MAGENTA), bgcolor="#1a1a2e", bordercolor=EPL_MAGENTA,
                 )
                 fig.update_layout(
-                    xaxis_title="시장가치 (EUR)", yaxis_title="WAR 점수 (팀 기여도)",
+                    xaxis_title="시장가치 (EUR)", yaxis_title="PIS 점수 (팀 기여도)",
                     height=450, plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff", margin=dict(l=10, r=10, t=30, b=10),
                     legend_title="포지션",
                 )
@@ -328,7 +328,7 @@ def render():
 - `0.3x` = 예측가가 실제가의 30% → 강력한 고평가 신호
             """)
 
-        sub1, sub2, sub3, sub4 = st.tabs(["저평가 선수 (S2)", "고평가 선수 (S2)", "🔬 P6 절대가치 예측", "🎯 WAR 기반 저평가"])
+        sub1, sub2, sub3, sub4 = st.tabs(["저평가 선수 (S2)", "고평가 선수 (S2)", "🔬 P6 절대가치 예측", "🎯 PIS 기반 저평가"])
 
         with sub1:
             underval = load_undervalued()
@@ -504,8 +504,8 @@ def render():
                 st.caption("💡 **스카우터 포인트**: P6는 선수 스탯만으로 계산한 절대 적정가. S2와 함께 보면 두 모델이 모두 저평가 신호를 보내는 선수가 최우선 영입 후보.")
 
         with sub4:
-            # ── WAR 순위 vs 시장가치 순위 역전 = 실력 대비 몸값이 낮은 진짜 바겐 ──
-            st.markdown("### 🎯 WAR 순위 vs 시장가치 순위 역전 분석")
+            # ── PIS 순위 vs 시장가치 순위 역전 = 실력 대비 몸값이 낮은 진짜 바겐 ──
+            st.markdown("### 🎯 PIS 순위 vs 시장가치 순위 역전 분석")
             st.markdown(
                 "S2 모델이 잡지 못한 **FW/MID 저평가 후보**를 찾는 보조 지표입니다. "
                 "포지션별로 WAR(실력) 순위 백분위에서 시장가치 순위 백분위를 뺀 값이 클수록 "
@@ -513,7 +513,7 @@ def render():
             )
             with st.expander("📖 분석 방법 설명", expanded=False):
                 st.markdown("""
-**undervalue_gap = WAR 순위(백분위) − 시장가치 순위(백분위)**
+**undervalue_gap = PIS 순위(백분위) − 시장가치 순위(백분위)**
 
 | 값 | 해석 |
 |----|------|
@@ -652,7 +652,7 @@ S2는 회귀 모델이 예측한 가격 vs 실제 가격을 비교합니다.
                         st.caption(
                             "🟢 하락위험 30% 미만 · 🟡 30~50% · 🔴 50%+ | "
                             "버블 크기 = 저평가 Gap 크기 | "
-                            "**좌상단**이 최고 바겐 (저렴+WAR 높음)"
+                            "**좌상단**이 최고 바겐 (저렴+PIS 높음)"
                         )
 
                         # 테이블

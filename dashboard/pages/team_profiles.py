@@ -182,7 +182,7 @@ def render():
     st.plotly_chart(fig_pos, use_container_width=True, theme=None)
 
     # ── TOP 5 선수 카드 ─────────────────────────────────────────────────
-    st.markdown("### 🌟 WAR Top 5 선수")
+    st.markdown("### 🌟 PIS Top 5 선수")
     top5 = team_df.sort_values("war", ascending=False).head(5) if "war" in team_df.columns else team_df.head(5)
 
     t5_cols = st.columns(5)
@@ -271,13 +271,13 @@ def render():
             plot_bgcolor="#1a1a2e",
             font_color="#fff",
             xaxis_title="나이",
-            yaxis_title="WAR",
+            yaxis_title="PIS (포지션 내 기여 백분위)",
             margin=dict(t=20, b=20, l=20, r=20),
             height=400,
             legend_title="포지션",
         )
         st.plotly_chart(fig_bubble, use_container_width=True, theme=None)
-        st.caption("💡 버블 크기 = 시장가치. 우측 상단(나이 젊고 WAR 높음) = 핵심 자산. 좌측 하단 = 개발 필요 자원.")
+        st.caption("💡 버블 크기 = 시장가치. 우측 상단(나이 젊고 PIS 높음) = 핵심 자산. 좌측 하단 = 개발 필요 자원.")
 
     # ── 전체 스쿼드 테이블 ──────────────────────────────────────────────
     with st.expander("📋 전체 스쿼드 테이블"):
@@ -285,7 +285,7 @@ def render():
         squad_disp = team_df[squad_cols].sort_values("war", ascending=False).copy()
         squad_rename = {
             "player": "선수", "pos": "포지션", "age": "나이",
-            "war": "WAR", "tier": "등급", "market_value": "시장가치(€M)",
+            "war": "PIS", "tier": "등급", "market_value": "시장가치(€M)",
             "total_min": "출전 분", "goals_p90": "골/90분", "assists_p90": "어시/90분",
         }
         squad_disp = squad_disp.rename(columns={k: v for k, v in squad_rename.items() if k in squad_disp.columns})

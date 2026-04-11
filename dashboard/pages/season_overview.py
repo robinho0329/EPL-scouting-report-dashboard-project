@@ -84,9 +84,9 @@ def render():
                 if "gls" in ps.columns:
                     cols_show = [c for c in ["player", "team", "gls", "war"] if c in ps.columns]
                     top_scorers = ps.nlargest(5, "gls")[cols_show].copy()
-                    top_scorers = top_scorers.rename(columns={"player": "선수", "team": "팀", "gls": "골", "war": "WAR"})
-                    if "WAR" in top_scorers.columns:
-                        top_scorers["WAR"] = top_scorers["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+                    top_scorers = top_scorers.rename(columns={"player": "선수", "team": "팀", "gls": "골", "war": "PIS"})
+                    if "PIS" in top_scorers.columns:
+                        top_scorers["PIS"] = top_scorers["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
                     st.dataframe(top_scorers, hide_index=True, use_container_width=True)
 
             with tc2:
@@ -94,18 +94,18 @@ def render():
                 if "ast" in ps.columns:
                     cols_show = [c for c in ["player", "team", "ast", "war"] if c in ps.columns]
                     top_assists = ps.nlargest(5, "ast")[cols_show].copy()
-                    top_assists = top_assists.rename(columns={"player": "선수", "team": "팀", "ast": "어시스트", "war": "WAR"})
-                    if "WAR" in top_assists.columns:
-                        top_assists["WAR"] = top_assists["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+                    top_assists = top_assists.rename(columns={"player": "선수", "team": "팀", "ast": "어시스트", "war": "PIS"})
+                    if "PIS" in top_assists.columns:
+                        top_assists["PIS"] = top_assists["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
                     st.dataframe(top_assists, hide_index=True, use_container_width=True)
 
             with tc3:
-                st.markdown("**WAR 상위 Top 5**")
+                st.markdown("**PIS 상위 Top 5**")
                 if "war" in ps.columns:
                     cols_show = [c for c in ["player", "team", "war", "tier"] if c in ps.columns]
                     top_war = ps.dropna(subset=["war"]).nlargest(5, "war")[cols_show].copy()
-                    top_war = top_war.rename(columns={"player": "선수", "team": "팀", "war": "WAR", "tier": "등급"})
-                    top_war["WAR"] = top_war["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+                    top_war = top_war.rename(columns={"player": "선수", "team": "팀", "war": "PIS", "tier": "등급"})
+                    top_war["PIS"] = top_war["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
                     st.dataframe(top_war, hide_index=True, use_container_width=True)
                 else:
                     st.markdown("**다출전 선수 Top 5**")

@@ -14,7 +14,12 @@ from config.settings import DASHBOARD_DIR, PROCESSED_DIR, MATCH_CSV
 
 @st.cache_data
 def load_match_data() -> pd.DataFrame:
-    """Load the existing match-level CSV (epl_final.csv)."""
+    """경기 데이터 로드. match_results.parquet 우선, 없으면 epl_final.csv 폴백."""
+    parquet_path = PROCESSED_DIR / "match_results.parquet"
+    if parquet_path.exists():
+        df = pd.read_parquet(parquet_path)
+        df["MatchDate"] = pd.to_datetime(df["MatchDate"])
+        return df
     if MATCH_CSV.exists():
         df = pd.read_csv(MATCH_CSV)
         df["MatchDate"] = pd.to_datetime(df["MatchDate"])
@@ -67,7 +72,7 @@ MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
 
 @st.cache_data
 def load_scout_ratings() -> pd.DataFrame:
-    """S1: WAR 기반 선수 평가."""
+    """S1: PIS 기반 선수 평가."""
     path = SCOUT_DIR / "scout_ratings_v3.parquet"
     if path.exists():
         return pd.read_parquet(path)

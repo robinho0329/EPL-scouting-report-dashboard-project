@@ -3,11 +3,17 @@
 흐름: 시즌 → 팀 → 선수A/B 선택 → 핵심 지표 나란히 비교 → 레이더 차트
 """
 
+import io
 from typing import Optional
 
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+
+# EPL 브랜드 컬러
+EPL_PURPLE = "#37003c"
+EPL_MAGENTA = "#e90052"
+EPL_GREEN = "#00ff87"
 
 from dashboard.components.data_loader import (
     load_player_season_stats,
@@ -24,7 +30,7 @@ from dashboard.utils.image_utils import get_player_image_b64, get_team_logo_b64
 # 1순위: 가치/생산성 지표 (영입 의사결정의 핵심)
 # goals_p90 / assists_p90 는 scout_ratings_v3 병합으로 채워짐
 SCOUT_PRIMARY = {
-    "WAR": "war",
+    "PIS": "war",
     "시장가치(M£)": "market_value_m",
     "나이": "age",
     "90분당 득점": "goals_p90",
@@ -52,7 +58,7 @@ SCOUT_DEFENSE = {
 
 # 레이더 차트용: 1+2순위 병합 (정규화에 부적합한 나이/시장가치 제외)
 RADAR_STATS = {
-    "WAR": "war",
+    "PIS": "war",
     "90분당 득점": "goals_p90",
     "90분당 어시스트": "assists_p90",
     "슈팅/90": "shots_p90",
@@ -82,6 +88,126 @@ def _fmt(val, decimals: int = 2) -> str:
         return f"{float(val):.{decimals}f}"
     except (TypeError, ValueError):
         return str(val) if pd.notna(val) else "-"
+
+
+def _safe_val(val):
+    """Excel 저장용 안전한 값 변환 (NaN → None, numpy 타입 → Python 기본 타입)."""
+    import numpy as np
+    if val is None:
+        return None
+    try:
+        if pd.isna(val):
+            return None
+    except (TypeError, ValueError):
+        pass
+    if isinstance(val, (np.integer,)):
+        return int(val)
+    if isinstance(val, (np.floating,)):
+        return float(val)
+    return val
+
+
+def _build_comparison_excel(compare_df: pd.DataFrame, selected_players: list) -> bytes:
+    """비교 결과를 3시트 Excel 바이트로 반환.
+
+    시트 1: 기본정보 (이름/팀/포지션/나이/시장가치)
+    시트 2: 주요 스탯 (WAR, goals_p90, assists_p90, xG 계열, 수비 지표)
+    시트 3: 모델 점수 (가용한 s-score 컬럼)
+    """
+    # ── 시트 1: 기본정보 ───────────────────────────────────────────────────
+    basic_cols_map = {
+        "선수": "player",
+        "팀": "team",
+        "포지션": "pos_group",
+        "나이": "age",
+        "시장가치(M£)": "market_value_m",
+        "시즌": "season",
+    }
+    sheet1_rows = []
+    for player in selected_players:
+        data = compare_df[compare_df["player"] == player]
+        if data.empty:
+            continue
+        row = data.iloc[0]
+        entry = {}
+        for label, col in basic_cols_map.items():
+            entry[label] = _safe_val(row.get(col, None))
+        sheet1_rows.append(entry)
+    sheet1_df = pd.DataFrame(sheet1_rows)
+
+    # ── 시트 2: 주요 스탯 ──────────────────────────────────────────────────
+    stat_cols_map = {
+        "선수": "player",
+        "PIS": "war",
+        "90분당 득점": "goals_p90",
+        "90분당 어시스트": "assists_p90",
+        "슈팅/90": "shots_p90",
+        "유효슈팅/90": "sot_p90",
+        "공격포인트(G+A)": "g_a",
+        "득점": "gls",
+        "어시스트": "ast",
+        "태클/90": "tackles_p90",
+        "인터셉트/90": "int_p90",
+        "압박 지수": "possession_proxy",
+        "일관성": "consistency",
+        "출전 비율": "minutes_share",
+        "골 기여율": "goal_contribution_rate",
+    }
+    sheet2_rows = []
+    for player in selected_players:
+        data = compare_df[compare_df["player"] == player]
+        if data.empty:
+            continue
+        row = data.iloc[0]
+        entry = {}
+        for label, col in stat_cols_map.items():
+            entry[label] = _safe_val(row.get(col, None))
+        sheet2_rows.append(entry)
+    sheet2_df = pd.DataFrame(sheet2_rows)
+
+    # ── 시트 3: 모델 점수 ──────────────────────────────────────────────────
+    # 가용한 모델 점수 컬럼 탐색
+    model_score_candidates = {
+        "선수": "player",
+        "WAR (S1)": "war",
+        "가치비율 (S2)": "value_ratio",
+        "클러스터 (S3)": "cluster_label",
+        "성장 궤적 (S4)": "career_trajectory",
+        "이적 적응 점수 (S5)": "transfer_adapt_score",
+        "하락세 확률 (S6)": "decline_prob",
+        "시장가치 효율 (S2파생)": "market_value_efficiency",
+    }
+    sheet3_rows = []
+    for player in selected_players:
+        data = compare_df[compare_df["player"] == player]
+        if data.empty:
+            continue
+        row = data.iloc[0]
+        entry = {}
+        for label, col in model_score_candidates.items():
+            entry[label] = _safe_val(row.get(col, None))
+        sheet3_rows.append(entry)
+    sheet3_df = pd.DataFrame(sheet3_rows)
+
+    # ── Excel 직렬화 ────────────────────────────────────────────────────────
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
+        sheet1_df.to_excel(writer, sheet_name="기본정보", index=False)
+        sheet2_df.to_excel(writer, sheet_name="주요스탯", index=False)
+        sheet3_df.to_excel(writer, sheet_name="모델점수", index=False)
+
+        # 컬럼 너비 자동 조정
+        for sheet_name, df in [("기본정보", sheet1_df), ("주요스탯", sheet2_df), ("모델점수", sheet3_df)]:
+            ws = writer.sheets[sheet_name]
+            for col_cells in ws.columns:
+                max_len = max(
+                    (len(str(cell.value)) if cell.value is not None else 0)
+                    for cell in col_cells
+                )
+                ws.column_dimensions[col_cells[0].column_letter].width = min(max_len + 4, 30)
+
+    buffer.seek(0)
+    return buffer.read()
 
 
 def render():
@@ -390,7 +516,7 @@ def render():
         best_age = best_row.get("age", None)
         best_mv = best_row.get("market_value_m", best_row.get("market_value", None))
 
-        # 2위와의 WAR 격차
+        # 2위와의 PIS 격차
         war_sorted = compare_df.dropna(subset=["war"]).sort_values("war", ascending=False)
         war_gap = (war_sorted.iloc[0]["war"] - war_sorted.iloc[1]["war"]) if len(war_sorted) >= 2 else 0
         gap_label = "압도적 우위" if war_gap >= 10 else ("명확한 우위" if war_gap >= 5 else "근소한 우위")
@@ -442,3 +568,20 @@ def render():
                 st.success(f"✅ {best_player} 쇼트리스트에 추가했습니다.")
     else:
         st.info("WAR 데이터가 없어 자동 추천을 생성할 수 없습니다. 상세 통계를 직접 비교하세요.")
+
+    # ── 섹션 6: Excel 내보내기 ─────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown("### Excel 내보내기")
+    st.caption("비교 결과를 3개 시트(기본정보 · 주요스탯 · 모델점수)로 구성된 Excel 파일로 저장합니다.")
+
+    excel_bytes = _build_comparison_excel(compare_df, selected_players)
+    player_names_slug = "_vs_".join(p.split()[-1] for p in selected_players[:4])
+    filename = f"EPL_비교_{player_names_slug}.xlsx"
+
+    st.download_button(
+        label="Excel 다운로드",
+        data=excel_bytes,
+        file_name=filename,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        use_container_width=False,
+    )

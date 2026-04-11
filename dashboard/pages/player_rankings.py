@@ -22,7 +22,7 @@ EPL_GREEN = "#00ff87"
 
 # 실제 parquet 컬럼명에 맞춘 매핑 (한국어 표시명)
 STAT_CATEGORIES = {
-    "WAR (대체불가 가치)": "war",
+    "PIS (선수 임팩트 기여도)": "war",
     "골": "gls",
     "어시스트": "ast",
     "출전 경기": "mp",
@@ -127,11 +127,11 @@ def render():
         if pos_col:
             df = df[df[pos_col].str.contains(selected_pos, case=False, na=False)]
 
-    # === WAR Top 5 미니 카드 ===
+    # === PIS Top 5 미니 카드 ===
     if "war" in df.columns and df["war"].notna().any():
         top5_war = df.dropna(subset=["war"]).nlargest(5, "war")
         st.markdown("---")
-        st.markdown(f"#### 🏆 {selected_season if selected_season != '전체 시즌' else '전체'} WAR Top 5")
+        st.markdown(f"#### 🏆 {selected_season if selected_season != '전체 시즌' else '전체'} PIS Top 5")
         war_cols = st.columns(5)
         for i, (_, row) in enumerate(top5_war.iterrows()):
             if i >= 5:
@@ -190,15 +190,15 @@ def render():
         "pos": "포지션",
         "num_seasons": "시즌 수",
         "mp": "출전 경기",
-        "war": "WAR",
+        "war": "PIS",
         "tier": "등급",
     }
     rename_map[stat_col] = stat_display
     display_df = display_df.rename(columns=rename_map)
 
     # WAR 소수점 포맷
-    if "WAR" in display_df.columns:
-        display_df["WAR"] = display_df["WAR"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
+    if "PIS" in display_df.columns:
+        display_df["PIS"] = display_df["PIS"].apply(lambda x: f"{x:.1f}" if pd.notna(x) else "-")
 
     st.dataframe(display_df, use_container_width=True, height=520)
 
