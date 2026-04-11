@@ -2,6 +2,8 @@
 
 이적/영입 의사결정을 위한 통합 분석 도구.
 """
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -20,6 +22,32 @@ EPL_PURPLE = "#37003c"
 EPL_MAGENTA = "#e90052"
 EPL_GREEN = "#00ff87"
 EPL_CYAN = "#04f5ff"
+
+_SCOUT_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "scout"
+
+
+@st.cache_data(ttl=3600)
+def _load_team_rank() -> pd.DataFrame:
+    """팀 순위/스탯 데이터 로드."""
+    p = _SCOUT_DIR / "scout_team_profiles.parquet"
+    if not p.exists():
+        return pd.DataFrame()
+    df = pd.read_parquet(p)
+    latest = df["season"].max() if "season" in df.columns else None
+    if latest:
+        df = df[df["season"] == latest].copy()
+    df = df.sort_values("points", ascending=False).reset_index(drop=True)
+    df["rank"] = range(1, len(df) + 1)
+    return df
+
+
+@st.cache_data(ttl=3600)
+def _load_player_profiles_full() -> pd.DataFrame:
+    """선수 프로파일 전체 로드."""
+    p = _SCOUT_DIR / "scout_player_profiles.parquet"
+    if not p.exists():
+        return pd.DataFrame()
+    return pd.read_parquet(p)
 
 # 데이터프레임 컬럼 한국어 매핑
 COL_RENAME = {
@@ -1543,29 +1571,6 @@ def render():
 
         adapt_sim = load_transfer_adapt_predictions()
         ratings_sim = load_scout_ratings()
-
-        # ── 팀 순위 데이터 로드 ───────────────────────────────────────────
-        @st.cache_data(ttl=3600)
-        def _load_team_rank() -> pd.DataFrame:
-            """팀 순위/스탯 데이터 로드."""
-            p = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "scout_team_profiles.parquet"
-            if not p.exists():
-                return pd.DataFrame()
-            df = pd.read_parquet(p)
-            latest = df["season"].max() if "season" in df.columns else None
-            if latest:
-                df = df[df["season"] == latest].copy()
-            df = df.sort_values("points", ascending=False).reset_index(drop=True)
-            df["rank"] = range(1, len(df) + 1)
-            return df
-
-        @st.cache_data(ttl=3600)
-        def _load_player_profiles_full() -> pd.DataFrame:
-            """선수 프로파일 전체 로드."""
-            p = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "scout_player_profiles.parquet"
-            if not p.exists():
-                return pd.DataFrame()
-            return pd.read_parquet(p)
 
         team_rank_df = _load_team_rank()
         player_profiles_full = _load_player_profiles_full()
