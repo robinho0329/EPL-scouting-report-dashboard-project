@@ -222,7 +222,9 @@ def render():
                     max_war = pos_df["war"].max()
                     fig.update_layout(
                         xaxis=dict(range=[0, max_war * 1.2], title="WAR (대체불가 가치)"),
-                        height=400, margin=dict(l=10, r=60, t=10, b=10),
+                        height=400,
+                        yaxis=dict(automargin=True),
+                        margin=dict(l=0, r=80, t=10, b=10),
                         plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff", showlegend=True,
                         legend=dict(orientation="h", yanchor="bottom", y=-0.3, title_text="소속 팀"),
                     )

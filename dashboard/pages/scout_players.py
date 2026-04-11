@@ -65,10 +65,14 @@ def render():
         st.subheader("S1. 선수 WAR 순위")
         with st.expander("📖 WAR 지표 해석 가이드 (스카우터 필독)", expanded=False):
             st.markdown("""
-**WAR (Wins Above Replacement)** 는 해당 선수를 EPL 리그 평균 대체 선수로 바꿨을 때 팀이 잃게 되는 승리 수입니다.
+**WAR (Wins Above Replacement)** 는 해당 선수를 EPL 리그 평균 대체 선수로 바꿨을 때 팀이 잃게 되는 기여 가치를 종합 압축한 **1차 스크리닝 지표**입니다.
 
-> ⚠️ **WAR 스케일 안내**: WAR은 **0~100 백분위(percentile)** 기준으로 산출됩니다.
+> ⚠️ **WAR 스케일 안내**: WAR은 **포지션 내 0~100 백분위(percentile)** 기준으로 산출됩니다.
+> 즉, FW 99는 FW 중 최상위, DEF 99는 DEF 중 최상위로 **포지션 간 직접 비교는 하지 않습니다.**
 > 리그 최고값 ≈ 99 (살라급), 리그 평균 = 50. 절댓값이 아닌 상대적 순위 지표입니다.
+
+> 💡 **스카우터 활용법**: WAR은 **후보군 추리기(1차 스크리닝)** 용도입니다.
+> 최종 영입 판단은 저평가(S2) · 유사선수(S3) · 성장(S4) · 리스크(S5/S6) 탭을 함께 확인하세요.
 
 | WAR 구간 (백분위) | 해석 | 스카우팅 판단 |
 |-----------------|------|------------|
@@ -79,6 +83,7 @@ def render():
 | **35 미만 (하위 35%)** | 대체 선수 이하 | 방출/계약 연장 재검토 |
 
 - **p90 기준**: 90분당 수치로 출전시간 편향을 제거. 주전/벤치 공정 비교 가능
+- **WAR 구성**: 공격기여(골·도움) 60% + 수비기여(태클·인터셉트) 25% + 출전안정성 15%
             """)
         ratings = load_scout_ratings()
         if len(ratings) == 0:
@@ -125,9 +130,11 @@ def render():
                 ))
             max_war = top20["war"].max()
             fig.update_layout(
-                height=500,
+                height=560,
                 xaxis=dict(range=[0, max_war * 1.2], title="WAR 점수 (높을수록 대체불가 가치↑)"),
-                margin=dict(l=10, r=60, t=10, b=10), plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff",
+                yaxis=dict(automargin=True),
+                margin=dict(l=0, r=80, t=10, b=10),
+                plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff",
             )
             st.plotly_chart(fig, use_container_width=True, theme=None)
         st.caption(
