@@ -1,4 +1,4 @@
-"""SHAP 모델 설명 페이지 - S1 WAR 모델 기여 피처 시각화.
+"""SHAP 모델 설명 페이지 - S1 PIS 모델 기여 피처 시각화.
 
 "왜 이 선수의 PIS이 이렇게 나왔는가?" 를 감독/구단에 설명할 수 있도록
 SHAP summary plot(전체 피처 중요도) + 선수별 waterfall plot(개별 기여도)을 제공한다.
@@ -124,7 +124,7 @@ def _compute_shap(_X_values: np.ndarray, _model_key: str) -> np.ndarray:
 def render():
     st.title("모델 설명 (SHAP)")
     st.caption(
-        "S1 WAR 모델이 왜 이 점수를 줬는지 피처 기여도로 설명합니다. "
+        "S1 PIS 모델이 왜 이 점수를 줬는지 피처 기여도로 설명합니다. "
         "전체 중요도(Summary) + 선수별 기여도(Waterfall)를 제공합니다."
     )
 
@@ -132,7 +132,7 @@ def render():
     model, enc = _load_model()
     if model is None:
         st.error(
-            "S1 WAR 모델 파일을 찾을 수 없습니다. "
+            "S1 PIS 모델 파일을 찾을 수 없습니다. "
             f"`{_MODEL_DIR / 'xgb_model.pkl'}` 가 존재하는지 확인하세요."
         )
         return
@@ -173,7 +173,7 @@ def render():
     st.markdown("---")
     st.markdown("### PIS 점수는 어떻게 결정되는가?")
     st.info(
-        "S1 WAR(Wins Above Replacement) 모델은 나이, 시장가치, 팀 전력(승점/득실차), "
+        "S1 PIS(Player Impact Score) 모델은 나이, 시장가치, 팀 전력(승점/득실차), "
         "출전 시간, 포지션 등 8개 피처로 선수의 기여도를 0~100 퍼센타일로 환산합니다. "
         "아래 차트는 각 피처가 PIS 점수를 얼마나 올리거나 낮추는지 보여줍니다."
     )
@@ -181,7 +181,7 @@ def render():
     # ── 섹션 2: 전체 피처 중요도 (Summary Bar) ──────────────────────────────
     st.markdown("---")
     st.markdown(f"### 전체 피처 중요도 — {sel_season} 시즌")
-    st.caption("막대 길이 = 해당 피처의 평균 |SHAP| 값 (WAR에 미치는 평균 영향력)")
+    st.caption("막대 길이 = 해당 피처의 평균 |SHAP| 값 (PIS에 미치는 평균 영향력)")
 
     mean_abs_shap = np.abs(shap_vals).mean(axis=0)
     importance_df = pd.DataFrame({
@@ -211,11 +211,11 @@ def render():
     )
     st.plotly_chart(bar_fig, use_container_width=True, theme=None)
 
-    # ── 섹션 3: 선수별 WAR 기여도 (Waterfall) ───────────────────────────────
+    # ── 섹션 3: 선수별 PIS 기여도 (Waterfall) ───────────────────────────────
     st.markdown("---")
-    st.markdown("### 선수별 WAR 기여도")
+    st.markdown("### 선수별 PIS 기여도")
     st.caption(
-        "선수를 선택하면 각 피처가 WAR 기준값(Expected Value)에서 "
+        "선수를 선택하면 각 피처가 PIS 기준값(Expected Value)에서 "
         "얼마나 더하거나 빼는지 waterfall 차트로 보여줍니다."
     )
 
@@ -274,7 +274,7 @@ def render():
     wf_fig = go.Figure(go.Waterfall(
         orientation="v",
         measure=["absolute"] + ["relative"] * len(sorted_shap) + ["total"],
-        x=["기준값 (평균 WAR)"] + x_labels + ["최종 WAR 예측"],
+        x=["기준값 (평균 PIS)"] + x_labels + ["최종 PIS 예측"],
         y=[expected_value] + sorted_shap + [0],  # total은 자동 계산
         connector=dict(line=dict(color="#555577")),
         decreasing=dict(marker_color="#e90052"),
@@ -290,10 +290,10 @@ def render():
 
     wf_fig.update_layout(
         title=dict(
-            text=f"{sel_player} WAR 기여도 분해",
+            text=f"{sel_player} PIS 기여도 분해",
             font=dict(color="#ffffff"),
         ),
-        yaxis_title="WAR 기여 (SHAP 값)",
+        yaxis_title="PIS 기여 (SHAP 값)",
         height=480,
         margin=dict(t=60, b=20),
         plot_bgcolor="#1a1a2e",
@@ -315,13 +315,13 @@ def render():
         if top_pos:
             top3_pos = top_pos[:3]
             lines.append(
-                "WAR을 높인 주요 요인: "
+                "PIS를 높인 주요 요인: "
                 + ", ".join(f"**{name}** (+{val:.1f})" for name, val in top3_pos)
             )
         if top_neg:
             top3_neg = top_neg[:2]
             lines.append(
-                "WAR을 낮춘 요인: "
+                "PIS를 낮춘 요인: "
                 + ", ".join(f"**{name}** ({val:.1f})" for name, val in top3_neg)
             )
         for line in lines:
@@ -330,7 +330,7 @@ def render():
     # ── 섹션 4: 시즌 전체 SHAP 산점도 (피처별 값 vs SHAP) ────────────────────
     st.markdown("---")
     st.markdown("### 피처 값과 WAR 영향력 관계")
-    st.caption("선택한 피처의 실제 값(X축)과 WAR에 미치는 영향(Y축)의 관계. 점이 위에 있을수록 WAR을 높임.")
+    st.caption("선택한 피처의 실제 값(X축)과 PIS에 미치는 영향(Y축)의 관계. 점이 위에 있을수록 PIS를 높임.")
 
     sel_feat_ko = st.selectbox(
         "피처 선택",
@@ -359,7 +359,7 @@ def render():
             showscale=True,
         ),
         text=[
-            f"{n}<br>{sel_feat_ko}: {x:.1f}<br>SHAP: {y:+.2f}<br>WAR: {w:.1f}"
+            f"{n}<br>{sel_feat_ko}: {x:.1f}<br>SHAP: {y:+.2f}<br>PIS: {w:.1f}"
             for n, x, y, w in zip(scatter_names, scatter_x, scatter_y, scatter_war)
         ],
         hoverinfo="text",
@@ -367,7 +367,7 @@ def render():
 
     sc_fig.update_layout(
         xaxis_title=sel_feat_ko,
-        yaxis_title=f"SHAP 값 ({sel_feat_ko} → WAR 영향)",
+        yaxis_title=f"SHAP 값 ({sel_feat_ko} → PIS 영향)",
         height=400,
         margin=dict(t=20, b=20),
         plot_bgcolor="#1a1a2e",

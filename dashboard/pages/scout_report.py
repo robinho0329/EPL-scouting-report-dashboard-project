@@ -68,7 +68,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
         "영입 긍정 검토": "POSITIVE CONSIDERATION",
         "추가 검토 필요": "FURTHER REVIEW NEEDED",
         "데이터 부족": "INSUFFICIENT DATA",
-        "WAR 평가": "WAR Score",
+        "PIS 평가": "PIS Score",
         "S2 가치 평가": "S2 Value",
         "하락 안정성": "Decline Stability",
         "성장 전망": "Growth Outlook",
@@ -78,7 +78,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
         "하락확률": "Decline Prob",
         "가치비율": "Value Ratio",
         "내년 예측": "Next Yr Pred",
-        "WAR ": "WAR ",
+        "PIS ": "PIS ",
     }
 
     def _to_latin(text: str) -> str:
@@ -173,8 +173,8 @@ def _generate_scout_pdf(data: dict) -> bytes:
             pdf.cell(50, 7, val2)
         pdf.ln()
 
-    # ── S1 WAR 평가 ─────────────────────────────────────────────────
-    section_title("S1  WAR Assessment (Wins Above Replacement)")
+    # ── S1 PIS 평가 ─────────────────────────────────────────────────
+    section_title("S1  PIS Assessment (Player Impact Score)")
     metric_row("WAR (Percentile)", data.get("war", "N/A"), "Tier", data.get("tier", "N/A"))
     metric_row("Goals/90", data.get("goals_p90", "N/A"), "Assists/90", data.get("assists_p90", "N/A"))
     metric_row("Tackles/90", data.get("tackles_p90", "N/A"), "", "")
@@ -330,7 +330,7 @@ def _get_player_row(df: pd.DataFrame, player: str, season: Optional[str] = None)
 def render():
     st.title("🔍 선수 즉시 분석 리포트")
     st.caption(
-        "이름 직접 검색 또는 시즌 → 팀 → 선수 드롭다운으로 선수를 선택하면 WAR, 시장가치, 성장 궤적, 하락 위험, 이적 적응도까지 "
+        "이름 직접 검색 또는 시즌 → 팀 → 선수 드롭다운으로 선수를 선택하면 PIS, 시장가치, 성장 궤적, 하락 위험, 이적 적응도까지 "
         "전 모델 결과를 한 페이지에서 확인합니다."
     )
 
@@ -486,7 +486,7 @@ def render():
     # 섹션 2: WAR + 핵심 지표 (S1)
     # ──────────────────────────────────────────────────────────────────
     st.markdown("---")
-    st.markdown("### 📊 WAR 평가 (S1)")
+    st.markdown("### 📊 PIS 평가 (S1)")
     st.caption("PIS는 0~100 백분위(percentile) 스케일입니다. 리그 평균=50, 최상위(살라급)≈99")
 
     s1_col1, s1_col2, s1_col3, s1_col4, s1_col5, s1_col6 = st.columns(6)
@@ -530,7 +530,7 @@ def render():
                 textposition="top center",
                 line=dict(color=EPL_GREEN, width=2),
                 marker=dict(size=8, color=EPL_GREEN),
-                hovertemplate="%{x}<br>WAR: %{y:.1f}<extra></extra>",
+                hovertemplate="%{x}<br>PIS: %{y:.1f}<extra></extra>",
                 name="PIS",
             ))
             # 리그 평균선 (포지션 기준)
@@ -549,10 +549,10 @@ def render():
                         mode="lines",
                         line=dict(color="#888888", width=1, dash="dot"),
                         name=f"{pos_grp} 리그 평균",
-                        hovertemplate="%{x}<br>평균 WAR: %{y:.1f}<extra></extra>",
+                        hovertemplate="%{x}<br>평균 PIS: %{y:.1f}<extra></extra>",
                     ))
             fig_war.update_layout(
-                title=dict(text="시즌별 WAR 추이", font=dict(size=13)),
+                title=dict(text="시즌별 PIS 추이", font=dict(size=13)),
                 xaxis=dict(title="시즌", tickangle=-30),
                 yaxis=dict(title="PIS (포지션 내 기여 백분위)", range=[0, 100]),
                 height=240,
@@ -922,7 +922,7 @@ def render():
     war_num = player_row.get("war", None)
     if war_num and not pd.isna(war_num):
         war_score = min(war_num / 100.0, 1.0)
-        score_items.append(("WAR 평가", war_score, f"WAR {war_num:.1f}"))
+        score_items.append(("PIS 평가", war_score, f"WAR {war_num:.1f}"))
 
     if _s2_ratio and not pd.isna(_s2_ratio):
         # value_ratio 1.0 = 적정가, 1.5 = 33% 저평가 = good, 0.5 = overvalued = bad
@@ -981,7 +981,7 @@ def render():
     # ──────────────────────────────────────────────────────────────────
     st.markdown("---")
     st.markdown("### 📄 PDF 리포트 내보내기")
-    st.caption("선수 기본정보, S1 WAR, S2 가치 평가, S6 하락 위험, 종합 판정을 PDF로 저장합니다.")
+    st.caption("선수 기본정보, S1 PIS, S2 가치 평가, S6 하락 위험, 종합 판정을 PDF로 저장합니다.")
 
     # PDF 생성에 필요한 데이터 구성
     _pdf_data = {

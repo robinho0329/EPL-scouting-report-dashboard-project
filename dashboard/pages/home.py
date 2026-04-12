@@ -112,7 +112,7 @@ def render():
                     key=f"home_war_{rank}",
                 )
         else:
-            st.info("WAR 데이터 없음")
+            st.info("PIS 데이터 없음")
 
     # ── [MID] 저평가 기회 Top 5 ──────────────────────────────────────────
     with mid_col:

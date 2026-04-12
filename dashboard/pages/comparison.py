@@ -111,7 +111,7 @@ def _build_comparison_excel(compare_df: pd.DataFrame, selected_players: list) ->
     """비교 결과를 3시트 Excel 바이트로 반환.
 
     시트 1: 기본정보 (이름/팀/포지션/나이/시장가치)
-    시트 2: 주요 스탯 (WAR, goals_p90, assists_p90, xG 계열, 수비 지표)
+    시트 2: 주요 스탯 (PIS, goals_p90, assists_p90, xG 계열, 수비 지표)
     시트 3: 모델 점수 (가용한 s-score 컬럼)
     """
     # ── 시트 1: 기본정보 ───────────────────────────────────────────────────
@@ -246,7 +246,7 @@ def render():
             )
         # shots_p90, sot_p90 컬럼명 통일 (player_features 기준)
         _feat_cols = ["player", "season", "shots_p90", "sot_p90", "goal_contribution_rate"]
-        # alltime_stats에는 WAR/시장가치 직접 병합 (시즌 무관, 최근 시즌 기준)
+        # alltime_stats에는 PIS/시장가치 직접 병합 (시즌 무관, 최근 시즌 기준)
         if not _ratings_slim.empty and not alltime_stats.empty:
             _latest = (
                 _ratings_slim.sort_values("season", ascending=False)
@@ -363,7 +363,7 @@ def render():
     # ── 섹션 1: 핵심 지표 메트릭 카드 ─────────────────────────────────────
     st.markdown("---")
     st.markdown("### 핵심 지표 한눈에 보기")
-    st.caption("영입 의사결정에 직결되는 1순위 지표 (WAR · 시장가치 · 나이 · 골/90 · 어시스트/90)")
+    st.caption("영입 의사결정에 직결되는 1순위 지표 (PIS · 시장가치 · 나이 · 골/90 · 어시스트/90)")
 
     primary_available = {
         k: v for k, v in SCOUT_PRIMARY.items() if v in compare_df.columns
@@ -482,7 +482,7 @@ def render():
     # ── 섹션 4: 상세 통계 테이블 (스카우팅 우선순위 순) ───────────────────
     st.markdown("---")
     st.markdown("### 상세 통계 (스카우팅 우선순위 순)")
-    st.caption("WAR · 시장가치 · 나이 → 공격 지표 → 수비/기여 지표 순 정렬")
+    st.caption("PIS · 시장가치 · 나이 → 공격 지표 → 수비/기여 지표 순 정렬")
 
     stat_display = []
     available_table = {
@@ -547,7 +547,7 @@ def render():
             </div>""",
             unsafe_allow_html=True,
         )
-        st.caption("💡 WAR 기준 자동 판정. 최종 결정은 포지션 필요도·예산·나이를 종합 판단하세요.")
+        st.caption("💡 PIS 기준 자동 판정. 최종 결정은 포지션 필요도·예산·나이를 종합 판단하세요.")
 
         # 즉시 분석 & 쇼트리스트 버튼
         btn_c1, btn_c2, btn_c3 = st.columns([1, 1, 2])
@@ -567,7 +567,7 @@ def render():
                 }
                 st.success(f"✅ {best_player} 쇼트리스트에 추가했습니다.")
     else:
-        st.info("WAR 데이터가 없어 자동 추천을 생성할 수 없습니다. 상세 통계를 직접 비교하세요.")
+        st.info("PIS 데이터가 없어 자동 추천을 생성할 수 없습니다. 상세 통계를 직접 비교하세요.")
 
     # ── 섹션 6: Excel 내보내기 ─────────────────────────────────────────────
     st.markdown("---")

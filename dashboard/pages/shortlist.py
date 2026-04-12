@@ -177,7 +177,7 @@ def render():
         player = srow["선수"]
         priority = srow.get("우선순위", "")
         team = srow.get("팀", "")
-        war = srow.get("WAR", "-")
+        war = srow.get("PIS", "-")
         tier = srow.get("등급", "")
         mv = srow.get("시장가치", "-")
         growth = srow.get("성장예측", "")
@@ -217,7 +217,7 @@ def render():
 
     # 테이블 뷰 (접기)
     with st.expander("📋 테이블로 보기"):
-        show_cols = [c for c in ["선수", "팀", "나이", "WAR", "등급", "시장가치", "성장예측", "S2", "우선순위", "메모"] if c in sl_df.columns]
+        show_cols = [c for c in ["선수", "팀", "나이", "PIS", "등급", "시장가치", "성장예측", "S2", "우선순위", "메모"] if c in sl_df.columns]
         st.dataframe(sl_df[show_cols].reset_index(drop=True), use_container_width=True, hide_index=True)
 
     # ── 개별 선수 관리 ───────────────────────────────────────────────────

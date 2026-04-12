@@ -1,6 +1,6 @@
-"""팀 프로파일 - 구단별 선수단 구성 및 WAR 분석.
+"""팀 프로파일 - 구단별 선수단 구성 및 PIS 분석.
 
-스카우트가 영입 후보 팀의 선수단 구성, 포지션별 WAR, 세대 교체 필요성을
+스카우트가 영입 후보 팀의 선수단 구성, 포지션별 PIS, 세대 교체 필요성을
 한눈에 파악할 수 있는 팀 분석 페이지.
 """
 import pandas as pd
@@ -52,7 +52,7 @@ def _simplify_pos(pos: str) -> str:
 
 def render():
     st.title("🏟️ 팀 프로파일")
-    st.caption("구단별 선수단 구성, 포지션별 WAR 강점/약점, 세대 교체 현황을 분석합니다.")
+    st.caption("구단별 선수단 구성, 포지션별 PIS 강점/약점, 세대 교체 현황을 분석합니다.")
 
     ratings = load_scout_ratings()
     team_profiles = _load_team_profiles()
@@ -126,21 +126,21 @@ def render():
         st.caption(f"{sel_season} 시즌 · {n_players}명")
 
     hm1, hm2, hm3, hm4 = st.columns(4)
-    hm1.metric("평균 WAR", f"{avg_war:.1f}" if avg_war else "-")
+    hm1.metric("평균 PIS", f"{avg_war:.1f}" if avg_war else "-")
     hm2.metric("평균 연령", f"{avg_age:.1f}" if avg_age else "-")
     hm3.metric("총 스쿼드 가치", f"€{total_mv/1_000_000:.0f}M" if total_mv else "-")
     hm4.metric("스쿼드 규모", n_players)
 
     st.markdown("---")
 
-    # ── 포지션별 WAR 분석 ──────────────────────────────────────────────
-    st.markdown("### 📊 포지션별 WAR 강점 분석")
+    # ── 포지션별 PIS 분석 ──────────────────────────────────────────────
+    st.markdown("### 📊 포지션별 PIS 강점 분석")
 
     pos_war = (
         team_df.groupby("pos_simple")["war"]
         .agg(["mean", "max", "count"])
         .reset_index()
-        .rename(columns={"pos_simple": "포지션", "mean": "평균 WAR", "max": "최고 WAR", "count": "선수 수"})
+        .rename(columns={"pos_simple": "포지션", "mean": "평균 PIS", "max": "최고 PIS", "count": "선수 수"})
     )
     pos_war["정렬"] = pos_war["포지션"].map(POS_ORDER).fillna(9)
     pos_war = pos_war.sort_values("정렬")
@@ -151,12 +151,12 @@ def render():
         pos_name = prow["포지션"]
         color = POS_COLORS.get(pos_name, "#888")
         fig_pos.add_trace(go.Bar(
-            x=[prow["평균 WAR"]],
+            x=[prow["평균 PIS"]],
             y=[pos_name],
             orientation="h",
             marker_color=color,
             name=pos_name,
-            text=[f"{prow['평균 WAR']:.1f}"],
+            text=[f"{prow['평균 PIS']:.1f}"],
             textposition="outside",
             showlegend=False,
         ))
@@ -176,7 +176,7 @@ def render():
         font_color="#fff",
         margin=dict(t=20, b=20, l=60, r=60),
         height=220,
-        xaxis_title="평균 WAR",
+        xaxis_title="평균 PIS",
         yaxis_title="",
     )
     st.plotly_chart(fig_pos, use_container_width=True, theme=None)
@@ -263,7 +263,7 @@ def render():
                     color=color,
                     opacity=0.85,
                 ),
-                hovertemplate="<b>%{text}</b><br>나이: %{x}<br>WAR: %{y:.1f}<extra></extra>",
+                hovertemplate="<b>%{text}</b><br>나이: %{x}<br>PIS: %{y:.1f}<extra></extra>",
             ))
         fig_bubble.add_hline(y=50, line_dash="dot", line_color="#888", annotation_text="WAR 50 기준선")
         fig_bubble.update_layout(
@@ -343,15 +343,15 @@ def render():
     gap_rows = []
     for _, grow in pos_gap.iterrows():
         pos_name = grow["포지션"]
-        team_avg = grow["평균 WAR"]
+        team_avg = grow["평균 PIS"]
         epl_avg = epl_pos_avg.get(pos_name, None)
         if epl_avg:
             gap = team_avg - epl_avg
             badge = "🟢 강점" if gap > 5 else ("🟡 보통" if gap > -5 else "🔴 약점")
             gap_rows.append({
                 "포지션": pos_name,
-                "팀 평균 WAR": round(team_avg, 1),
-                "EPL 평균 WAR": round(epl_avg, 1),
+                "팀 평균 PIS": round(team_avg, 1),
+                "EPL 평균 PIS": round(epl_avg, 1),
                 "격차": f"{gap:+.1f}",
                 "평가": badge,
             })

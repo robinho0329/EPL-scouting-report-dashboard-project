@@ -77,7 +77,7 @@ def render():
         st.metric("이적 분석", f"{len(transfers):,}건" if len(transfers) else "N/A")
 
     st.caption(
-        "💡 WAR(0~100 백분위, 평균=50·살라급=99) | "
+        "💡 PIS(0~100 백분위, 포지션 내 평균=50·살라급=99) | "
         "숨은 보석=PIS 상위+시장가치 하위 | "
         "저평가=예측가 1.5배 이상 | "
         "하락 주의보=28세++60%+"
@@ -161,9 +161,9 @@ def render():
 
     st.markdown("---")
 
-    # ── Top WAR 선수 (최신 시즌) ──
+    # ── Top PIS 선수 (최신 시즌) ──
     if len(ratings):
-        st.subheader("Top WAR 선수 (맞춤 필터 적용)")
+        st.subheader("Top PIS 선수 (맞춤 필터 적용)")
         latest = ratings[ratings["season"] == "2024/25"].copy()
         if len(latest) == 0:
             latest = ratings[ratings["season"] == ratings["season"].max()].copy()

@@ -1,6 +1,6 @@
-"""Scout Player Analysis - S1 WAR + S2 시장가치 + S6 하락세 통합 선수 분석
+"""Scout Player Analysis - S1 PIS + S2 시장가치 + S6 하락세 통합 선수 분석
 
-선수 개별 프로필을 WAR/시장가치/하락 리스크 관점에서 종합 분석.
+선수 개별 프로필을 PIS/시장가치/하락 리스크 관점에서 종합 분석.
 """
 import streamlit as st
 import pandas as pd
@@ -51,7 +51,7 @@ def render():
     st.title("선수 분석")
     st.markdown(
         "**김태현 스카우트 관점** — 중위권 구단 예산(£30-50M/시즌) 기준, "
-        "WAR·시장가치·하락 리스크를 통합해 가성비 영입 및 계약 연장 판단을 지원합니다."
+        "PIS·시장가치·하락 리스크를 통합해 가성비 영입 및 계약 연장 판단을 지원합니다."
     )
 
     tab1, tab2, tab3, tab4 = st.tabs([
@@ -83,7 +83,7 @@ def render():
 | **35 미만 (하위 35%)** | 대체 선수 이하 | 방출/계약 연장 재검토 |
 
 - **p90 기준**: 90분당 수치로 출전시간 편향을 제거. 주전/벤치 공정 비교 가능
-- **WAR 구성**: 공격기여(골·도움) 60% + 수비기여(태클·인터셉트) 25% + 출전안정성 15%
+- **PIS 구성**: 공격기여(골·도움) 60% + 수비기여(태클·인터셉트) 25% + 출전안정성 15%
             """)
         ratings = load_scout_ratings()
         if len(ratings) == 0:
@@ -197,7 +197,7 @@ def render():
         disp = df[available].head(30).copy()
         disp = disp.rename(columns={c: COL_RENAME.get(c, c) for c in disp.columns})
         st.dataframe(
-            disp.style.format({"WAR": "{:.1f}", "골/90분": "{:.2f}",
+            disp.style.format({"PIS": "{:.1f}", "골/90분": "{:.2f}",
                 "어시/90분": "{:.2f}", "태클/90분": "{:.2f}", "인터셉트/90분": "{:.2f}"}, na_rep="-"),
             use_container_width=True, height=400,
         )
@@ -234,9 +234,9 @@ def render():
 
 **차트 읽는 법:**
 - **X축(시장가치)**: 왼쪽으로 갈수록 저렴
-- **Y축(WAR)**: 위로 갈수록 팀 기여도 높음
+- **Y축(PIS)**: 위로 갈수록 팀 기여도 높음
 - **점 크기**: 출전시간 — 클수록 많이 뛰고 있음 (안정적 주전)
-- **최우선 타겟**: 좌측 상단 (저렴 + 고WAR + 큰 점)
+- **최우선 타겟**: 좌측 상단 (저렴 + 고PIS + 큰 점)
 
 **영입 시 추가 확인 사항:**
 - 나이가 24세 이하면 성장 여지까지 있어 더욱 가치 있음
@@ -277,11 +277,11 @@ def render():
                         marker=dict(size=norm, color=pos_color.get(pos, "#888"), opacity=0.7),
                         text=pdf["player"].tolist(),
                         customdata=list(zip(pdf["team"].tolist(), pdf["age"].tolist(), pdf["total_min"].fillna(0).tolist())),
-                        hovertemplate="<b>%{text}</b><br>팀: %{customdata[0]}<br>나이: %{customdata[1]}<br>출전시간: %{customdata[2]:.0f}분<br>시장가치: €%{x:,.0f}<br>WAR: %{y:.1f}<extra>%{fullData.name}</extra>",
+                        hovertemplate="<b>%{text}</b><br>팀: %{customdata[0]}<br>나이: %{customdata[1]}<br>출전시간: %{customdata[2]:.0f}분<br>시장가치: €%{x:,.0f}<br>PIS: %{y:.1f}<extra>%{fullData.name}</extra>",
                     ))
                 fig.add_annotation(
                     x=0.02, y=0.98, xref="paper", yref="paper",
-                    text="← 저렴 + 고WAR = 최우선 타겟", showarrow=False,
+                    text="← 저렴 + 고PIS = 최우선 타겟", showarrow=False,
                     font=dict(size=11, color=EPL_MAGENTA), bgcolor="#1a1a2e", bordercolor=EPL_MAGENTA,
                 )
                 fig.update_layout(
@@ -302,7 +302,7 @@ def render():
                 disp = disp.rename(columns={c: COL_RENAME.get(c, c) for c in disp.columns})
                 st.dataframe(disp, use_container_width=True, hide_index=True)
                 st.caption(
-                    "💡 **스카우터 포인트**: 나이 24세 이하 + WAR 3.0+ + 시장가치 €5M 미만 선수가 최고의 가성비 타겟. "
+                    "💡 **스카우터 포인트**: 나이 24세 이하 + PIS 3.0+ + 시장가치 €5M 미만 선수가 최고의 가성비 타겟. "
                     "팀 tier가 bottom6이면 이적 후 성장 가능성이 더 큽니다."
                 )
 
@@ -407,9 +407,9 @@ def render():
                 disp_t["predicted_value"] = disp_t["predicted_value"].apply(lambda x: f"€{x/1e6:.1f}M" if x >= 1e6 else f"€{x/1e3:.0f}K")
                 disp_t["value_ratio"] = disp_t["value_ratio"].apply(lambda x: f"{x:.2f}x")
                 disp_t["war_norm"] = disp_t["war_norm"].apply(lambda x: f"{x:.1f}")
-                disp_t.columns = ["선수", "팀", "포지션", "나이", "실제 시장가치", "예측 시장가치", "가치 비율", "WAR"]
+                disp_t.columns = ["선수", "팀", "포지션", "나이", "실제 시장가치", "예측 시장가치", "가치 비율", "PIS"]
                 st.dataframe(disp_t, use_container_width=True, hide_index=True)
-                st.caption("💡 WAR 90+ = 리그 최상위권. Neco Williams(91.5), Youri Tielemans(91.1), Yoane Wissa(90.0)가 고WAR-저가 대표 사례.")
+                st.caption("💡 PIS 90+ = 리그 최상위권. Neco Williams(91.5), Youri Tielemans(91.1), Yoane Wissa(90.0)가 고PIS-저가 대표 사례.")
 
         with sub2:
             overval = load_overvalued()
@@ -508,7 +508,7 @@ def render():
             st.markdown("### 🎯 PIS 순위 vs 시장가치 순위 역전 분석")
             st.markdown(
                 "S2 모델이 잡지 못한 **FW/MID 저평가 후보**를 찾는 보조 지표입니다. "
-                "포지션별로 WAR(실력) 순위 백분위에서 시장가치 순위 백분위를 뺀 값이 클수록 "
+                "포지션별로 PIS(기여도) 순위 백분위에서 시장가치 순위 백분위를 뺀 값이 클수록 "
                 "**실력에 비해 몸값이 저렴한 선수**입니다."
             )
             with st.expander("📖 분석 방법 설명", expanded=False):
@@ -629,7 +629,7 @@ S2는 회귀 모델이 예측한 가격 vs 실제 가격을 비교합니다.
                             hovertemplate=(
                                 "<b>%{text}</b><br>"
                                 "시장가치: €%{x:.1f}M<br>"
-                                "WAR: %{y:.1f}<br>"
+                                "PIS: %{y:.1f}<br>"
                                 "저평가 Gap: %{customdata[0]:.1f}%<br>"
                                 "%{customdata[1]}<br>"
                                 "포지션: %{customdata[2]}<extra></extra>"
@@ -637,7 +637,7 @@ S2는 회귀 모델이 예측한 가격 vs 실제 가격을 비교합니다.
                         ))
                         fig.update_layout(
                             xaxis_title="시장가치 (백만 EUR)",
-                            yaxis_title="WAR (백분위)",
+                            yaxis_title="PIS (포지션 내 백분위)",
                             height=480,
                             plot_bgcolor="#1a1a2e", paper_bgcolor="#0d0d1a", font_color="#ffffff",
                             margin=dict(l=10, r=10, t=30, b=10),

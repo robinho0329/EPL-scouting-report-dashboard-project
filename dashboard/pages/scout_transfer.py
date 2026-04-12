@@ -167,7 +167,7 @@ ARCHETYPE_INFO = {
         "weaknesses": "수비 가담 최하위, 수비 액션 0.82회 (FW 최저)",
         "scout_tip": (
             "팀 예산의 최우선 투자 포지션. 슈팅 전환율(실제골÷슈팅)로 진짜 결정력 확인 필수. "
-            "고령 스트라이커는 WAR 하락세 체크 후 계약 기간 단기로 제한 권장."
+            "고령 스트라이커는 PIS 하락세 체크 후 계약 기간 단기로 제한 권장."
         ),
         "key_stats": "골 0.51/90분, 슈팅 2.71회, 어시스트 0.23/90분, 평균나이 26.2세",
         "rep_players": ["Mohamed Salah", "Alexander Isak", "Ollie Watkins"],
@@ -263,7 +263,7 @@ ARCHETYPE_INFO = {
         "strengths": "공수 균형, 키패스+태클 동시 기여, 멀티롤",
         "weaknesses": "창의적 PM·딥라잉PM 대비 특화 강점 부재",
         "scout_tip": (
-            "WAR 대비 시장가치가 낮은 경우가 많은 숨은 보석 타입. "
+            "PIS 대비 시장가치가 낮은 경우가 많은 숨은 보석 타입. "
             "로테이션 자원이나 시스템 안정화 목적 영입에 가성비 최고."
         ),
         "key_stats": "키패스 1.80회, 태클 1.27회, 골 0.08/90분, 어시스트 0.09/90분",
@@ -1007,7 +1007,7 @@ def render():
                 _sh_cols = [c for c in _sh_cols if c in _short.columns]
                 _sh_disp = _short[_sh_cols].copy()
                 _sh_rename = {"player":"선수","team":"팀","pos_simple":"포지션","age":"나이",
-                              "prob_improving":"개선확률","war":"WAR"}
+                              "prob_improving":"개선확률","war":"PIS"}
                 if _mv_col:
                     _sh_rename[_mv_col[0]] = "가치비율"
                 _sh_disp = _sh_disp.rename(columns=_sh_rename)
@@ -1039,7 +1039,7 @@ def render():
             gv4_base = growth_v4_df.copy()
             ratings_df = load_scout_ratings()
 
-            # 탑클래스 판별: 최근 3시즌 평균 WAR ≥ 93 + 평균 MV ≥ 50M + 2시즌 이상
+            # 탑클래스 판별: 최근 3시즌 평균 PIS ≥ 93 + 평균 MV ≥ 50M + 2시즌 이상
             ELITE_WAR_THRESHOLD = 93.0
             ELITE_MV_THRESHOLD  = 50_000_000
             elite_players: set = set()
@@ -1230,7 +1230,7 @@ def render():
                     ))
 
                 sc_fig.update_layout(
-                    title=dict(text="나이 vs 개선 확률  (버블 크기 = WAR | ★ = 탑클래스 | 이름 = PIS 상위 10)", font=dict(size=13)),
+                    title=dict(text="나이 vs 개선 확률  (버블 크기 = PIS | ★ = 탑클래스 | 이름 = PIS 상위 10)", font=dict(size=13)),
                     xaxis=dict(title="나이", gridcolor="#333"),
                     yaxis=dict(
                         title="개선 확률", tickformat=".0%", gridcolor="#333",
@@ -1276,7 +1276,7 @@ def render():
                         lambda x: "🔴" if x == 1 else "🟢"
                     )
 
-                # WAR 기준 내림차순 정렬
+                # PIS 기준 내림차순 정렬
                 sort_col = "war" if "war" in tbl.columns else ("prob_improving" if "prob_improving" in tbl.columns else None)
                 if sort_col:
                     tbl = tbl.sort_values(sort_col, ascending=False)
@@ -1506,7 +1506,7 @@ def render():
 
         # ── P8 이적 적응 리스크 분석 ─────────────────────────────────────────
         st.markdown("### P8 이적 적응 리스크 분석 (선수별 예측)")
-        st.caption("P8 모델이 예측한 이적 후 WAR 변화량과 적응 리스크 등급을 선수별로 확인합니다.")
+        st.caption("P8 모델이 예측한 이적 후 PIS 변화량과 적응 리스크 등급을 선수별로 확인합니다.")
 
         adapt_df = load_transfer_adapt_predictions()
         if adapt_df.empty:
@@ -1541,7 +1541,7 @@ def render():
                 "from_team": "이전팀",
                 "to_team": "이적팀",
                 "style_distance": "전술 거리",
-                "predicted_war_change": "예측 WAR 변화",
+                "predicted_war_change": "예측 PIS 변화",
                 "adapt_risk": "적응 리스크",
             }
             p8_disp = p8_disp.rename(columns={k: v for k, v in p8_rename.items() if k in p8_disp.columns})
@@ -1549,13 +1549,13 @@ def render():
             # 수치 포맷
             if "전술 거리" in p8_disp.columns:
                 p8_disp["전술 거리"] = p8_disp["전술 거리"].apply(lambda x: f"{x:.3f}" if pd.notna(x) else "N/A")
-            if "예측 WAR 변화" in p8_disp.columns:
-                p8_disp["예측 WAR 변화"] = p8_disp["예측 WAR 변화"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "N/A")
+            if "예측 PIS 변화" in p8_disp.columns:
+                p8_disp["예측 PIS 변화"] = p8_disp["예측 PIS 변화"].apply(lambda x: f"{x:+.2f}" if pd.notna(x) else "N/A")
 
             st.dataframe(p8_disp, use_container_width=True, hide_index=True)
             st.caption(
                 "💡 **스카우터 포인트**: 전술 거리가 클수록 적응이 어렵습니다. "
-                "예측 WAR 변화가 음수이면 이적 후 성과 하락이 예상됩니다. "
+                "예측 PIS 변화가 음수이면 이적 후 성과 하락이 예상됩니다. "
                 "고위험(🔴) 선수는 임대 먼저 제안하거나 이적료 할인 협상 근거로 활용하세요."
             )
 
@@ -1670,7 +1670,7 @@ def render():
                     sc1.metric("현 팀", p_team or "-")
                     sc2.metric("현 팀 순위", f"{from_rank}위" if p_team else "-")
                     sc3.metric("나이", f"{p_age}세")
-                    sc4.metric("WAR", f"{p_war:.1f}")
+                    sc4.metric("PIS", f"{p_war:.1f}")
                     sc5.metric("등급", p_tier or "-")
                     if p_mv > 0:
                         st.caption(
@@ -1758,7 +1758,7 @@ def render():
                             S5 모델 피처 중요도 기반 가중치 적용."""
                             score = 50.0
 
-                            # WAR 기여 (war_old 중요도 0.061)
+                            # PIS 기여 (war_old 중요도 0.061)
                             war_bonus = min(20, max(-10, (war - 3.0) * 5))
                             score += war_bonus
 
@@ -1936,7 +1936,7 @@ def render():
                     elif sim_age >= 28:
                         age_risk_note = (
                             f"**나이 고려**: {sim_age}세는 전성기 후반입니다. "
-                            "3년 이상 장기 계약 시 WAR 하락 리스크를 반드시 검토하세요."
+                            "3년 이상 장기 계약 시 PIS 하락 리스크를 반드시 검토하세요."
                         )
                     elif sim_age <= 21:
                         age_risk_note = (
@@ -1952,14 +1952,14 @@ def render():
                         )
                     elif sim_rank_gap >= 5:
                         rank_note = (
-                            "**하위팀 이적**: 팀 수준 하락은 적응은 용이하나 WAR 지표 자체가 낮아질 수 있습니다. "
+                            "**하위팀 이적**: 팀 수준 하락은 적응은 용이하나 PIS 지표 자체가 낮아질 수 있습니다. "
                             "개인 성과 지표로 재계약 조건을 설정하세요."
                         )
 
                     minutes_note = ""
                     if sim_minutes_pct < 40:
                         minutes_note = (
-                            "**출전 시간 경고**: 예상 출전 비율이 40% 미만이면 WAR 통계 신뢰도가 낮아집니다. "
+                            "**출전 시간 경고**: 예상 출전 비율이 40% 미만이면 PIS 통계 신뢰도가 낮아집니다. "
                             "주전 경쟁 환경을 사전에 파악하세요."
                         )
 
@@ -2091,11 +2091,11 @@ def render():
                                 help=f"{sim_age}±3세 {len(age_similar)}건",
                             )
                             rs1.metric(
-                                "예상 WAR 변화 (전체)",
+                                "예상 PIS 변화 (전체)",
                                 f"{avg_war_all:+.2f}" if avg_war_all is not None else "-",
                             )
                             rs2.metric(
-                                "예상 WAR 변화 (유사 연령)",
+                                "예상 PIS 변화 (유사 연령)",
                                 f"{avg_war_age:+.2f}" if avg_war_age is not None else "-",
                             )
 
@@ -2126,7 +2126,7 @@ def render():
                                     "from_team": "이전팀",
                                     "season_new": "시즌",
                                     "age": "나이",
-                                    "predicted_war_change": "예측 WAR 변화",
+                                    "predicted_war_change": "예측 PIS 변화",
                                     "adapt_risk": "적응 리스크",
                                 }
                                 disp = disp.rename(
@@ -2137,7 +2137,7 @@ def render():
                                 st.info("나이 유사 사례(±3세)가 없습니다.")
 
                     st.caption(
-                        "적응 점수: WAR(27%), 출전 시간(18%), 나이(20%), 리그 수준 차이(20%), "
+                        "적응 점수: PIS(27%), 출전 시간(18%), 나이(20%), 리그 수준 차이(20%), "
                         "전술 거리(15%) 기반 통계 모델 추정값. S5 모델 피처 중요도 적용."
                     )
 

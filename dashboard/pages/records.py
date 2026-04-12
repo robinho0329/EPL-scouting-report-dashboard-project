@@ -36,7 +36,7 @@ def render():
         st.markdown("### 🏆 역대 PIS 명전")
         st.caption("전 시즌 PIS 기준 역대 최고 선수들 — 스카우팅 레퍼런스 기준")
 
-        # 선수별 최고 WAR 시즌 기준 집계
+        # 선수별 최고 PIS 시즌 기준 집계
         war_best = (
             scout_ratings.dropna(subset=["war"])
             .sort_values("war", ascending=False)

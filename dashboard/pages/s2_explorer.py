@@ -80,7 +80,7 @@ def render():
 
     with fc4:
         min_war = st.slider(
-            "최소 WAR 백분위",
+            "최소 PIS 백분위",
             min_value=0, max_value=100,
             value=30,
             key="s2_min_war",

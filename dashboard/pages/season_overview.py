@@ -115,7 +115,7 @@ def render():
                         top_apps = top_apps.rename(columns={"player": "선수", "team": "팀", "mp": "경기"})
                         st.dataframe(top_apps, hide_index=True, use_container_width=True)
 
-            st.caption("💡 WAR(대체불가 가치) 높은 선수가 실제 팀 기여도가 높습니다. 실제 영입 판단은 WAR 기준으로 하세요.")
+            st.caption("💡 PIS(기여 점수) 높은 선수가 실제 팀 기여도가 높습니다. 실제 영입 판단은 PIS 기준으로 하세요.")
 
             # ── 즉시 분석 연동 ─────────────────────────────────────────────
             st.markdown("---")
