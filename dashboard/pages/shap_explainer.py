@@ -41,20 +41,27 @@ FEATURE_NAMES_KO = [FEATURE_LABELS[f] for f in FEATURE_NAMES]
 
 # ── 데이터/모델 캐시 로더 ─────────────────────────────────────────────────────
 
-@st.cache_resource(show_spinner="S1 WAR 모델 로드 중...")
+@st.cache_resource(show_spinner="S1 PIS 모델 로드 중...")
 def _load_model():
     """XGB 모델 + pos 인코더 로드."""
     xgb_path = _MODEL_DIR / "xgb_model.pkl"
     enc_path = _MODEL_DIR / "pos_encoder.pkl"
     if not xgb_path.exists():
         return None, None
-    with open(xgb_path, "rb") as f:
-        model = pickle.load(f)
-    enc = None
-    if enc_path.exists():
-        with open(enc_path, "rb") as f:
-            enc = pickle.load(f)
-    return model, enc
+    try:
+        with open(xgb_path, "rb") as f:
+            model = pickle.load(f)
+        enc = None
+        if enc_path.exists():
+            with open(enc_path, "rb") as f:
+                enc = pickle.load(f)
+        return model, enc
+    except (ModuleNotFoundError, ImportError) as e:
+        st.warning(f"모델 로드 실패: {e}. xgboost 패키지가 필요합니다.")
+        return None, None
+    except Exception as e:
+        st.warning(f"모델 로드 중 오류: {e}")
+        return None, None
 
 
 @st.cache_data(show_spinner="선수 데이터 로드 중...")
