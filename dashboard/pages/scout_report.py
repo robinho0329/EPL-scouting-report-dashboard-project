@@ -92,6 +92,8 @@ def _generate_scout_pdf(data: dict) -> bytes:
         "가치비율": "Value Ratio",
         "내년 예측": "Next Yr Pred",
         "PIS ": "PIS ",
+        "€": "EUR ",
+        "£": "GBP ",
     }
 
     def _to_latin(text: str) -> str:
@@ -155,7 +157,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
     pdf.set_x(14)
     pdf.set_text_color(0, 255, 135)
     pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 6, f"Market Value: {data.get('market_value', 'N/A')}", ln=True)
+    pdf.cell(0, 6, _to_latin(f"Market Value: {data.get('market_value', 'N/A')}"), ln=True)
 
     pdf.ln(10)
 
