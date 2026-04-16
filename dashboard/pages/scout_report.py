@@ -73,9 +73,26 @@ def _generate_scout_pdf(data: dict) -> bytes:
     Returns:
         PDF 바이트 데이터
     """
+    import datetime as _dt
     from fpdf import FPDF
 
-    # 한국어 → 영어 변환 (Helvetica는 Latin-1만 지원)
+    # ── 유니코드 폰트 경로 탐색 (€, £ 등 지원) ──────────────────────
+    _UNICODE_FONT_CANDIDATES = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",          # Linux/Ubuntu (Streamlit Cloud)
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+        "C:/Windows/Fonts/calibri.ttf",                              # Windows
+        "C:/Windows/Fonts/arial.ttf",
+        "/System/Library/Fonts/Supplemental/Arial.ttf",              # macOS
+    ]
+
+    _unicode_font_path = None
+    for _fp in _UNICODE_FONT_CANDIDATES:
+        if Path(_fp).exists():
+            _unicode_font_path = _fp
+            break
+
+    # ── 텍스트 안전 변환 헬퍼 ────────────────────────────────────────
     _kor_map = {
         "영입 강력 권고": "STRONGLY RECOMMENDED",
         "영입 긍정 검토": "POSITIVE CONSIDERATION",
@@ -92,100 +109,143 @@ def _generate_scout_pdf(data: dict) -> bytes:
         "가치비율": "Value Ratio",
         "내년 예측": "Next Yr Pred",
         "PIS ": "PIS ",
-        "€": "EUR ",
-        "£": "GBP ",
     }
 
-    def _to_latin(text: str) -> str:
-        """한국어 텍스트를 영어로 변환 (Latin-1 안전 처리)."""
+    def _safe_str(text: str) -> str:
+        """텍스트를 폰트에 맞게 안전 변환."""
         if not text:
-            return text
+            return str(text) if text is not None else ""
+        text = str(text)
         for kor, eng in _kor_map.items():
             text = text.replace(kor, eng)
-        # 변환 후 남은 비 ASCII 문자 제거
+        if _unicode_font_path:
+            return text  # 유니코드 폰트 → 그대로 반환
+        # Helvetica fallback: latin-1 변환 (€ 등 유지 시도)
         return text.encode("latin-1", errors="replace").decode("latin-1")
+
+    # ── 색상 상수 ────────────────────────────────────────────────────
+    C_EPL_PURPLE  = (55, 0, 60)
+    C_EPL_MAGENTA = (233, 0, 82)
+    C_EPL_GREEN   = (0, 200, 100)
+    C_EPL_YELLOW  = (255, 200, 0)
+    C_DARK_BOX    = (26, 26, 46)
+    C_WHITE       = (255, 255, 255)
+    C_LIGHT_GRAY  = (245, 245, 250)   # 지표 행 배경
+    C_TEXT_DARK   = (30, 30, 50)      # 흰 배경 위 기본 텍스트
+    C_TEXT_LABEL  = (100, 100, 120)   # 레이블 (약간 회색)
+    C_TEXT_MUTED  = (120, 120, 140)   # 부연 설명
 
     class ScoutPDF(FPDF):
         """EPL 스카우트 리포트 PDF 레이아웃."""
+        def __init__(self, use_unicode: bool):
+            super().__init__()
+            self._use_unicode = use_unicode
+
+        def txt(self, text: str) -> str:
+            return _safe_str(text)
+
+        def set_f(self, style: str = "", size: int = 10):
+            """폰트 설정 단축."""
+            if self._use_unicode:
+                self.set_font("UniFont", style if style in ("B", "I") else "", size)
+            else:
+                self.set_font("Helvetica", style, size)
 
         def header(self):
-            # EPL 보라색 배경 헤더
-            self.set_fill_color(55, 0, 60)
+            self.set_fill_color(*C_EPL_PURPLE)
             self.rect(0, 0, 210, 22, "F")
-            self.set_text_color(233, 0, 82)
-            self.set_font("Helvetica", "B", 14)
+            self.set_text_color(*C_EPL_MAGENTA)
+            self.set_f("B", 14)
             self.set_xy(10, 5)
             self.cell(0, 12, "EPL SCOUT REPORT", align="L")
-            self.set_text_color(0, 255, 135)
-            self.set_font("Helvetica", "", 9)
+            self.set_text_color(*C_EPL_GREEN)
+            self.set_f("", 9)
             self.set_xy(0, 5)
             self.cell(200, 12, "Powered by EPL Analytics", align="R")
             self.ln(18)
 
         def footer(self):
             self.set_y(-12)
-            self.set_text_color(150, 150, 150)
-            self.set_font("Helvetica", "I", 8)
+            self.set_text_color(*C_TEXT_MUTED)
+            self.set_f("", 8)
             self.cell(0, 8, f"EPL Scouting Dashboard  |  Page {self.page_no()}", align="C")
 
-    pdf = ScoutPDF()
+    use_unicode = _unicode_font_path is not None
+    pdf = ScoutPDF(use_unicode=use_unicode)
+
+    if use_unicode:
+        pdf.add_font("UniFont", fname=_unicode_font_path)
+        try:
+            # Bold 버전 탐색 (없으면 Regular로 대체)
+            bold_path = _unicode_font_path.replace("Sans.ttf", "Sans-Bold.ttf").replace("Regular", "Bold")
+            if Path(bold_path).exists():
+                pdf.add_font("UniFont", style="B", fname=bold_path)
+            else:
+                pdf.add_font("UniFont", style="B", fname=_unicode_font_path)
+        except Exception:
+            pass
+
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
 
     # ── 생성일 / 시즌 ────────────────────────────────────────────────
-    import datetime as _dt
-    pdf.set_font("Helvetica", "", 8)
-    pdf.set_text_color(150, 150, 150)
+    pdf.set_f("", 8)
+    pdf.set_text_color(*C_TEXT_MUTED)
     pdf.cell(0, 6, f"Generated: {_dt.datetime.now().strftime('%Y-%m-%d %H:%M')}  |  Season: {data.get('season', '')}", ln=True)
     pdf.ln(2)
 
-    # ── 선수 기본 정보 박스 ──────────────────────────────────────────
-    pdf.set_fill_color(26, 26, 46)
-    pdf.set_draw_color(55, 0, 60)
+    # ── 선수 기본 정보 박스 (어두운 배경 → 흰 텍스트 OK) ────────────
+    pdf.set_fill_color(*C_DARK_BOX)
+    pdf.set_draw_color(*C_EPL_PURPLE)
     pdf.rect(10, pdf.get_y(), 190, 36, "FD")
 
-    pdf.set_text_color(255, 255, 255)
-    pdf.set_font("Helvetica", "B", 18)
+    pdf.set_text_color(*C_WHITE)
+    pdf.set_f("B", 18)
     pdf.set_xy(14, pdf.get_y() + 4)
-    pdf.cell(0, 10, data.get("player", ""), ln=True)
+    pdf.cell(0, 10, pdf.txt(data.get("player", "")), ln=True)
 
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_f("", 10)
     pdf.set_text_color(200, 200, 200)
     pdf.set_x(14)
-    pdf.cell(0, 6, f"{data.get('team', '')}  |  {data.get('pos', '')}  |  Age {data.get('age', '')}", ln=True)
+    pdf.cell(0, 6, pdf.txt(f"{data.get('team', '')}  |  {data.get('pos', '')}  |  Age {data.get('age', '')}"), ln=True)
 
     pdf.set_x(14)
-    pdf.set_text_color(0, 255, 135)
-    pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 6, _to_latin(f"Market Value: {data.get('market_value', 'N/A')}"), ln=True)
+    pdf.set_text_color(*C_EPL_GREEN)
+    pdf.set_f("B", 11)
+    pdf.cell(0, 6, pdf.txt(f"Market Value: {data.get('market_value', 'N/A')}"), ln=True)
 
     pdf.ln(10)
 
     # ── 헬퍼: 섹션 제목 ─────────────────────────────────────────────
     def section_title(title: str):
-        pdf.set_fill_color(55, 0, 60)
-        pdf.set_text_color(233, 0, 82)
-        pdf.set_font("Helvetica", "B", 11)
+        pdf.set_fill_color(*C_EPL_PURPLE)
+        pdf.set_text_color(*C_EPL_MAGENTA)
+        pdf.set_f("B", 11)
         pdf.set_x(10)
-        pdf.cell(190, 8, f"  {title}", fill=True, ln=True)
+        pdf.cell(190, 8, f"  {pdf.txt(title)}", fill=True, ln=True)
         pdf.ln(2)
 
-    # ── 헬퍼: 2열 지표 행 ──────────────────────────────────────────
+    # ── 헬퍼: 2열 지표 행 (흰 배경 → 어두운 텍스트) ─────────────────
     def metric_row(label1: str, val1: str, label2: str = "", val2: str = ""):
+        # 연한 회색 줄무늬 배경
+        y = pdf.get_y()
+        pdf.set_fill_color(*C_LIGHT_GRAY)
+        pdf.rect(10, y, 190, 7, "F")
+
         pdf.set_x(14)
-        pdf.set_text_color(150, 150, 150)
-        pdf.set_font("Helvetica", "", 9)
-        pdf.cell(45, 7, label1)
-        pdf.set_text_color(255, 255, 255)
-        pdf.set_font("Helvetica", "B", 9)
-        pdf.cell(50, 7, val1)
+        pdf.set_text_color(*C_TEXT_LABEL)
+        pdf.set_f("", 9)
+        pdf.cell(48, 7, pdf.txt(label1))
+        pdf.set_text_color(*C_TEXT_DARK)          # ← 흰 배경에 진한 텍스트
+        pdf.set_f("B", 9)
+        pdf.cell(47, 7, pdf.txt(str(val1)))
         if label2:
-            pdf.set_text_color(150, 150, 150)
-            pdf.set_font("Helvetica", "", 9)
-            pdf.cell(45, 7, label2)
-            pdf.set_text_color(255, 255, 255)
-            pdf.set_font("Helvetica", "B", 9)
-            pdf.cell(50, 7, val2)
+            pdf.set_text_color(*C_TEXT_LABEL)
+            pdf.set_f("", 9)
+            pdf.cell(48, 7, pdf.txt(label2))
+            pdf.set_text_color(*C_TEXT_DARK)      # ← 여기도 동일
+            pdf.set_f("B", 9)
+            pdf.cell(47, 7, pdf.txt(str(val2)))
         pdf.ln()
 
     # ── S1 PIS 평가 ─────────────────────────────────────────────────
@@ -193,7 +253,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
     metric_row("WAR (Percentile)", data.get("war", "N/A"), "Tier", data.get("tier", "N/A"))
     metric_row("Goals/90", data.get("goals_p90", "N/A"), "Assists/90", data.get("assists_p90", "N/A"))
     metric_row("Tackles/90", data.get("tackles_p90", "N/A"), "", "")
-    pdf.ln(3)
+    pdf.ln(4)
 
     # ── S2 시장가치 평가 ─────────────────────────────────────────────
     section_title("S2  Market Value Assessment")
@@ -204,95 +264,102 @@ def _generate_scout_pdf(data: dict) -> bytes:
         "neutral":            "Neutral - Not in undervalued/overvalued list",
     }
     s2_label = s2_status_map.get(data.get("s2_status", "neutral"), "N/A")
-    metric_row("Status", s2_label[:45] if len(s2_label) > 45 else s2_label, "", "")
-    metric_row("Estimated Fair Value", data.get("s2_pred_mv", "N/A"), "Value Ratio", data.get("s2_ratio", "N/A"))
-    pdf.ln(3)
+    metric_row("Status", s2_label[:42] if len(s2_label) > 42 else s2_label, "", "")
+    metric_row("Est. Fair Value", data.get("s2_pred_mv", "N/A"), "Value Ratio", data.get("s2_ratio", "N/A"))
+    pdf.ln(4)
 
     # ── S6 하락 위험 ─────────────────────────────────────────────────
     section_title("S6  Decline Risk Detection")
     decline_prob = data.get("decline_prob", "N/A")
-    metric_row("Decline Probability", decline_prob, "Growth Classification (P7)", data.get("growth_class", "N/A"))
-    # 위험 판정 텍스트
+    metric_row("Decline Probability", decline_prob, "Growth (P7)", data.get("growth_class", "N/A"))
+
     pdf.set_x(14)
     try:
-        prob_f = float(decline_prob.replace("%", "")) / 100
+        prob_f = float(str(decline_prob).replace("%", "")) / 100
         if prob_f >= 0.7:
             risk_text = "HIGH RISK: Short-term contract + performance clauses recommended"
-            pdf.set_text_color(233, 0, 82)
+            pdf.set_text_color(*C_EPL_MAGENTA)
         elif prob_f >= 0.5:
             risk_text = "MEDIUM RISK: Include performance monitoring clauses"
-            pdf.set_text_color(255, 215, 0)
+            pdf.set_text_color(180, 120, 0)       # 흰 배경에 보이는 진한 노란색
         else:
             risk_text = "LOW RISK: Stable. Long-term contract feasible"
-            pdf.set_text_color(0, 255, 135)
+            pdf.set_text_color(0, 140, 70)         # 흰 배경에 보이는 진한 초록색
     except (ValueError, AttributeError):
         risk_text = "Risk level: N/A"
-        pdf.set_text_color(200, 200, 200)
-    pdf.set_font("Helvetica", "B", 9)
-    pdf.cell(0, 7, risk_text, ln=True)
-    pdf.ln(3)
+        pdf.set_text_color(*C_TEXT_DARK)
+    pdf.set_f("B", 9)
+    pdf.cell(0, 7, pdf.txt(risk_text), ln=True)
+    pdf.ln(4)
 
     # ── 종합 판정 ────────────────────────────────────────────────────
     section_title("Overall Scout Verdict")
-    pdf.set_x(14)
     verdict_raw = data.get("verdict", "N/A")
-    verdict_en = _to_latin(verdict_raw)
+    verdict_en = _safe_str(verdict_raw)
     overall = data.get("overall_score", "N/A")
-    if "강력" in verdict_raw or "STRONGLY" in verdict_en:
-        pdf.set_text_color(0, 255, 135)
-    elif "긍정" in verdict_raw or "POSITIVE" in verdict_en:
-        pdf.set_text_color(255, 215, 0)
-    else:
-        pdf.set_text_color(233, 0, 82)
-    pdf.set_font("Helvetica", "B", 13)
-    pdf.cell(0, 9, f"{verdict_en}  ({overall})", ln=True)
-    pdf.ln(2)
 
-    # 항목별 점수
+    # 판정 배경 박스
+    if "STRONGLY" in verdict_en or "강력" in verdict_raw:
+        v_color = C_EPL_GREEN
+        v_bg    = (0, 80, 40)
+    elif "POSITIVE" in verdict_en or "긍정" in verdict_raw:
+        v_color = (255, 200, 0)
+        v_bg    = (80, 60, 0)
+    else:
+        v_color = C_EPL_MAGENTA
+        v_bg    = (80, 0, 20)
+
+    pdf.set_fill_color(*v_bg)
+    pdf.rect(10, pdf.get_y(), 190, 12, "F")
+    pdf.set_x(14)
+    pdf.set_text_color(*v_color)
+    pdf.set_f("B", 13)
+    pdf.cell(0, 12, f"{verdict_en}  ({overall})", ln=True)
+    pdf.ln(3)
+
+    # 항목별 점수 바
     score_items = data.get("score_items", [])
     for label, score, note in score_items:
-        label_en = _to_latin(str(label))
-        note_en = _to_latin(str(note))
-        pdf.set_x(14)
-        bar_w = int(score * 120)
+        label_en = _safe_str(str(label))
+        note_en  = _safe_str(str(note))
         y_bar = pdf.get_y() + 1
+        bar_w = int(score * 120)
+
         # 배경 바
-        pdf.set_fill_color(50, 50, 70)
-        pdf.rect(60, y_bar, 120, 4, "F")
+        pdf.set_fill_color(220, 220, 230)
+        pdf.rect(62, y_bar, 120, 4, "F")
         # 점수 바
-        color = (0, 200, 100) if score >= 0.7 else ((255, 200, 0) if score >= 0.5 else (200, 0, 60))
-        pdf.set_fill_color(*color)
+        bar_color = C_EPL_GREEN if score >= 0.7 else (C_EPL_YELLOW if score >= 0.5 else (200, 0, 60))
+        pdf.set_fill_color(*bar_color)
         if bar_w > 0:
-            pdf.rect(60, y_bar, bar_w, 4, "F")
-        # 레이블
-        pdf.set_text_color(180, 180, 180)
-        pdf.set_font("Helvetica", "", 8)
-        pdf.cell(44, 6, label_en)
-        pdf.set_text_color(255, 255, 255)
-        pdf.set_font("Helvetica", "B", 8)
+            pdf.rect(62, y_bar, bar_w, 4, "F")
+
+        pdf.set_x(14)
+        pdf.set_text_color(*C_TEXT_DARK)          # ← 흰 배경에 진한 텍스트
+        pdf.set_f("", 8)
+        pdf.cell(46, 6, label_en)
         pdf.cell(120, 6, "")
-        pdf.set_text_color(200, 200, 200)
-        pdf.set_font("Helvetica", "", 8)
+        pdf.set_text_color(*C_TEXT_MUTED)
         pdf.cell(0, 6, f"  {note_en}", ln=True)
     pdf.ln(4)
 
-    # ── 쇼트리스트 메모 (있을 때만) ─────────────────────────────────
-    note = _to_latin(data.get("shortlist_note", ""))
-    priority = _to_latin(data.get("shortlist_priority", ""))
+    # ── 쇼트리스트 메모 ─────────────────────────────────────────────
+    note     = _safe_str(data.get("shortlist_note", ""))
+    priority = _safe_str(data.get("shortlist_priority", ""))
     if note or priority:
         section_title("Scout Notes")
         if priority:
             metric_row("Priority", priority, "", "")
         if note:
             pdf.set_x(14)
-            pdf.set_text_color(220, 220, 220)
-            pdf.set_font("Helvetica", "", 9)
+            pdf.set_text_color(*C_TEXT_DARK)      # ← 흰 배경에 진한 텍스트
+            pdf.set_f("", 9)
             pdf.multi_cell(182, 6, f"Memo: {note}")
         pdf.ln(2)
 
     # ── 면책 문구 ────────────────────────────────────────────────────
-    pdf.set_text_color(100, 100, 100)
-    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*C_TEXT_MUTED)
+    pdf.set_f("", 7)
     pdf.set_x(10)
     pdf.multi_cell(
         190, 5,
