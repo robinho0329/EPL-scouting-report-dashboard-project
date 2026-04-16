@@ -73,8 +73,11 @@ def _generate_scout_pdf(data: dict) -> bytes:
     Returns:
         PDF 바이트 데이터
     """
+    import io
     import datetime as _dt
     from fpdf import FPDF
+    from PIL import Image as _PILImage
+    from dashboard.utils.image_utils import get_player_image, get_team_logo
 
     # ── 유니코드 폰트 경로 탐색 (€, £ 등 지원) ──────────────────────
     _UNICODE_FONT_CANDIDATES = [
@@ -188,6 +191,33 @@ def _generate_scout_pdf(data: dict) -> bytes:
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
 
+    # ── 이미지 헬퍼: PIL Image → BytesIO ────────────────────────────
+    def _img_buf(pil_img: "_PILImage.Image", fmt: str = "JPEG", bg=None) -> io.BytesIO:
+        """PIL Image를 BytesIO로 변환. 투명 배경(RGBA) 처리 포함."""
+        if pil_img.mode == "RGBA" and fmt == "JPEG":
+            background = _PILImage.new("RGB", pil_img.size, bg or C_DARK_BOX)
+            background.paste(pil_img, mask=pil_img.split()[3])
+            pil_img = background
+        else:
+            pil_img = pil_img.convert("RGB")
+        buf = io.BytesIO()
+        pil_img.save(buf, format=fmt, quality=85)
+        buf.seek(0)
+        return buf
+
+    # ── 선수 사진 & 팀 로고 로드 ────────────────────────────────────
+    _player_name = data.get("player", "")
+    _team_name   = data.get("team", "")
+
+    try:
+        _player_img = get_player_image(_player_name, size=(200, 200))
+    except Exception:
+        _player_img = None
+    try:
+        _team_logo  = get_team_logo(_team_name, size=(140, 140))
+    except Exception:
+        _team_logo = None
+
     # ── 생성일 / 시즌 ────────────────────────────────────────────────
     pdf.set_f("", 8)
     pdf.set_text_color(*C_TEXT_MUTED)
@@ -195,26 +225,52 @@ def _generate_scout_pdf(data: dict) -> bytes:
     pdf.ln(2)
 
     # ── 선수 기본 정보 박스 (어두운 배경 → 흰 텍스트 OK) ────────────
+    _BOX_H   = 46   # 이미지 포함 높이
+    _PHOTO_W = 32   # 선수 사진 너비 (mm)
+    _LOGO_W  = 22   # 팀 로고 너비 (mm)
+    _HAS_PHOTO = _player_img is not None
+    _TEXT_X  = 13 + _PHOTO_W + 4 if _HAS_PHOTO else 14  # 텍스트 시작 x
+
+    box_y = pdf.get_y()
     pdf.set_fill_color(*C_DARK_BOX)
     pdf.set_draw_color(*C_EPL_PURPLE)
-    pdf.rect(10, pdf.get_y(), 190, 36, "FD")
+    pdf.rect(10, box_y, 190, _BOX_H, "FD")
 
+    # 선수 사진 (좌측)
+    if _player_img:
+        try:
+            _pbuf = _img_buf(_player_img, fmt="JPEG", bg=C_DARK_BOX)
+            pdf.image(_pbuf, x=13, y=box_y + 4, w=_PHOTO_W, h=_PHOTO_W)
+        except Exception:
+            pass
+
+    # 팀 로고 (우측)
+    if _team_logo:
+        try:
+            _lbuf = _img_buf(_team_logo, fmt="JPEG", bg=C_DARK_BOX)
+            pdf.image(_lbuf, x=197 - _LOGO_W, y=box_y + 4, w=_LOGO_W, h=_LOGO_W)
+        except Exception:
+            pass
+
+    # 선수 이름
     pdf.set_text_color(*C_WHITE)
-    pdf.set_f("B", 18)
-    pdf.set_xy(14, pdf.get_y() + 4)
-    pdf.cell(0, 10, pdf.txt(data.get("player", "")), ln=True)
+    pdf.set_f("B", 17)
+    pdf.set_xy(_TEXT_X, box_y + 6)
+    pdf.cell(0, 9, pdf.txt(_player_name), ln=True)
 
+    # 팀 · 포지션 · 나이
     pdf.set_f("", 10)
     pdf.set_text_color(200, 200, 200)
-    pdf.set_x(14)
-    pdf.cell(0, 6, pdf.txt(f"{data.get('team', '')}  |  {data.get('pos', '')}  |  Age {data.get('age', '')}"), ln=True)
+    pdf.set_x(_TEXT_X)
+    pdf.cell(0, 6, pdf.txt(f"{_team_name}  |  {data.get('pos', '')}  |  Age {data.get('age', '')}"), ln=True)
 
-    pdf.set_x(14)
+    # 시장 가치
+    pdf.set_x(_TEXT_X)
     pdf.set_text_color(*C_EPL_GREEN)
     pdf.set_f("B", 11)
     pdf.cell(0, 6, pdf.txt(f"Market Value: {data.get('market_value', 'N/A')}"), ln=True)
 
-    pdf.ln(10)
+    pdf.ln(_BOX_H - (pdf.get_y() - box_y) + 6)
 
     # ── 헬퍼: 섹션 제목 ─────────────────────────────────────────────
     def section_title(title: str):
