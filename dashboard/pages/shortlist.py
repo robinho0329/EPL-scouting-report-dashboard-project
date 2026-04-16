@@ -3,7 +3,8 @@
 스카우트가 탐색 중 발견한 선수를 저장하고
 우선순위와 메모를 관리하는 개인 워크스페이스.
 
-브라우저를 닫아도 data/scout/shortlist.json 에 영구 저장됩니다.
+로컬: data/scout/shortlist.json 에 영구 저장.
+Streamlit Cloud: /tmp/shortlist.json (재시작 시 초기화됨).
 """
 import json
 import logging
@@ -13,7 +14,23 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-SHORTLIST_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "shortlist.json"
+
+def _get_shortlist_path() -> Path:
+    """환경에 따라 쓰기 가능한 shortlist 경로 반환."""
+    local_path = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "shortlist.json"
+    # 디렉토리에 쓰기 권한 확인 (Streamlit Cloud는 읽기전용)
+    try:
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+        test_file = local_path.parent / ".write_test"
+        test_file.touch()
+        test_file.unlink()
+        return local_path
+    except OSError:
+        # Streamlit Cloud 등 읽기전용 환경 → /tmp/ 사용
+        return Path("/tmp/shortlist.json")
+
+
+SHORTLIST_PATH = _get_shortlist_path()
 from dashboard.components.data_loader import load_scout_ratings, load_undervalued, load_growth_predictions_v4
 from dashboard.utils.image_utils import get_player_image_b64
 
@@ -216,8 +233,8 @@ def render():
         )
 
     # 테이블 뷰 (접기)
+    show_cols = [c for c in ["선수", "팀", "나이", "PIS", "등급", "시장가치", "성장예측", "S2", "우선순위", "메모"] if c in sl_df.columns]
     with st.expander("📋 테이블로 보기"):
-        show_cols = [c for c in ["선수", "팀", "나이", "PIS", "등급", "시장가치", "성장예측", "S2", "우선순위", "메모"] if c in sl_df.columns]
         st.dataframe(sl_df[show_cols].reset_index(drop=True), use_container_width=True, hide_index=True)
 
     # ── 개별 선수 관리 ───────────────────────────────────────────────────

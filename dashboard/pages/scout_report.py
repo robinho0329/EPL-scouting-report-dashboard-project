@@ -13,7 +13,20 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
-SHORTLIST_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "shortlist.json"
+def _get_shortlist_path() -> Path:
+    """환경에 따라 쓰기 가능한 shortlist 경로 반환."""
+    local_path = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "shortlist.json"
+    try:
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+        test_file = local_path.parent / ".write_test"
+        test_file.touch()
+        test_file.unlink()
+        return local_path
+    except OSError:
+        return Path("/tmp/shortlist.json")
+
+
+SHORTLIST_PATH = _get_shortlist_path()
 from dashboard.components.data_loader import (
     load_scout_ratings,
     load_decline_predictions,
@@ -1001,8 +1014,8 @@ def render():
         "s2_pred_mv": f"EUR{_s2_pred_mv/1_000_000:.1f}M" if _s2_pred_mv and not pd.isna(_s2_pred_mv) else "N/A",
         "decline_prob": _safe_val(decline_row.get("decline_prob_ensemble"), ".1%") if decline_row is not None else "N/A",
         "growth_class": str(v4_row.get("pred_xgb", v4_row.get("pred_ensemble", "N/A"))) if v4_row is not None else "N/A",
-        "verdict": locals().get("verdict", "데이터 부족") if score_items else "데이터 부족",
-        "overall_score": f"{locals().get('overall', 0):.0%}" if score_items else "N/A",
+        "verdict": verdict if score_items else "데이터 부족",
+        "overall_score": f"{overall:.0%}" if score_items else "N/A",
         "score_items": score_items if score_items else [],
         "shortlist_note": shortlist.get(selected_player, {}).get("note", ""),
         "shortlist_priority": shortlist.get(selected_player, {}).get("priority", ""),
