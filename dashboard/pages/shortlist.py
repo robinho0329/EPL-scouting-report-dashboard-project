@@ -13,7 +13,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from config.settings import SHORTLIST_PATH
+SHORTLIST_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "shortlist.json"
 from dashboard.components.data_loader import load_scout_ratings, load_undervalued, load_growth_predictions_v4
 from dashboard.utils.image_utils import get_player_image_b64
 

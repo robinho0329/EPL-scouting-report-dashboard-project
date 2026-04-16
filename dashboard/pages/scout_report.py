@@ -13,7 +13,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
-from config.settings import SHORTLIST_PATH
+SHORTLIST_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "scout" / "shortlist.json"
 from dashboard.components.data_loader import (
     load_scout_ratings,
     load_decline_predictions,
