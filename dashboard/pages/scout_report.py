@@ -420,6 +420,61 @@ def _generate_scout_pdf(data: dict) -> bytes:
     pdf.cell(0, 7, pdf.txt(risk_text), ln=True)
     pdf.ln(4)
 
+    # ── [2순위] 포지션 내 리그 순위 ─────────────────────────────────
+    _league_rank = data.get("league_rank", "N/A")
+    if _league_rank and _league_rank != "N/A":
+        metric_row("League Rank (Position)", _league_rank, "", "")
+        pdf.ln(4)
+
+    # ── [2순위] 유사 선수 Top 3 ──────────────────────────────────────
+    _sim_top3 = data.get("sim_top3", [])
+    if _sim_top3:
+        section_title("S3  Similar Players  (Top 3)")
+        metric_row("Player", "Similarity", "PIS", "")
+        for _i, (_nbr, _sim_v, _nbr_war) in enumerate(_sim_top3):
+            _y_sim = pdf.get_y()
+            if _i % 2 == 0:
+                pdf.set_fill_color(*C_LIGHT_GRAY)
+                pdf.rect(10, _y_sim, 190, 7, "F")
+            pdf.set_x(14)
+            pdf.set_text_color(*C_TEXT_DARK)
+            pdf.set_f("B", 9)
+            pdf.cell(95, 7, pdf.txt(_nbr))
+            pdf.set_text_color(*C_TEXT_LABEL)
+            pdf.set_f("", 9)
+            pdf.cell(47, 7, pdf.txt(f"sim {_sim_v}") if _sim_v else "")
+            pdf.set_text_color(*C_TEXT_DARK)
+            pdf.cell(0, 7, pdf.txt(f"PIS {_nbr_war}"), ln=True)
+        pdf.ln(4)
+
+    # ── [2순위] 이적 적응 리스크 (P8/S5) ────────────────────────────
+    _t_label = data.get("transfer_label", "N/A")
+    _t_prob  = data.get("transfer_prob", "N/A")
+    _t_old   = data.get("transfer_team_old", "")
+    if _t_label not in ("N/A", "", None):
+        section_title("P8  Transfer Adaptation Risk")
+        _t_map = {"success": "SUCCESS", "failure": "FAILURE", "partial": "PARTIAL"}
+        _t_label_en = _t_map.get(str(_t_label).lower(), str(_t_label).upper())
+        _t_color = C_EPL_GREEN if "SUCCESS" in _t_label_en else (C_EPL_MAGENTA if "FAIL" in _t_label_en else (180, 130, 0))
+        metric_row("Prev Transfer Outcome", _t_label_en, "Success Prob", _t_prob)
+        if _t_old and _t_old not in ("", "nan", "None"):
+            metric_row("From Club", _t_old, "", "")
+        # 리스크 텍스트
+        pdf.set_x(14)
+        if "SUCCESS" in _t_label_en:
+            pdf.set_text_color(0, 140, 70)
+            pdf.set_f("B", 9)
+            pdf.cell(0, 7, "LOW ADAPTATION RISK: Historical record shows successful transition.", ln=True)
+        elif "FAIL" in _t_label_en:
+            pdf.set_text_color(*C_EPL_MAGENTA)
+            pdf.set_f("B", 9)
+            pdf.cell(0, 7, "HIGH ADAPTATION RISK: Past transfer shows difficulty adapting.", ln=True)
+        else:
+            pdf.set_text_color(180, 120, 0)
+            pdf.set_f("B", 9)
+            pdf.cell(0, 7, "MEDIUM RISK: Partial adaptation. Close monitoring required.", ln=True)
+        pdf.ln(4)
+
     # ── 종합 판정 ────────────────────────────────────────────────────
     section_title("Overall Scout Verdict")
     verdict_raw = data.get("verdict", "N/A")
@@ -1242,6 +1297,57 @@ def render():
     _foot        = str(_profile_row.get("foot", "")) if _profile_row is not None else ""
     _height      = _safe_val(_profile_row.get("height_cm"), ".0f") if _profile_row is not None else "N/A"
 
+    # ── [2순위] 포지션 내 리그 순위 계산 ─────────────────────────────
+    _pos_grp_pdf = player_row.get("pos_group", None)
+    if _pos_grp_pdf and war_val and not pd.isna(war_val):
+        _pos_war = season_ratings[season_ratings["pos_group"] == _pos_grp_pdf]["war"].dropna()
+        _league_rank  = int((_pos_war > float(war_val)).sum()) + 1
+        _league_total = len(_pos_war)
+        _league_rank_str = f"#{_league_rank} / {_league_total}  ({_pos_grp_pdf})"
+    else:
+        _league_rank_str = "N/A"
+
+    # ── [2순위] 유사 선수 Top 3 ──────────────────────────────────────
+    _sim_top3 = []  # [(이름, 유사도, PIS), ...]
+    if not sim_matrix.empty:
+        _sm = sim_matrix[sim_matrix["player"] == selected_player]
+        if "season" in sim_matrix.columns:
+            _sm_s = _sm[_sm["season"] == selected_season]
+            if not _sm_s.empty:
+                _sm = _sm_s
+        if "rank" in _sm.columns:
+            _sm = _sm.sort_values("rank")
+        for _, _sr in _sm.head(3).iterrows():
+            _nbr = str(_sr.get("neighbor", ""))
+            _sim_v = _sr.get("cosine_sim", None)
+            _sim_s = f"{float(_sim_v):.3f}" if _sim_v is not None and not pd.isna(_sim_v) else ""
+            # 유사 선수 PIS 조회
+            _nbr_war = "N/A"
+            if not ratings.empty and "player" in ratings.columns:
+                _nbr_rows = ratings[ratings["player"] == _nbr]
+                if "season" in ratings.columns:
+                    _nbr_rows = _nbr_rows.sort_values("season", ascending=False)
+                if not _nbr_rows.empty:
+                    _nbr_w = _nbr_rows.iloc[0].get("war", None)
+                    if _nbr_w is not None and not pd.isna(_nbr_w):
+                        _nbr_war = f"{float(_nbr_w):.1f}"
+            _sim_top3.append((_nbr, _sim_s, _nbr_war))
+
+    # ── [2순위] 이적 적응 리스크 (P8/S5) 요약 ───────────────────────
+    _transfer_label = "N/A"
+    _transfer_prob_s = "N/A"
+    _transfer_team_old = ""
+    if not transfers.empty and "player" in transfers.columns:
+        _tr = transfers[transfers["player"] == selected_player]
+        if not _tr.empty:
+            if "season_new" in _tr.columns:
+                _tr = _tr.sort_values("season_new", ascending=False)
+            _tr0 = _tr.iloc[0]
+            _transfer_label  = str(_tr0.get("pred_label", "N/A"))
+            _ps = _tr0.get("prob_success", None)
+            _transfer_prob_s = f"{float(_ps):.1%}" if _ps is not None and not pd.isna(_ps) else "N/A"
+            _transfer_team_old = str(_tr0.get("team_old", ""))
+
     # PDF 생성에 필요한 데이터 구성
     _pdf_data = {
         "player": selected_player,
@@ -1268,6 +1374,11 @@ def render():
         "overall_score": f"{overall:.0%}" if score_items else "N/A",
         "score_items": score_items if score_items else [],
         "season_trend": _season_trend,
+        "league_rank": _league_rank_str,
+        "sim_top3": _sim_top3,
+        "transfer_label": _transfer_label,
+        "transfer_prob": _transfer_prob_s,
+        "transfer_team_old": _transfer_team_old,
         "shortlist_note": shortlist.get(selected_player, {}).get("note", ""),
         "shortlist_priority": shortlist.get(selected_player, {}).get("priority", ""),
         "scout_memo": _scout_memo_pdf.strip() if _scout_memo_pdf else "",
