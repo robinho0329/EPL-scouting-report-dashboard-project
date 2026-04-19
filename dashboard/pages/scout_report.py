@@ -369,9 +369,16 @@ def _generate_scout_pdf(data: dict) -> bytes:
             pdf.set_fill_color(*_bc)
             if _bar_w > 0:
                 pdf.rect(_bar_x, _bar_y, _bar_w, 4, "F")
-            # 리그 평균 기준선 (PIS 50 = 40mm 위치)
+            # 리그 평균 기준선 (PIS 50 = 40mm 위치) + 범례 텍스트
             pdf.set_fill_color(80, 80, 100)
             pdf.rect(_bar_x + 40, _bar_y - 0.5, 0.5, 5, "F")
+            if _idx == 0:   # 첫 행에만 범례 표시
+                _prev_x = pdf.get_x()
+                pdf.set_xy(_bar_x + 41, _bar_y - 0.5)
+                pdf.set_text_color(80, 80, 100)
+                pdf.set_f("", 6)
+                pdf.cell(15, 4, "avg 50", ln=False)
+                pdf.set_xy(_prev_x, pdf.get_y())
 
             # 텍스트: 시즌 | PIS 값 | 트렌드
             pdf.set_x(14)
@@ -453,7 +460,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
             pdf.cell(95, 7, pdf.txt(_nbr_label))
             pdf.set_text_color(*C_TEXT_LABEL)
             pdf.set_f("", 9)
-            pdf.cell(47, 7, pdf.txt(f"sim {_sim_v}") if _sim_v else "")
+            pdf.cell(47, 7, pdf.txt(f"Sim {_sim_v}") if _sim_v else "")
             pdf.set_text_color(*C_TEXT_DARK)
             pdf.cell(0, 7, pdf.txt(f"PIS {_nbr_war}"), ln=True)
         pdf.ln(4)
@@ -1292,6 +1299,12 @@ def render():
             placeholder="예: 에이전트 연락 필요, 셀링 클럽 협상 여지 있음",
             key=f"pdf_memo_{selected_player}",
         )
+    _include_scout_memo = st.checkbox(
+        "🔒 비공개 메모를 PDF에 포함 (내부 배포용에만 체크)",
+        value=False,
+        key=f"pdf_memo_include_{selected_player}",
+        help="체크 해제 시 '추가 메모'가 PDF에서 제외됩니다. 외부 공유 리포트에는 해제를 권장합니다.",
+    )
 
     # ── 시즌별 PIS 트렌드 수집 (최근 5시즌) ─────────────────────────
     _all_seasons = ratings[ratings["player"] == selected_player].copy()
@@ -1317,13 +1330,38 @@ def render():
     _foot        = str(_profile_row.get("foot", "")) if _profile_row is not None else ""
     _height      = _safe_val(_profile_row.get("height_cm"), ".0f") if _profile_row is not None else "N/A"
 
-    # ── [2순위] 포지션 내 리그 순위 계산 ─────────────────────────────
-    _pos_grp_pdf = player_row.get("pos_group", None)
+    # ── [2순위] 포지션 세분화 (MID → MID_ATK / MID_DEF) ──────────────
+    _pos_raw = str(player_row.get("pos", player_row.get("pos_group", ""))).upper()
+    _pos_grp_pdf = str(player_row.get("pos_group", ""))
+
+    # MID 세분화: pos 컬럼으로 공격형/수비형 구분
+    _pos_display = _pos_grp_pdf
+    if _pos_grp_pdf == "MID":
+        if any(p in _pos_raw for p in ("FW,MF", "MF,FW")):
+            _pos_display = "MID_ATK"
+        elif any(p in _pos_raw for p in ("DF,MF", "MF,DF")):
+            _pos_display = "MID_DEF"
+        else:
+            _pos_display = "MID"
+
+    # 포지션 내 리그 순위 계산 (세분화 그룹 우선, fallback: 전체 MID)
     if _pos_grp_pdf and war_val and not pd.isna(war_val):
-        _pos_war = season_ratings[season_ratings["pos_group"] == _pos_grp_pdf]["war"].dropna()
+        if _pos_display in ("MID_ATK", "MID_DEF"):
+            # 세분화 필터: season_ratings의 pos 컬럼으로 필터
+            if "pos" in season_ratings.columns:
+                if _pos_display == "MID_ATK":
+                    _pos_mask = season_ratings["pos"].str.upper().str.contains("FW,MF|MF,FW", na=False)
+                else:
+                    _pos_mask = season_ratings["pos"].str.upper().str.contains("DF,MF|MF,DF", na=False)
+                _sub_ratings = season_ratings[_pos_mask]
+            else:
+                _sub_ratings = season_ratings[season_ratings["pos_group"] == _pos_grp_pdf]
+        else:
+            _sub_ratings = season_ratings[season_ratings["pos_group"] == _pos_grp_pdf]
+        _pos_war = _sub_ratings["war"].dropna()
         _league_rank  = int((_pos_war > float(war_val)).sum()) + 1
         _league_total = len(_pos_war)
-        _league_rank_str = f"#{_league_rank} / {_league_total}  ({_pos_grp_pdf})"
+        _league_rank_str = f"#{_league_rank} / {_league_total}  ({_pos_display})"
     else:
         _league_rank_str = "N/A"
 
@@ -1340,7 +1378,7 @@ def render():
         for _, _sr in _sm.head(3).iterrows():
             _nbr = str(_sr.get("neighbor", ""))
             _sim_v = _sr.get("cosine_sim", None)
-            _sim_s = f"{float(_sim_v):.3f}" if _sim_v is not None and not pd.isna(_sim_v) else ""
+            _sim_s = f"{float(_sim_v)*100:.1f}%" if _sim_v is not None and not pd.isna(_sim_v) else ""
             # 유사 선수 PIS + 소속팀 조회
             _nbr_war = "N/A"
             _nbr_team = ""
@@ -1413,7 +1451,7 @@ def render():
         "transfer_league_old": _transfer_league_old,
         "shortlist_note": shortlist.get(selected_player, {}).get("note", ""),
         "shortlist_priority": shortlist.get(selected_player, {}).get("priority", ""),
-        "scout_memo": _scout_memo_pdf.strip() if _scout_memo_pdf else "",
+        "scout_memo": (_scout_memo_pdf.strip() if _scout_memo_pdf else "") if _include_scout_memo else "",
     }
 
     _pdf_bytes = _generate_scout_pdf(_pdf_data)
