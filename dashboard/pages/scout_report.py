@@ -162,9 +162,10 @@ def _generate_scout_pdf(data: dict) -> bytes:
             self.set_xy(10, 5)
             self.cell(0, 12, "EPL SCOUT REPORT", align="L")
             self.set_text_color(*C_EPL_GREEN)
-            self.set_f("", 9)
+            self.set_f("", 8)
             self.set_xy(0, 5)
-            self.cell(200, 12, "Powered by EPL Analytics", align="R")
+            _date_str = _dt.datetime.now().strftime("%Y-%m-%d")
+            self.cell(200, 12, f"EPL Analytics  |  {_date_str}", align="R")
             self.ln(18)
 
         def footer(self):
@@ -368,6 +369,9 @@ def _generate_scout_pdf(data: dict) -> bytes:
             pdf.set_fill_color(*_bc)
             if _bar_w > 0:
                 pdf.rect(_bar_x, _bar_y, _bar_w, 4, "F")
+            # 리그 평균 기준선 (PIS 50 = 40mm 위치)
+            pdf.set_fill_color(80, 80, 100)
+            pdf.rect(_bar_x + 40, _bar_y - 0.5, 0.5, 5, "F")
 
             # 텍스트: 시즌 | PIS 값 | 트렌드
             pdf.set_x(14)
@@ -430,8 +434,15 @@ def _generate_scout_pdf(data: dict) -> bytes:
     _sim_top3 = data.get("sim_top3", [])
     if _sim_top3:
         section_title("S3  Similar Players  (Top 3)")
-        metric_row("Player", "Similarity", "PIS", "")
-        for _i, (_nbr, _sim_v, _nbr_war) in enumerate(_sim_top3):
+        metric_row("Player  ·  Club", "Similarity", "PIS", "")
+        for _i, _sim_item in enumerate(_sim_top3):
+            # 4-tuple (name, team, sim, war) or 3-tuple (name, sim, war) 하위 호환
+            if len(_sim_item) == 4:
+                _nbr, _nbr_team, _sim_v, _nbr_war = _sim_item
+            else:
+                _nbr, _sim_v, _nbr_war = _sim_item
+                _nbr_team = ""
+            _nbr_label = f"{_nbr}  ·  {_nbr_team}" if _nbr_team else _nbr
             _y_sim = pdf.get_y()
             if _i % 2 == 0:
                 pdf.set_fill_color(*C_LIGHT_GRAY)
@@ -439,7 +450,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
             pdf.set_x(14)
             pdf.set_text_color(*C_TEXT_DARK)
             pdf.set_f("B", 9)
-            pdf.cell(95, 7, pdf.txt(_nbr))
+            pdf.cell(95, 7, pdf.txt(_nbr_label))
             pdf.set_text_color(*C_TEXT_LABEL)
             pdf.set_f("", 9)
             pdf.cell(47, 7, pdf.txt(f"sim {_sim_v}") if _sim_v else "")
@@ -448,17 +459,21 @@ def _generate_scout_pdf(data: dict) -> bytes:
         pdf.ln(4)
 
     # ── [2순위] 이적 적응 리스크 (P8/S5) ────────────────────────────
-    _t_label = data.get("transfer_label", "N/A")
-    _t_prob  = data.get("transfer_prob", "N/A")
-    _t_old   = data.get("transfer_team_old", "")
+    _t_label      = data.get("transfer_label", "N/A")
+    _t_prob       = data.get("transfer_prob", "N/A")
+    _t_old        = data.get("transfer_team_old", "")
+    _t_league_old = data.get("transfer_league_old", "")
     if _t_label not in ("N/A", "", None):
         section_title("P8  Transfer Adaptation Risk")
         _t_map = {"success": "SUCCESS", "failure": "FAILURE", "partial": "PARTIAL"}
         _t_label_en = _t_map.get(str(_t_label).lower(), str(_t_label).upper())
-        _t_color = C_EPL_GREEN if "SUCCESS" in _t_label_en else (C_EPL_MAGENTA if "FAIL" in _t_label_en else (180, 130, 0))
         metric_row("Prev Transfer Outcome", _t_label_en, "Success Prob", _t_prob)
+        # 이전 구단 + 리그
         if _t_old and _t_old not in ("", "nan", "None"):
-            metric_row("From Club", _t_old, "", "")
+            _from_str = _t_old
+            if _t_league_old and _t_league_old not in ("", "nan", "None"):
+                _from_str = f"{_t_old}  ({_t_league_old})"
+            metric_row("From Club  (League)", _from_str, "", "")
         # 리스크 텍스트
         pdf.set_x(14)
         if "SUCCESS" in _t_label_en:
@@ -473,7 +488,12 @@ def _generate_scout_pdf(data: dict) -> bytes:
             pdf.set_text_color(180, 120, 0)
             pdf.set_f("B", 9)
             pdf.cell(0, 7, "MEDIUM RISK: Partial adaptation. Close monitoring required.", ln=True)
-        pdf.ln(4)
+        # 판정 기준 주석
+        pdf.set_x(14)
+        pdf.set_text_color(*C_TEXT_MUTED)
+        pdf.set_f("", 7)
+        pdf.cell(0, 5, "* Model basis: P8 XGBoost trained on EPL transfer data (2017-2025). SUCCESS >= 60% prob_success.", ln=True)
+        pdf.ln(2)
 
     # ── 종합 판정 ────────────────────────────────────────────────────
     section_title("Overall Scout Verdict")
@@ -1308,7 +1328,7 @@ def render():
         _league_rank_str = "N/A"
 
     # ── [2순위] 유사 선수 Top 3 ──────────────────────────────────────
-    _sim_top3 = []  # [(이름, 유사도, PIS), ...]
+    _sim_top3 = []  # [(이름, 소속팀, 유사도, PIS), ...]
     if not sim_matrix.empty:
         _sm = sim_matrix[sim_matrix["player"] == selected_player]
         if "season" in sim_matrix.columns:
@@ -1321,8 +1341,9 @@ def render():
             _nbr = str(_sr.get("neighbor", ""))
             _sim_v = _sr.get("cosine_sim", None)
             _sim_s = f"{float(_sim_v):.3f}" if _sim_v is not None and not pd.isna(_sim_v) else ""
-            # 유사 선수 PIS 조회
+            # 유사 선수 PIS + 소속팀 조회
             _nbr_war = "N/A"
+            _nbr_team = ""
             if not ratings.empty and "player" in ratings.columns:
                 _nbr_rows = ratings[ratings["player"] == _nbr]
                 if "season" in ratings.columns:
@@ -1331,12 +1352,16 @@ def render():
                     _nbr_w = _nbr_rows.iloc[0].get("war", None)
                     if _nbr_w is not None and not pd.isna(_nbr_w):
                         _nbr_war = f"{float(_nbr_w):.1f}"
-            _sim_top3.append((_nbr, _sim_s, _nbr_war))
+                    _nbr_t = _nbr_rows.iloc[0].get("team", "")
+                    if _nbr_t and not pd.isna(_nbr_t):
+                        _nbr_team = str(_nbr_t)
+            _sim_top3.append((_nbr, _nbr_team, _sim_s, _nbr_war))
 
     # ── [2순위] 이적 적응 리스크 (P8/S5) 요약 ───────────────────────
     _transfer_label = "N/A"
     _transfer_prob_s = "N/A"
     _transfer_team_old = ""
+    _transfer_league_old = ""
     if not transfers.empty and "player" in transfers.columns:
         _tr = transfers[transfers["player"] == selected_player]
         if not _tr.empty:
@@ -1347,6 +1372,12 @@ def render():
             _ps = _tr0.get("prob_success", None)
             _transfer_prob_s = f"{float(_ps):.1%}" if _ps is not None and not pd.isna(_ps) else "N/A"
             _transfer_team_old = str(_tr0.get("team_old", ""))
+            # 이전 리그 정보 (컬럼명 후보: league_old, prev_league, competition_old)
+            for _league_col in ("league_old", "prev_league", "competition_old", "league"):
+                _lv = _tr0.get(_league_col, None)
+                if _lv and not pd.isna(_lv) and str(_lv) not in ("", "nan", "None"):
+                    _transfer_league_old = str(_lv)
+                    break
 
     # PDF 생성에 필요한 데이터 구성
     _pdf_data = {
@@ -1379,6 +1410,7 @@ def render():
         "transfer_label": _transfer_label,
         "transfer_prob": _transfer_prob_s,
         "transfer_team_old": _transfer_team_old,
+        "transfer_league_old": _transfer_league_old,
         "shortlist_note": shortlist.get(selected_player, {}).get("note", ""),
         "shortlist_priority": shortlist.get(selected_player, {}).get("priority", ""),
         "scout_memo": _scout_memo_pdf.strip() if _scout_memo_pdf else "",
