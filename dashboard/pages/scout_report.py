@@ -225,7 +225,7 @@ def _generate_scout_pdf(data: dict) -> bytes:
     pdf.ln(2)
 
     # ── 선수 기본 정보 박스 (어두운 배경 → 흰 텍스트 OK) ────────────
-    _BOX_H   = 46   # 이미지 포함 높이
+    _BOX_H   = 58   # 이미지 포함 높이 (국적/발/키/계약 라인 추가로 확장)
     _PHOTO_W = 32   # 선수 사진 너비 (mm)
     _LOGO_W  = 22   # 팀 로고 너비 (mm)
     _HAS_PHOTO = _player_img is not None
@@ -270,6 +270,31 @@ def _generate_scout_pdf(data: dict) -> bytes:
     pdf.set_f("B", 11)
     pdf.cell(0, 6, pdf.txt(f"Market Value: {data.get('market_value', 'N/A')}"), ln=True)
 
+    # 국적 / 주발 / 키
+    _nat = data.get("nationality", "")
+    _ft  = data.get("foot", "")
+    _ht  = data.get("height", "N/A")
+    _ce  = data.get("contract_expiry", "")
+    _profile_parts = []
+    if _nat and _nat not in ("", "nan", "None"):
+        _profile_parts.append(f"Nat: {_nat}")
+    if _ft and _ft not in ("", "nan", "None"):
+        _profile_parts.append(f"Foot: {_ft.capitalize()}")
+    if _ht and _ht not in ("N/A", "", "nan", "None"):
+        _profile_parts.append(f"Height: {_ht} cm")
+    if _profile_parts:
+        pdf.set_x(_TEXT_X)
+        pdf.set_text_color(180, 180, 210)
+        pdf.set_f("", 9)
+        pdf.cell(0, 5, pdf.txt("  |  ".join(_profile_parts)), ln=True)
+
+    # 계약 만료 연도 (입력된 경우만)
+    if _ce and _ce not in ("", "nan", "None"):
+        pdf.set_x(_TEXT_X)
+        pdf.set_text_color(*C_EPL_YELLOW)
+        pdf.set_f("B", 9)
+        pdf.cell(0, 5, pdf.txt(f"Contract Expires: {_ce}"), ln=True)
+
     pdf.ln(_BOX_H - (pdf.get_y() - box_y) + 6)
 
     # ── 헬퍼: 섹션 제목 ─────────────────────────────────────────────
@@ -310,6 +335,53 @@ def _generate_scout_pdf(data: dict) -> bytes:
     metric_row("Goals/90", data.get("goals_p90", "N/A"), "Assists/90", data.get("assists_p90", "N/A"))
     metric_row("Tackles/90", data.get("tackles_p90", "N/A"), "", "")
     pdf.ln(4)
+
+    # ── PIS 시즌 트렌드 (최근 5시즌) ────────────────────────────────
+    _season_trend = data.get("season_trend", [])
+    if _season_trend:
+        section_title("PIS Season Trend  (Recent 5 Seasons)")
+        for _idx, (_ssn, _war_v) in enumerate(_season_trend):
+            # 트렌드 방향: 리스트는 최신→과거 순서
+            if _idx < len(_season_trend) - 1:
+                _prev_war = _season_trend[_idx + 1][1]
+                _trend_sym = "(+)" if _war_v > _prev_war else (  # 상승
+                             "(-)" if _war_v < _prev_war else "( )")  # 하락 / 유지
+                _trend_rgb = C_EPL_GREEN if _war_v > _prev_war else (
+                             C_EPL_MAGENTA if _war_v < _prev_war else C_TEXT_MUTED)
+            else:
+                _trend_sym = "( )"
+                _trend_rgb = C_TEXT_MUTED
+
+            # 행 배경 (짝수행 연회색)
+            _y_row = pdf.get_y()
+            if _idx % 2 == 0:
+                pdf.set_fill_color(*C_LIGHT_GRAY)
+                pdf.rect(10, _y_row, 190, 7, "F")
+
+            # 미니 바 (PIS 0~100 → 최대 80mm)
+            _bar_w = int(float(_war_v) / 100 * 80)
+            _bar_x = 100
+            _bar_y = _y_row + 1.5
+            pdf.set_fill_color(210, 210, 220)
+            pdf.rect(_bar_x, _bar_y, 80, 4, "F")
+            _bc = C_EPL_GREEN if float(_war_v) >= 70 else ((200, 160, 0) if float(_war_v) >= 50 else (200, 50, 50))
+            pdf.set_fill_color(*_bc)
+            if _bar_w > 0:
+                pdf.rect(_bar_x, _bar_y, _bar_w, 4, "F")
+
+            # 텍스트: 시즌 | PIS 값 | 트렌드
+            pdf.set_x(14)
+            pdf.set_text_color(*C_TEXT_LABEL)
+            pdf.set_f("", 9)
+            pdf.cell(48, 7, pdf.txt(str(_ssn)))
+            pdf.set_text_color(*C_TEXT_DARK)
+            pdf.set_f("B", 9)
+            pdf.cell(38, 7, f"PIS {_war_v}")
+            pdf.cell(80, 7, "")    # 바 공간
+            pdf.set_text_color(*_trend_rgb)
+            pdf.set_f("B", 9)
+            pdf.cell(0, 7, _trend_sym, ln=True)
+        pdf.ln(4)
 
     # ── S2 시장가치 평가 ─────────────────────────────────────────────
     section_title("S2  Market Value Assessment")
@@ -399,18 +471,28 @@ def _generate_scout_pdf(data: dict) -> bytes:
         pdf.cell(0, 6, f"  {note_en}", ln=True)
     pdf.ln(4)
 
-    # ── 쇼트리스트 메모 ─────────────────────────────────────────────
-    note     = _safe_str(data.get("shortlist_note", ""))
-    priority = _safe_str(data.get("shortlist_priority", ""))
-    if note or priority:
+    # ── 쇼트리스트 메모 + PDF 전용 메모 ────────────────────────────
+    note        = _safe_str(data.get("shortlist_note", ""))
+    priority    = _safe_str(data.get("shortlist_priority", ""))
+    scout_memo  = _safe_str(data.get("scout_memo", ""))
+    if note or priority or scout_memo:
         section_title("Scout Notes")
         if priority:
             metric_row("Priority", priority, "", "")
         if note:
             pdf.set_x(14)
-            pdf.set_text_color(*C_TEXT_DARK)      # ← 흰 배경에 진한 텍스트
+            pdf.set_text_color(*C_TEXT_DARK)
             pdf.set_f("", 9)
-            pdf.multi_cell(182, 6, f"Memo: {note}")
+            pdf.multi_cell(182, 6, f"Shortlist Memo: {note}")
+        if scout_memo:
+            pdf.set_x(14)
+            pdf.set_text_color(*C_TEXT_DARK)
+            pdf.set_f("B", 9)
+            pdf.cell(0, 6, "Scout Memo:", ln=True)
+            pdf.set_x(14)
+            pdf.set_text_color(*C_TEXT_DARK)
+            pdf.set_f("", 9)
+            pdf.multi_cell(182, 6, scout_memo)
         pdf.ln(2)
 
     # ── 면책 문구 ────────────────────────────────────────────────────
@@ -1119,7 +1201,46 @@ def render():
     # ──────────────────────────────────────────────────────────────────
     st.markdown("---")
     st.markdown("### 📄 PDF 리포트 내보내기")
-    st.caption("선수 기본정보, S1 PIS, S2 가치 평가, S6 하락 위험, 종합 판정을 PDF로 저장합니다.")
+    st.caption("선수 기본정보, S1 PIS, S2 가치 평가, S6 하락 위험, 시즌 트렌드, 종합 판정을 PDF로 저장합니다.")
+
+    # 계약 만료 연도 수동 입력 (DB에 없는 정보)
+    _pdf_col1, _pdf_col2 = st.columns([1, 2])
+    with _pdf_col1:
+        _contract_expiry = st.text_input(
+            "📅 계약 만료 연도 (선택)",
+            placeholder="예: 2026",
+            key=f"pdf_contract_{selected_player}",
+        )
+    with _pdf_col2:
+        _scout_memo_pdf = st.text_input(
+            "📝 추가 메모 (PDF 전용)",
+            placeholder="예: 에이전트 연락 필요, 셀링 클럽 협상 여지 있음",
+            key=f"pdf_memo_{selected_player}",
+        )
+
+    # ── 시즌별 PIS 트렌드 수집 (최근 5시즌) ─────────────────────────
+    _all_seasons = ratings[ratings["player"] == selected_player].copy()
+    if not _all_seasons.empty and "season" in _all_seasons.columns:
+        _all_seasons = _all_seasons.sort_values("season", ascending=False)
+        _season_trend = [
+            (str(row["season"]), round(float(row["war"]), 1))
+            for _, row in _all_seasons.head(5).iterrows()
+            if pd.notna(row.get("war"))
+        ]
+    else:
+        _season_trend = []
+
+    # ── 선수 프로필 추가 정보 (nationality, foot, height) ────────────
+    _profiles = load_player_profiles()
+    _profile_row = None
+    if not _profiles.empty and "player" in _profiles.columns:
+        _pr = _profiles[_profiles["player"] == selected_player]
+        if not _pr.empty:
+            _profile_row = _pr.sort_values("season", ascending=False).iloc[0] if "season" in _pr.columns else _pr.iloc[0]
+
+    _nationality = str(_profile_row.get("nationality", "")) if _profile_row is not None else ""
+    _foot        = str(_profile_row.get("foot", "")) if _profile_row is not None else ""
+    _height      = _safe_val(_profile_row.get("height_cm"), ".0f") if _profile_row is not None else "N/A"
 
     # PDF 생성에 필요한 데이터 구성
     _pdf_data = {
@@ -1128,6 +1249,10 @@ def render():
         "team": str(player_row.get("team", "N/A")),
         "pos": str(player_row.get("pos_group", player_row.get("pos", "N/A"))),
         "age": _safe_val(player_row.get("age", player_row.get("age_tm", None)), ".0f"),
+        "nationality": _nationality,
+        "foot": _foot,
+        "height": _height,
+        "contract_expiry": _contract_expiry.strip() if _contract_expiry else "",
         "market_value": mv_str,
         "war": _safe_val(war_val, ".1f"),
         "tier": str(tier_val) if tier_val and not pd.isna(tier_val) else "N/A",
@@ -1142,8 +1267,10 @@ def render():
         "verdict": verdict if score_items else "데이터 부족",
         "overall_score": f"{overall:.0%}" if score_items else "N/A",
         "score_items": score_items if score_items else [],
+        "season_trend": _season_trend,
         "shortlist_note": shortlist.get(selected_player, {}).get("note", ""),
         "shortlist_priority": shortlist.get(selected_player, {}).get("priority", ""),
+        "scout_memo": _scout_memo_pdf.strip() if _scout_memo_pdf else "",
     }
 
     _pdf_bytes = _generate_scout_pdf(_pdf_data)
