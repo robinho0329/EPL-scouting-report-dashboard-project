@@ -279,6 +279,11 @@ y_val = train_df.loc[val_mask, TARGET_COL].values
 X_test = train_df.loc[test_mask, FEATURE_COLS].values
 y_test = train_df.loc[test_mask, TARGET_COL].values
 
+# LightGBM은 학습 시 DataFrame을 쓰면 feature name을 기억하기 때문에
+# np.array 학습으로 통일해 경고 제거
+import warnings as _warnings
+_warnings.filterwarnings("ignore", message=".*does not have valid feature names.*")
+
 logger.info(f"분할: train={len(X_train)}, val={len(X_val)}, test={len(X_test)}")
 
 # 스케일러 (Ridge용)
