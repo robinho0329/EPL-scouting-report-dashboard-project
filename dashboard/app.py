@@ -46,6 +46,7 @@ MENU_OPTIONS = [
     "스카우트 개요",
     "선수 분석",
     "이적 인텔리전스",
+    "🚨 강등권 탐색기",
     "💎 S2 저평가 탐색기",
     "🏟️ 팀 프로파일",
     "선수 통계 순위",
@@ -53,6 +54,7 @@ MENU_OPTIONS = [
     "선수 비교",
     "역대 기록",
     "모델 설명 (SHAP)",
+    "🎯 선수 유형 탐색기",
 ]
 
 # 페이지 이동 플래그 처리 (radio 위젯 렌더 전에 반드시 실행)
@@ -97,6 +99,9 @@ elif page == "선수 분석":
 elif page == "이적 인텔리전스":
     from dashboard.pages.scout_transfer import render
     render()
+elif page == "🚨 강등권 탐색기":
+    from dashboard.pages.relegation_scout import render
+    render()
 elif page == "💎 S2 저평가 탐색기":
     from dashboard.pages.s2_explorer import render
     render()
@@ -117,4 +122,7 @@ elif page == "역대 기록":
     render()
 elif page == "모델 설명 (SHAP)":
     from dashboard.pages.shap_explainer import render
+    render()
+elif page == "🎯 선수 유형 탐색기":
+    from dashboard.pages.cluster_explorer import render
     render()

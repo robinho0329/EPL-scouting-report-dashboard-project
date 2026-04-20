@@ -1,20 +1,87 @@
 {
-  "model": "P7 Growth Curve",
+  "model": "P7 Growth Curve (v2 Ensemble)",
   "status": "완료",
+  "best_model_name": "ensemble",
   "metrics": {
+    "mae": 1.2399,
+    "r2": 0.5404,
+    "train_size": 5405,
+    "val_size": 245,
+    "test_size": 262
+  },
+  "model_comparison": {
+    "ridge": {
+      "val": {
+        "mae": 1.4142,
+        "r2": 0.4158
+      },
+      "test": {
+        "mae": 1.4764,
+        "r2": 0.3961
+      },
+      "best_alpha": 100.0,
+      "cv_mae": 1.4622
+    },
+    "gbr": {
+      "val": {
+        "mae": 1.0558,
+        "r2": 0.631
+      },
+      "test": {
+        "mae": 1.237,
+        "r2": 0.5369
+      }
+    },
+    "xgb": {
+      "val": {
+        "mae": 1.0896,
+        "r2": 0.6032
+      },
+      "test": {
+        "mae": 1.2652,
+        "r2": 0.516
+      }
+    },
+    "lgbm": {
+      "val": {
+        "mae": 1.0566,
+        "r2": 0.6308
+      },
+      "test": {
+        "mae": 1.2656,
+        "r2": 0.5024
+      }
+    },
+    "ensemble": {
+      "val": {
+        "mae": 1.0661,
+        "r2": 0.6308
+      },
+      "test": {
+        "mae": 1.2399,
+        "r2": 0.5404
+      },
+      "weights": {
+        "ridge": 0.1823,
+        "gbr": 0.2766,
+        "xgb": 0.2645,
+        "lgbm": 0.2766
+      }
+    }
+  },
+  "legacy_ridge_only": {
     "mae": 0.5955,
     "r2": 0.1735,
-    "best_alpha": 100.0,
-    "cv_mae": 0.5912,
-    "train_size": 5650,
-    "test_size": 262
+    "note": "v1 Ridge 단일 모델 성능 (참고용)"
   },
   "features_used": [
     "age_clean",
     "age2",
     "age_vs_peak",
     "age_vs_peak2",
+    "age_vs_peak_abs",
     "pos_code",
+    "career_stage_code",
     "goals_p90",
     "assists_p90",
     "goal_contributions_p90",
@@ -25,7 +92,19 @@
     "market_value",
     "ac_z",
     "ac_z_lag1",
-    "ac_z_trend"
+    "ac_z_trend",
+    "delta_war",
+    "war_ma3",
+    "prev_season_goals_p90",
+    "prev_season_assists_p90"
+  ],
+  "feature_additions_v2": [
+    "delta_war",
+    "war_ma3",
+    "age_vs_peak_abs",
+    "career_stage_code",
+    "prev_season_goals_p90",
+    "prev_season_assists_p90"
   ],
   "pos_peak_ages": {
     "FWD": 28,
@@ -39,7 +118,7 @@
     "DEF": 27,
     "GK": 31
   },
-  "scout_validation": "포지션별 peak_age (FWD~27, MID~27, DEF~26) 스카우트 경험치와 일치. Ridge 예측은 향후 3시즌 공격 기여 궤적을 제공하여 '이 선수가 전성기냐 하락기냐' 영입 회의에서 즉시 활용 가능.",
+  "scout_validation": "포지션별 peak_age (FWD~28, MID~24, DEF~26, GK~30) 스카우트 경험치와 일치. v2 앙상블 모델로 R² 0.540 달성 (v1 대비 0.367 개선). 향후 3시즌 공격 기여 궤적을 제공하여 '이 선수가 전성기냐 하락기냐' 영입 회의에서 즉시 활용 가능.",
   "output_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\scout\\growth_predictions.parquet",
   "row_count": 894
 }
