@@ -1,0 +1,46 @@
+name: 🤖 EPL 스카우트팀 일일 개발 루프
+
+on:
+  schedule:
+    - cron: '15 0 * * *'   # 00:15 UTC = 09:15 KST
+  workflow_dispatch:         # 수동 실행 버튼
+
+permissions:
+  contents: write            # git push 허용
+
+jobs:
+  dev-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 📥 레포 체크아웃
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 🐍 Python 3.12 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 📦 의존성 설치
+        run: pip install anthropic --quiet
+
+      - name: 🤖 액션아이템 구현 (Claude API)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/github_actions_dev.py
+
+      - name: 📤 변경사항 커밋 & 푸시
+        run: |
+          git config user.email "epl-dev-bot@github-actions"
+          git config user.name "EPL Dev Bot"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "변경사항 없음 — 커밋 스킵"
+          else
+            TODAY=$(date +'%Y-%m-%d')
+            git commit -m "auto(actions/${TODAY}): 미팅 액션아이템 코드 구현"
+            git push
+          fi
