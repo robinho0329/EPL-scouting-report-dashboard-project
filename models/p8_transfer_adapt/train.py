@@ -27,7 +27,7 @@ logger = logging.getLogger("p8_transfer_adapt")
 ROOT         = Path(__file__).resolve().parent.parent.parent
 DATA_PATH    = ROOT / "data" / "processed" / "player_season_stats.parquet"
 FEAT_PATH    = ROOT / "data" / "features" / "player_features.parquet"
-TRANS_PATH   = ROOT / "models" / "p8_transfer_adaptation" / "transfer_dataset.parquet"
+TRANS_PATH   = ROOT / "models" / "p8_transfer_adaptation_archived" / "transfer_dataset.parquet"
 OUT_DIR      = Path(__file__).resolve().parent
 SCOUT_OUT    = ROOT / "data" / "scout" / "transfer_adapt_predictions.parquet"
 
