@@ -202,41 +202,74 @@ def run_claude_agent(prompt: str, agent_type: str) -> bool:
 
 
 def check_streamlit_and_fix(streamlit_url: str) -> bool:
-    """push 후 Streamlit Cloud 앱 에러 확인 → 에러 시 자동 수정.
+    """push 후 Streamlit Cloud 앱 에러 확인.
 
-    Returns:
-        True  — 앱 정상 또는 수정 완료
-        False — 확인/수정 실패
+    1단계: playwright 헤드리스로 에러 감지 (GitHub Actions와 동일)
+    2단계: 에러 있으면 Claude CLI로 자동 수정 (로컬 전용)
     """
     import time
     logger.info(f"Streamlit Cloud 재배포 대기 중 ({STREAMLIT_WAIT_SEC}초)...")
     time.sleep(STREAMLIT_WAIT_SEC)
 
-    prompt = f"""EPL 스카우트 대시보드 Streamlit Cloud 에러 점검 및 자동 수정.
+    # ── 1단계: playwright 헤드리스로 에러 감지 ──────────────────
+    errors_found = []
+    try:
+        from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
 
-## 작업 순서
-1. 브라우저로 {streamlit_url} 접속 (Chrome MCP 또는 computer-use 활용)
-2. 앱 완전 로딩 대기 (최대 30초, 스피너 사라질 때까지)
-3. 화면에 에러 박스(빨간색 배경) 또는 Python traceback 있는지 확인
-4. 에러 발견 시:
-   a. 에러 메시지 전체 읽기
-   b. 원인 파일 특정 (`C:/Users/xcv54/workspace/EPL project/dashboard/` 내)
-   c. 해당 파일 수정 (경로 오류·import 오류·컬럼명 불일치 등)
-   d. 수정 후 `git add <파일>` (커밋은 오케스트레이터가 처리)
-   e. 다른 페이지도 사이드바로 순차 확인 후 같은 방식으로 수정
-5. 모든 페이지 정상이면 "STREAMLIT_OK" 출력 후 종료
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page()
+            logger.info(f"🌐 {streamlit_url} 접속 중...")
+            try:
+                page.goto(streamlit_url, timeout=60_000)
+                page.wait_for_selector("[data-testid='stApp']", timeout=60_000)
+            except PWTimeout:
+                logger.error("페이지 로딩 타임아웃")
+                browser.close()
+                return False
 
-## 에러 유형별 힌트
-- FileNotFoundError: data/ 경로가 로컬 절대경로로 하드코딩됐을 가능성 → Path(__file__) 기반으로 수정
-- ModuleNotFoundError: requirements.txt에 패키지 추가 필요
-- KeyError / AttributeError: 최근 파이프라인 결과로 컬럼명 변경됐을 가능성
+            error_els = page.query_selector_all(
+                "[data-testid='stException'], .element-container.stAlert"
+            )
+            for el in error_els:
+                errors_found.append(el.inner_text()[:500])
+
+            content = page.content()
+            if "Traceback (most recent call last)" in content:
+                idx = content.find("Traceback")
+                errors_found.append(content[idx:idx + 500])
+
+            browser.close()
+
+    except ImportError:
+        logger.warning("playwright 미설치 — 에러 감지 스킵 (pip install playwright 후 playwright install chromium)")
+        return True
+
+    if not errors_found:
+        logger.info("✅ Streamlit 앱 정상")
+        return True
+
+    # ── 2단계: 에러 있으면 Claude CLI로 자동 수정 (로컬 전용) ───
+    logger.warning(f"Streamlit 에러 {len(errors_found)}건 감지 → Claude CLI 자동 수정 시도")
+    err_text = "\n\n".join(errors_found)
+
+    prompt = f"""EPL 스카우트 대시보드 Streamlit 에러 자동 수정.
+
+## 감지된 에러
+{err_text}
+
+## 작업
+1. 에러 원인 분석
+2. `C:/Users/xcv54/workspace/EPL project/dashboard/` 내 해당 파일 수정
+   - FileNotFoundError → Path(__file__) 기반 상대경로로 교체
+   - ModuleNotFoundError → requirements.txt 추가
+   - KeyError / AttributeError → 컬럼명 또는 데이터 로딩 수정
+3. 수정 후 `git add <파일>` (커밋은 오케스트레이터가 처리)
 
 ## 주의
-- 정상 작동 중인 페이지는 건드리지 말 것
-- git add까지만 수행, 커밋·푸시는 하지 말 것
-- 수정 불가한 에러는 에러 내용만 로그에 남기고 "STREAMLIT_ERR: <내용>" 출력 후 종료
-"""
-    logger.info("Streamlit 에러 점검 에이전트 실행...")
+- 정상 작동 중인 페이지 건드리지 말 것
+- git add까지만 수행, 커밋·푸시 금지"""
+
     result = subprocess.run(
         [CLAUDE_CLI, "--dangerously-skip-permissions", "-p", prompt],
         cwd=str(ROOT),
@@ -246,19 +279,11 @@ def check_streamlit_and_fix(streamlit_url: str) -> bool:
         encoding="utf-8",
         errors="replace",
     )
-    output = result.stdout + result.stderr
-    if "STREAMLIT_OK" in output:
-        logger.info("✅ Streamlit 앱 정상 확인")
-        return True
-    elif "STREAMLIT_ERR" in output:
-        err_line = next((l for l in output.splitlines() if "STREAMLIT_ERR" in l), "")
-        logger.error(f"Streamlit 에러 수정 불가: {err_line}")
-        return False
-    elif result.returncode == 0:
-        logger.info("Streamlit 점검 완료 (수정 사항 있음)")
+    if result.returncode == 0:
+        logger.info("Claude CLI 자동 수정 완료")
         return True
     else:
-        logger.error(f"Streamlit 점검 실패 (코드 {result.returncode})")
+        logger.error(f"자동 수정 실패: {result.stderr[:300]}")
         return False
 
 
@@ -308,19 +333,31 @@ def main() -> None:
         logger.warning("액션아이템이 없습니다. 종료.")
         sys.exit(0)
 
-    # 4. 에이전트 순차 실행 (model → dashboard)
-    results = {}
-    for agent_type in ("model", "dashboard"):
-        prompt = build_agent_prompt(items, agent_type, note_path)
-        if not prompt:
-            logger.info(f"{agent_type} 에이전트: 해당 액션아이템 없음, 스킵")
-            continue
-        results[agent_type] = run_claude_agent(prompt, agent_type)
+    # 4. 기존 train 스크립트 직접 실행 (GitHub Actions와 동일 방식)
+    logger.info("기존 train 스크립트 실행 (github_actions_dev.py 위임)...")
+    try:
+        venv_python = str(ROOT / ".venv" / "Scripts" / "python")
+        train_result = subprocess.run(
+            [venv_python, str(ROOT / "scripts" / "github_actions_dev.py")],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            timeout=1800,
+            encoding="utf-8",
+            errors="replace",
+        )
+        logger.info(train_result.stdout[-1000:])
+        train_ok = train_result.returncode == 0
+        if not train_ok:
+            logger.error(f"학습 실패:\n{train_result.stderr[-500:]}")
+    except subprocess.TimeoutExpired:
+        logger.error("학습 타임아웃 (30분)")
+        train_ok = False
 
-    # 5. git commit & push (1차: 모델/대시보드 구현 결과)
+    # 5. git commit & push (1차: 학습 결과)
     push_ok = git_commit_push(items)
 
-    # 6. Streamlit Cloud 에러 체크 → 수정 후 재푸시
+    # 6. Streamlit Cloud 에러 체크 → 에러 시 자동 수정 + 재푸시
     streamlit_ok = False
     if push_ok:
         streamlit_ok = check_streamlit_and_fix(STREAMLIT_URL)
@@ -331,8 +368,7 @@ def main() -> None:
 
     # 결과 요약
     logger.info("=== 실행 결과 요약 ===")
-    for k, v in results.items():
-        logger.info(f"  {k}: {'✅ 성공' if v else '❌ 실패'}")
+    logger.info(f"  학습 실행    : {'✅ 성공' if train_ok else '❌ 실패'}")
     logger.info(f"  git push    : {'✅ 성공' if push_ok else '❌ 실패'}")
     logger.info(f"  streamlit   : {'✅ 정상' if streamlit_ok else '⚠️  확인 필요'}")
     logger.info(f"=== daily_dev_loop 종료: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===")

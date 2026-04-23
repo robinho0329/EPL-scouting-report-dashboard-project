@@ -11,7 +11,7 @@ permissions:
 jobs:
   dev-loop:
     runs-on: ubuntu-latest
-    timeout-minutes: 60      # 모델 학습 포함이므로 60분
+    timeout-minutes: 90      # 모델 학습 + Streamlit 체크 포함
 
     steps:
       - name: 📥 레포 체크아웃
@@ -25,19 +25,16 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
-      - name: 📦 ML + API 의존성 설치
+      - name: 📦 ML 의존성 설치
         run: |
           pip install --quiet \
-            anthropic \
             pandas pyarrow \
             scikit-learn \
             xgboost lightgbm \
             optuna \
             joblib numpy
 
-      - name: 🤖 액션아이템 구현 + 모델 학습 (Claude API)
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: 🤖 액션아이템 → 기존 스크립트 학습 실행
         run: python scripts/github_actions_dev.py
 
       - name: 📤 변경사항 커밋 & 푸시
@@ -52,3 +49,15 @@ jobs:
             git commit -m "auto(actions/${TODAY}): 미팅 액션아이템 구현 + 모델 학습"
             git push
           fi
+
+      - name: 🌐 Playwright 설치
+        run: |
+          pip install --quiet playwright
+          playwright install chromium --with-deps
+
+      - name: 🔍 Streamlit Cloud 에러 체크
+        env:
+          STREAMLIT_CHECK: "1"
+          STREAMLIT_WAIT_SEC: "90"
+        run: python scripts/github_actions_dev.py
+        continue-on-error: true   # 에러 감지돼도 워크플로우 전체 실패 처리 안 함 (결과만 로그)

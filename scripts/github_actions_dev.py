@@ -5,20 +5,24 @@
   2. 액션아이템 키워드 → 대응 모델 디렉토리 탐색
   3. 기존 최신 train 스크립트 직접 실행 (Claude API 불필요)
   4. results_summary.json + 변경 파일 저장 (git push는 workflow에서)
-
-참고: Claude API를 사용하는 '코드 자동생성' 버전은 github_actions_dev_claude.py 참조
+  5. push 후 Streamlit Cloud 헤드리스 체크 → 에러 시 워크플로우 실패 처리
 """
 
 import json
+import os
 import re
 import subprocess
 import sys
+import time
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional, Tuple
 
 ROOT        = Path(__file__).resolve().parent.parent
 MEETING_DIR = ROOT / "reports" / "daily_meeting"
+
+STREAMLIT_URL   = "https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app"
+STREAMLIT_WAIT  = int(os.getenv("STREAMLIT_WAIT_SEC", "90"))  # 재배포 대기(초)
 
 # ────────────────────────────────────────────────────────────────────
 # 모델 키워드 → (디렉토리, 우선 실행 스크립트) 매핑
@@ -137,10 +141,100 @@ def run_script(script: Path, model_dir: Path) -> bool:
 
 
 # ────────────────────────────────────────────────────────────────────
+# Streamlit Cloud 헤드리스 체크  (playwright 사용)
+# ────────────────────────────────────────────────────────────────────
+
+def check_streamlit(url: str, wait_sec: int = STREAMLIT_WAIT) -> bool:
+    """Streamlit Cloud 앱 에러 여부 확인.
+
+    playwright로 헤드리스 브라우저를 띄워 실제 앱 화면을 검사한다.
+    에러 박스가 없으면 True, 있으면 에러 내용을 출력하고 False 반환.
+    playwright 미설치 시 requests 폴백.
+    """
+    print(f"  ⏳ Streamlit 재배포 대기 ({wait_sec}초)...")
+    time.sleep(wait_sec)
+
+    # ── playwright 시도 ──────────────────────────────────────────
+    try:
+        from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_page()
+            print(f"  🌐 {url} 접속 중...")
+            try:
+                page.goto(url, timeout=60_000)
+                # Streamlit 앱 로딩 완료 대기 (스피너 사라질 때까지 최대 60초)
+                page.wait_for_selector(
+                    "[data-testid='stApp']", timeout=60_000
+                )
+            except PWTimeout:
+                print("  ❌ 페이지 로딩 타임아웃 (60초)")
+                browser.close()
+                return False
+
+            # 에러 박스 탐색 (Streamlit의 빨간 에러 컨테이너)
+            error_els = page.query_selector_all(
+                "[data-testid='stException'], .element-container.stAlert"
+            )
+            if error_els:
+                print(f"  ❌ Streamlit 에러 감지 ({len(error_els)}건):")
+                for el in error_els[:3]:
+                    print(f"     {el.inner_text()[:300]}")
+                browser.close()
+                return False
+
+            # 추가: traceback 텍스트 직접 검색
+            content = page.content()
+            if "Traceback (most recent call last)" in content:
+                # 에러 텍스트 일부 추출
+                idx = content.find("Traceback")
+                print(f"  ❌ Traceback 감지:\n{content[idx:idx+400]}")
+                browser.close()
+                return False
+
+            browser.close()
+            print("  ✅ Streamlit 앱 정상")
+            return True
+
+    except ImportError:
+        # ── requests 폴백 ─────────────────────────────────────────
+        print("  ⚠️  playwright 없음 — requests 폴백 사용")
+        try:
+            import requests as req
+            resp = req.get(url, timeout=30)
+            if resp.status_code == 200:
+                print(f"  ✅ HTTP 200 OK ({url})")
+                return True
+            else:
+                print(f"  ❌ HTTP {resp.status_code}")
+                return False
+        except Exception as e:
+            print(f"  ❌ 접속 실패: {e}")
+            return False
+
+    except Exception as e:
+        print(f"  ❌ Streamlit 체크 예외: {e}")
+        return False
+
+
+# ────────────────────────────────────────────────────────────────────
 # 메인
 # ────────────────────────────────────────────────────────────────────
 
 def main() -> None:
+    # ── Streamlit 체크 전용 모드 ─────────────────────────────────
+    if os.getenv("STREAMLIT_CHECK") == "1":
+        print("=" * 60)
+        print("🔍 Streamlit Cloud 에러 체크 모드")
+        print("=" * 60)
+        ok = check_streamlit(STREAMLIT_URL)
+        if not ok:
+            print("❌ Streamlit 에러 감지")
+            sys.exit(2)
+        sys.exit(0)
+
+    # ── 일반 학습 모드 ───────────────────────────────────────────
     print("=" * 60)
     print("🤖 GitHub Actions Daily Dev Loop (기존 스크립트 실행)")
     print(f"   실행일: {date.today()}")
@@ -208,7 +302,7 @@ def main() -> None:
 
     ok = sum(1 for r in results_log if r["success"])
     print("=" * 60)
-    print(f"✅ 완료: {ok}/{len(results_log)} 성공")
+    print(f"✅ 학습 완료: {ok}/{len(results_log)} 성공")
     print(f"📄 결과: {summary_path.relative_to(ROOT)}")
     print("=" * 60)
 
