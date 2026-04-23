@@ -6,12 +6,12 @@ on:
   workflow_dispatch:         # 수동 실행 버튼
 
 permissions:
-  contents: write            # git push 허용
+  contents: write
 
 jobs:
   dev-loop:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60      # 모델 학습 포함이므로 60분
 
     steps:
       - name: 📥 레포 체크아웃
@@ -23,11 +23,19 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
 
-      - name: 📦 의존성 설치
-        run: pip install anthropic --quiet
+      - name: 📦 ML + API 의존성 설치
+        run: |
+          pip install --quiet \
+            anthropic \
+            pandas pyarrow \
+            scikit-learn \
+            xgboost lightgbm \
+            optuna \
+            joblib numpy
 
-      - name: 🤖 액션아이템 구현 (Claude API)
+      - name: 🤖 액션아이템 구현 + 모델 학습 (Claude API)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/github_actions_dev.py
@@ -41,6 +49,6 @@ jobs:
             echo "변경사항 없음 — 커밋 스킵"
           else
             TODAY=$(date +'%Y-%m-%d')
-            git commit -m "auto(actions/${TODAY}): 미팅 액션아이템 코드 구현"
+            git commit -m "auto(actions/${TODAY}): 미팅 액션아이템 구현 + 모델 학습"
             git push
           fi
