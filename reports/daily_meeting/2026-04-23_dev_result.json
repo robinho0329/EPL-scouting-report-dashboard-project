@@ -13,7 +13,7 @@
     },
     {
       "item": "P7 성장 곡선 lag 피처 추가: 직전 1·2시즌 목표변수 Δ를 lag1/lag2 피처로",
-      "script": "models/p7_growth_curve/train_v2.py",
+      "script": "models/p7_growth_curve/train_v4.py",
       "success": false
     }
   ]
