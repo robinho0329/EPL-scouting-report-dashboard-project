@@ -47,6 +47,7 @@ jobs:
           else
             TODAY=$(date +'%Y-%m-%d')
             git commit -m "auto(actions/${TODAY}): 미팅 액션아이템 구현 + 모델 학습"
+            git pull --rebase origin master
             git push
           fi
 
