@@ -5,6 +5,7 @@
   2. 오늘 미팅 노트에서 액션아이템 파싱
   3. Claude Code CLI로 epl-model / epl-dashboard 에이전트 실행
   4. git push → GitHub → Streamlit Cloud 자동 배포
+  5. Streamlit Cloud 앱 에러 체크 → 에러 시 자동 수정 & 재푸시
 """
 
 import logging
@@ -36,6 +37,11 @@ logger = logging.getLogger("daily_dev_loop")
 
 # ─── Claude CLI 경로 ──────────────────────────────────────────────────────────
 CLAUDE_CLI = r"C:\Users\xcv54\AppData\Roaming\npm\claude.cmd"
+
+# ─── Streamlit Cloud 앱 URL ───────────────────────────────────────────────────
+# ※ 실제 배포 URL로 교체 필요
+STREAMLIT_URL = "https://epl-scouting-dashboard.streamlit.app"
+STREAMLIT_WAIT_SEC = 90   # push 후 재배포 대기 시간(초)
 
 
 def run(cmd: list[str], cwd: Path = ROOT, timeout: int = 60) -> str:
@@ -195,10 +201,70 @@ def run_claude_agent(prompt: str, agent_type: str) -> bool:
         return False
 
 
-def git_commit_push(items: list[dict]) -> bool:
+def check_streamlit_and_fix(streamlit_url: str) -> bool:
+    """push 후 Streamlit Cloud 앱 에러 확인 → 에러 시 자동 수정.
+
+    Returns:
+        True  — 앱 정상 또는 수정 완료
+        False — 확인/수정 실패
+    """
+    import time
+    logger.info(f"Streamlit Cloud 재배포 대기 중 ({STREAMLIT_WAIT_SEC}초)...")
+    time.sleep(STREAMLIT_WAIT_SEC)
+
+    prompt = f"""EPL 스카우트 대시보드 Streamlit Cloud 에러 점검 및 자동 수정.
+
+## 작업 순서
+1. 브라우저로 {streamlit_url} 접속 (Chrome MCP 또는 computer-use 활용)
+2. 앱 완전 로딩 대기 (최대 30초, 스피너 사라질 때까지)
+3. 화면에 에러 박스(빨간색 배경) 또는 Python traceback 있는지 확인
+4. 에러 발견 시:
+   a. 에러 메시지 전체 읽기
+   b. 원인 파일 특정 (`C:/Users/xcv54/workspace/EPL project/dashboard/` 내)
+   c. 해당 파일 수정 (경로 오류·import 오류·컬럼명 불일치 등)
+   d. 수정 후 `git add <파일>` (커밋은 오케스트레이터가 처리)
+   e. 다른 페이지도 사이드바로 순차 확인 후 같은 방식으로 수정
+5. 모든 페이지 정상이면 "STREAMLIT_OK" 출력 후 종료
+
+## 에러 유형별 힌트
+- FileNotFoundError: data/ 경로가 로컬 절대경로로 하드코딩됐을 가능성 → Path(__file__) 기반으로 수정
+- ModuleNotFoundError: requirements.txt에 패키지 추가 필요
+- KeyError / AttributeError: 최근 파이프라인 결과로 컬럼명 변경됐을 가능성
+
+## 주의
+- 정상 작동 중인 페이지는 건드리지 말 것
+- git add까지만 수행, 커밋·푸시는 하지 말 것
+- 수정 불가한 에러는 에러 내용만 로그에 남기고 "STREAMLIT_ERR: <내용>" 출력 후 종료
+"""
+    logger.info("Streamlit 에러 점검 에이전트 실행...")
+    result = subprocess.run(
+        [CLAUDE_CLI, "--dangerously-skip-permissions", "-p", prompt],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        timeout=1800,
+        encoding="utf-8",
+        errors="replace",
+    )
+    output = result.stdout + result.stderr
+    if "STREAMLIT_OK" in output:
+        logger.info("✅ Streamlit 앱 정상 확인")
+        return True
+    elif "STREAMLIT_ERR" in output:
+        err_line = next((l for l in output.splitlines() if "STREAMLIT_ERR" in l), "")
+        logger.error(f"Streamlit 에러 수정 불가: {err_line}")
+        return False
+    elif result.returncode == 0:
+        logger.info("Streamlit 점검 완료 (수정 사항 있음)")
+        return True
+    else:
+        logger.error(f"Streamlit 점검 실패 (코드 {result.returncode})")
+        return False
+
+
+def git_commit_push(items: list[dict], msg_prefix: str = "") -> bool:
     """변경사항 커밋 & 푸시."""
     try:
-        # 스테이징 상태 확인
         status = run(["git", "status", "--short"])
         if not status:
             logger.info("변경사항 없음 — 커밋 스킵")
@@ -207,7 +273,8 @@ def git_commit_push(items: list[dict]) -> bool:
         run(["git", "add", "-A"])
 
         titles = " / ".join(i["content"][:30] for i in items[:2])
-        commit_msg = f"auto({today_str}): {titles}"
+        prefix = f"{msg_prefix} " if msg_prefix else ""
+        commit_msg = f"auto({today_str}): {prefix}{titles}"
         run(["git", "commit", "-m", commit_msg])
         run(["git", "push", "origin", "master"], timeout=120)
 
@@ -250,14 +317,24 @@ def main() -> None:
             continue
         results[agent_type] = run_claude_agent(prompt, agent_type)
 
-    # 5. git commit & push
-    success = git_commit_push(items)
+    # 5. git commit & push (1차: 모델/대시보드 구현 결과)
+    push_ok = git_commit_push(items)
+
+    # 6. Streamlit Cloud 에러 체크 → 수정 후 재푸시
+    streamlit_ok = False
+    if push_ok:
+        streamlit_ok = check_streamlit_and_fix(STREAMLIT_URL)
+        # 에이전트가 수정한 파일이 있으면 2차 커밋
+        git_commit_push(items, msg_prefix="[streamlit-fix]")
+    else:
+        logger.warning("push 실패로 Streamlit 체크 스킵")
 
     # 결과 요약
     logger.info("=== 실행 결과 요약 ===")
     for k, v in results.items():
         logger.info(f"  {k}: {'✅ 성공' if v else '❌ 실패'}")
-    logger.info(f"  git push: {'✅ 성공' if success else '❌ 실패'}")
+    logger.info(f"  git push    : {'✅ 성공' if push_ok else '❌ 실패'}")
+    logger.info(f"  streamlit   : {'✅ 정상' if streamlit_ok else '⚠️  확인 필요'}")
     logger.info(f"=== daily_dev_loop 종료: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ===")
 
 

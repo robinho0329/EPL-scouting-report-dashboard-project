@@ -37,7 +37,7 @@ warnings.filterwarnings("ignore")
 np.random.seed(42)
 
 # ─── Paths ───────────────────────────────────────────────────────────────────
-BASE = Path(r"C:\Users\xcv54\workspace\EPL project")
+BASE = Path(__file__).resolve().parent.parent.parent
 DATA = BASE / "data" / "processed"
 OUT  = BASE / "models" / "p8_transfer_adaptation"
 OUT.mkdir(parents=True, exist_ok=True)

@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 # ─────────────────────────────────────────────
 # PATHS
 # ─────────────────────────────────────────────
-BASE_DIR = Path("C:/Users/xcv54/workspace/EPL project")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = BASE_DIR / "data" / "processed"
 OUT_DIR  = BASE_DIR / "models" / "p1_match_result"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

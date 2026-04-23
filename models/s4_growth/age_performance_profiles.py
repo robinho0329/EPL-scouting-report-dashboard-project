@@ -34,7 +34,7 @@ from scipy.ndimage import gaussian_filter1d
 warnings.filterwarnings('ignore')
 
 # ─────────────────────────── 경로 설정 ───────────────────────────
-BASE_DIR  = Path("C:/Users/xcv54/workspace/EPL project")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR  = BASE_DIR / "data" / "processed"
 SCOUT_DIR = BASE_DIR / "data" / "scout"
 FIG_DIR   = BASE_DIR / "models" / "s4_growth" / "figures"

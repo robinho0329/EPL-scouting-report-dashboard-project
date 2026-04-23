@@ -1,3 +1,4 @@
+from pathlib import Path
 """
 S1: Scout Player Rating System
 WAR 스타일 복합 선수 평가 시스템 (0-100 스케일)
@@ -29,10 +30,10 @@ warnings.filterwarnings('ignore')
 # ─────────────────────────────────────────────
 # 경로 설정
 # ─────────────────────────────────────────────
-BASE_DIR = r"C:/Users/xcv54/workspace/EPL project"
-DATA_DIR = os.path.join(BASE_DIR, "data", "processed")
-MODEL_DIR = os.path.join(BASE_DIR, "models", "s1_player_rating")
-SCOUT_DIR = os.path.join(BASE_DIR, "data", "scout")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR = BASE_DIR / "data" / "processed"
+MODEL_DIR = BASE_DIR / "models" / "s1_player_rating"
+SCOUT_DIR = BASE_DIR / "data" / "scout"
 FIG_DIR = os.path.join(MODEL_DIR, "figures")
 
 os.makedirs(MODEL_DIR, exist_ok=True)

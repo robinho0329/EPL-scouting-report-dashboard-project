@@ -46,7 +46,7 @@ warnings.filterwarnings("ignore")
 # ─────────────────────────────────────────────
 # Paths
 # ─────────────────────────────────────────────
-BASE = Path("C:/Users/xcv54/workspace/EPL project")
+BASE = Path(__file__).resolve().parent.parent.parent
 DATA = BASE / "data" / "processed"
 OUT  = BASE / "models" / "p2_goal_scoring"
 OUT.mkdir(parents=True, exist_ok=True)

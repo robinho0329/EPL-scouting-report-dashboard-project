@@ -34,7 +34,7 @@ import joblib
 warnings.filterwarnings("ignore")
 
 # ── paths ────────────────────────────────────────────────────────────────
-PROJECT  = Path(r"C:/Users/xcv54/workspace/EPL project")
+PROJECT = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = PROJECT / "data"
 OUT_DIR  = PROJECT / "models" / "p3_relegation"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

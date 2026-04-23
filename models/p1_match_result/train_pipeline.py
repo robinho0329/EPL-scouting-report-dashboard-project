@@ -25,7 +25,7 @@ from torch.utils.data import DataLoader, TensorDataset
 warnings.filterwarnings("ignore")
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-PROJECT_ROOT = Path(r"C:\Users\xcv54\workspace\EPL project")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 FEATURES_PATH = PROJECT_ROOT / "data" / "features" / "match_features.parquet"
 RESULTS_PATH = PROJECT_ROOT / "data" / "processed" / "match_results.parquet"
 OUTPUT_DIR = PROJECT_ROOT / "models" / "p1_match_result"

@@ -33,7 +33,7 @@ warnings.filterwarnings("ignore")
 # ─────────────────────────────────────────────────────────────────────────────
 # Paths
 # ─────────────────────────────────────────────────────────────────────────────
-BASE = Path("C:/Users/xcv54/workspace/EPL project")
+BASE = Path(__file__).resolve().parent.parent.parent
 DATA = BASE / "data" / "processed"
 OUT  = BASE / "models" / "p4_mvp_scoring"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -132,7 +132,7 @@ df = df.merge(cs_agg, on=["player", "season"], how="left")
 df = df.merge(cons_agg, on=["player", "season"], how="left")
 df = df.merge(team_goals, on=["season", "team"], how="left")
 df = df.merge(
-    tss[["season", "team", "team_rank", "team_strength", "points"]],
+    tss[["season", "team", "team_rank", "team_strength", "teams_in_season", "points"]],
     on=["season", "team"],
     how="left",
 )

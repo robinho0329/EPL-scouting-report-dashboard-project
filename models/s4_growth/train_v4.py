@@ -53,7 +53,7 @@ import xgboost as xgb
 warnings.filterwarnings('ignore')
 
 # ─────────────────────────── Paths ───────────────────────────
-BASE_DIR  = Path("C:/Users/xcv54/workspace/EPL project")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR  = BASE_DIR / "data" / "processed"
 SCOUT_DIR = BASE_DIR / "data" / "scout"
 FIG_DIR   = BASE_DIR / "models" / "s4_growth" / "figures"

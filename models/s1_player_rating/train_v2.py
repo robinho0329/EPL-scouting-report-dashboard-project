@@ -1,3 +1,4 @@
+from pathlib import Path
 """
 S1 v3: Scout Player Rating System - 완전 재설계 (v2 버그픽스 + 스카우트 검증)
 
@@ -29,11 +30,11 @@ warnings.filterwarnings('ignore')
 # ─────────────────────────────────────────────
 # 경로 설정
 # ─────────────────────────────────────────────
-BASE_DIR  = r"C:/Users/xcv54/workspace/EPL project"
-DATA_DIR  = os.path.join(BASE_DIR, "data", "processed")
-FEAT_DIR  = os.path.join(BASE_DIR, "data", "features")
-MODEL_DIR = os.path.join(BASE_DIR, "models", "s1_player_rating")
-SCOUT_DIR = os.path.join(BASE_DIR, "data", "scout")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR  = BASE_DIR / "data" / "processed"
+FEAT_DIR  = BASE_DIR / "data" / "features"
+MODEL_DIR = BASE_DIR / "models" / "s1_player_rating"
+SCOUT_DIR = BASE_DIR / "data" / "scout"
 FIG_DIR   = os.path.join(MODEL_DIR, "figures")
 
 os.makedirs(MODEL_DIR, exist_ok=True)

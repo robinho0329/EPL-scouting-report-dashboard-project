@@ -35,7 +35,7 @@ warnings.filterwarnings("ignore")
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-PROJECT_ROOT = Path(r"C:\Users\xcv54\workspace\EPL project")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 MODEL_DIR = PROJECT_ROOT / "models" / "p4_mvp"
 MODEL_DIR.mkdir(parents=True, exist_ok=True)

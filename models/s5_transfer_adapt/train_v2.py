@@ -46,7 +46,7 @@ warnings.filterwarnings('ignore')
 # ─────────────────────────────────────────────
 # Paths
 # ─────────────────────────────────────────────
-BASE_DIR = Path("C:/Users/xcv54/workspace/EPL project")
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR  = BASE_DIR / "data" / "processed"
 SCOUT_DIR = BASE_DIR / "data" / "scout"
 FEAT_DIR  = BASE_DIR / "data" / "features"

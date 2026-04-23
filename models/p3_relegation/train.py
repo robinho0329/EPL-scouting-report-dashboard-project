@@ -41,7 +41,7 @@ warnings.filterwarnings("ignore")
 # =============================================================================
 # Paths
 # =============================================================================
-ROOT = Path("C:/Users/xcv54/workspace/EPL project")
+ROOT = Path(__file__).resolve().parent.parent.parent
 DATA = ROOT / "data" / "processed"
 OUT  = ROOT / "models" / "p3_relegation"
 OUT.mkdir(parents=True, exist_ok=True)
