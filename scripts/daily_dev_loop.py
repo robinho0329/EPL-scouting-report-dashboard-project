@@ -40,7 +40,7 @@ CLAUDE_CLI = r"C:\Users\xcv54\AppData\Roaming\npm\claude.cmd"
 
 # ─── Streamlit Cloud 앱 URL ───────────────────────────────────────────────────
 # ※ 실제 배포 URL로 교체 필요
-STREAMLIT_URL = "https://epl-scouting-dashboard.streamlit.app"
+STREAMLIT_URL = "https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app"
 STREAMLIT_WAIT_SEC = 90   # push 후 재배포 대기 시간(초)
 
 
