@@ -1,0 +1,20 @@
+{
+  "date": "2026-04-23",
+  "results": [
+    {
+      "item": "P8 이적 적응 모델 개선: 이적 샘플을 Championship/주요 유럽 리그 이적까지 ",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": false
+    },
+    {
+      "item": "S2 수비수(DEF) 시장가치 예측 개선: match_logs 기반 `tackles_p90",
+      "script": "models/s2_market_value/train_v4.py",
+      "success": false
+    },
+    {
+      "item": "P7 성장 곡선 lag 피처 추가: 직전 1·2시즌 목표변수 Δ를 lag1/lag2 피처로",
+      "script": "models/p7_growth_curve/train_v2.py",
+      "success": false
+    }
+  ]
+}
