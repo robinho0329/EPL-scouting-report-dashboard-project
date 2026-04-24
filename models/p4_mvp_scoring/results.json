@@ -1,0 +1,293 @@
+{
+  "models": {
+    "xgboost": {
+      "val": {
+        "mae": 2.17984938621521,
+        "rmse": 3.205655813217163,
+        "r2": 0.9665190985121321,
+        "top10_spearman": 0.6666666666666666
+      },
+      "test": {
+        "mae": 5.918659210205078,
+        "rmse": 8.189236640930176,
+        "r2": 0.7095507215020473,
+        "top10_spearman": 0.7393939393939393
+      }
+    },
+    "mlp": {
+      "val": {
+        "mae": 1.4751709699630737,
+        "rmse": 2.089174270629883,
+        "r2": 0.9857795726522226,
+        "top10_spearman": 0.9393939393939393
+      },
+      "test": {
+        "mae": 5.2035746574401855,
+        "rmse": 7.437737464904785,
+        "r2": 0.7604119401324618,
+        "top10_spearman": 0.8363636363636363
+      }
+    },
+    "attention_mlp": {
+      "val": {
+        "mae": 1.6901426315307617,
+        "rmse": 2.386361598968506,
+        "r2": 0.9814460706364969,
+        "top10_spearman": 0.8363636363636363
+      },
+      "test": {
+        "mae": 5.385162830352783,
+        "rmse": 7.591555595397949,
+        "r2": 0.750399724654912,
+        "top10_spearman": 0.7454545454545454
+      }
+    },
+    "ensemble": {
+      "val": {
+        "mae": 1.5828114748001099,
+        "rmse": 2.1952004432678223,
+        "r2": 0.9842995638115744,
+        "top10_spearman": 0.8242424242424242
+      },
+      "test": {
+        "mae": 5.4208784103393555,
+        "rmse": 7.624821662902832,
+        "r2": 0.7482074836866917,
+        "top10_spearman": 0.8242424242424241
+      }
+    }
+  },
+  "feature_importance_xgboost": {
+    "pos_MF": 0.2127087265253067,
+    "pos_DF": 0.16984370350837708,
+    "pos_GK": 0.1295119971036911,
+    "clean_sheets": 0.10593362897634506,
+    "ga_std": 0.10340695083141327,
+    "minutes_share": 0.0830509215593338,
+    "pos_FW": 0.07360974699258804,
+    "gls_p90": 0.03535192087292671,
+    "ast_p90": 0.020078623667359352,
+    "team_strength": 0.010565044358372688,
+    "team_points": 0.009455230087041855,
+    "sh_p90_log": 0.009352313354611397,
+    "int_p90_log": 0.007880386896431446,
+    "tklw_p90_log": 0.005582512356340885,
+    "team_rank_norm": 0.005512606352567673,
+    "log_market_value": 0.004851637873798609,
+    "experience": 0.00378443393856287,
+    "delta_gls_p90": 0.0037170173600316048,
+    "delta_ast_p90": 0.0034214940387755632,
+    "player_age": 0.0023811357095837593
+  },
+  "top10_mvp_per_test_season": {
+    "2023/24": [
+      {
+        "player": "Cole Palmer",
+        "team": "Chelsea",
+        "primary_pos": "MF",
+        "pred_score": 87.66666412353516,
+        "mvp_score": 100.0
+      },
+      {
+        "player": "Ben White",
+        "team": "Arsenal",
+        "primary_pos": "DF",
+        "pred_score": 83.51425170898438,
+        "mvp_score": 81.40036750822006
+      },
+      {
+        "player": "Phil Foden",
+        "team": "Man City",
+        "primary_pos": "MF",
+        "pred_score": 80.45697784423828,
+        "mvp_score": 81.09453776158921
+      },
+      {
+        "player": "Ollie Watkins",
+        "team": "Aston Villa",
+        "primary_pos": "FW",
+        "pred_score": 79.36946868896484,
+        "mvp_score": 76.79896740505032
+      },
+      {
+        "player": "Gabriel Magalh\u00e3es",
+        "team": "Arsenal",
+        "primary_pos": "DF",
+        "pred_score": 77.58746337890625,
+        "mvp_score": 68.21713032192007
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Man City",
+        "primary_pos": "FW",
+        "pred_score": 77.2933349609375,
+        "mvp_score": 71.289118249143
+      },
+      {
+        "player": "William Saliba",
+        "team": "Arsenal",
+        "primary_pos": "DF",
+        "pred_score": 70.50138092041016,
+        "mvp_score": 65.94372973493596
+      },
+      {
+        "player": "Son Heung-min",
+        "team": "Tottenham",
+        "primary_pos": "FW",
+        "pred_score": 70.19244384765625,
+        "mvp_score": 64.35790590507987
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool",
+        "primary_pos": "FW",
+        "pred_score": 67.68505096435547,
+        "mvp_score": 65.5194108802546
+      },
+      {
+        "player": "Jarrod Bowen",
+        "team": "West Ham",
+        "primary_pos": "MF",
+        "pred_score": 66.94093322753906,
+        "mvp_score": 69.16061030477778
+      }
+    ],
+    "2024/25": [
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool",
+        "primary_pos": "MF",
+        "pred_score": 109.42536163330078,
+        "mvp_score": 100.0
+      },
+      {
+        "player": "Bryan Mbeumo",
+        "team": "Brentford",
+        "primary_pos": "MF",
+        "pred_score": 77.2005844116211,
+        "mvp_score": 60.01104265838152
+      },
+      {
+        "player": "Cole Palmer",
+        "team": "Chelsea",
+        "primary_pos": "MF",
+        "pred_score": 74.99469757080078,
+        "mvp_score": 49.87523614341346
+      },
+      {
+        "player": "Trent Alexander-Arnold",
+        "team": "Liverpool",
+        "primary_pos": "DF",
+        "pred_score": 73.31417083740234,
+        "mvp_score": 47.45229369046366
+      },
+      {
+        "player": "Alexander Isak",
+        "team": "Newcastle",
+        "primary_pos": "FW",
+        "pred_score": 72.5278091430664,
+        "mvp_score": 48.14376900574738
+      },
+      {
+        "player": "Jo\u0161ko Gvardiol",
+        "team": "Man City",
+        "primary_pos": "DF",
+        "pred_score": 69.52519989013672,
+        "mvp_score": 43.00647109326643
+      },
+      {
+        "player": "Nikola Milenkovi\u0107",
+        "team": "Nott'm Forest",
+        "primary_pos": "DF",
+        "pred_score": 68.22722625732422,
+        "mvp_score": 46.980958258989205
+      },
+      {
+        "player": "Matheus Cunha",
+        "team": "Wolves",
+        "primary_pos": "MF",
+        "pred_score": 68.16769409179688,
+        "mvp_score": 47.02335642566383
+      },
+      {
+        "player": "Jarrod Bowen",
+        "team": "West Ham",
+        "primary_pos": "MF",
+        "pred_score": 65.16144561767578,
+        "mvp_score": 48.12232455733536
+      },
+      {
+        "player": "Virgil van Dijk",
+        "team": "Liverpool",
+        "primary_pos": "DF",
+        "pred_score": 64.46460723876953,
+        "mvp_score": 40.88140416230578
+      }
+    ]
+  },
+  "config": {
+    "train_seasons": [
+      "2000/01",
+      "2001/02",
+      "2002/03",
+      "2003/04",
+      "2004/05",
+      "2005/06",
+      "2006/07",
+      "2007/08",
+      "2008/09",
+      "2009/10",
+      "2010/11",
+      "2011/12",
+      "2012/13",
+      "2013/14",
+      "2014/15",
+      "2015/16",
+      "2016/17",
+      "2017/18",
+      "2018/19",
+      "2019/20",
+      "2020/21"
+    ],
+    "val_seasons": [
+      "2021/22",
+      "2022/23"
+    ],
+    "test_seasons": [
+      "2023/24",
+      "2024/25"
+    ],
+    "min_minutes_threshold": 900,
+    "features": [
+      "gls_p90",
+      "ast_p90",
+      "sh_p90_log",
+      "tklw_p90_log",
+      "int_p90_log",
+      "player_age",
+      "log_market_value",
+      "minutes_share",
+      "clean_sheets",
+      "team_strength",
+      "team_points",
+      "team_rank_norm",
+      "experience",
+      "delta_gls_p90",
+      "delta_ast_p90",
+      "ga_std",
+      "pos_DF",
+      "pos_FW",
+      "pos_GK",
+      "pos_MF"
+    ],
+    "target": "mvp_score",
+    "goal_weights": {
+      "FW": 1.0,
+      "MF": 1.5,
+      "DF": 2.0,
+      "GK": 3.0
+    },
+    "assist_weight": 1.2,
+    "clean_sheet_weight": 1.5
+  }
+}

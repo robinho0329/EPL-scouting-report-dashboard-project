@@ -1,0 +1,2237 @@
+{
+  "meta": {
+    "analysis_date": "2026-03-21",
+    "base_dir": "C:/Users/xcv54/workspace/EPL project/data/raw/fbref",
+    "parquet_path": "C:/Users/xcv54/workspace/EPL project/data/processed/player_match_logs.parquet",
+    "total_seasons": 25,
+    "seasons_list": [
+      "2000-2001",
+      "2001-2002",
+      "2002-2003",
+      "2003-2004",
+      "2004-2005",
+      "2005-2006",
+      "2006-2007",
+      "2007-2008",
+      "2008-2009",
+      "2009-2010",
+      "2010-2011",
+      "2011-2012",
+      "2012-2013",
+      "2013-2014",
+      "2014-2015",
+      "2015-2016",
+      "2016-2017",
+      "2017-2018",
+      "2018-2019",
+      "2019-2020",
+      "2020-2021",
+      "2021-2022",
+      "2022-2023",
+      "2023-2024",
+      "2024-2025"
+    ]
+  },
+  "file_inventory": {
+    "total_matchlog_csv_files": 11369,
+    "files_per_season": {
+      "2000-2001": 455,
+      "2001-2002": 443,
+      "2002-2003": 436,
+      "2003-2004": 447,
+      "2004-2005": 444,
+      "2005-2006": 460,
+      "2006-2007": 461,
+      "2007-2008": 459,
+      "2008-2009": 455,
+      "2009-2010": 456,
+      "2010-2011": 465,
+      "2011-2012": 455,
+      "2012-2013": 445,
+      "2013-2014": 456,
+      "2014-2015": 450,
+      "2015-2016": 451,
+      "2016-2017": 460,
+      "2017-2018": 443,
+      "2018-2019": 440,
+      "2019-2020": 448,
+      "2020-2021": 436,
+      "2021-2022": 450,
+      "2022-2023": 483,
+      "2023-2024": 491,
+      "2024-2025": 480
+    },
+    "files_per_team": {
+      "Tottenham": 577,
+      "Man United": 573,
+      "Arsenal": 564,
+      "Everton": 557,
+      "Chelsea": 552,
+      "Liverpool": 549,
+      "Newcastle": 539,
+      "Man City": 529,
+      "West Ham": 526,
+      "Aston Villa": 484,
+      "Fulham": 414,
+      "Southampton": 382,
+      "Sunderland": 333,
+      "Leicester": 302,
+      "Crystal Palace": 294,
+      "West Brom": 290,
+      "Wolves": 248,
+      "Blackburn": 247,
+      "Middlesbrough": 238,
+      "Bolton": 237,
+      "Stoke": 216,
+      "Burnley": 194,
+      "Bournemouth": 184,
+      "Brighton": 181,
+      "Wigan": 173,
+      "Portsmouth": 172,
+      "Norwich": 163,
+      "Birmingham": 162,
+      "Watford": 160,
+      "Swansea": 156,
+      "Leeds": 155,
+      "Charlton": 151,
+      "Hull": 122,
+      "Sheffield United": 96,
+      "Brentford": 93,
+      "Derby": 79,
+      "Nott'm Forest": 79,
+      "QPR": 72,
+      "Ipswich": 69,
+      "Reading": 67,
+      "Cardiff": 47,
+      "Huddersfield": 45,
+      "Bradford": 27,
+      "Luton": 25,
+      "Blackpool": 24,
+      "Coventry": 22
+    },
+    "top10_teams_by_file_count": {
+      "Tottenham": 577,
+      "Man United": 573,
+      "Arsenal": 564,
+      "Everton": 557,
+      "Chelsea": 552,
+      "Liverpool": 549,
+      "Newcastle": 539,
+      "Man City": 529,
+      "West Ham": 526,
+      "Aston Villa": 484
+    },
+    "sample_size_analyzed": 1696,
+    "sample_load_errors": 0,
+    "sample_encoding_issues": 0,
+    "header_contaminated_files": 0
+  },
+  "column_analysis": {
+    "all_columns_found": {
+      "date": 1696,
+      "day": 1696,
+      "comp": 1696,
+      "round": 1696,
+      "venue": 1696,
+      "result": 1696,
+      "squad": 1696,
+      "opponent": 1696,
+      "start": 1696,
+      "pos": 1696,
+      "min": 1696,
+      "gls": 1696,
+      "ast": 1696,
+      "pk": 1696,
+      "pkatt": 1696,
+      "sh": 1696,
+      "sot": 1696,
+      "crdy": 1696,
+      "crdr": 1696,
+      "fls": 1696,
+      "fld": 1696,
+      "off": 1696,
+      "crs": 1696,
+      "tklw": 1696,
+      "int": 1696,
+      "og": 1696,
+      "pkwon": 1696,
+      "pkcon": 1696,
+      "match_report": 1696,
+      "season": 1696,
+      "team": 1696,
+      "player": 1696
+    },
+    "total_unique_columns": 32,
+    "early_era_columns_union_2000_2005": [
+      "ast",
+      "comp",
+      "crdr",
+      "crdy",
+      "crs",
+      "date",
+      "day",
+      "fld",
+      "fls",
+      "gls",
+      "int",
+      "match_report",
+      "min",
+      "off",
+      "og",
+      "opponent",
+      "pk",
+      "pkatt",
+      "pkcon",
+      "pkwon",
+      "player",
+      "pos",
+      "result",
+      "round",
+      "season",
+      "sh",
+      "sot",
+      "squad",
+      "start",
+      "team",
+      "tklw",
+      "venue"
+    ],
+    "recent_era_columns_union_2020_2025": [
+      "ast",
+      "comp",
+      "crdr",
+      "crdy",
+      "crs",
+      "date",
+      "day",
+      "fld",
+      "fls",
+      "gls",
+      "int",
+      "match_report",
+      "min",
+      "off",
+      "og",
+      "opponent",
+      "pk",
+      "pkatt",
+      "pkcon",
+      "pkwon",
+      "player",
+      "pos",
+      "result",
+      "round",
+      "season",
+      "sh",
+      "sot",
+      "squad",
+      "start",
+      "team",
+      "tklw",
+      "venue"
+    ],
+    "columns_only_in_early_era": [],
+    "columns_only_in_recent_era": [],
+    "columns_in_both_eras": [
+      "ast",
+      "comp",
+      "crdr",
+      "crdy",
+      "crs",
+      "date",
+      "day",
+      "fld",
+      "fls",
+      "gls",
+      "int",
+      "match_report",
+      "min",
+      "off",
+      "og",
+      "opponent",
+      "pk",
+      "pkatt",
+      "pkcon",
+      "pkwon",
+      "player",
+      "pos",
+      "result",
+      "round",
+      "season",
+      "sh",
+      "sot",
+      "squad",
+      "start",
+      "team",
+      "tklw",
+      "venue"
+    ],
+    "early_always_present": [
+      "ast",
+      "comp",
+      "crdr",
+      "crdy",
+      "crs",
+      "date",
+      "day",
+      "fld",
+      "fls",
+      "gls",
+      "int",
+      "match_report",
+      "min",
+      "off",
+      "og",
+      "opponent",
+      "pk",
+      "pkatt",
+      "pkcon",
+      "pkwon",
+      "player",
+      "pos",
+      "result",
+      "round",
+      "season",
+      "sh",
+      "sot",
+      "squad",
+      "start",
+      "team",
+      "tklw",
+      "venue"
+    ],
+    "recent_always_present": [
+      "ast",
+      "comp",
+      "crdr",
+      "crdy",
+      "crs",
+      "date",
+      "day",
+      "fld",
+      "fls",
+      "gls",
+      "int",
+      "match_report",
+      "min",
+      "off",
+      "og",
+      "opponent",
+      "pk",
+      "pkatt",
+      "pkcon",
+      "pkwon",
+      "player",
+      "pos",
+      "result",
+      "round",
+      "season",
+      "sh",
+      "sot",
+      "squad",
+      "start",
+      "team",
+      "tklw",
+      "venue"
+    ]
+  },
+  "missing_value_analysis": {
+    "top_20_missing_columns": {
+      "pkwon": {
+        "count": 34266,
+        "pct": 76.99
+      },
+      "pkcon": {
+        "count": 34265,
+        "pct": 76.99
+      },
+      "pos": {
+        "count": 26715,
+        "pct": 60.02
+      },
+      "pkatt": {
+        "count": 21607,
+        "pct": 48.55
+      },
+      "sh": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "sot": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "fls": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "fld": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "off": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "crs": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "tklw": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "int": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "date": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "day": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "comp": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "round": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "venue": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "result": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "squad": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "opponent": {
+        "count": 0,
+        "pct": 0.0
+      }
+    },
+    "full_missing_report": {
+      "date": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "day": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "comp": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "round": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "venue": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "result": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "squad": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "opponent": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "start": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "pos": {
+        "count": 26715,
+        "pct": 60.02
+      },
+      "min": {
+        "count": 2,
+        "pct": 0.0
+      },
+      "gls": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "ast": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "pk": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "pkatt": {
+        "count": 21607,
+        "pct": 48.55
+      },
+      "sh": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "sot": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "crdy": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "crdr": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "fls": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "fld": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "off": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "crs": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "tklw": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "int": {
+        "count": 21608,
+        "pct": 48.55
+      },
+      "og": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "pkwon": {
+        "count": 34266,
+        "pct": 76.99
+      },
+      "pkcon": {
+        "count": 34265,
+        "pct": 76.99
+      },
+      "match_report": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "season": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "team": {
+        "count": 0,
+        "pct": 0.0
+      },
+      "player": {
+        "count": 0,
+        "pct": 0.0
+      }
+    }
+  },
+  "match_count_per_player": {
+    "min": 5,
+    "max": 38,
+    "mean": 26.24,
+    "median": 28.0,
+    "std": 8.96,
+    "percentiles": {
+      "10": 13.0,
+      "25": 19.0,
+      "75": 34.0,
+      "90": 37.0
+    },
+    "total_player_season_files_in_sample": 1696
+  },
+  "minutes_played_distribution": {
+    "column_used": "min",
+    "count": 38815,
+    "min": 1.0,
+    "max": 90.0,
+    "mean": 71.86,
+    "median": 90.0,
+    "std": 28.5,
+    "pct_90_mins": 59.62,
+    "pct_zero_mins": 0.0,
+    "value_counts_common": {
+      "90.0": 23141,
+      "45.0": 1053,
+      "89.0": 420,
+      "1.0": 396,
+      "79.0": 258,
+      "13.0": 257,
+      "15.0": 251,
+      "75.0": 250,
+      "80.0": 244,
+      "78.0": 244
+    }
+  },
+  "stat_distributions": {
+    "goals": {
+      "column": "gls",
+      "count": 38817,
+      "min": 0.0,
+      "max": 4.0,
+      "mean": 0.0931,
+      "median": 0.0,
+      "std": 0.3232,
+      "total_sum": 3614.0,
+      "pct_zero": 91.58,
+      "value_counts": {
+        "0.0": 35550,
+        "1.0": 2958,
+        "2.0": 274,
+        "3.0": 32,
+        "4.0": 3
+      }
+    },
+    "assists": {
+      "column": "ast",
+      "count": 38817,
+      "min": 0.0,
+      "max": 4.0,
+      "mean": 0.0649,
+      "median": 0.0,
+      "std": 0.2613,
+      "total_sum": 2519.0,
+      "pct_zero": 93.87,
+      "value_counts": {
+        "0.0": 36436,
+        "1.0": 2251,
+        "2.0": 123,
+        "3.0": 6,
+        "4.0": 1
+      }
+    },
+    "shots": {
+      "column": "sh",
+      "count": 17209,
+      "min": 0.0,
+      "max": 10.0,
+      "mean": 0.8847,
+      "median": 0.0,
+      "std": 1.2404,
+      "total_sum": 15225.0,
+      "pct_zero": 51.97,
+      "value_counts": {
+        "0.0": 8943,
+        "1.0": 4417,
+        "2.0": 2085,
+        "3.0": 990,
+        "4.0": 445,
+        "5.0": 174,
+        "6.0": 97,
+        "7.0": 39,
+        "8.0": 10,
+        "9.0": 7,
+        "10.0": 2
+      }
+    },
+    "shots_on_target": {
+      "column": "sot",
+      "count": 17209,
+      "min": 0.0,
+      "max": 6.0,
+      "mean": 0.2975,
+      "median": 0.0,
+      "std": 0.6238,
+      "total_sum": 5120.0,
+      "pct_zero": 77.27,
+      "value_counts": {
+        "0.0": 13298,
+        "1.0": 2975,
+        "2.0": 718,
+        "3.0": 174,
+        "4.0": 35,
+        "5.0": 7,
+        "6.0": 2
+      }
+    },
+    "penalty_goals": {
+      "column": "pk",
+      "count": 38817,
+      "min": 0.0,
+      "max": 2.0,
+      "mean": 0.0065,
+      "median": 0.0,
+      "std": 0.085,
+      "total_sum": 254.0,
+      "pct_zero": 99.38,
+      "value_counts": {
+        "0.0": 38577,
+        "1.0": 226,
+        "2.0": 14
+      }
+    },
+    "penalty_attempts": {
+      "column": "pkatt",
+      "count": 17210,
+      "min": 0.0,
+      "max": 2.0,
+      "mean": 0.0066,
+      "median": 0.0,
+      "std": 0.0843,
+      "total_sum": 113.0,
+      "pct_zero": 99.37,
+      "value_counts": {
+        "0.0": 17102,
+        "1.0": 103,
+        "2.0": 5
+      }
+    },
+    "yellow_cards": {
+      "column": "crdy",
+      "count": 38817,
+      "min": 0.0,
+      "max": 2.0,
+      "mean": 0.122,
+      "median": 0.0,
+      "std": 0.3357,
+      "total_sum": 4734.0,
+      "pct_zero": 88.09,
+      "value_counts": {
+        "0.0": 34192,
+        "1.0": 4516,
+        "2.0": 109
+      }
+    },
+    "red_cards": {
+      "column": "crdr",
+      "count": 38817,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.0059,
+      "median": 0.0,
+      "std": 0.0766,
+      "total_sum": 229.0,
+      "pct_zero": 99.41,
+      "value_counts": {
+        "0.0": 38588,
+        "1.0": 229
+      }
+    },
+    "fouls_committed": {
+      "column": "fls",
+      "count": 17209,
+      "min": 0.0,
+      "max": 8.0,
+      "mean": 0.7816,
+      "median": 0.0,
+      "std": 0.9892,
+      "total_sum": 13451.0,
+      "pct_zero": 50.15,
+      "value_counts": {
+        "0.0": 8630,
+        "1.0": 5241,
+        "2.0": 2231,
+        "3.0": 776,
+        "4.0": 254,
+        "5.0": 60,
+        "6.0": 16,
+        "8.0": 1
+      }
+    },
+    "fouls_drawn": {
+      "column": "fld",
+      "count": 17209,
+      "min": 0.0,
+      "max": 9.0,
+      "mean": 0.7179,
+      "median": 0.0,
+      "std": 1.0106,
+      "total_sum": 12354.0,
+      "pct_zero": 55.13,
+      "value_counts": {
+        "0.0": 9487,
+        "1.0": 4725,
+        "2.0": 1897,
+        "3.0": 737,
+        "4.0": 242,
+        "5.0": 83,
+        "6.0": 30,
+        "7.0": 5,
+        "9.0": 2,
+        "8.0": 1
+      }
+    },
+    "offsides": {
+      "column": "off",
+      "count": 17209,
+      "min": 0.0,
+      "max": 5.0,
+      "mean": 0.1227,
+      "median": 0.0,
+      "std": 0.4101,
+      "total_sum": 2111.0,
+      "pct_zero": 90.11,
+      "value_counts": {
+        "0.0": 15507,
+        "1.0": 1385,
+        "2.0": 243,
+        "3.0": 58,
+        "4.0": 14,
+        "5.0": 2
+      }
+    },
+    "crosses": {
+      "column": "crs",
+      "count": 17209,
+      "min": 0.0,
+      "max": 22.0,
+      "mean": 1.2615,
+      "median": 0.0,
+      "std": 2.2655,
+      "total_sum": 21709.0,
+      "pct_zero": 56.67,
+      "value_counts": {
+        "0.0": 9752,
+        "1.0": 2974,
+        "2.0": 1521,
+        "3.0": 960,
+        "4.0": 612,
+        "5.0": 402,
+        "6.0": 289,
+        "7.0": 183,
+        "8.0": 156,
+        "9.0": 100,
+        "10.0": 69,
+        "11.0": 64,
+        "12.0": 34,
+        "13.0": 28,
+        "14.0": 21
+      }
+    },
+    "tackles_won": {
+      "column": "tklw",
+      "count": 17209,
+      "min": 0.0,
+      "max": 10.0,
+      "mean": 0.8281,
+      "median": 0.0,
+      "std": 1.1165,
+      "total_sum": 14250.0,
+      "pct_zero": 51.53,
+      "value_counts": {
+        "0.0": 8867,
+        "1.0": 4726,
+        "2.0": 2154,
+        "3.0": 935,
+        "4.0": 331,
+        "5.0": 131,
+        "6.0": 39,
+        "8.0": 13,
+        "7.0": 12,
+        "10.0": 1
+      }
+    },
+    "interceptions": {
+      "column": "int",
+      "count": 17209,
+      "min": 0.0,
+      "max": 13.0,
+      "mean": 0.8464,
+      "median": 0.0,
+      "std": 1.2133,
+      "total_sum": 14566.0,
+      "pct_zero": 53.8,
+      "value_counts": {
+        "0.0": 9258,
+        "1.0": 4243,
+        "2.0": 2035,
+        "3.0": 941,
+        "4.0": 415,
+        "5.0": 191,
+        "6.0": 90,
+        "7.0": 23,
+        "8.0": 9,
+        "9.0": 2,
+        "13.0": 1,
+        "11.0": 1
+      }
+    },
+    "own_goals": {
+      "column": "og",
+      "count": 38817,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.0031,
+      "median": 0.0,
+      "std": 0.0557,
+      "total_sum": 121.0,
+      "pct_zero": 99.69,
+      "value_counts": {
+        "0.0": 38696,
+        "1.0": 121
+      }
+    }
+  },
+  "start_vs_sub_analysis": {
+    "column": "start",
+    "value_counts": {
+      "Y": 30100,
+      "N": 13342,
+      "Y*": 1065
+    },
+    "starter_count": 31165,
+    "sub_count": 13342,
+    "total_appearances": 44507,
+    "start_pct": 70.02,
+    "sub_pct": 29.98,
+    "position_col": "pos",
+    "position_values": {
+      "nan": 26715,
+      "On matchday squad, but did not play": 5690,
+      "CB": 2746,
+      "FW": 1770,
+      "DM": 1523,
+      "AM": 1412,
+      "CM": 1398,
+      "GK": 963,
+      "LB": 901,
+      "RB": 748,
+      "RM": 268,
+      "LM": 247,
+      "RW": 73,
+      "LW": 53
+    }
+  },
+  "result_column_analysis": {
+    "column": "result",
+    "unique_count": 66,
+    "sample_values": [
+      "W 3–1",
+      "D 1–1",
+      "L 1–2",
+      "D 3–3",
+      "L 1–3",
+      "L 0–1",
+      "W 2–0",
+      "D 0–0",
+      "L 0–6",
+      "L 0–2",
+      "D 2–2",
+      "W 2–1",
+      "W 5–3",
+      "W 1–0",
+      "W 5–0",
+      "L 0–4",
+      "W 6–1",
+      "W 4–0",
+      "L 0–3",
+      "L 2–3"
+    ],
+    "null_count": 0,
+    "outcome_counts": {
+      "W": 16911,
+      "D": 10940,
+      "L": 16656
+    },
+    "dash_format": {
+      "hyphen_(-_0x2D)": 0,
+      "en_dash_(–_0x2013)": 44507
+    }
+  },
+  "position_analysis": {
+    "column": "pos",
+    "unique_values": 13,
+    "value_counts": {
+      "nan": 26715,
+      "On matchday squad, but did not play": 5690,
+      "CB": 2746,
+      "FW": 1770,
+      "DM": 1523,
+      "AM": 1412,
+      "CM": 1398,
+      "GK": 963,
+      "LB": 901,
+      "RB": 748,
+      "RM": 268,
+      "LM": 247,
+      "RW": 73,
+      "LW": 53
+    }
+  },
+  "date_coverage": {
+    "column": "date",
+    "min_date": "2000-08-19",
+    "max_date": "2025-05-25",
+    "total_valid_dates": 44507,
+    "null_date_count": 0,
+    "years_covered": [
+      2000,
+      2001,
+      2002,
+      2003,
+      2004,
+      2005,
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ]
+  },
+  "data_quality": {
+    "duplicate_rows_in_sample": 0,
+    "header_contaminated_files": [],
+    "encoding_issue_files": [],
+    "load_errors": [],
+    "numeric_column_contamination": {
+      "gls": {
+        "non_numeric_count": 5690,
+        "sample_bad_values": [
+          "On matchday squad, but did not play"
+        ]
+      },
+      "ast": {
+        "non_numeric_count": 5690,
+        "sample_bad_values": [
+          "On matchday squad, but did not play"
+        ]
+      },
+      "min": {
+        "non_numeric_count": 5690,
+        "sample_bad_values": [
+          "On matchday squad, but did not play"
+        ]
+      },
+      "sh": {
+        "non_numeric_count": 5690,
+        "sample_bad_values": [
+          "On matchday squad, but did not play"
+        ]
+      },
+      "sot": {
+        "non_numeric_count": 5690,
+        "sample_bad_values": [
+          "On matchday squad, but did not play"
+        ]
+      }
+    },
+    "dtype_summary": {
+      "date": "object",
+      "day": "object",
+      "comp": "object",
+      "round": "object",
+      "venue": "object",
+      "result": "object",
+      "squad": "object",
+      "opponent": "object",
+      "start": "object",
+      "pos": "object",
+      "min": "object",
+      "gls": "object",
+      "ast": "object",
+      "pk": "object",
+      "pkatt": "object",
+      "sh": "object",
+      "sot": "object",
+      "crdy": "object",
+      "crdr": "object",
+      "fls": "object",
+      "fld": "object",
+      "off": "object",
+      "crs": "object",
+      "tklw": "object",
+      "int": "object",
+      "og": "object",
+      "pkwon": "object",
+      "pkcon": "object",
+      "match_report": "object",
+      "season": "object",
+      "team": "object",
+      "player": "object"
+    }
+  },
+  "column_stats": {
+    "date": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 2625,
+      "top_values": {
+        "2024-05-19": 57,
+        "2014-05-11": 54,
+        "2022-05-22": 53,
+        "2025-05-25": 52,
+        "2015-12-26": 51,
+        "2020-01-01": 51,
+        "2018-12-26": 51,
+        "2015-05-24": 49,
+        "2023-04-08": 49,
+        "2011-05-22": 49
+      }
+    },
+    "day": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 7,
+      "top_values": {
+        "Sat": 24320,
+        "Sun": 10519,
+        "Wed": 3446,
+        "Mon": 2543,
+        "Tue": 2302,
+        "Thu": 706,
+        "Fri": 671
+      }
+    },
+    "comp": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 1,
+      "top_values": {
+        "Premier League": 44507
+      }
+    },
+    "round": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 38,
+      "top_values": {
+        "Matchweek 11": 1211,
+        "Matchweek 30": 1198,
+        "Matchweek 31": 1194,
+        "Matchweek 7": 1193,
+        "Matchweek 29": 1192,
+        "Matchweek 5": 1191,
+        "Matchweek 26": 1188,
+        "Matchweek 8": 1188,
+        "Matchweek 9": 1187,
+        "Matchweek 34": 1186
+      }
+    },
+    "venue": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 2,
+      "top_values": {
+        "Home": 22310,
+        "Away": 22197
+      }
+    },
+    "result": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 66,
+      "top_values": {
+        "D 1–1": 4997,
+        "W 1–0": 3774,
+        "L 0–1": 3759,
+        "W 2–1": 3378,
+        "L 1–2": 3265,
+        "D 0–0": 3209,
+        "L 0–2": 2910,
+        "W 2–0": 2896,
+        "D 2–2": 2254,
+        "L 1–3": 1719
+      }
+    },
+    "squad": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 46,
+      "top_values": {
+        "Tottenham Hotspur": 2436,
+        "Everton": 2345,
+        "Newcastle United": 2339,
+        "Manchester Utd": 2299,
+        "Liverpool": 2224,
+        "Manchester City": 2129,
+        "Arsenal": 2127,
+        "Southampton": 1916,
+        "Chelsea": 1916,
+        "Aston Villa": 1908
+      }
+    },
+    "opponent": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 46,
+      "top_values": {
+        "Manchester Utd": 2255,
+        "Liverpool": 2232,
+        "Chelsea": 2226,
+        "Arsenal": 2221,
+        "Everton": 2215,
+        "Tottenham Hotspur": 2201,
+        "Manchester City": 2167,
+        "Newcastle United": 2015,
+        "West Ham United": 2009,
+        "Aston Villa": 1951
+      }
+    },
+    "start": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 3,
+      "top_values": {
+        "Y": 30100,
+        "N": 13342,
+        "Y*": 1065
+      }
+    },
+    "pos": {
+      "dtype": "object",
+      "null_count": 26715,
+      "null_pct": 60.02,
+      "unique_count": 13,
+      "top_values": {
+        "nan": 26715,
+        "On matchday squad, but did not play": 5690,
+        "CB": 2746,
+        "FW": 1770,
+        "DM": 1523,
+        "AM": 1412,
+        "CM": 1398,
+        "GK": 963,
+        "LB": 901,
+        "RB": 748
+      }
+    },
+    "min": {
+      "dtype": "object",
+      "null_count": 2,
+      "null_pct": 0.0,
+      "unique_count": 181,
+      "numeric_stats": {
+        "min": 1.0,
+        "max": 90.0,
+        "mean": 71.8561,
+        "std": 28.4982
+      }
+    },
+    "gls": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 11,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 4.0,
+        "mean": 0.0931,
+        "std": 0.3232
+      }
+    },
+    "ast": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 10,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 4.0,
+        "mean": 0.0649,
+        "std": 0.2613
+      }
+    },
+    "pk": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 7,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 2.0,
+        "mean": 0.0065,
+        "std": 0.085
+      }
+    },
+    "pkatt": {
+      "dtype": "object",
+      "null_count": 21607,
+      "null_pct": 48.55,
+      "unique_count": 6,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 2.0,
+        "mean": 0.0066,
+        "std": 0.0843
+      }
+    },
+    "sh": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 23,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 10.0,
+        "mean": 0.8847,
+        "std": 1.2404
+      }
+    },
+    "sot": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 14,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 6.0,
+        "mean": 0.2975,
+        "std": 0.6238
+      }
+    },
+    "crdy": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 7,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 2.0,
+        "mean": 0.122,
+        "std": 0.3357
+      }
+    },
+    "crdr": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 5,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 1.0,
+        "mean": 0.0059,
+        "std": 0.0766
+      }
+    },
+    "fls": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 16,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 8.0,
+        "mean": 0.7816,
+        "std": 0.9892
+      }
+    },
+    "fld": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 20,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 9.0,
+        "mean": 0.7179,
+        "std": 1.0106
+      }
+    },
+    "off": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 12,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 5.0,
+        "mean": 0.1227,
+        "std": 0.4101
+      }
+    },
+    "crs": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 41,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 22.0,
+        "mean": 1.2615,
+        "std": 2.2655
+      }
+    },
+    "tklw": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 20,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 10.0,
+        "mean": 0.8281,
+        "std": 1.1165
+      }
+    },
+    "int": {
+      "dtype": "object",
+      "null_count": 21608,
+      "null_pct": 48.55,
+      "unique_count": 22,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 13.0,
+        "mean": 0.8464,
+        "std": 1.2133
+      }
+    },
+    "og": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 5,
+      "numeric_stats": {
+        "min": 0.0,
+        "max": 1.0,
+        "mean": 0.0031,
+        "std": 0.0557
+      }
+    },
+    "pkwon": {
+      "dtype": "object",
+      "null_count": 34266,
+      "null_pct": 76.99,
+      "unique_count": 5,
+      "top_values": {
+        "nan": 34266,
+        "On matchday squad, but did not play": 5690,
+        "0": 3494,
+        "0.0": 1023,
+        "1": 21,
+        "1.0": 13
+      }
+    },
+    "pkcon": {
+      "dtype": "object",
+      "null_count": 34265,
+      "null_pct": 76.99,
+      "unique_count": 6,
+      "top_values": {
+        "nan": 34265,
+        "On matchday squad, but did not play": 5690,
+        "0": 3474,
+        "0.0": 1023,
+        "1": 41,
+        "1.0": 13,
+        "2": 1
+      }
+    },
+    "match_report": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 1,
+      "top_values": {
+        "Match Report": 44507
+      }
+    },
+    "season": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 25,
+      "top_values": {
+        "2024/25": 2060,
+        "2023/24": 2043,
+        "2021/22": 1996,
+        "2022/23": 1991,
+        "2009/10": 1942,
+        "2020/21": 1922,
+        "2011/12": 1920,
+        "2018/19": 1914,
+        "2016/17": 1906,
+        "2013/14": 1904
+      }
+    },
+    "team": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 46,
+      "top_values": {
+        "Tottenham Hotspur": 2489,
+        "Manchester Utd": 2322,
+        "Everton": 2293,
+        "Newcastle United": 2281,
+        "Liverpool": 2238,
+        "Manchester City": 2128,
+        "Arsenal": 2116,
+        "Southampton": 1939,
+        "Chelsea": 1909,
+        "Aston Villa": 1886
+      }
+    },
+    "player": {
+      "dtype": "object",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_count": 1198,
+      "top_values": {
+        "Pablo Zabaleta": 172,
+        "Theo Walcott": 153,
+        "Steven Davis": 153,
+        "Scott Parker": 149,
+        "Peter Crouch": 148,
+        "Phil Jagielka": 142,
+        "Sylvain Distin": 136,
+        "Emile Heskey": 136,
+        "Yakubu Aiyegbeni": 134,
+        "Antonio Valencia": 127
+      }
+    }
+  },
+  "era_comparison": {
+    "era_2000_2012": {
+      "file_count": 877,
+      "row_count": 21294,
+      "columns_union": [
+        "ast",
+        "comp",
+        "crdr",
+        "crdy",
+        "crs",
+        "date",
+        "day",
+        "fld",
+        "fls",
+        "gls",
+        "int",
+        "match_report",
+        "min",
+        "off",
+        "og",
+        "opponent",
+        "pk",
+        "pkatt",
+        "pkcon",
+        "pkwon",
+        "player",
+        "pos",
+        "result",
+        "round",
+        "season",
+        "sh",
+        "sot",
+        "squad",
+        "start",
+        "team",
+        "tklw",
+        "venue"
+      ],
+      "columns_always_present": [
+        "ast",
+        "comp",
+        "crdr",
+        "crdy",
+        "crs",
+        "date",
+        "day",
+        "fld",
+        "fls",
+        "gls",
+        "int",
+        "match_report",
+        "min",
+        "off",
+        "og",
+        "opponent",
+        "pk",
+        "pkatt",
+        "pkcon",
+        "pkwon",
+        "player",
+        "pos",
+        "result",
+        "round",
+        "season",
+        "sh",
+        "sot",
+        "squad",
+        "start",
+        "team",
+        "tklw",
+        "venue"
+      ],
+      "column_count_union": 32,
+      "missing_pcts_top20": {
+        "pos": 93.9,
+        "pkatt": 93.9,
+        "sh": 93.9,
+        "sot": 93.9,
+        "fls": 93.9,
+        "fld": 93.9,
+        "off": 93.9,
+        "crs": 93.9,
+        "tklw": 93.9,
+        "int": 93.9,
+        "pkwon": 93.89,
+        "pkcon": 93.89,
+        "date": 0.0,
+        "day": 0.0,
+        "comp": 0.0,
+        "round": 0.0,
+        "venue": 0.0,
+        "result": 0.0,
+        "squad": 0.0,
+        "opponent": 0.0
+      }
+    },
+    "era_2013_2025": {
+      "file_count": 819,
+      "row_count": 23213,
+      "columns_union": [
+        "ast",
+        "comp",
+        "crdr",
+        "crdy",
+        "crs",
+        "date",
+        "day",
+        "fld",
+        "fls",
+        "gls",
+        "int",
+        "match_report",
+        "min",
+        "off",
+        "og",
+        "opponent",
+        "pk",
+        "pkatt",
+        "pkcon",
+        "pkwon",
+        "player",
+        "pos",
+        "result",
+        "round",
+        "season",
+        "sh",
+        "sot",
+        "squad",
+        "start",
+        "team",
+        "tklw",
+        "venue"
+      ],
+      "columns_always_present": [
+        "ast",
+        "comp",
+        "crdr",
+        "crdy",
+        "crs",
+        "date",
+        "day",
+        "fld",
+        "fls",
+        "gls",
+        "int",
+        "match_report",
+        "min",
+        "off",
+        "og",
+        "opponent",
+        "pk",
+        "pkatt",
+        "pkcon",
+        "pkwon",
+        "player",
+        "pos",
+        "result",
+        "round",
+        "season",
+        "sh",
+        "sot",
+        "squad",
+        "start",
+        "team",
+        "tklw",
+        "venue"
+      ],
+      "column_count_union": 32,
+      "missing_pcts_top20": {
+        "pkwon": 61.48,
+        "pkcon": 61.48,
+        "pos": 28.95,
+        "sh": 6.95,
+        "sot": 6.95,
+        "fls": 6.95,
+        "fld": 6.95,
+        "off": 6.95,
+        "crs": 6.95,
+        "tklw": 6.95,
+        "int": 6.95,
+        "pkatt": 6.94,
+        "min": 0.01,
+        "date": 0.0,
+        "day": 0.0,
+        "comp": 0.0,
+        "round": 0.0,
+        "venue": 0.0,
+        "result": 0.0,
+        "squad": 0.0
+      }
+    },
+    "columns_only_in_old_era": [],
+    "columns_only_in_new_era": []
+  },
+  "parquet_analysis": {
+    "exists": true,
+    "shape": [
+      299517,
+      33
+    ],
+    "columns": [
+      "date",
+      "day",
+      "comp",
+      "round",
+      "venue",
+      "result",
+      "squad",
+      "opponent",
+      "pos",
+      "min",
+      "gls",
+      "ast",
+      "pk",
+      "pkatt",
+      "sh",
+      "sot",
+      "crdy",
+      "crdr",
+      "fls",
+      "fld",
+      "off",
+      "crs",
+      "tklw",
+      "int",
+      "og",
+      "season",
+      "team",
+      "player",
+      "outcome",
+      "goals_for",
+      "goals_against",
+      "started",
+      "detail_stats_available"
+    ],
+    "column_count": 33,
+    "row_count": 299517,
+    "dtypes": {
+      "date": "datetime64[ns]",
+      "day": "object",
+      "comp": "object",
+      "round": "object",
+      "venue": "object",
+      "result": "object",
+      "squad": "object",
+      "opponent": "object",
+      "pos": "object",
+      "min": "float64",
+      "gls": "float64",
+      "ast": "float64",
+      "pk": "float64",
+      "pkatt": "float64",
+      "sh": "float64",
+      "sot": "float64",
+      "crdy": "float64",
+      "crdr": "float64",
+      "fls": "float64",
+      "fld": "float64",
+      "off": "float64",
+      "crs": "float64",
+      "tklw": "float64",
+      "int": "float64",
+      "og": "float64",
+      "season": "object",
+      "team": "object",
+      "player": "object",
+      "outcome": "object",
+      "goals_for": "int64",
+      "goals_against": "int64",
+      "started": "bool",
+      "detail_stats_available": "bool"
+    },
+    "missing_pcts": {
+      "date": 0.0,
+      "day": 0.0,
+      "comp": 0.0,
+      "round": 0.0,
+      "venue": 0.0,
+      "result": 0.0,
+      "squad": 0.0,
+      "opponent": 0.0,
+      "pos": 59.25,
+      "min": 12.77,
+      "gls": 12.77,
+      "ast": 12.77,
+      "pk": 12.77,
+      "pkatt": 60.73,
+      "sh": 60.75,
+      "sot": 60.75,
+      "crdy": 12.77,
+      "crdr": 12.77,
+      "fls": 60.75,
+      "fld": 60.75,
+      "off": 60.75,
+      "crs": 60.75,
+      "tklw": 60.75,
+      "int": 60.75,
+      "og": 12.77,
+      "season": 0.0,
+      "team": 0.0,
+      "player": 0.0,
+      "outcome": 0.0,
+      "goals_for": 0.0,
+      "goals_against": 0.0,
+      "started": 0.0,
+      "detail_stats_available": 0.0
+    },
+    "memory_mb": 282.0,
+    "cols_in_parquet_not_raw": [
+      "detail_stats_available",
+      "goals_against",
+      "goals_for",
+      "outcome",
+      "started"
+    ],
+    "cols_in_raw_not_parquet": [
+      "match_report",
+      "pkcon",
+      "pkwon",
+      "start"
+    ],
+    "key_col_missing": {},
+    "comparison_with_csv_sample": {
+      "csv_total_files": 11369,
+      "csv_sample_rows": 44507,
+      "parquet_rows": 299517,
+      "parquet_cols": 33,
+      "csv_sample_cols": 32
+    }
+  },
+  "sample_file_structures": [
+    {
+      "season": "2000-2001",
+      "team": "Middlesbrough",
+      "file": "Gary Pallister.csv",
+      "columns": [
+        "date",
+        "day",
+        "comp",
+        "round",
+        "venue",
+        "result",
+        "squad",
+        "opponent",
+        "start",
+        "pos",
+        "min",
+        "gls",
+        "ast",
+        "pk",
+        "pkatt",
+        "sh",
+        "sot",
+        "crdy",
+        "crdr",
+        "fls",
+        "fld",
+        "off",
+        "crs",
+        "tklw",
+        "int",
+        "og",
+        "pkwon",
+        "pkcon",
+        "match_report",
+        "season",
+        "team",
+        "player"
+      ],
+      "shape": [
+        3,
+        32
+      ],
+      "first_row": {
+        "date": "2000-08-19",
+        "day": "Sat",
+        "comp": "Premier League",
+        "round": "Matchweek 1",
+        "venue": "Away",
+        "result": "W 3–1",
+        "squad": "Middlesbrough",
+        "opponent": "Coventry City",
+        "start": "Y",
+        "pos": "nan",
+        "min": "79.0",
+        "gls": "0.0",
+        "ast": "1.0",
+        "pk": "0.0",
+        "pkatt": "nan",
+        "sh": "nan",
+        "sot": "nan",
+        "crdy": "0.0",
+        "crdr": "0.0",
+        "fls": "nan",
+        "fld": "nan",
+        "off": "nan",
+        "crs": "nan",
+        "tklw": "nan",
+        "int": "nan",
+        "og": "0.0",
+        "pkwon": "nan",
+        "pkcon": "nan",
+        "match_report": "Match Report",
+        "season": "2000/01",
+        "team": "Middlesbrough",
+        "player": "Gary Pallister"
+      }
+    },
+    {
+      "season": "2000-2001",
+      "team": "Bradford",
+      "file": "Matt Clarke.csv",
+      "columns": [
+        "date",
+        "day",
+        "comp",
+        "round",
+        "venue",
+        "result",
+        "squad",
+        "opponent",
+        "start",
+        "pos",
+        "min",
+        "gls",
+        "ast",
+        "pk",
+        "pkatt",
+        "sh",
+        "sot",
+        "crdy",
+        "crdr",
+        "fls",
+        "fld",
+        "off",
+        "crs",
+        "tklw",
+        "int",
+        "og",
+        "pkwon",
+        "pkcon",
+        "match_report",
+        "season",
+        "team",
+        "player"
+      ],
+      "shape": [
+        3,
+        32
+      ],
+      "first_row": {
+        "date": "2000-08-19",
+        "day": "Sat",
+        "comp": "Premier League",
+        "round": "Matchweek 1",
+        "venue": "Away",
+        "result": "L 0–1",
+        "squad": "Bradford City",
+        "opponent": "Liverpool",
+        "start": "Y",
+        "pos": "nan",
+        "min": "90",
+        "gls": "0",
+        "ast": "0",
+        "pk": "0",
+        "pkatt": "nan",
+        "sh": "nan",
+        "sot": "nan",
+        "crdy": "0",
+        "crdr": "0",
+        "fls": "nan",
+        "fld": "nan",
+        "off": "nan",
+        "crs": "nan",
+        "tklw": "nan",
+        "int": "nan",
+        "og": "0",
+        "pkwon": "nan",
+        "pkcon": "nan",
+        "match_report": "Match Report",
+        "season": "2000/01",
+        "team": "Bradford City",
+        "player": "Matt Clarke"
+      }
+    },
+    {
+      "season": "2000-2001",
+      "team": "Arsenal",
+      "file": "Nwankwo Kanu.csv",
+      "columns": [
+        "date",
+        "day",
+        "comp",
+        "round",
+        "venue",
+        "result",
+        "squad",
+        "opponent",
+        "start",
+        "pos",
+        "min",
+        "gls",
+        "ast",
+        "pk",
+        "pkatt",
+        "sh",
+        "sot",
+        "crdy",
+        "crdr",
+        "fls",
+        "fld",
+        "off",
+        "crs",
+        "tklw",
+        "int",
+        "og",
+        "pkwon",
+        "pkcon",
+        "match_report",
+        "season",
+        "team",
+        "player"
+      ],
+      "shape": [
+        3,
+        32
+      ],
+      "first_row": {
+        "date": "2000-08-19",
+        "day": "Sat",
+        "comp": "Premier League",
+        "round": "Matchweek 1",
+        "venue": "Away",
+        "result": "L 0–1",
+        "squad": "Arsenal",
+        "opponent": "Sunderland",
+        "start": "Y",
+        "pos": "nan",
+        "min": "90",
+        "gls": "0",
+        "ast": "0",
+        "pk": "0",
+        "pkatt": "nan",
+        "sh": "nan",
+        "sot": "nan",
+        "crdy": "0",
+        "crdr": "0",
+        "fls": "nan",
+        "fld": "nan",
+        "off": "nan",
+        "crs": "nan",
+        "tklw": "nan",
+        "int": "nan",
+        "og": "0",
+        "pkwon": "nan",
+        "pkcon": "nan",
+        "match_report": "Match Report",
+        "season": "2000/01",
+        "team": "Arsenal",
+        "player": "Nwankwo Kanu"
+      }
+    },
+    {
+      "season": "2000-2001",
+      "team": "Southampton",
+      "file": "Matt Le Tissier.csv",
+      "columns": [
+        "date",
+        "day",
+        "comp",
+        "round",
+        "venue",
+        "result",
+        "squad",
+        "opponent",
+        "start",
+        "pos",
+        "min",
+        "gls",
+        "ast",
+        "pk",
+        "pkatt",
+        "sh",
+        "sot",
+        "crdy",
+        "crdr",
+        "fls",
+        "fld",
+        "off",
+        "crs",
+        "tklw",
+        "int",
+        "og",
+        "pkwon",
+        "pkcon",
+        "match_report",
+        "season",
+        "team",
+        "player"
+      ],
+      "shape": [
+        3,
+        32
+      ],
+      "first_row": {
+        "date": "2000-08-26",
+        "day": "Sat",
+        "comp": "Premier League",
+        "round": "Matchweek 3",
+        "venue": "Home",
+        "result": "D 3–3",
+        "squad": "Southampton",
+        "opponent": "Liverpool",
+        "start": "N",
+        "pos": "nan",
+        "min": "30.0",
+        "gls": "0.0",
+        "ast": "0.0",
+        "pk": "0.0",
+        "pkatt": "nan",
+        "sh": "nan",
+        "sot": "nan",
+        "crdy": "0.0",
+        "crdr": "0.0",
+        "fls": "nan",
+        "fld": "nan",
+        "off": "nan",
+        "crs": "nan",
+        "tklw": "nan",
+        "int": "nan",
+        "og": "0.0",
+        "pkwon": "nan",
+        "pkcon": "nan",
+        "match_report": "Match Report",
+        "season": "2000/01",
+        "team": "Southampton",
+        "player": "Matt Le Tissier"
+      }
+    },
+    {
+      "season": "2000-2001",
+      "team": "Derby",
+      "file": "Danny Higginbotham.csv",
+      "columns": [
+        "date",
+        "day",
+        "comp",
+        "round",
+        "venue",
+        "result",
+        "squad",
+        "opponent",
+        "start",
+        "pos",
+        "min",
+        "gls",
+        "ast",
+        "pk",
+        "pkatt",
+        "sh",
+        "sot",
+        "crdy",
+        "crdr",
+        "fls",
+        "fld",
+        "off",
+        "crs",
+        "tklw",
+        "int",
+        "og",
+        "pkwon",
+        "pkcon",
+        "match_report",
+        "season",
+        "team",
+        "player"
+      ],
+      "shape": [
+        3,
+        32
+      ],
+      "first_row": {
+        "date": "2000-08-19",
+        "day": "Sat",
+        "comp": "Premier League",
+        "round": "Matchweek 1",
+        "venue": "Home",
+        "result": "D 2–2",
+        "squad": "Derby County",
+        "opponent": "Southampton",
+        "start": "Y",
+        "pos": "nan",
+        "min": "90.0",
+        "gls": "0.0",
+        "ast": "0.0",
+        "pk": "0.0",
+        "pkatt": "nan",
+        "sh": "nan",
+        "sot": "nan",
+        "crdy": "0.0",
+        "crdr": "0.0",
+        "fls": "nan",
+        "fld": "nan",
+        "off": "nan",
+        "crs": "nan",
+        "tklw": "nan",
+        "int": "nan",
+        "og": "0.0",
+        "pkwon": "nan",
+        "pkcon": "nan",
+        "match_report": "Match Report",
+        "season": "2000/01",
+        "team": "Derby County",
+        "player": "Danny Higginbotham"
+      }
+    }
+  ]
+}
