@@ -16,7 +16,7 @@ import sys
 import time
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Set, Tuple
 
 ROOT        = Path(__file__).resolve().parent.parent
 MEETING_DIR = ROOT / "reports" / "daily_meeting"
@@ -120,8 +120,8 @@ def resolve_script(content: str) -> Tuple[Optional[Path], Optional[Path]]:
     return None, None
 
 
-def run_script(script: Path, model_dir: Path) -> bool:
-    """스크립트 실행 → 성공 여부 반환."""
+def run_script(script: Path, model_dir: Path):
+    """스크립트 실행 → (성공여부, 에러메시지) 반환."""
     print(f"  🚀 실행: {script.relative_to(ROOT)}")
     result = subprocess.run(
         [sys.executable, str(script)],
@@ -134,10 +134,11 @@ def run_script(script: Path, model_dir: Path) -> bool:
     if stdout_tail:
         print(stdout_tail)
     if result.returncode != 0:
-        print(f"  ❌ 실패 (코드 {result.returncode}):\n{result.stderr[-600:]}")
-        return False
+        err = result.stderr[-800:] if result.stderr else result.stdout[-400:]
+        print(f"  ❌ 실패 (코드 {result.returncode}):\n{err}")
+        return False, err
     print("  ✅ 완료")
-    return True
+    return True, ""
 
 
 # ────────────────────────────────────────────────────────────────────
@@ -253,7 +254,7 @@ def main() -> None:
 
     print(f"🎯 액션아이템 {len(items)}개\n")
     results_log = []
-    seen_scripts: set[str] = set()   # 같은 스크립트 중복 실행 방지
+    seen_scripts: Set[str] = set()   # 같은 스크립트 중복 실행 방지
 
     for idx, item in enumerate(items, 1):
         print(f"[{idx}/{len(items)}] {item['content'][:70]}")
@@ -282,11 +283,12 @@ def main() -> None:
             continue
 
         seen_scripts.add(script_key)
-        success = run_script(script, model_dir)
+        success, err = run_script(script, model_dir)
         results_log.append({
             "item":    item["content"][:50],
             "script":  str(script.relative_to(ROOT)),
             "success": success,
+            "error":   err[:400] if err else "",
         })
         print()
 

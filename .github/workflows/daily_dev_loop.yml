@@ -32,7 +32,8 @@ jobs:
             scikit-learn \
             xgboost lightgbm \
             optuna \
-            joblib numpy
+            joblib numpy \
+            matplotlib seaborn
 
       - name: 🤖 액션아이템 → 기존 스크립트 학습 실행
         run: python scripts/github_actions_dev.py

@@ -39,10 +39,16 @@ from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import xgboost as xgb
 import joblib
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+try:
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as mpatches
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+    plt = None       # type: ignore
+    mpatches = None  # type: ignore
 
 warnings.filterwarnings("ignore")
 
@@ -633,11 +639,14 @@ imp_df.to_csv(MODEL_DIR / "xgb_feature_importance_v4.csv", index=False)
 # ---------------------------------------------------------------------------
 print("\n[9/9] 시각화 생성 중...")
 
-# Fig 1: Predicted vs Actual
-fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-fig.suptitle("S2 v4: Predicted vs Actual Market Value (Test Set 2023-2025)\n"
-             "[Youth Filter v4 + 38+ Exclusion Applied]",
-             fontsize=13, fontweight="bold")
+if not HAS_MATPLOTLIB:
+    print("  ⚠️  matplotlib 없음 — 시각화 스킵 (CI 환경)")
+else:
+    # Fig 1: Predicted vs Actual
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+    fig.suptitle("S2 v4: Predicted vs Actual Market Value (Test Set 2023-2025)\n"
+                 "[Youth Filter v4 + 38+ Exclusion Applied]",
+                 fontsize=13, fontweight="bold")
 
 for ax, (name, preds) in zip(axes, test_predictions.items()):
     actual_m = y_test_orig / 1e6
