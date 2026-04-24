@@ -1,0 +1,1951 @@
+{
+  "report_generated_at": "2026-03-21T23:06:23.404435",
+  "data_source": "C:/Users/xcv54/workspace/EPL project/data/raw/transfermarkt",
+  "summary": {
+    "total_csv_files_found": 500,
+    "files_read_successfully": 500,
+    "files_with_read_errors": 0,
+    "seasons_covered": [
+      "2000",
+      "2001",
+      "2002",
+      "2003",
+      "2004",
+      "2005",
+      "2006",
+      "2007",
+      "2008",
+      "2009",
+      "2010",
+      "2011",
+      "2012",
+      "2013",
+      "2014",
+      "2015",
+      "2016",
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024"
+    ],
+    "total_seasons": 25,
+    "files_per_season": {
+      "2000": 20,
+      "2001": 20,
+      "2002": 20,
+      "2003": 20,
+      "2004": 20,
+      "2005": 20,
+      "2006": 20,
+      "2007": 20,
+      "2008": 20,
+      "2009": 20,
+      "2010": 20,
+      "2011": 20,
+      "2012": 20,
+      "2013": 20,
+      "2014": 20,
+      "2015": 20,
+      "2016": 20,
+      "2017": 20,
+      "2018": 20,
+      "2019": 20,
+      "2020": 20,
+      "2021": 20,
+      "2022": 20,
+      "2023": 20,
+      "2024": 20
+    },
+    "total_rows_combined": 18828,
+    "total_columns": 19,
+    "unique_teams": 46,
+    "unique_players": 5715
+  },
+  "columns_and_dtypes": {
+    "player": "object",
+    "player_id": "int64",
+    "position": "object",
+    "dob": "object",
+    "age": "float64",
+    "nationality": "object",
+    "height": "object",
+    "foot": "object",
+    "joined": "object",
+    "market_value": "float64",
+    "market_value_str": "object",
+    "team": "object",
+    "season": "object",
+    "_source_season": "object",
+    "_source_team_folder": "object",
+    "_source_file": "object"
+  },
+  "missing_values_per_column": {
+    "player": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "player_id": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "position": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "dob": {
+      "missing_count": 12,
+      "missing_pct": 0.06
+    },
+    "age": {
+      "missing_count": 12,
+      "missing_pct": 0.06
+    },
+    "nationality": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "height": {
+      "missing_count": 834,
+      "missing_pct": 4.43
+    },
+    "foot": {
+      "missing_count": 1198,
+      "missing_pct": 6.36
+    },
+    "joined": {
+      "missing_count": 1620,
+      "missing_pct": 8.6
+    },
+    "market_value": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "market_value_str": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "team": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "season": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "_source_season": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "_source_team_folder": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    },
+    "_source_file": {
+      "missing_count": 0,
+      "missing_pct": 0.0
+    }
+  },
+  "market_value_analysis": {
+    "overall_distribution": {
+      "total_records": 18828,
+      "zero_market_value_count": 4408,
+      "zero_market_value_pct": 23.41,
+      "null_market_value_count": 0,
+      "nonzero_records": 14420,
+      "min": 25000.0,
+      "max": 180000000.0,
+      "mean": 8917516.643550623,
+      "median": 3800000.0,
+      "std": 14078675.334690565,
+      "percentiles": {
+        "25th": 1200000.0,
+        "75th": 10000000.0,
+        "90th": 24000000.0,
+        "95th": 35000000.0,
+        "99th": 70000000.0
+      }
+    },
+    "per_season_stats": {
+      "2000/01": {
+        "players": 738,
+        "nonzero_mv_players": 0,
+        "mean_mv": null,
+        "median_mv": null,
+        "total_mv": null,
+        "max_mv": null,
+        "min_mv": null
+      },
+      "2001/02": {
+        "players": 705,
+        "nonzero_mv_players": 0,
+        "mean_mv": null,
+        "median_mv": null,
+        "total_mv": null,
+        "max_mv": null,
+        "min_mv": null
+      },
+      "2002/03": {
+        "players": 712,
+        "nonzero_mv_players": 0,
+        "mean_mv": null,
+        "median_mv": null,
+        "total_mv": null,
+        "max_mv": null,
+        "min_mv": null
+      },
+      "2003/04": {
+        "players": 683,
+        "nonzero_mv_players": 0,
+        "mean_mv": null,
+        "median_mv": null,
+        "total_mv": null,
+        "max_mv": null,
+        "min_mv": null
+      },
+      "2004/05": {
+        "players": 670,
+        "nonzero_mv_players": 641,
+        "mean_mv": 3645608.4243369736,
+        "median_mv": 2000000.0,
+        "total_mv": 2336835000.0,
+        "max_mv": 45000000.0,
+        "min_mv": 25000.0
+      },
+      "2005/06": {
+        "players": 661,
+        "nonzero_mv_players": 631,
+        "mean_mv": 3806030.110935024,
+        "median_mv": 2250000.0,
+        "total_mv": 2401605000.0,
+        "max_mv": 50000000.0,
+        "min_mv": 50000.0
+      },
+      "2006/07": {
+        "players": 727,
+        "nonzero_mv_players": 676,
+        "mean_mv": 3859363.905325444,
+        "median_mv": 2000000.0,
+        "total_mv": 2608930000.0,
+        "max_mv": 46000000.0,
+        "min_mv": 50000.0
+      },
+      "2007/08": {
+        "players": 742,
+        "nonzero_mv_players": 714,
+        "mean_mv": 4435049.019607843,
+        "median_mv": 2500000.0,
+        "total_mv": 3166625000.0,
+        "max_mv": 55000000.0,
+        "min_mv": 50000.0
+      },
+      "2008/09": {
+        "players": 739,
+        "nonzero_mv_players": 688,
+        "mean_mv": 5210937.5,
+        "median_mv": 3000000.0,
+        "total_mv": 3585125000.0,
+        "max_mv": 60000000.0,
+        "min_mv": 50000.0
+      },
+      "2009/10": {
+        "players": 753,
+        "nonzero_mv_players": 710,
+        "mean_mv": 4915746.47887324,
+        "median_mv": 2500000.0,
+        "total_mv": 3490180000.0,
+        "max_mv": 55000000.0,
+        "min_mv": 25000.0
+      },
+      "2010/11": {
+        "players": 756,
+        "nonzero_mv_players": 660,
+        "mean_mv": 5717386.363636363,
+        "median_mv": 3100000.0,
+        "total_mv": 3773475000.0,
+        "max_mv": 55000000.0,
+        "min_mv": 25000.0
+      },
+      "2011/12": {
+        "players": 738,
+        "nonzero_mv_players": 645,
+        "mean_mv": 5537906.976744186,
+        "median_mv": 3000000.0,
+        "total_mv": 3571950000.0,
+        "max_mv": 65000000.0,
+        "min_mv": 50000.0
+      },
+      "2012/13": {
+        "players": 735,
+        "nonzero_mv_players": 623,
+        "mean_mv": 6091252.006420546,
+        "median_mv": 3000000.0,
+        "total_mv": 3794850000.0,
+        "max_mv": 65000000.0,
+        "min_mv": 50000.0
+      },
+      "2013/14": {
+        "players": 761,
+        "nonzero_mv_players": 665,
+        "mean_mv": 6073947.368421053,
+        "median_mv": 3000000.0,
+        "total_mv": 4039175000.0,
+        "max_mv": 52000000.0,
+        "min_mv": 50000.0
+      },
+      "2014/15": {
+        "players": 746,
+        "nonzero_mv_players": 654,
+        "mean_mv": 6440290.519877676,
+        "median_mv": 3500000.0,
+        "total_mv": 4211950000.0,
+        "max_mv": 65000000.0,
+        "min_mv": 50000.0
+      },
+      "2015/16": {
+        "players": 794,
+        "nonzero_mv_players": 674,
+        "mean_mv": 7207752.225519287,
+        "median_mv": 4000000.0,
+        "total_mv": 4858025000.0,
+        "max_mv": 65000000.0,
+        "min_mv": 25000.0
+      },
+      "2016/17": {
+        "players": 782,
+        "nonzero_mv_players": 701,
+        "mean_mv": 8385805.991440799,
+        "median_mv": 5000000.0,
+        "total_mv": 5878450000.0,
+        "max_mv": 75000000.0,
+        "min_mv": 50000.0
+      },
+      "2017/18": {
+        "players": 738,
+        "nonzero_mv_players": 665,
+        "mean_mv": 12167503.759398496,
+        "median_mv": 6000000.0,
+        "total_mv": 8091390000.0,
+        "max_mv": 150000000.0,
+        "min_mv": 40000.0
+      },
+      "2018/19": {
+        "players": 770,
+        "nonzero_mv_players": 682,
+        "mean_mv": 14380205.278592376,
+        "median_mv": 7000000.0,
+        "total_mv": 9807300000.0,
+        "max_mv": 150000000.0,
+        "min_mv": 50000.0
+      },
+      "2019/20": {
+        "players": 775,
+        "nonzero_mv_players": 646,
+        "mean_mv": 12851780.185758514,
+        "median_mv": 6500000.0,
+        "total_mv": 8302250000.0,
+        "max_mv": 128000000.0,
+        "min_mv": 25000.0
+      },
+      "2020/21": {
+        "players": 801,
+        "nonzero_mv_players": 735,
+        "mean_mv": 12461088.43537415,
+        "median_mv": 5000000.0,
+        "total_mv": 9158900000.0,
+        "max_mv": 120000000.0,
+        "min_mv": 100000.0
+      },
+      "2021/22": {
+        "players": 805,
+        "nonzero_mv_players": 717,
+        "mean_mv": 13028033.472803347,
+        "median_mv": 6000000.0,
+        "total_mv": 9341100000.0,
+        "max_mv": 90000000.0,
+        "min_mv": 50000.0
+      },
+      "2022/23": {
+        "players": 840,
+        "nonzero_mv_players": 771,
+        "mean_mv": 14677367.055771725,
+        "median_mv": 9000000.0,
+        "total_mv": 11316250000.0,
+        "max_mv": 180000000.0,
+        "min_mv": 50000.0
+      },
+      "2023/24": {
+        "players": 855,
+        "nonzero_mv_players": 804,
+        "mean_mv": 15198383.084577115,
+        "median_mv": 8000000.0,
+        "total_mv": 12219500000.0,
+        "max_mv": 180000000.0,
+        "min_mv": 75000.0
+      },
+      "2024/25": {
+        "players": 802,
+        "nonzero_mv_players": 718,
+        "mean_mv": 17599895.54317549,
+        "median_mv": 11000000.0,
+        "total_mv": 12636725000.0,
+        "max_mv": 180000000.0,
+        "min_mv": 75000.0
+      }
+    },
+    "top_20_most_valuable_players_ever": [
+      {
+        "player": "Erling Haaland",
+        "team": "Manchester City",
+        "season": "2022/23",
+        "market_value": 180000000.0,
+        "position": "Centre-Forward",
+        "nationality": "Norway"
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Manchester City",
+        "season": "2023/24",
+        "market_value": 180000000.0,
+        "position": "Centre-Forward",
+        "nationality": "Norway"
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Manchester City",
+        "season": "2024/25",
+        "market_value": 180000000.0,
+        "position": "Centre-Forward",
+        "nationality": "Norway"
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool FC",
+        "season": "2017/18",
+        "market_value": 150000000.0,
+        "position": "Right Winger",
+        "nationality": "Egypt"
+      },
+      {
+        "player": "Kevin De Bruyne",
+        "team": "Manchester City",
+        "season": "2017/18",
+        "market_value": 150000000.0,
+        "position": "Attacking Midfield",
+        "nationality": "Belgium"
+      },
+      {
+        "player": "Harry Kane",
+        "team": "Tottenham Hotspur",
+        "season": "2017/18",
+        "market_value": 150000000.0,
+        "position": "Centre-Forward",
+        "nationality": "England, Ireland"
+      },
+      {
+        "player": "Eden Hazard",
+        "team": "Chelsea FC",
+        "season": "2018/19",
+        "market_value": 150000000.0,
+        "position": "Left Winger",
+        "nationality": "Belgium"
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool FC",
+        "season": "2018/19",
+        "market_value": 150000000.0,
+        "position": "Right Winger",
+        "nationality": "Egypt"
+      },
+      {
+        "player": "Harry Kane",
+        "team": "Tottenham Hotspur",
+        "season": "2018/19",
+        "market_value": 150000000.0,
+        "position": "Centre-Forward",
+        "nationality": "England, Ireland"
+      },
+      {
+        "player": "Phil Foden",
+        "team": "Manchester City",
+        "season": "2023/24",
+        "market_value": 150000000.0,
+        "position": "Attacking Midfield",
+        "nationality": "England"
+      },
+      {
+        "player": "Bukayo Saka",
+        "team": "Arsenal FC",
+        "season": "2024/25",
+        "market_value": 150000000.0,
+        "position": "Right Winger",
+        "nationality": "England, Nigeria"
+      },
+      {
+        "player": "Raheem Sterling",
+        "team": "Manchester City",
+        "season": "2018/19",
+        "market_value": 140000000.0,
+        "position": "Right Winger",
+        "nationality": "England, Jamaica"
+      },
+      {
+        "player": "Bukayo Saka",
+        "team": "Arsenal FC",
+        "season": "2023/24",
+        "market_value": 140000000.0,
+        "position": "Right Winger",
+        "nationality": "England, Nigeria"
+      },
+      {
+        "player": "Kevin De Bruyne",
+        "team": "Manchester City",
+        "season": "2018/19",
+        "market_value": 130000000.0,
+        "position": "Attacking Midfield",
+        "nationality": "Belgium"
+      },
+      {
+        "player": "Raheem Sterling",
+        "team": "Manchester City",
+        "season": "2019/20",
+        "market_value": 128000000.0,
+        "position": "Right Winger",
+        "nationality": "England, Jamaica"
+      },
+      {
+        "player": "Sadio Mané",
+        "team": "Liverpool FC",
+        "season": "2018/19",
+        "market_value": 120000000.0,
+        "position": "Left Winger",
+        "nationality": "Senegal"
+      },
+      {
+        "player": "Sadio Mané",
+        "team": "Liverpool FC",
+        "season": "2019/20",
+        "market_value": 120000000.0,
+        "position": "Left Winger",
+        "nationality": "Senegal"
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool FC",
+        "season": "2019/20",
+        "market_value": 120000000.0,
+        "position": "Right Winger",
+        "nationality": "Egypt"
+      },
+      {
+        "player": "Kevin De Bruyne",
+        "team": "Manchester City",
+        "season": "2019/20",
+        "market_value": 120000000.0,
+        "position": "Attacking Midfield",
+        "nationality": "Belgium"
+      },
+      {
+        "player": "Harry Kane",
+        "team": "Tottenham Hotspur",
+        "season": "2019/20",
+        "market_value": 120000000.0,
+        "position": "Centre-Forward",
+        "nationality": "England, Ireland"
+      }
+    ],
+    "market_value_trend_by_season": {
+      "2000/01": {
+        "avg_mv": null,
+        "total_mv": null
+      },
+      "2001/02": {
+        "avg_mv": null,
+        "total_mv": null
+      },
+      "2002/03": {
+        "avg_mv": null,
+        "total_mv": null
+      },
+      "2003/04": {
+        "avg_mv": null,
+        "total_mv": null
+      },
+      "2004/05": {
+        "avg_mv": 3645608.4243369736,
+        "total_mv": 2336835000.0
+      },
+      "2005/06": {
+        "avg_mv": 3806030.110935024,
+        "total_mv": 2401605000.0
+      },
+      "2006/07": {
+        "avg_mv": 3859363.905325444,
+        "total_mv": 2608930000.0
+      },
+      "2007/08": {
+        "avg_mv": 4435049.019607843,
+        "total_mv": 3166625000.0
+      },
+      "2008/09": {
+        "avg_mv": 5210937.5,
+        "total_mv": 3585125000.0
+      },
+      "2009/10": {
+        "avg_mv": 4915746.47887324,
+        "total_mv": 3490180000.0
+      },
+      "2010/11": {
+        "avg_mv": 5717386.363636363,
+        "total_mv": 3773475000.0
+      },
+      "2011/12": {
+        "avg_mv": 5537906.976744186,
+        "total_mv": 3571950000.0
+      },
+      "2012/13": {
+        "avg_mv": 6091252.006420546,
+        "total_mv": 3794850000.0
+      },
+      "2013/14": {
+        "avg_mv": 6073947.368421053,
+        "total_mv": 4039175000.0
+      },
+      "2014/15": {
+        "avg_mv": 6440290.519877676,
+        "total_mv": 4211950000.0
+      },
+      "2015/16": {
+        "avg_mv": 7207752.225519287,
+        "total_mv": 4858025000.0
+      },
+      "2016/17": {
+        "avg_mv": 8385805.991440799,
+        "total_mv": 5878450000.0
+      },
+      "2017/18": {
+        "avg_mv": 12167503.759398496,
+        "total_mv": 8091390000.0
+      },
+      "2018/19": {
+        "avg_mv": 14380205.278592376,
+        "total_mv": 9807300000.0
+      },
+      "2019/20": {
+        "avg_mv": 12851780.185758514,
+        "total_mv": 8302250000.0
+      },
+      "2020/21": {
+        "avg_mv": 12461088.43537415,
+        "total_mv": 9158900000.0
+      },
+      "2021/22": {
+        "avg_mv": 13028033.472803347,
+        "total_mv": 9341100000.0
+      },
+      "2022/23": {
+        "avg_mv": 14677367.055771725,
+        "total_mv": 11316250000.0
+      },
+      "2023/24": {
+        "avg_mv": 15198383.084577115,
+        "total_mv": 12219500000.0
+      },
+      "2024/25": {
+        "avg_mv": 17599895.54317549,
+        "total_mv": 12636725000.0
+      }
+    },
+    "market_value_by_position": {
+      "Attacking Midfield": {
+        "count": 727,
+        "mean_mv": 15645667.13,
+        "median_mv": 6700000.0,
+        "max_mv": 150000000.0,
+        "total_mv": 11374400000.0
+      },
+      "Left Winger": {
+        "count": 731,
+        "mean_mv": 13618262.65,
+        "median_mv": 6000000.0,
+        "max_mv": 150000000.0,
+        "total_mv": 9954950000.0
+      },
+      "Right Winger": {
+        "count": 748,
+        "mean_mv": 12856316.84,
+        "median_mv": 6000000.0,
+        "max_mv": 150000000.0,
+        "total_mv": 9616525000.0
+      },
+      "Centre-Forward": {
+        "count": 2223,
+        "mean_mv": 10035089.97,
+        "median_mv": 4500000.0,
+        "max_mv": 180000000.0,
+        "total_mv": 22308005000.0
+      },
+      "Defensive Midfield": {
+        "count": 1176,
+        "mean_mv": 9856581.63,
+        "median_mv": 5000000.0,
+        "max_mv": 120000000.0,
+        "total_mv": 11591340000.0
+      },
+      "Second Striker": {
+        "count": 103,
+        "mean_mv": 9280339.81,
+        "median_mv": 5000000.0,
+        "max_mv": 70000000.0,
+        "total_mv": 955875000.0
+      },
+      "Central Midfield": {
+        "count": 1881,
+        "mean_mv": 8854545.45,
+        "median_mv": 4000000.0,
+        "max_mv": 120000000.0,
+        "total_mv": 16655400000.0
+      },
+      "Centre-Back": {
+        "count": 2717,
+        "mean_mv": 8155237.39,
+        "median_mv": 3500000.0,
+        "max_mv": 90000000.0,
+        "total_mv": 22157780000.0
+      },
+      "Right-Back": {
+        "count": 1155,
+        "mean_mv": 7313242.42,
+        "median_mv": 3500000.0,
+        "max_mv": 99000000.0,
+        "total_mv": 8446795000.0
+      },
+      "Left-Back": {
+        "count": 972,
+        "mean_mv": 7168045.27,
+        "median_mv": 3300000.0,
+        "max_mv": 65000000.0,
+        "total_mv": 6967340000.0
+      },
+      "Left Midfield": {
+        "count": 220,
+        "mean_mv": 4476250.0,
+        "median_mv": 3800000.0,
+        "max_mv": 23000000.0,
+        "total_mv": 984775000.0
+      },
+      "Goalkeeper": {
+        "count": 1590,
+        "mean_mv": 4305314.47,
+        "median_mv": 1000000.0,
+        "max_mv": 80000000.0,
+        "total_mv": 6845450000.0
+      },
+      "Right Midfield": {
+        "count": 170,
+        "mean_mv": 4297382.35,
+        "median_mv": 2750000.0,
+        "max_mv": 32000000.0,
+        "total_mv": 730555000.0
+      },
+      "Striker": {
+        "count": 2,
+        "mean_mv": 275000.0,
+        "median_mv": 275000.0,
+        "max_mv": 500000.0,
+        "total_mv": 550000.0
+      },
+      "Midfielder": {
+        "count": 5,
+        "mean_mv": 170000.0,
+        "median_mv": 100000.0,
+        "max_mv": 400000.0,
+        "total_mv": 850000.0
+      }
+    }
+  },
+  "age_and_dob_analysis": {
+    "age_stats": {
+      "min": 15.0,
+      "max": 57.0,
+      "mean": 25.45,
+      "median": 25.0,
+      "std": 4.91
+    },
+    "age_distribution_bins": {
+      "U18": 1002,
+      "18-20": 4010,
+      "21-23": 3503,
+      "24-26": 3758,
+      "27-29": 3393,
+      "30-32": 2091,
+      "33-35": 788,
+      "36+": 271
+    },
+    "missing_age_count": 12,
+    "missing_dob_count": 12,
+    "oldest_player": {
+      "name": "Sven Andersson",
+      "dob": "18/04/1945",
+      "team": "West Ham United",
+      "season": "2001/02"
+    },
+    "youngest_player": {
+      "name": "Jeremy Monga",
+      "dob": "10/07/2009",
+      "team": "Leicester City",
+      "season": "2024/25"
+    }
+  },
+  "nationality_analysis": {
+    "top_20": {
+      "England": 5057,
+      "England, Jamaica": 586,
+      "Spain": 541,
+      "Ireland": 533,
+      "Scotland": 429,
+      "Ireland, England": 309,
+      "Wales": 294,
+      "England, Ireland": 267,
+      "Brazil": 248,
+      "England, Nigeria": 234,
+      "Netherlands": 229,
+      "France": 218,
+      "Denmark": 218,
+      "Wales, England": 217,
+      "Jamaica, England": 212,
+      "Scotland, England": 211,
+      "Portugal": 198,
+      "Northern Ireland": 197,
+      "Germany": 189,
+      "Norway": 168
+    },
+    "unique_nationalities": 93,
+    "missing_nationality": 0
+  },
+  "position_analysis": {
+    "distribution": {
+      "Centre-Back": 3504,
+      "Centre-Forward": 2889,
+      "Central Midfield": 2508,
+      "Goalkeeper": 2100,
+      "Right-Back": 1510,
+      "Defensive Midfield": 1441,
+      "Left-Back": 1327,
+      "Attacking Midfield": 911,
+      "Right Winger": 906,
+      "Left Winger": 889,
+      "Left Midfield": 334,
+      "Right Midfield": 313,
+      "Second Striker": 148,
+      "Midfielder": 34,
+      "Striker": 9,
+      "Defender": 5
+    },
+    "unique_positions": 16,
+    "missing_position": 0
+  },
+  "height_analysis": {
+    "records_with_height": 17994,
+    "missing_height_count": 834,
+    "missing_height_pct": 4.43,
+    "min_m": 1.6,
+    "max_m": 2.06,
+    "mean_m": 1.827,
+    "median_m": 1.83,
+    "std_m": 0.069,
+    "height_distribution_bins_cm": {
+      "≤165": 75,
+      "166-170": 630,
+      "171-175": 2307,
+      "176-180": 4378,
+      "181-185": 4602,
+      "186-190": 3439,
+      "191-195": 2052,
+      ">195": 511
+    }
+  },
+  "joined_date_analysis": {
+    "missing_joined_count": 1620,
+    "missing_joined_pct": 8.6,
+    "earliest_join_date": "1983-07-01",
+    "latest_join_date": "2026-01-28",
+    "join_year_distribution": {
+      "1983": 2,
+      "1985": 2,
+      "1986": 4,
+      "1987": 4,
+      "1988": 3,
+      "1989": 7,
+      "1990": 25,
+      "1991": 14,
+      "1992": 29,
+      "1993": 38,
+      "1994": 28,
+      "1995": 67,
+      "1996": 138,
+      "1997": 205,
+      "1998": 311,
+      "1999": 419,
+      "2000": 614,
+      "2001": 556,
+      "2002": 475,
+      "2003": 614,
+      "2004": 636,
+      "2005": 618,
+      "2006": 692,
+      "2007": 815,
+      "2008": 831,
+      "2009": 676,
+      "2010": 612,
+      "2011": 795,
+      "2012": 781,
+      "2013": 599,
+      "2014": 820,
+      "2015": 701,
+      "2016": 739,
+      "2017": 702,
+      "2018": 596,
+      "2019": 586,
+      "2020": 598,
+      "2021": 407,
+      "2022": 527,
+      "2023": 490,
+      "2024": 273,
+      "2025": 140,
+      "2026": 19
+    }
+  },
+  "foot_preference_analysis": {
+    "distribution": {
+      "right": 12818,
+      "left": 4148,
+      "nan": 1198,
+      "both": 664
+    },
+    "missing_foot_count": 1198,
+    "missing_foot_pct": 6.36
+  },
+  "players_per_team_per_season": {
+    "2015/16": {
+      "AFC Bournemouth": 49,
+      "Arsenal FC": 41,
+      "Aston Villa": 44,
+      "Chelsea FC": 40,
+      "Crystal Palace": 38,
+      "Everton FC": 39,
+      "Leicester City": 35,
+      "Liverpool FC": 44,
+      "Manchester City": 38,
+      "Manchester United": 44,
+      "Newcastle United": 42,
+      "Norwich City": 41,
+      "Southampton FC": 35,
+      "Stoke City": 31,
+      "Sunderland AFC": 42,
+      "Swansea City": 36,
+      "Tottenham Hotspur": 31,
+      "Watford FC": 39,
+      "West Bromwich Albion": 35,
+      "West Ham United": 50
+    },
+    "2016/17": {
+      "AFC Bournemouth": 41,
+      "Arsenal FC": 42,
+      "Burnley FC": 36,
+      "Chelsea FC": 49,
+      "Crystal Palace": 45,
+      "Everton FC": 39,
+      "Hull City": 42,
+      "Leicester City": 31,
+      "Liverpool FC": 38,
+      "Manchester City": 35,
+      "Manchester United": 42,
+      "Middlesbrough FC": 35,
+      "Southampton FC": 36,
+      "Stoke City": 34,
+      "Sunderland AFC": 42,
+      "Swansea City": 37,
+      "Tottenham Hotspur": 38,
+      "Watford FC": 46,
+      "West Bromwich Albion": 30,
+      "West Ham United": 44
+    },
+    "2017/18": {
+      "AFC Bournemouth": 35,
+      "Arsenal FC": 45,
+      "Brighton & Hove Albion": 39,
+      "Burnley FC": 30,
+      "Chelsea FC": 46,
+      "Crystal Palace": 41,
+      "Everton FC": 48,
+      "Huddersfield Town": 35,
+      "Leicester City": 34,
+      "Liverpool FC": 35,
+      "Manchester City": 32,
+      "Manchester United": 35,
+      "Newcastle United": 37,
+      "Southampton FC": 29,
+      "Stoke City": 35,
+      "Swansea City": 36,
+      "Tottenham Hotspur": 34,
+      "Watford FC": 37,
+      "West Bromwich Albion": 33,
+      "West Ham United": 42
+    },
+    "2018/19": {
+      "AFC Bournemouth": 37,
+      "Arsenal FC": 42,
+      "Brighton & Hove Albion": 41,
+      "Burnley FC": 33,
+      "Cardiff City": 35,
+      "Chelsea FC": 54,
+      "Crystal Palace": 36,
+      "Everton FC": 40,
+      "Fulham FC": 33,
+      "Huddersfield Town": 33,
+      "Leicester City": 37,
+      "Liverpool FC": 39,
+      "Manchester City": 47,
+      "Manchester United": 36,
+      "Newcastle United": 37,
+      "Southampton FC": 40,
+      "Tottenham Hotspur": 34,
+      "Watford FC": 39,
+      "West Ham United": 37,
+      "Wolverhampton Wanderers": 40
+    },
+    "2019/20": {
+      "AFC Bournemouth": 39,
+      "Arsenal FC": 38,
+      "Aston Villa": 38,
+      "Brighton & Hove Albion": 45,
+      "Burnley FC": 35,
+      "Chelsea FC": 36,
+      "Crystal Palace": 33,
+      "Everton FC": 35,
+      "Leicester City": 32,
+      "Liverpool FC": 56,
+      "Manchester City": 35,
+      "Manchester United": 43,
+      "Newcastle United": 41,
+      "Norwich City": 38,
+      "Sheffield United": 34,
+      "Southampton FC": 36,
+      "Tottenham Hotspur": 36,
+      "Watford FC": 43,
+      "West Ham United": 38,
+      "Wolverhampton Wanderers": 44
+    },
+    "2022/23": {
+      "AFC Bournemouth": 47,
+      "Arsenal FC": 42,
+      "Aston Villa": 43,
+      "Brentford FC": 36,
+      "Brighton & Hove Albion": 42,
+      "Chelsea FC": 43,
+      "Crystal Palace": 39,
+      "Everton FC": 40,
+      "Fulham FC": 47,
+      "Leeds United": 47,
+      "Leicester City": 38,
+      "Liverpool FC": 39,
+      "Manchester City": 34,
+      "Manchester United": 48,
+      "Newcastle United": 38,
+      "Nottingham Forest": 50,
+      "Southampton FC": 46,
+      "Tottenham Hotspur": 34,
+      "West Ham United": 44,
+      "Wolverhampton Wanderers": 43
+    },
+    "2023/24": {
+      "AFC Bournemouth": 42,
+      "Arsenal FC": 40,
+      "Aston Villa": 45,
+      "Brentford FC": 42,
+      "Brighton & Hove Albion": 49,
+      "Burnley FC": 39,
+      "Chelsea FC": 56,
+      "Crystal Palace": 40,
+      "Everton FC": 34,
+      "Fulham FC": 35,
+      "Liverpool FC": 45,
+      "Luton Town": 46,
+      "Manchester City": 36,
+      "Manchester United": 46,
+      "Newcastle United": 45,
+      "Nottingham Forest": 46,
+      "Sheffield United": 45,
+      "Tottenham Hotspur": 41,
+      "West Ham United": 36,
+      "Wolverhampton Wanderers": 47
+    },
+    "2024/25": {
+      "AFC Bournemouth": 39,
+      "Arsenal FC": 42,
+      "Aston Villa": 41,
+      "Brentford FC": 38,
+      "Brighton & Hove Albion": 49,
+      "Chelsea FC": 58,
+      "Crystal Palace": 40,
+      "Everton FC": 39,
+      "Fulham FC": 28,
+      "Ipswich Town": 35,
+      "Leicester City": 40,
+      "Liverpool FC": 35,
+      "Manchester City": 44,
+      "Manchester United": 49,
+      "Newcastle United": 36,
+      "Nottingham Forest": 33,
+      "Southampton FC": 42,
+      "Tottenham Hotspur": 41,
+      "West Ham United": 29,
+      "Wolverhampton Wanderers": 44
+    },
+    "2000/01": {
+      "Arsenal FC": 38,
+      "Aston Villa": 33,
+      "Bradford City": 42,
+      "Charlton Athletic": 33,
+      "Chelsea FC": 38,
+      "Coventry City": 38,
+      "Derby County": 39,
+      "Everton FC": 35,
+      "Ipswich Town": 30,
+      "Leeds United": 33,
+      "Leicester City": 40,
+      "Liverpool FC": 35,
+      "Manchester City": 40,
+      "Manchester United": 39,
+      "Middlesbrough FC": 36,
+      "Newcastle United": 37,
+      "Southampton FC": 32,
+      "Sunderland AFC": 38,
+      "Tottenham Hotspur": 36,
+      "West Ham United": 46
+    },
+    "2001/02": {
+      "Arsenal FC": 37,
+      "Aston Villa": 27,
+      "Blackburn Rovers": 35,
+      "Bolton Wanderers": 43,
+      "Charlton Athletic": 33,
+      "Chelsea FC": 36,
+      "Derby County": 41,
+      "Everton FC": 33,
+      "Fulham FC": 34,
+      "Ipswich Town": 34,
+      "Leeds United": 26,
+      "Leicester City": 37,
+      "Liverpool FC": 34,
+      "Manchester United": 38,
+      "Middlesbrough FC": 39,
+      "Newcastle United": 35,
+      "Southampton FC": 37,
+      "Sunderland AFC": 34,
+      "Tottenham Hotspur": 31,
+      "West Ham United": 41
+    },
+    "2002/03": {
+      "Arsenal FC": 36,
+      "Aston Villa": 36,
+      "Birmingham City": 37,
+      "Blackburn Rovers": 36,
+      "Bolton Wanderers": 38,
+      "Charlton Athletic": 31,
+      "Chelsea FC": 33,
+      "Everton FC": 33,
+      "Fulham FC": 32,
+      "Leeds United": 36,
+      "Liverpool FC": 31,
+      "Manchester City": 44,
+      "Manchester United": 34,
+      "Middlesbrough FC": 39,
+      "Newcastle United": 34,
+      "Southampton FC": 33,
+      "Sunderland AFC": 42,
+      "Tottenham Hotspur": 37,
+      "West Bromwich Albion": 29,
+      "West Ham United": 41
+    },
+    "2003/04": {
+      "Arsenal FC": 38,
+      "Aston Villa": 27,
+      "Birmingham City": 30,
+      "Blackburn Rovers": 35,
+      "Bolton Wanderers": 34,
+      "Charlton Athletic": 31,
+      "Chelsea FC": 32,
+      "Everton FC": 29,
+      "Fulham FC": 37,
+      "Leeds United": 37,
+      "Leicester City": 40,
+      "Liverpool FC": 34,
+      "Manchester City": 33,
+      "Manchester United": 35,
+      "Middlesbrough FC": 37,
+      "Newcastle United": 32,
+      "Portsmouth FC": 37,
+      "Southampton FC": 35,
+      "Tottenham Hotspur": 34,
+      "Wolverhampton Wanderers": 36
+    },
+    "2004/05": {
+      "Arsenal FC": 37,
+      "Aston Villa": 25,
+      "Birmingham City": 38,
+      "Blackburn Rovers": 34,
+      "Bolton Wanderers": 29,
+      "Charlton Athletic": 27,
+      "Chelsea FC": 31,
+      "Crystal Palace": 35,
+      "Everton FC": 28,
+      "Fulham FC": 34,
+      "Liverpool FC": 38,
+      "Manchester City": 34,
+      "Manchester United": 37,
+      "Middlesbrough FC": 34,
+      "Newcastle United": 31,
+      "Norwich City": 28,
+      "Portsmouth FC": 39,
+      "Southampton FC": 41,
+      "Tottenham Hotspur": 38,
+      "West Bromwich Albion": 32
+    },
+    "2005/06": {
+      "Arsenal FC": 37,
+      "Aston Villa": 31,
+      "Birmingham City": 35,
+      "Blackburn Rovers": 28,
+      "Bolton Wanderers": 32,
+      "Charlton Athletic": 36,
+      "Chelsea FC": 30,
+      "Everton FC": 31,
+      "Fulham FC": 33,
+      "Liverpool FC": 37,
+      "Manchester City": 32,
+      "Manchester United": 34,
+      "Middlesbrough FC": 39,
+      "Newcastle United": 32,
+      "Portsmouth FC": 36,
+      "Sunderland AFC": 31,
+      "Tottenham Hotspur": 32,
+      "West Bromwich Albion": 32,
+      "West Ham United": 33,
+      "Wigan Athletic": 30
+    },
+    "2006/07": {
+      "Arsenal FC": 38,
+      "Aston Villa": 34,
+      "Blackburn Rovers": 31,
+      "Bolton Wanderers": 34,
+      "Charlton Athletic": 37,
+      "Chelsea FC": 37,
+      "Everton FC": 29,
+      "Fulham FC": 37,
+      "Liverpool FC": 38,
+      "Manchester City": 34,
+      "Manchester United": 38,
+      "Middlesbrough FC": 35,
+      "Newcastle United": 35,
+      "Portsmouth FC": 32,
+      "Reading FC": 38,
+      "Sheffield United": 43,
+      "Tottenham Hotspur": 38,
+      "Watford FC": 43,
+      "West Ham United": 39,
+      "Wigan Athletic": 37
+    },
+    "2007/08": {
+      "Arsenal FC": 35,
+      "Aston Villa": 25,
+      "Birmingham City": 33,
+      "Blackburn Rovers": 38,
+      "Bolton Wanderers": 42,
+      "Chelsea FC": 39,
+      "Derby County": 41,
+      "Everton FC": 32,
+      "Fulham FC": 43,
+      "Liverpool FC": 41,
+      "Manchester City": 36,
+      "Manchester United": 38,
+      "Middlesbrough FC": 34,
+      "Newcastle United": 33,
+      "Portsmouth FC": 33,
+      "Reading FC": 43,
+      "Sunderland AFC": 46,
+      "Tottenham Hotspur": 38,
+      "West Ham United": 37,
+      "Wigan Athletic": 35
+    },
+    "2008/09": {
+      "Arsenal FC": 41,
+      "Aston Villa": 35,
+      "Blackburn Rovers": 36,
+      "Bolton Wanderers": 33,
+      "Chelsea FC": 33,
+      "Everton FC": 32,
+      "Fulham FC": 38,
+      "Hull City": 35,
+      "Liverpool FC": 33,
+      "Manchester City": 39,
+      "Manchester United": 42,
+      "Middlesbrough FC": 33,
+      "Newcastle United": 38,
+      "Portsmouth FC": 36,
+      "Stoke City": 38,
+      "Sunderland AFC": 44,
+      "Tottenham Hotspur": 43,
+      "West Bromwich Albion": 35,
+      "West Ham United": 40,
+      "Wigan Athletic": 35
+    },
+    "2009/10": {
+      "Arsenal FC": 45,
+      "Aston Villa": 31,
+      "Birmingham City": 36,
+      "Blackburn Rovers": 35,
+      "Bolton Wanderers": 32,
+      "Burnley FC": 33,
+      "Chelsea FC": 36,
+      "Everton FC": 42,
+      "Fulham FC": 41,
+      "Hull City": 37,
+      "Liverpool FC": 34,
+      "Manchester City": 40,
+      "Manchester United": 39,
+      "Portsmouth FC": 45,
+      "Stoke City": 39,
+      "Sunderland AFC": 38,
+      "Tottenham Hotspur": 41,
+      "West Ham United": 36,
+      "Wigan Athletic": 36,
+      "Wolverhampton Wanderers": 37
+    },
+    "2010/11": {
+      "Arsenal FC": 34,
+      "Aston Villa": 39,
+      "Birmingham City": 34,
+      "Blackburn Rovers": 37,
+      "Blackpool FC": 45,
+      "Bolton Wanderers": 34,
+      "Chelsea FC": 33,
+      "Everton FC": 32,
+      "Fulham FC": 34,
+      "Liverpool FC": 42,
+      "Manchester City": 45,
+      "Manchester United": 43,
+      "Newcastle United": 38,
+      "Stoke City": 33,
+      "Sunderland AFC": 39,
+      "Tottenham Hotspur": 38,
+      "West Bromwich Albion": 37,
+      "West Ham United": 42,
+      "Wigan Athletic": 35,
+      "Wolverhampton Wanderers": 42
+    },
+    "2011/12": {
+      "Arsenal FC": 45,
+      "Aston Villa": 37,
+      "Blackburn Rovers": 37,
+      "Bolton Wanderers": 38,
+      "Chelsea FC": 32,
+      "Everton FC": 36,
+      "Fulham FC": 36,
+      "Liverpool FC": 31,
+      "Manchester City": 36,
+      "Manchester United": 41,
+      "Newcastle United": 37,
+      "Norwich City": 29,
+      "Queens Park Rangers": 48,
+      "Stoke City": 32,
+      "Sunderland AFC": 36,
+      "Swansea City": 34,
+      "Tottenham Hotspur": 50,
+      "West Bromwich Albion": 36,
+      "Wigan Athletic": 30,
+      "Wolverhampton Wanderers": 37
+    },
+    "2012/13": {
+      "Arsenal FC": 42,
+      "Aston Villa": 33,
+      "Chelsea FC": 34,
+      "Everton FC": 29,
+      "Fulham FC": 37,
+      "Liverpool FC": 41,
+      "Manchester City": 41,
+      "Manchester United": 41,
+      "Newcastle United": 39,
+      "Norwich City": 36,
+      "Queens Park Rangers": 38,
+      "Reading FC": 35,
+      "Southampton FC": 40,
+      "Stoke City": 30,
+      "Sunderland AFC": 37,
+      "Swansea City": 33,
+      "Tottenham Hotspur": 41,
+      "West Bromwich Albion": 32,
+      "West Ham United": 39,
+      "Wigan Athletic": 37
+    },
+    "2013/14": {
+      "Arsenal FC": 41,
+      "Aston Villa": 36,
+      "Cardiff City": 42,
+      "Chelsea FC": 49,
+      "Crystal Palace": 45,
+      "Everton FC": 34,
+      "Fulham FC": 48,
+      "Hull City": 34,
+      "Liverpool FC": 36,
+      "Manchester City": 27,
+      "Manchester United": 37,
+      "Newcastle United": 37,
+      "Norwich City": 32,
+      "Southampton FC": 35,
+      "Stoke City": 33,
+      "Sunderland AFC": 39,
+      "Swansea City": 36,
+      "Tottenham Hotspur": 41,
+      "West Bromwich Albion": 33,
+      "West Ham United": 46
+    },
+    "2014/15": {
+      "Arsenal FC": 42,
+      "Aston Villa": 38,
+      "Burnley FC": 30,
+      "Chelsea FC": 38,
+      "Crystal Palace": 42,
+      "Everton FC": 40,
+      "Hull City": 35,
+      "Leicester City": 37,
+      "Liverpool FC": 35,
+      "Manchester City": 34,
+      "Manchester United": 43,
+      "Newcastle United": 42,
+      "Queens Park Rangers": 41,
+      "Southampton FC": 37,
+      "Stoke City": 30,
+      "Sunderland AFC": 34,
+      "Swansea City": 36,
+      "Tottenham Hotspur": 42,
+      "West Bromwich Albion": 34,
+      "West Ham United": 36
+    },
+    "2020/21": {
+      "Arsenal FC": 42,
+      "Aston Villa": 53,
+      "Brighton & Hove Albion": 46,
+      "Burnley FC": 32,
+      "Chelsea FC": 39,
+      "Crystal Palace": 36,
+      "Everton FC": 44,
+      "Fulham FC": 38,
+      "Leeds United": 39,
+      "Leicester City": 40,
+      "Liverpool FC": 43,
+      "Manchester City": 36,
+      "Manchester United": 39,
+      "Newcastle United": 33,
+      "Sheffield United": 40,
+      "Southampton FC": 39,
+      "Tottenham Hotspur": 41,
+      "West Bromwich Albion": 43,
+      "West Ham United": 40,
+      "Wolverhampton Wanderers": 38
+    },
+    "2021/22": {
+      "Arsenal FC": 41,
+      "Aston Villa": 44,
+      "Brentford FC": 38,
+      "Brighton & Hove Albion": 43,
+      "Burnley FC": 35,
+      "Chelsea FC": 44,
+      "Crystal Palace": 33,
+      "Everton FC": 42,
+      "Leeds United": 35,
+      "Leicester City": 40,
+      "Liverpool FC": 49,
+      "Manchester City": 39,
+      "Manchester United": 43,
+      "Newcastle United": 34,
+      "Norwich City": 45,
+      "Southampton FC": 33,
+      "Tottenham Hotspur": 45,
+      "Watford FC": 47,
+      "West Ham United": 37,
+      "Wolverhampton Wanderers": 38
+    }
+  },
+  "most_expensive_teams_per_season": {
+    "2004/05": {
+      "Chelsea FC": 331475000.0,
+      "Manchester United": 293225000.0,
+      "Arsenal FC": 247000000.0,
+      "Liverpool FC": 222125000.0,
+      "Tottenham Hotspur": 129450000.0
+    },
+    "2005/06": {
+      "Chelsea FC": 363425000.0,
+      "Manchester United": 254575000.0,
+      "Arsenal FC": 232330000.0,
+      "Liverpool FC": 216350000.0,
+      "Tottenham Hotspur": 154325000.0
+    },
+    "2006/07": {
+      "Chelsea FC": 416755000.0,
+      "Arsenal FC": 278175000.0,
+      "Manchester United": 259150000.0,
+      "Liverpool FC": 239765000.0,
+      "Tottenham Hotspur": 165730000.0
+    },
+    "2007/08": {
+      "Chelsea FC": 434350000.0,
+      "Manchester United": 354550000.0,
+      "Liverpool FC": 305650000.0,
+      "Arsenal FC": 262400000.0,
+      "Tottenham Hotspur": 220500000.0
+    },
+    "2008/09": {
+      "Chelsea FC": 448550000.0,
+      "Manchester United": 425950000.0,
+      "Liverpool FC": 342850000.0,
+      "Arsenal FC": 311450000.0,
+      "Tottenham Hotspur": 278800000.0
+    },
+    "2009/10": {
+      "Chelsea FC": 451950000.0,
+      "Manchester United": 384700000.0,
+      "Liverpool FC": 331550000.0,
+      "Arsenal FC": 314300000.0,
+      "Manchester City": 312500000.0
+    },
+    "2010/11": {
+      "Chelsea FC": 424100000.0,
+      "Manchester City": 404175000.0,
+      "Manchester United": 388000000.0,
+      "Liverpool FC": 339200000.0,
+      "Arsenal FC": 324000000.0
+    },
+    "2011/12": {
+      "Manchester City": 498600000.0,
+      "Manchester United": 404100000.0,
+      "Chelsea FC": 375500000.0,
+      "Arsenal FC": 362425000.0,
+      "Tottenham Hotspur": 323500000.0
+    },
+    "2012/13": {
+      "Manchester City": 502100000.0,
+      "Manchester United": 457500000.0,
+      "Chelsea FC": 454250000.0,
+      "Arsenal FC": 296900000.0,
+      "Tottenham Hotspur": 296800000.0
+    },
+    "2013/14": {
+      "Chelsea FC": 584200000.0,
+      "Manchester City": 455800000.0,
+      "Manchester United": 402550000.0,
+      "Arsenal FC": 385750000.0,
+      "Liverpool FC": 315750000.0
+    },
+    "2014/15": {
+      "Chelsea FC": 557250000.0,
+      "Manchester United": 505400000.0,
+      "Manchester City": 448250000.0,
+      "Arsenal FC": 414750000.0,
+      "Liverpool FC": 324850000.0
+    },
+    "2015/16": {
+      "Chelsea FC": 553500000.0,
+      "Manchester City": 499350000.0,
+      "Arsenal FC": 457850000.0,
+      "Manchester United": 439850000.0,
+      "Liverpool FC": 375250000.0
+    },
+    "2016/17": {
+      "Chelsea FC": 686700000.0,
+      "Manchester City": 576500000.0,
+      "Tottenham Hotspur": 543650000.0,
+      "Arsenal FC": 542000000.0,
+      "Manchester United": 531450000.0
+    },
+    "2017/18": {
+      "Manchester City": 1009000000.0,
+      "Chelsea FC": 884250000.0,
+      "Liverpool FC": 857500000.0,
+      "Manchester United": 849500000.0,
+      "Tottenham Hotspur": 829600000.0
+    },
+    "2018/19": {
+      "Manchester City": 1203450000.0,
+      "Liverpool FC": 1172400000.0,
+      "Chelsea FC": 1166650000.0,
+      "Tottenham Hotspur": 898600000.0,
+      "Manchester United": 797600000.0
+    },
+    "2019/20": {
+      "Manchester City": 1048675000.0,
+      "Liverpool FC": 1002650000.0,
+      "Tottenham Hotspur": 806800000.0,
+      "Chelsea FC": 705850000.0,
+      "Manchester United": 670450000.0
+    },
+    "2020/21": {
+      "Manchester City": 1044500000.0,
+      "Liverpool FC": 969650000.0,
+      "Chelsea FC": 889200000.0,
+      "Manchester United": 770050000.0,
+      "Tottenham Hotspur": 703500000.0
+    },
+    "2021/22": {
+      "Manchester City": 1003700000.0,
+      "Liverpool FC": 918900000.0,
+      "Chelsea FC": 914500000.0,
+      "Manchester United": 769150000.0,
+      "Tottenham Hotspur": 689350000.0
+    },
+    "2022/23": {
+      "Manchester City": 1145950000.0,
+      "Arsenal FC": 1000700000.0,
+      "Chelsea FC": 994950000.0,
+      "Manchester United": 847750000.0,
+      "Liverpool FC": 811850000.0
+    },
+    "2023/24": {
+      "Manchester City": 1462500000.0,
+      "Arsenal FC": 1203050000.0,
+      "Chelsea FC": 1013650000.0,
+      "Liverpool FC": 955650000.0,
+      "Tottenham Hotspur": 838500000.0
+    },
+    "2024/25": {
+      "Manchester City": 1358000000.0,
+      "Chelsea FC": 1193950000.0,
+      "Arsenal FC": 1158450000.0,
+      "Liverpool FC": 950950000.0,
+      "Manchester United": 825000000.0
+    }
+  },
+  "data_quality": {
+    "total_rows": 18828,
+    "total_columns": 19,
+    "duplicate_player_team_season": 2,
+    "encoding_issue_cells_approx": 14481,
+    "zero_market_value_count": 4408,
+    "null_market_value_count": 0,
+    "missing_dob_count": 12,
+    "missing_nationality_count": 0,
+    "missing_position_count": 0,
+    "file_read_errors": []
+  },
+  "processed_parquet_analysis": {
+    "file_exists": true,
+    "shape": [
+      14980,
+      36
+    ],
+    "columns": [
+      "player",
+      "nation",
+      "pos",
+      "age",
+      "mp",
+      "starts",
+      "min",
+      "90s",
+      "gls",
+      "ast",
+      "g_a",
+      "g_pk",
+      "pk",
+      "pkatt",
+      "crdy",
+      "crdr",
+      "gls_1",
+      "ast_1",
+      "g_a_1",
+      "g_pk_1",
+      "g_a_pk",
+      "season",
+      "team",
+      "transfer_flag",
+      "player_id",
+      "position",
+      "dob",
+      "age_tm",
+      "nationality",
+      "foot",
+      "joined",
+      "market_value",
+      "market_value_str",
+      "birth_year",
+      "height_cm",
+      "no_value_data"
+    ],
+    "dtypes": {
+      "player": "object",
+      "nation": "object",
+      "pos": "object",
+      "age": "float64",
+      "mp": "int64",
+      "starts": "float64",
+      "min": "float64",
+      "90s": "float64",
+      "gls": "float64",
+      "ast": "float64",
+      "g_a": "float64",
+      "g_pk": "float64",
+      "pk": "float64",
+      "pkatt": "float64",
+      "crdy": "int64",
+      "crdr": "int64",
+      "gls_1": "float64",
+      "ast_1": "float64",
+      "g_a_1": "float64",
+      "g_pk_1": "float64",
+      "g_a_pk": "float64",
+      "season": "object",
+      "team": "object",
+      "transfer_flag": "bool",
+      "player_id": "float64",
+      "position": "object",
+      "dob": "datetime64[ns]",
+      "age_tm": "float64",
+      "nationality": "object",
+      "foot": "object",
+      "joined": "object",
+      "market_value": "float64",
+      "market_value_str": "object",
+      "birth_year": "float64",
+      "height_cm": "float64",
+      "no_value_data": "object"
+    },
+    "missing_values": {
+      "player": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "nation": {
+        "missing_count": 8,
+        "missing_pct": 0.05
+      },
+      "pos": {
+        "missing_count": 1,
+        "missing_pct": 0.01
+      },
+      "age": {
+        "missing_count": 1,
+        "missing_pct": 0.01
+      },
+      "mp": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "starts": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "min": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "90s": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "gls": {
+        "missing_count": 2,
+        "missing_pct": 0.01
+      },
+      "ast": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "g_a": {
+        "missing_count": 2,
+        "missing_pct": 0.01
+      },
+      "g_pk": {
+        "missing_count": 35,
+        "missing_pct": 0.23
+      },
+      "pk": {
+        "missing_count": 35,
+        "missing_pct": 0.23
+      },
+      "pkatt": {
+        "missing_count": 168,
+        "missing_pct": 1.12
+      },
+      "crdy": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "crdr": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "gls_1": {
+        "missing_count": 2,
+        "missing_pct": 0.01
+      },
+      "ast_1": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "g_a_1": {
+        "missing_count": 2,
+        "missing_pct": 0.01
+      },
+      "g_pk_1": {
+        "missing_count": 35,
+        "missing_pct": 0.23
+      },
+      "g_a_pk": {
+        "missing_count": 35,
+        "missing_pct": 0.23
+      },
+      "season": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "team": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "transfer_flag": {
+        "missing_count": 0,
+        "missing_pct": 0.0
+      },
+      "player_id": {
+        "missing_count": 1094,
+        "missing_pct": 7.3
+      },
+      "position": {
+        "missing_count": 1094,
+        "missing_pct": 7.3
+      },
+      "dob": {
+        "missing_count": 4235,
+        "missing_pct": 28.27
+      },
+      "age_tm": {
+        "missing_count": 1099,
+        "missing_pct": 7.34
+      },
+      "nationality": {
+        "missing_count": 1094,
+        "missing_pct": 7.3
+      },
+      "foot": {
+        "missing_count": 1859,
+        "missing_pct": 12.41
+      },
+      "joined": {
+        "missing_count": 4474,
+        "missing_pct": 29.87
+      },
+      "market_value": {
+        "missing_count": 1094,
+        "missing_pct": 7.3
+      },
+      "market_value_str": {
+        "missing_count": 1094,
+        "missing_pct": 7.3
+      },
+      "birth_year": {
+        "missing_count": 1099,
+        "missing_pct": 7.34
+      },
+      "height_cm": {
+        "missing_count": 1687,
+        "missing_pct": 11.26
+      },
+      "no_value_data": {
+        "missing_count": 1094,
+        "missing_pct": 7.3
+      }
+    },
+    "detected_tm_columns": [
+      "dob",
+      "nationality",
+      "foot",
+      "joined",
+      "market_value",
+      "market_value_str",
+      "height_cm"
+    ],
+    "detected_fbref_columns": [
+      "90s"
+    ],
+    "tm_match_rate_market_value": {
+      "matched": 13886,
+      "total": 14980,
+      "match_pct": 92.7
+    },
+    "seasons_in_parquet": [
+      "2000/01",
+      "2001/02",
+      "2002/03",
+      "2003/04",
+      "2004/05",
+      "2005/06",
+      "2006/07",
+      "2007/08",
+      "2008/09",
+      "2009/10",
+      "2010/11",
+      "2011/12",
+      "2012/13",
+      "2013/14",
+      "2014/15",
+      "2015/16",
+      "2016/17",
+      "2017/18",
+      "2018/19",
+      "2019/20",
+      "2020/21",
+      "2021/22",
+      "2022/23",
+      "2023/24",
+      "2024/25"
+    ],
+    "top5_by_mv_in_parquet": [
+      {
+        "player": "Erling Haaland",
+        "team": "Man City",
+        "season": "2022/23",
+        "market_value": 180000000.0
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Man City",
+        "season": "2023/24",
+        "market_value": 180000000.0
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Man City",
+        "season": "2024/25",
+        "market_value": 180000000.0
+      },
+      {
+        "player": "Mohamed Salah",
+        "team": "Liverpool",
+        "season": "2017/18",
+        "market_value": 150000000.0
+      },
+      {
+        "player": "Kevin De Bruyne",
+        "team": "Man City",
+        "season": "2017/18",
+        "market_value": 150000000.0
+      }
+    ]
+  }
+}

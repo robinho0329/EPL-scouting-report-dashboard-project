@@ -2,8 +2,8 @@
   "model": "P8 Transfer Adaptation",
   "status": "완료",
   "metrics": {
-    "mae": 0.0953,
-    "r2": 0.1942,
+    "mae": 0.0933,
+    "r2": 0.2252,
     "train_size": 173,
     "test_size": 44
   },
@@ -29,44 +29,44 @@
   ],
   "top_features": [
     {
-      "feature": "gls_per90_old",
-      "importance": 0.1449
+      "feature": "g_a_per90_old",
+      "importance": 0.153
     },
     {
-      "feature": "g_a_per90_old",
-      "importance": 0.1362
+      "feature": "gls_per90_old",
+      "importance": 0.1509
     },
     {
       "feature": "ast_per90_old",
-      "importance": 0.0974
+      "importance": 0.1036
     },
     {
       "feature": "points_diff",
-      "importance": 0.0879
+      "importance": 0.0872
     },
     {
       "feature": "mv_vs_squad",
-      "importance": 0.0867
+      "importance": 0.0846
     },
     {
       "feature": "elo_diff",
-      "importance": 0.068
+      "importance": 0.0619
     },
     {
       "feature": "pos_code",
-      "importance": 0.0657
-    },
-    {
-      "feature": "style_match_pct",
-      "importance": 0.0482
-    },
-    {
-      "feature": "was_starter",
-      "importance": 0.0457
+      "importance": 0.0569
     },
     {
       "feature": "market_value",
-      "importance": 0.044
+      "importance": 0.047
+    },
+    {
+      "feature": "style_match_pct",
+      "importance": 0.0434
+    },
+    {
+      "feature": "was_starter",
+      "importance": 0.0429
     }
   ],
   "adapt_risk_distribution": {
