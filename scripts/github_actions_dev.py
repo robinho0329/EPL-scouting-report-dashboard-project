@@ -35,7 +35,7 @@ MODEL_MAP = [
     (["s1", "레이팅", "player rating"],          "s1_player_rating",     None),
     (["p1", "경기 결과", "match result"],        "p1_match_result",      "train_pipeline.py"),
     (["p2", "득점", "goal scor"],               "p2_goal_scoring",      None),
-    (["p3", "강등", "relegat"],                  "p3_relegation",        "train_relegation.py"),
+    (["p3", "강등 예측", "relegat"],              "p3_relegation",        "train_relegation.py"),
     (["p4", "mvp", "출전 시간"],                 "p4_mvp",               "mvp_pipeline.py"),
     (["p5", "클러스터", "cluster"],              "p5_clustering",        "run_clustering_k6.py"),
     (["p6", "이적료", "transfer fee"],           "p6_market_value",      None),

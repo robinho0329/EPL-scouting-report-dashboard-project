@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          lfs: true          # LFS 데이터 파일(parquet) 다운로드 필수
 
       - name: 🐍 Python 3.12 설정
         uses: actions/setup-python@v5
