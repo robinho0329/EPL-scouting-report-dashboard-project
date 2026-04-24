@@ -4,8 +4,8 @@
     {
       "item": "훈련 스크립트 경로 수정: P8(`train.py`), S2(`train_v4.py`), ",
       "script": "models/p8_transfer_adapt/train.py",
-      "success": false,
-      "error": "ib/python3.12/site-packages/pyarrow/parquet/core.py\", line 1891, in read_table\n    dataset = ParquetDataset(\n              ^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/pyarrow/parquet/core.py\", line 1460, in __init__\n    [fragment], schema=schema or fragment.physical_schema,\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"pyarrow/_d"
+      "success": true,
+      "error": ""
     },
     {
       "item": "P8 이적 적응 모델 재학습: 경로 수정 후 Championship/분데스리가/라리가 이적",
@@ -15,9 +15,9 @@
     },
     {
       "item": "S3 유사선수 클러스터 K 최적화: K=5~9 그리드 서치(실루엣·DB지수 기준), 최적 ",
-      "script": "models/p3_relegation/train_relegation.py",
-      "success": false,
-      "error": "ib/python3.12/site-packages/pyarrow/parquet/core.py\", line 1891, in read_table\n    dataset = ParquetDataset(\n              ^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/pyarrow/parquet/core.py\", line 1460, in __init__\n    [fragment], schema=schema or fragment.physical_schema,\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"pyarrow/_d"
+      "script": "models/p5_clustering/run_clustering_k6.py",
+      "success": true,
+      "error": ""
     }
   ]
 }
