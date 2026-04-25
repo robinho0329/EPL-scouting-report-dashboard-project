@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-25",
+  "results": [
+    {
+      "item": "P8 이적 적응 모델 재학습: Championship 강등-복귀 케이스 + 분데스리가/라리",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S2 DEF 피처 보강: `clearances_p90`, `aerial_duels_won_",
+      "script": "models/s2_market_value/train_v4.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "대시보드 마무리: S3 K=6 클러스터 모델이 선수 유형 탐색기 페이지에 실제 로드되는지 ",
+      "script": "models/p3_relegation/train_relegation.py",
+      "success": false,
+      "error": "shtable.PyObjectHashTable.get_item\nKeyError: 'Season'\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/models/p3_relegation/train_relegation.py\", line 227, in <module>\n    all_seasons = sorted(ts[\"Season\"].unique())\n                         "
+    }
+  ]
+}
