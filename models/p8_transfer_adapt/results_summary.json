@@ -2,10 +2,10 @@
   "model": "P8 Transfer Adaptation",
   "status": "완료",
   "metrics": {
-    "mae": 0.0933,
-    "r2": 0.2252,
-    "train_size": 173,
-    "test_size": 44
+    "mae": 0.1483,
+    "r2": 0.1672,
+    "train_size": 1297,
+    "test_size": 325
   },
   "features_used": [
     "style_distance",
@@ -30,56 +30,56 @@
   "top_features": [
     {
       "feature": "g_a_per90_old",
-      "importance": 0.153
+      "importance": 0.1751
     },
     {
       "feature": "gls_per90_old",
-      "importance": 0.1509
+      "importance": 0.1038
     },
     {
       "feature": "ast_per90_old",
-      "importance": 0.1036
+      "importance": 0.0722
     },
     {
-      "feature": "points_diff",
-      "importance": 0.0872
+      "feature": "epl_experience",
+      "importance": 0.0653
     },
     {
-      "feature": "mv_vs_squad",
-      "importance": 0.0846
-    },
-    {
-      "feature": "elo_diff",
-      "importance": 0.0619
-    },
-    {
-      "feature": "pos_code",
-      "importance": 0.0569
-    },
-    {
-      "feature": "market_value",
-      "importance": 0.047
-    },
-    {
-      "feature": "style_match_pct",
-      "importance": 0.0434
+      "feature": "90s_old",
+      "importance": 0.0641
     },
     {
       "feature": "was_starter",
-      "importance": 0.0429
+      "importance": 0.0609
+    },
+    {
+      "feature": "pos_code",
+      "importance": 0.0585
+    },
+    {
+      "feature": "points_diff",
+      "importance": 0.0561
+    },
+    {
+      "feature": "market_value",
+      "importance": 0.0542
+    },
+    {
+      "feature": "elo_diff",
+      "importance": 0.0444
     }
   ],
   "adapt_risk_distribution": {
-    "low": 72,
-    "medium": 73,
-    "high": 72
+    "low": 535,
+    "medium": 552,
+    "high": 535
   },
   "style_distance_stats": {
-    "mean": 0.0124,
+    "mean": 0.0118,
     "median": 0.011,
-    "std": 0.0091
+    "std": 0.0066
   },
   "scout_validation": "style_distance(팀 스타일 코사인 거리)가 상위 피처로 등장. 이적 전 공격 기여(g_a_per90_old)와 팀 포인트 차이(points_diff)도 핵심 예측 인자. 'adapt_risk=high' 선수는 영입 회의에서 적응 실패 위험 경고로 활용 가능.",
   "output_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\scout\\transfer_adapt_predictions.parquet",
-  "row_count": 217
+  "row_count": 1622
 }

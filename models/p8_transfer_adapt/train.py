@@ -170,7 +170,19 @@ logger.info(f"adapt_risk 분포: {df_trans['adapt_risk'].value_counts().to_dict(
 # ─────────────────────────────────────────────
 logger.info("XGBoost 학습 피처 구성")
 
-# 포지션 코드 (pos_code가 이미 있음)
+# 크로스리그 데이터 분리 분석 (리그별 적응률 통계 — 스카우트 레포트용)
+if "source_league" in df_trans.columns:
+    cross_df = df_trans[df_trans["source_league"] != "EPL"]
+    if not cross_df.empty:
+        logger.info("=== 크로스리그 적응률 통계 (스카우트 참고용) ===")
+        for lg, grp in cross_df.groupby("source_league"):
+            logger.info(f"  {lg}: {len(grp)}건, "
+                        f"적응률={grp['adapted'].mean()*100:.1f}%, "
+                        f"전 리그 g+a/90={grp['g_a_per90_old'].mean():.3f}, "
+                        f"EPL g+a/90={grp['g_a_per90_new'].mean():.3f}")
+
+    logger.info(f"모델 학습 대상: 전체 {len(df_trans)}건 (EPL 내부 + 크로스리그)")
+
 BASE_FEATURE_COLS = [
     "style_distance",
     "age",
@@ -197,11 +209,11 @@ FEATURE_COLS = [c for c in BASE_FEATURE_COLS if c in df_trans.columns]
 logger.info(f"사용 피처 수: {len(FEATURE_COLS)}")
 
 # 학습 데이터 준비
-df_model = df_trans[FEATURE_COLS + ["war_change", "adapt_risk", "adapted"]].dropna(
-    subset=FEATURE_COLS + ["war_change"]
-).copy()
-
+# NaN 피처를 먼저 0으로 채운 뒤 war_change 없는 행만 제거
+# (market_value/elo_diff 등이 NaN인 크로스리그 데이터도 활용)
+df_model = df_trans[FEATURE_COLS + ["war_change", "adapt_risk", "adapted"]].copy()
 df_model[FEATURE_COLS] = df_model[FEATURE_COLS].fillna(0.0)
+df_model = df_model.dropna(subset=["war_change"]).copy()
 logger.info(f"학습 데이터 크기: {len(df_model)}")
 
 # train/test 분리 (인덱스 기반 80/20)
