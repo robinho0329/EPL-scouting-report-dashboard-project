@@ -2,8 +2,8 @@
   "model": "P8 Transfer Adaptation",
   "status": "완료",
   "metrics": {
-    "mae": 0.1478,
-    "r2": 0.1572,
+    "mae": 0.1461,
+    "r2": 0.1744,
     "train_size": 1297,
     "test_size": 325
   },
@@ -30,43 +30,43 @@
   "top_features": [
     {
       "feature": "g_a_per90_old",
-      "importance": 0.1724
+      "importance": 0.1807
     },
     {
       "feature": "gls_per90_old",
-      "importance": 0.1189
-    },
-    {
-      "feature": "was_starter",
-      "importance": 0.0782
+      "importance": 0.1114
     },
     {
       "feature": "ast_per90_old",
-      "importance": 0.0748
+      "importance": 0.0773
     },
     {
       "feature": "90s_old",
-      "importance": 0.0742
+      "importance": 0.0633
     },
     {
-      "feature": "points_diff",
-      "importance": 0.0635
+      "feature": "was_starter",
+      "importance": 0.0618
     },
     {
       "feature": "pos_code",
-      "importance": 0.0552
+      "importance": 0.0586
     },
     {
-      "feature": "elo_diff",
-      "importance": 0.0483
+      "feature": "epl_experience",
+      "importance": 0.0558
+    },
+    {
+      "feature": "points_diff",
+      "importance": 0.0554
     },
     {
       "feature": "market_value",
-      "importance": 0.0481
+      "importance": 0.055
     },
     {
-      "feature": "mv_vs_squad",
-      "importance": 0.0381
+      "feature": "elo_diff",
+      "importance": 0.0507
     }
   ],
   "adapt_risk_distribution": {
@@ -80,6 +80,6 @@
     "std": 0.0066
   },
   "scout_validation": "style_distance(팀 스타일 코사인 거리)가 상위 피처로 등장. 이적 전 공격 기여(g_a_per90_old)와 팀 포인트 차이(points_diff)도 핵심 예측 인자. 'adapt_risk=high' 선수는 영입 회의에서 적응 실패 위험 경고로 활용 가능.",
-  "output_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/scout/transfer_adapt_predictions.parquet",
+  "output_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\scout\\transfer_adapt_predictions.parquet",
   "row_count": 1622
 }
