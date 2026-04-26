@@ -9,15 +9,17 @@ on:
 permissions:
   contents: write
 
+# 워크플로우 전역 환경변수 (action 실행 전 적용 보장)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"  # Node.js 20 deprecated 경고 완전 제거
+  PYTHONWARNINGS: "ignore"                     # Python warning 전역 억제
+  PIP_NO_WARN_SCRIPT_LOCATION: "1"             # pip 위치 경고 억제
+  DEBIAN_FRONTEND: noninteractive              # apt 대화형 프롬프트 비활성화
+
 jobs:
   dev-loop:
     runs-on: ubuntu-latest
     timeout-minutes: 90
-    env:
-      PYTHONWARNINGS: "ignore"                  # 모든 Python 프로세스 warning 전역 억제
-      PIP_NO_WARN_SCRIPT_LOCATION: "1"          # pip script 위치 경고 억제
-      DEBIAN_FRONTEND: noninteractive           # apt 대화형 프롬프트 비활성화
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Node.js 20 deprecated 경고 억제
 
     steps:
       - name: 📥 레포 체크아웃
