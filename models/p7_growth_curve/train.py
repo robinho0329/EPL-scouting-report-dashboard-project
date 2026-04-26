@@ -9,6 +9,7 @@
 import logging
 import json
 import joblib
+import warnings
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -16,6 +17,8 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import mean_absolute_error, r2_score
+
+warnings.filterwarnings("ignore")
 
 logging.basicConfig(
     level=logging.INFO,

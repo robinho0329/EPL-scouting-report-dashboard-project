@@ -29,7 +29,7 @@ jobs:
 
       - name: 📦 ML 의존성 설치
         run: |
-          pip install --quiet \
+          pip install --quiet --no-warn-script-location -W ignore::DeprecationWarning \
             pandas pyarrow \
             scikit-learn \
             xgboost lightgbm \
@@ -38,10 +38,11 @@ jobs:
             matplotlib seaborn
 
       - name: 🤖 액션아이템 → 기존 스크립트 학습 실행
-        run: python scripts/github_actions_dev.py
+        run: python -W ignore scripts/github_actions_dev.py
 
       - name: 📤 변경사항 커밋 & 푸시
         run: |
+          git config core.autocrlf false
           git config user.email "epl-dev-bot@github-actions"
           git config user.name "EPL Dev Bot"
           git add -A
@@ -57,13 +58,15 @@ jobs:
           fi
 
       - name: 🌐 Playwright 설치
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
-          pip install --quiet playwright
-          playwright install chromium --with-deps
+          pip install --quiet --no-warn-script-location playwright 2>/dev/null
+          playwright install chromium --with-deps --quiet 2>/dev/null || true
 
       - name: 🔍 Streamlit Cloud 에러 체크
         env:
           STREAMLIT_CHECK: "1"
           STREAMLIT_WAIT_SEC: "90"
-        run: python scripts/github_actions_dev.py
+        run: python -W ignore scripts/github_actions_dev.py
         continue-on-error: true   # 에러 감지돼도 워크플로우 전체 실패 처리 안 함 (결과만 로그)

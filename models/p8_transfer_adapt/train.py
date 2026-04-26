@@ -10,6 +10,7 @@
 import logging
 import json
 import joblib
+import warnings
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -17,6 +18,8 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.metrics.pairwise import cosine_similarity
 import xgboost as xgb
+
+warnings.filterwarnings("ignore")
 
 logging.basicConfig(
     level=logging.INFO,

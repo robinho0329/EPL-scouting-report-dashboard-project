@@ -8,6 +8,9 @@
   5. push 후 Streamlit Cloud 헤드리스 체크 → 에러 시 워크플로우 실패 처리
 """
 
+import warnings
+warnings.filterwarnings("ignore")
+
 import json
 import os
 import re
@@ -124,7 +127,7 @@ def run_script(script: Path, model_dir: Path):
     """스크립트 실행 → (성공여부, 에러메시지) 반환."""
     print(f"  🚀 실행: {script.relative_to(ROOT)}")
     result = subprocess.run(
-        [sys.executable, str(script)],
+        [sys.executable, "-W", "ignore", str(script)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,

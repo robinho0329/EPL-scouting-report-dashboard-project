@@ -8,9 +8,12 @@
 
 import logging
 import sys
+import warnings
 from pathlib import Path
 
 import pandas as pd
+
+warnings.filterwarnings("ignore")
 
 ROOT     = Path(__file__).resolve().parent.parent
 EXT_PATH = ROOT / "data" / "raw" / "p8_crossleague_transfers.parquet"
