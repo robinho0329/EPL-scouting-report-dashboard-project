@@ -74,13 +74,13 @@ print(f"  player_features: {pf.shape}")
 ts["season_year"] = ts["Season"].apply(season_start_year)
 
 # Bottom 3 teams by points each season = relegated
-def mark_relegated(group):
-    group = group.sort_values("points", ascending=True)
-    group["relegated"] = 0
-    group.iloc[:3, group.columns.get_loc("relegated")] = 1
-    return group
+# groupby+apply 대신 루프 사용 (pandas 3.0 include_groups 변경 대응)
+ts["relegated"] = 0
+for _season in ts["Season"].unique():
+    _mask = ts["Season"] == _season
+    _bottom3_idx = ts.loc[_mask].nsmallest(3, "points").index
+    ts.loc[_bottom3_idx, "relegated"] = 1
 
-ts = ts.groupby("Season", group_keys=False).apply(mark_relegated)
 print(f"\nRelegation label distribution:\n{ts['relegated'].value_counts()}")
 print(f"  Fraction relegated: {ts['relegated'].mean():.3f}")
 
