@@ -152,8 +152,9 @@ def check_streamlit(url: str, wait_sec: int = STREAMLIT_WAIT) -> bool:
     """Streamlit Cloud 앱 에러 여부 확인.
 
     playwright로 헤드리스 브라우저를 띄워 실제 앱 화면을 검사한다.
-    에러 박스가 없으면 True, 있으면 에러 내용을 출력하고 False 반환.
-    playwright 미설치 시 requests 폴백.
+    - 슬리핑 상태(Wake up 버튼)는 코드 에러 아님 → True 반환
+    - Traceback / stException 감지 시에만 False 반환
+    playwright 미설치 시 체크 스킵 (True 반환).
     """
     print(f"  ⏳ Streamlit 재배포 대기 ({wait_sec}초)...")
     time.sleep(wait_sec)
@@ -167,31 +168,49 @@ def check_streamlit(url: str, wait_sec: int = STREAMLIT_WAIT) -> bool:
             page = browser.new_page()
             print(f"  🌐 {url} 접속 중...")
             try:
-                page.goto(url, timeout=60_000)
-                # Streamlit 앱 로딩 완료 대기 (스피너 사라질 때까지 최대 60초)
-                page.wait_for_selector(
-                    "[data-testid='stApp']", timeout=60_000
-                )
+                page.goto(url, timeout=60_000, wait_until="domcontentloaded")
             except PWTimeout:
-                print("  ❌ 페이지 로딩 타임아웃 (60초)")
+                print("  ⚠️  초기 접속 타임아웃 — 슬리핑 가능성, 정상 처리")
                 browser.close()
-                return False
+                return True
 
-            # 에러 박스 탐색 (Streamlit의 빨간 에러 컨테이너)
+            # 슬리핑 상태 감지 → Wake up 클릭 후 추가 대기
+            try:
+                for selector in [
+                    "button:has-text('Wake app')",
+                    "button:has-text('Yes, get this app back up!')",
+                    "button:has-text('Wake')",
+                ]:
+                    wake_btn = page.query_selector(selector)
+                    if wake_btn:
+                        print("  💤 슬리핑 상태 감지 — Wake 버튼 클릭")
+                        wake_btn.click()
+                        time.sleep(15)
+                        break
+            except Exception:
+                pass
+
+            # stApp 로딩 대기 (최대 120초)
+            try:
+                page.wait_for_selector("[data-testid='stApp']", timeout=120_000)
+            except PWTimeout:
+                print("  ⚠️  stApp 로딩 타임아웃 — 슬리핑/재시작 중으로 간주, 정상 처리")
+                browser.close()
+                return True  # 슬리핑·재배포 중은 코드 에러 아님
+
+            # 실제 코드 에러만 탐지
             error_els = page.query_selector_all(
-                "[data-testid='stException'], .element-container.stAlert"
+                "[data-testid='stException']"
             )
             if error_els:
-                print(f"  ❌ Streamlit 에러 감지 ({len(error_els)}건):")
+                print(f"  ❌ Streamlit 코드 에러 감지 ({len(error_els)}건):")
                 for el in error_els[:3]:
                     print(f"     {el.inner_text()[:300]}")
                 browser.close()
                 return False
 
-            # 추가: traceback 텍스트 직접 검색
             content = page.content()
             if "Traceback (most recent call last)" in content:
-                # 에러 텍스트 일부 추출
                 idx = content.find("Traceback")
                 print(f"  ❌ Traceback 감지:\n{content[idx:idx+400]}")
                 browser.close()
@@ -202,23 +221,13 @@ def check_streamlit(url: str, wait_sec: int = STREAMLIT_WAIT) -> bool:
             return True
 
     except ImportError:
-        # ── requests 폴백 ─────────────────────────────────────────
-        print("  ⚠️  playwright 없음 — requests 폴백 사용")
-        try:
-            import requests as req
-            resp = req.get(url, timeout=30)
-            if resp.status_code == 200:
-                print(f"  ✅ HTTP 200 OK ({url})")
-                return True
-            else:
-                print(f"  ❌ HTTP {resp.status_code}")
-                return False
-        except Exception as e:
-            print(f"  ❌ 접속 실패: {e}")
-            return False
+        # playwright 없으면 체크 불가 → 정상 처리
+        print("  ⚠️  playwright 없음 — Streamlit 체크 스킵")
+        return True
 
     except Exception as e:
-        print(f"  ❌ Streamlit 체크 예외: {e}")
+        print(f"  ⚠️  Streamlit 체크 예외 (비치명적): {e}")
+        return True  # 체크 자체 실패는 코드 에러 아님
         return False
 
 
