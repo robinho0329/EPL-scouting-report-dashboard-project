@@ -1,7 +1,7 @@
 {
   "pipeline": "S2 v4 - Unified Market Value Prediction (Youth Filter + 38+ Fix)",
   "version": "v4",
-  "created": "2026-04-25 16:59:56",
+  "created": "2026-04-26 11:18:22",
   "key_improvements_over_v3": [
     "FIX 1 (v4): Overvalued 유스 필터 확장 — age<=21 OR (age<=22 AND min<1500) → Tyler Dibling (age=19, 1874min) 올바르게 제외",
     "FIX 2 (v4): 38세 이상 선수 undervalued 목록에서 자동 제외 — 나이 감가상각은 진짜 저평가가 아님",
