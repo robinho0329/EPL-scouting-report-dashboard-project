@@ -2,7 +2,8 @@ name: 🤖 EPL 스카우트팀 일일 개발 루프
 
 on:
   schedule:
-    - cron: '15 0 * * *'   # 00:15 UTC = 09:15 KST
+    - cron: '50 20 * * *'  # 20:50 UTC (전일) → 실제 실행 ~00:15 UTC = 09:15 KST
+                           # GitHub Actions 평균 지연 3h24m 역산 적용 (실측: 03:30, 03:47 UTC)
   workflow_dispatch:         # 수동 실행 버튼
 
 permissions:

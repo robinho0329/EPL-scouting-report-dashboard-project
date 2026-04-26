@@ -59,7 +59,7 @@ base64 인코딩 파일은 디코딩해서 읽을 것.
 | 구분 | 방식 | 시간 |
 |------|------|------|
 | 미팅 시뮬레이션 | CCR RemoteTrigger | 매일 09:00 KST |
-| 모델 학습 + Streamlit 체크 | GitHub Actions | 매일 09:15 KST |
+| 모델 학습 + Streamlit 체크 | GitHub Actions | 매일 09:15 KST (cron: 20:50 UTC, 지연 3h24m 역산) |
 | 로컬 실행 (PC 켤 때) | Windows Task Scheduler | 매일 09:15 KST |
 
 - **학습**: 기존 train 스크립트 직접 실행 (Claude API 불필요)
