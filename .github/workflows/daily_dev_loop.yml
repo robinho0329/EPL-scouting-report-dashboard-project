@@ -2,9 +2,9 @@ name: 🤖 EPL 스카우트팀 일일 개발 루프
 
 on:
   schedule:
-    - cron: '50 20 * * *'  # 20:50 UTC (전일) → 실제 실행 ~00:15 UTC = 09:15 KST
-                           # GitHub Actions 평균 지연 3h24m 역산 적용 (실측: 03:30, 03:47 UTC)
-  workflow_dispatch:         # 수동 실행 버튼
+    - cron: '50 20 * * *'  # 20:50 UTC → 실제 실행 ~00:15 UTC = 09:15 KST
+                           # GitHub Actions 평균 지연 3h24m 역산 적용
+  workflow_dispatch:        # 수동 실행 버튼
 
 permissions:
   contents: write
@@ -12,14 +12,18 @@ permissions:
 jobs:
   dev-loop:
     runs-on: ubuntu-latest
-    timeout-minutes: 90      # 모델 학습 + Streamlit 체크 포함
+    timeout-minutes: 90
+    env:
+      PYTHONWARNINGS: "ignore"          # 모든 Python 프로세스 warning 전역 억제 (자식 프로세스 포함)
+      PIP_NO_WARN_SCRIPT_LOCATION: "1"  # pip script 위치 경고 억제
+      DEBIAN_FRONTEND: noninteractive   # apt 대화형 프롬프트 비활성화
 
     steps:
       - name: 📥 레포 체크아웃
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          lfs: true          # LFS 데이터 파일(parquet) 다운로드 필수
+          lfs: true
 
       - name: 🐍 Python 3.12 설정
         uses: actions/setup-python@v5
@@ -29,13 +33,14 @@ jobs:
 
       - name: 📦 ML 의존성 설치
         run: |
-          pip install --quiet --no-warn-script-location -W ignore::DeprecationWarning \
+          pip install --quiet --no-warn-script-location \
             pandas pyarrow \
             scikit-learn \
             xgboost lightgbm \
             optuna \
             joblib numpy \
-            matplotlib seaborn
+            matplotlib seaborn \
+            imbalanced-learn
 
       - name: 🤖 액션아이템 → 기존 스크립트 학습 실행
         run: python -W ignore scripts/github_actions_dev.py
@@ -43,6 +48,7 @@ jobs:
       - name: 📤 변경사항 커밋 & 푸시
         run: |
           git config core.autocrlf false
+          git config core.safecrlf false
           git config user.email "epl-dev-bot@github-actions"
           git config user.name "EPL Dev Bot"
           git add -A
@@ -51,22 +57,20 @@ jobs:
           else
             TODAY=$(date +'%Y-%m-%d')
             git commit -m "auto(actions/${TODAY}): 미팅 액션아이템 구현 + 모델 학습"
-            # 원격에 새 커밋이 있을 경우 fetch → merge (ours=runner결과 우선)
-            git fetch origin master
-            git merge -X ours origin/master --no-edit
+            git fetch --no-progress origin master
+            git merge -s recursive -X ours origin/master --no-edit 2>/dev/null || true
             git push
           fi
 
       - name: 🌐 Playwright 설치
-        env:
-          DEBIAN_FRONTEND: noninteractive
         run: |
-          pip install --quiet --no-warn-script-location playwright 2>/dev/null
-          playwright install chromium --with-deps --quiet 2>/dev/null || true
+          pip install --quiet --no-warn-script-location playwright
+          playwright install chromium --with-deps > /tmp/pw_log.txt 2>&1 || \
+            (echo "❌ Playwright 설치 실패:" && cat /tmp/pw_log.txt && exit 1)
 
       - name: 🔍 Streamlit Cloud 에러 체크
         env:
           STREAMLIT_CHECK: "1"
           STREAMLIT_WAIT_SEC: "90"
         run: python -W ignore scripts/github_actions_dev.py
-        continue-on-error: true   # 에러 감지돼도 워크플로우 전체 실패 처리 안 함 (결과만 로그)
+        continue-on-error: true

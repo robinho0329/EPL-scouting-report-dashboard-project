@@ -34,6 +34,7 @@ warnings.filterwarnings("ignore")
 BASE = os.path.dirname(os.path.abspath(__file__))
 PROJECT = os.path.abspath(os.path.join(BASE, "..", ".."))
 FIG_DIR = os.path.join(BASE, "figures")
+os.makedirs(FIG_DIR, exist_ok=True)
 
 FEATURES_PATH = os.path.join(PROJECT, "data", "features", "player_features.parquet")
 
@@ -303,8 +304,15 @@ def make_serializable(obj):
     return obj
 
 results_path = os.path.join(BASE, "results_summary.json")
-with open(results_path, "r") as f:
-    results = json.load(f)
+if not os.path.exists(results_path):
+    print(f"  ⚠️  results_summary.json 없음 — 신규 빌드로 초기화")
+    results = {"figures": [], "metrics": {}}
+else:
+    with open(results_path, "r") as f:
+        results = json.load(f)
+# figures 키 보장
+if "figures" not in results:
+    results["figures"] = []
 
 results["kmeans_k6"] = {
     "metrics": make_serializable(metrics),
