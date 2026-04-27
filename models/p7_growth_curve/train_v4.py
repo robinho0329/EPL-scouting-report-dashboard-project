@@ -5,7 +5,13 @@ v3 대비 개선:
 - 포지션별 개별 LGBM 모델 (FWD/MID/DEF/GK)
 - 통합 delta 모델과 비교 후 best 선택
 
-목표: v3 R² 0.577 → 0.65+
+v4.1 추가 피처 (2026-04-27):
+- lag4: goals_p90_lag4, assists_p90_lag4, ac_z_lag4, attack_contribution_lag4, minutes_share_lag4
+- ac_z_trend3: 3시즌 전 대비 장기 추세
+- war_ma4: 4시즌 이동평균 (장기 트렌드)
+- age_vs_peak_lag1: peak까지 거리 전 시즌값 (성장 가속도 포착)
+
+목표: v4 R² 0.5588 → 0.60+
 """
 
 import json
@@ -166,12 +172,25 @@ df = df.sort_values(["player_id", "season_year"]).copy()
 df["ac_z_lag1"] = df.groupby("player_id")["ac_z"].shift(1)
 df["ac_z_trend"] = df["ac_z"] - df["ac_z_lag1"]
 
-# lag2 / lag3
+# lag2 / lag3 / lag4
 for col in ["goals_p90", "assists_p90", "attack_contribution", "ac_z", "minutes_share"]:
     df[f"{col}_lag2"] = df.groupby("player_id")[col].shift(2)
     df[f"{col}_lag3"] = df.groupby("player_id")[col].shift(3)
+    df[f"{col}_lag4"] = df.groupby("player_id")[col].shift(4)
 
 df["ac_z_trend2"] = df["ac_z"] - df["ac_z_lag2"]
+df["ac_z_trend3"] = df["ac_z"] - df["ac_z_lag3"]
+
+# 4시즌 이동평균 (장기 트렌드 캡처)
+df["war_ma4"] = (
+    df.groupby("player_id")["ac_z"]
+    .rolling(window=4, min_periods=2)
+    .mean()
+    .reset_index(level=0, drop=True)
+)
+
+# peak까지 거리의 1시즌 전 값 (나이에 따른 성장/하락 속도 변화 포착)
+df["age_vs_peak_lag1"] = df.groupby("player_id")["age_vs_peak"].shift(1)
 
 # 나이 비선형
 df["age2"] = df["age_clean"] ** 2
@@ -233,6 +252,12 @@ FEATURE_COLS = [
     "minutes_share_lag2", "minutes_share_lag3",
     # v3 lag2 트렌드
     "ac_z_trend2",
+    # v5 lag4 + 장기 트렌드
+    "goals_p90_lag4", "assists_p90_lag4", "ac_z_lag4",
+    "attack_contribution_lag4", "minutes_share_lag4",
+    "ac_z_trend3", "war_ma4",
+    # peak 거리 변화율 (성장/하락 가속도)
+    "age_vs_peak_lag1",
 ]
 FEATURE_COLS = [c for c in FEATURE_COLS if c in df.columns]
 logger.info(f"피처 {len(FEATURE_COLS)}개")

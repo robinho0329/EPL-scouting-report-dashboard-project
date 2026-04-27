@@ -316,16 +316,21 @@ df['season_year'] = df['season'].apply(season_to_year)
 pos_encoder = LabelEncoder()
 df['pos_group_enc'] = pos_encoder.fit_transform(df['pos_group'].fillna('MID'))
 
-# 피처 선택
+# 피처 선택 — WAR 구성 요소 피처 포함 (v1.1: R² 개선)
+# WAR 계산에 쓰인 Z-score 피처를 ML 입력에도 반영
 FEATURES = [
-    'age',           # 나이
-    'market_value',  # 시장 가치
-    'pos_group_enc', # 포지션 그룹
-    'points',        # 팀 강도 (시즌 포인트)
-    'goal_diff',     # 팀 골 득실 차
-    'nineties',      # 출전 90분 단위
-    'match_count',   # 경기 수
-    'season_year',   # 시즌 연도
+    # 선수 프로파일
+    'age', 'pos_group_enc', 'nineties', 'match_count', 'season_year',
+    # 팀 컨텍스트
+    'points', 'goal_diff',
+    # 성과 per-90 원시값 (WAR 계산 입력 그대로)
+    'gls_p90', 'ast_p90', 'sh_p90', 'tklw_p90', 'int_p90', 'clr_p90',
+    'kp_p90', 'cs_p90', 'save_pct',
+    # 포지션-시즌 내 Z-score (WAR 계산과 동일 기준)
+    'gls_p90_z', 'ast_p90_z', 'sh_p90_z', 'tklw_p90_z', 'int_p90_z',
+    'clr_p90_z', 'kp_p90_z', 'cs_p90_z', 'save_pct_z', 'min_ratio_z',
+    # 출전 비율
+    'min_ratio',
 ]
 
 TARGET = 'war_rating'

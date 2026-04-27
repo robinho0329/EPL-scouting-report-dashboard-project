@@ -261,6 +261,9 @@ FEATURE_COLS = [
     "goals_p90", "assists_p90", "goal_contributions_p90",
     "yellow_cards_p90", "red_cards_p90", "gc_x_min_share",
 
+    # 수비/활동량 (v4.1: DEF 모델 정확도 개선 — fouls_p90, versatility)
+    "fouls_p90", "versatility_positions",
+
     # WAR & 스카우트 평점
     "war_norm", "consistency_score",
 
@@ -289,6 +292,7 @@ for c in FEATURE_COLS:
 
 print(f"  총 피처 수: {len(FEATURE_COLS)}")
 print(f"  포지션 더미: {pos_cols}")
+print(f"  DEF 추가 피처: fouls_p90, versatility_positions (v4.1)")
 
 # ---------------------------------------------------------------------------
 # 6. 시간 기반 분할
