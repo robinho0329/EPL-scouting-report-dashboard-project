@@ -1026,9 +1026,64 @@ with open(MODEL_DIR / "results_summary_v4.json", "w", encoding="utf-8") as f:
 
 print(f"  Saved: {MODEL_DIR / 'results_summary_v4.json'}")
 
+# ---------------------------------------------------------------------------
+# 14. 포지션별 성능 계산 + results_summary.json 동기화
+#     모니터링 파일(results_summary.json)을 최신 v4 결과로 유지
+# ---------------------------------------------------------------------------
+print("\n  포지션별 성능 계산 중...")
+
+POS_MAP = {"FW": "FW", "DF": "DEF", "MF": "MID", "GK": "GK"}
+pos_metrics = {}
+best_xgb_pred = test_predictions.get("XGBoost", best_preds)
+
+for raw_pos, label in POS_MAP.items():
+    mask = test_df["pos_group_clean"] == raw_pos
+    if mask.sum() < 10:
+        continue
+    y_pos_orig = test_df.loc[mask, "market_value"].values
+    y_pos_pred = best_xgb_pred[mask.values]
+    pos_r2   = round(float(r2_score(y_pos_orig, y_pos_pred)), 4)
+    pos_mae  = round(float(mean_absolute_error(y_pos_orig, y_pos_pred)), 0)
+    pos_mape = round(float(mape_score(y_pos_orig, y_pos_pred)), 2) if mape_score(y_pos_orig, y_pos_pred) else None
+    pos_metrics[label] = {
+        "best_model": "XGBoost",
+        "test_R2":   pos_r2,
+        "test_MAE":  int(pos_mae),
+        "test_MAPE": pos_mape,
+        "test_size": int(mask.sum()),
+        "feature_cols": FEATURE_COLS,
+    }
+    print(f"    {label:<4}: R2={pos_r2:.4f}  MAE={pos_mae:,.0f}  n={mask.sum()}")
+
+pos_summary = {
+    "pipeline": "S2 - Position-Specific Market Value Prediction",
+    "version":  "v4",
+    "created":  datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "note":     "v4 통합 모델 기반 포지션별 성능 분해 (unified XGBoost per-position evaluation)",
+    "data": {
+        "total_rows_after_filter": len(df),
+        "train_size":  len(train_df),
+        "val_size":    len(val_df),
+        "test_size":   len(test_df),
+    },
+    "position_models": pos_metrics,
+    "overall_metrics": all_results.get("XGBoost", {}),
+    "best_model": best_model_name,
+    "value_analysis": results_summary["value_analysis"],
+    "top20_undervalued": build_player_list(undervalued_df, 20),
+    "top20_overvalued":  build_player_list(overvalued_df,  20),
+}
+
+with open(MODEL_DIR / "results_summary.json", "w", encoding="utf-8") as f:
+    json.dump(pos_summary, f, indent=2, ensure_ascii=False)
+
+print(f"  Saved: {MODEL_DIR / 'results_summary.json'} (포지션별 모니터링 파일 동기화)")
+
 print("\n" + "=" * 70)
 print("S2 v4 완료!")
 print(f"  최적 모델:        {best_model_name} (R2={best_r2:.4f})")
 print(f"  저평가 선수:      {len(undervalued_df)}명 (38세+ {len(excluded_old_df)}명 제외)")
 print(f"  과대평가 선수:    {len(overvalued_df)}명 (유스 {len(excluded_young_df)}명 제외)")
+for pos, m in pos_metrics.items():
+    print(f"  {pos} R2: {m['test_R2']:.4f}  MAE: {m['test_MAE']:,.0f}")
 print("=" * 70)

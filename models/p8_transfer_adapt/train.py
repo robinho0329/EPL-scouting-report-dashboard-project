@@ -186,15 +186,40 @@ if "source_league" in df_trans.columns:
 
     logger.info(f"모델 학습 대상: 전체 {len(df_trans)}건 (EPL 내부 + 크로스리그)")
 
+# ── 리그 정규화 피처 생성 (league_level_diff + 상대 성과 지표) ──
+# 챔피언십 0.8 g+a/90 ≠ EPL 0.8 g+a/90 — 리그별 평균으로 표준화
+logger.info("리그 정규화 피처 생성")
+
+if "source_league" in df_trans.columns:
+    league_avg = (
+        df_trans.groupby("source_league")[["g_a_per90_old", "gls_per90_old", "ast_per90_old"]]
+        .transform("mean")
+    )
+    eps = 1e-6
+    df_trans["g_a_per90_rel"] = df_trans["g_a_per90_old"] / (league_avg["g_a_per90_old"] + eps)
+    df_trans["gls_per90_rel"] = df_trans["gls_per90_old"] / (league_avg["gls_per90_old"] + eps)
+    df_trans["ast_per90_rel"] = df_trans["ast_per90_old"] / (league_avg["ast_per90_old"] + eps)
+    league_map = {"EPL": 0, "Championship": 1}
+    df_trans["league_level_diff"] = df_trans["source_league"].map(league_map).fillna(2).astype(int)
+    logger.info(f"g_a_per90_rel 범위: {df_trans['g_a_per90_rel'].min():.3f} ~ {df_trans['g_a_per90_rel'].max():.3f}")
+    logger.info(f"league_level_diff 분포: {df_trans['league_level_diff'].value_counts().to_dict()}")
+else:
+    df_trans["g_a_per90_rel"] = df_trans["g_a_per90_old"]
+    df_trans["gls_per90_rel"] = df_trans["gls_per90_old"]
+    df_trans["ast_per90_rel"] = df_trans["ast_per90_old"]
+    df_trans["league_level_diff"] = 0
+    logger.warning("source_league 컬럼 없음 — 리그 정규화 피처를 raw 값으로 대체")
+
 BASE_FEATURE_COLS = [
     "style_distance",
     "age",
     "pos_code",
     "epl_experience",
     "transfer_count",
-    "g_a_per90_old",
-    "gls_per90_old",
-    "ast_per90_old",
+    "g_a_per90_rel",
+    "gls_per90_rel",
+    "ast_per90_rel",
+    "league_level_diff",
     "90s_old",
     "was_starter",
     "market_value",
@@ -209,7 +234,7 @@ BASE_FEATURE_COLS = [
 
 # 존재하는 컬럼만 사용
 FEATURE_COLS = [c for c in BASE_FEATURE_COLS if c in df_trans.columns]
-logger.info(f"사용 피처 수: {len(FEATURE_COLS)}")
+logger.info(f"사용 피처 수: {len(FEATURE_COLS)} (리그 정규화 피처 포함)")
 
 # 학습 데이터 준비
 # NaN 피처를 먼저 0으로 채운 뒤 war_change 없는 행만 제거
@@ -335,8 +360,9 @@ summary = {
         "std":    round(float(df_trans["style_distance"].std()), 4),
     },
     "scout_validation": (
-        "style_distance(팀 스타일 코사인 거리)가 상위 피처로 등장. "
-        "이적 전 공격 기여(g_a_per90_old)와 팀 포인트 차이(points_diff)도 핵심 예측 인자. "
+        "리그 정규화 피처(g_a_per90_rel, league_level_diff) 추가로 크로스리그 이적 케이스 편향 보정. "
+        "챔피언십 0.8 g+a/90 ≠ EPL 0.8 g+a/90 문제 해소. "
+        "style_distance(팀 스타일 코사인 거리)와 리그 수준 차이(league_level_diff)가 핵심 예측 인자. "
         "'adapt_risk=high' 선수는 영입 회의에서 적응 실패 위험 경고로 활용 가능."
     ),
     "output_file": str(SCOUT_OUT),

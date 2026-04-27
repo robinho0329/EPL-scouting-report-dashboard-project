@@ -1,8 +1,21 @@
 {
   "metadata": {
-    "version": "v2",
-    "best_k": 11,
-    "best_silhouette": 0.115187,
+    "version": "v4",
+    "description": "Position-Stratified Clustering (FW/MID/DEF/GK 포지션별 독립 K-Means)",
+    "best_k": 20,
+    "best_k_by_position": {
+      "FW": 7,
+      "MID": 7,
+      "DEF": 4,
+      "GK": 2
+    },
+    "best_silhouette": 0.3224,
+    "silhouette_by_position": {
+      "FW": 0.2085,
+      "MID": 0.2299,
+      "DEF": 0.3637,
+      "GK": 0.4873
+    },
     "silhouette_scores": {
       "10": 0.114575,
       "11": 0.115187,
@@ -15,19 +28,28 @@
       "18": 0.088656
     },
     "archetypes": {
-      "0": "Centre-Back",
-      "1": "Attacking Full-Back",
-      "2": "Ball-Winning Defender",
-      "3": "Centre-Back",
-      "4": "Attacking Full-Back",
-      "5": "Centre-Back",
-      "6": "Centre-Forward",
-      "7": "Attacking Wide Forward",
-      "8": "Ball-Winning Defender",
-      "9": "Attacking Full-Back",
-      "10": "Attacking Full-Back"
+      "FW_3": "⚽ 박스 스트라이커",
+      "FW_6": "🎯 효율형 득점왕",
+      "FW_0": "⚽ 스트라이커",
+      "FW_1": "🎨 창의적 공격수",
+      "FW_2": "🏃 압박 전방",
+      "FW_4": "🔫 볼륨 슈터",
+      "FW_5": "FW 타입 5",
+      "MID_0": "📈 박스 투 박스",
+      "MID_4": "🔑 딥라잉 플레이메이커",
+      "MID_6": "🎨 창의적 플레이메이커",
+      "MID_1": "🔑 플레이메이커",
+      "MID_2": "💪 수비형 MF",
+      "MID_3": "📈 박스투박스",
+      "MID_5": "🎯 공격형 MF",
+      "DEF_3": "🏃 공격형 풀백",
+      "DEF_0": "🛡️ 전통 수비수",
+      "DEF_1": "🏃 오버래핑 수비수",
+      "DEF_2": "💪 공중볼 수비수",
+      "GK_0": "🧤 슈팅 스토퍼",
+      "GK_1": "🧱 클린시트 키퍼"
     },
-    "n_players": 12303,
+    "n_players": 8364,
     "seasons_covered": [
       "2000/01",
       "2001/02",
@@ -56,13 +78,149 @@
       "2024/25"
     ],
     "improvements": [
-      "포지션별 전용 피처셋 + 핵심 스탯 1.3 가중치",
-      "One-Hot 가중치 2.0 → 1.5 하향 (포지션 편향 완화)",
-      "K 탐색 범위 8~12 → 10~18 확장",
-      "n_init 10 → 20 증가",
-      "필터링 기능 추가 (시장가치, 나이, 포지션)",
-      "클러스터별 저가 대안 자동 목록"
-    ]
+      "v4: 포지션별 분리 클러스터링 (FW/MID/DEF/GK 독립 K-Means)",
+      "v4: 순수 스타일 피처만 사용 (age/height/market_value 제거)",
+      "v4: pos_group을 WAR 모델과 통일 (FW/MID/DEF/GK)",
+      "v4: 포지션별 최적 K 탐색 (FW:K=7, MID:K=7, DEF:K=4, GK:K=2)",
+      "v4: 유사도 계산 포지션 내에서만 (FW↔DEF 비교 불가)",
+      "v4: 아키타입 레이블 포지션별 의미 있는 이름으로 자동 부여"
+    ],
+    "created_at": "2026-04-05 13:23:49"
+  },
+  "cluster_meta": {
+    "FW": {
+      "best_k": 7,
+      "silhouette": 0.2085,
+      "k_scores": {
+        "4": 0.2061,
+        "5": 0.2052,
+        "6": 0.2006,
+        "7": 0.2085
+      },
+      "features": [
+        "goals_p90",
+        "assists_p90",
+        "shots_p90",
+        "sot_p90",
+        "g_plus_a_p90",
+        "shot_conversion",
+        "fouls_drawn_p90",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "3": "⚽ 박스 스트라이커",
+        "6": "🎯 효율형 득점왕",
+        "0": "⚽ 스트라이커",
+        "1": "🎨 창의적 공격수",
+        "2": "🏃 압박 전방",
+        "4": "🔫 볼륨 슈터",
+        "5": "FW 타입 5"
+      },
+      "2024_25_dist": {
+        "🎨 창의적 공격수": 20,
+        "🎯 효율형 득점왕": 19,
+        "⚽ 박스 스트라이커": 18,
+        "FW 타입 5": 18
+      }
+    },
+    "MID": {
+      "best_k": 7,
+      "silhouette": 0.2299,
+      "k_scores": {
+        "5": 0.227,
+        "6": 0.2299,
+        "7": 0.2299,
+        "8": 0.2139
+      },
+      "features": [
+        "assists_p90",
+        "key_passes_p90",
+        "goals_p90",
+        "shots_p90",
+        "tackles_p90",
+        "interc_p90",
+        "def_actions_p90",
+        "fouls_drawn_p90",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "0": "📈 박스 투 박스",
+        "4": "🔑 딥라잉 플레이메이커",
+        "6": "🎨 창의적 플레이메이커",
+        "1": "🔑 플레이메이커",
+        "2": "💪 수비형 MF",
+        "3": "📈 박스투박스",
+        "5": "🎯 공격형 MF"
+      },
+      "2024_25_dist": {
+        "📈 박스투박스": 31,
+        "🔑 플레이메이커": 31,
+        "🔑 딥라잉 플레이메이커": 20,
+        "🎨 창의적 플레이메이커": 17,
+        "💪 수비형 MF": 2,
+        "📈 박스 투 박스": 1,
+        "🎯 공격형 MF": 1
+      }
+    },
+    "DEF": {
+      "best_k": 4,
+      "silhouette": 0.3637,
+      "k_scores": {
+        "4": 0.3637,
+        "5": 0.2291,
+        "6": 0.2153,
+        "7": 0.2199
+      },
+      "features": [
+        "tackles_p90",
+        "interc_p90",
+        "def_actions_p90",
+        "fouls_p90",
+        "crosses_p90",
+        "goals_p90",
+        "assists_p90",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "3": "🏃 공격형 풀백",
+        "0": "🛡️ 전통 수비수",
+        "1": "🏃 오버래핑 수비수",
+        "2": "💪 공중볼 수비수"
+      },
+      "2024_25_dist": {
+        "💪 공중볼 수비수": 46,
+        "🛡️ 전통 수비수": 46,
+        "🏃 공격형 풀백": 22,
+        "🏃 오버래핑 수비수": 8
+      }
+    },
+    "GK": {
+      "best_k": 2,
+      "silhouette": 0.4873,
+      "k_scores": {
+        "2": 0.4873,
+        "3": 0.405,
+        "4": 0.4371
+      },
+      "features": [
+        "gk_save_pct",
+        "gk_cs_pct",
+        "gk_ga_p90_inv",
+        "minutes_share",
+        "starter_ratio"
+      ],
+      "archetypes": {
+        "0": "🧤 슈팅 스토퍼",
+        "1": "🧱 클린시트 키퍼"
+      },
+      "2024_25_dist": {
+        "🧱 클린시트 키퍼": 13,
+        "🧤 슈팅 스토퍼": 13
+      }
+    }
   },
   "cluster_profiles": {
     "0": {
