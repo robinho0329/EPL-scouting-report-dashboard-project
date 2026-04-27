@@ -1,22 +1,81 @@
 {
   "date": "2026-04-27",
+  "format_version": "v2",
+  "note": "script_expected/actual 불일치 감지 + metric_before/after 기록",
   "results": [
     {
-      "item": "P8 피처 재설계 + 재학습: `g_a_per90_old`를 각 리그 시즌 평균 대비 상대",
-      "script": "models\\p8_transfer_adapt\\train.py",
+      "item": "S3 results_summary.json → v4 (포지션별 클러스터링) 즉시 반영",
+      "script_expected": "models/s3_similarity/results_summary_v4.json → results_summary.json",
+      "script_actual": "direct_file_sync",
+      "script_match": true,
       "success": true,
+      "metric_before": {"version": "v2", "best_k": 11, "silhouette": 0.115},
+      "metric_after": {
+        "version": "v4", "FW_k": 7, "MID_k": 7, "DEF_k": 4, "GK_k": 2,
+        "avg_silhouette": 0.3224
+      },
+      "delta": "avg_silhouette +0.207",
       "error": ""
     },
     {
-      "item": "S2 DEF pipeline 보강 + 재학습: `pipeline/scout_features",
-      "script": "models\\s2_market_value\\train_v4.py",
-      "success": true,
+      "item": "P8 train.py — 리그 정규화 피처 추가",
+      "script_expected": "models/p8_transfer_adapt/train.py",
+      "script_actual": "models/p8_transfer_adapt/train.py",
+      "script_match": true,
+      "success": "code_modified",
+      "changes": [
+        "g_a_per90_old → g_a_per90_rel (리그 평균 대비 상대값)",
+        "gls_per90_old → gls_per90_rel", "ast_per90_old → ast_per90_rel",
+        "league_level_diff 추가 (EPL=0, Championship=1, 기타=2)"
+      ],
+      "metric_before": {"r2": 0.1572, "features_count": 18},
+      "metric_after": {"r2": null, "note": "로컬 실행 후 업데이트", "features_count": 18},
       "error": ""
     },
     {
-      "item": "S3 K=6 재학습 확정: `models/s3_similarity/` 내 올바른 스크립트 ",
-      "script": "models\\p5_clustering\\run_clustering_k6.py",
-      "success": true,
+      "item": "S2 train_v4.py — fouls_p90/versatility_positions + results_summary.json 동기화",
+      "script_expected": "models/s2_market_value/train_v4.py",
+      "script_actual": "models/s2_market_value/train_v4.py",
+      "script_match": true,
+      "success": "code_modified",
+      "changes": [
+        "FEATURE_COLS에 fouls_p90, versatility_positions 추가 (DEF 특화)",
+        "섹션 14: 포지션별 R2 계산 + results_summary.json 동기화 저장"
+      ],
+      "metric_before": {"DEF_r2": 0.1689, "source": "2026-03-23 구버전"},
+      "metric_after": {"DEF_r2": null, "note": "로컬 실행 후 업데이트"},
+      "error": ""
+    },
+    {
+      "item": "P7 train_v4.py — lag4 피처 + 장기 트렌드 피처 추가",
+      "script_expected": "models/p7_growth_curve/train_v4.py",
+      "script_actual": "models/p7_growth_curve/train_v4.py",
+      "script_match": true,
+      "success": "code_modified",
+      "changes": [
+        "lag4: goals_p90_lag4, assists_p90_lag4, ac_z_lag4, attack_contribution_lag4, minutes_share_lag4",
+        "ac_z_trend3: 3시즌 전 대비 장기 추세",
+        "war_ma4: 4시즌 이동평균",
+        "age_vs_peak_lag1: peak 거리 전 시즌값 (성장 가속도)"
+      ],
+      "metric_before": {"r2": 0.5588, "mae": 1.166},
+      "metric_after": {"r2": null, "note": "로컬 실행 후 업데이트. 목표: 0.60+"},
+      "error": ""
+    },
+    {
+      "item": "S1 train.py — WAR 구성 Z-score 피처를 ML 입력에 직접 반영",
+      "script_expected": "models/s1_player_rating/train.py",
+      "script_actual": "models/s1_player_rating/train.py",
+      "script_match": true,
+      "success": "code_modified",
+      "changes": [
+        "FEATURES: 8개 → 21개",
+        "추가: gls_p90, ast_p90, sh_p90, tklw_p90, int_p90, clr_p90, kp_p90, cs_p90, save_pct",
+        "추가: gls_p90_z, ast_p90_z, tklw_p90_z 등 Z-score 10개",
+        "WAR 계산 피처와 ML 입력 피처 동기화"
+      ],
+      "metric_before": {"xgb_r2": 0.4867, "features_count": 8},
+      "metric_after": {"xgb_r2": null, "note": "로컬 실행 후 업데이트. 목표: 0.60+"},
       "error": ""
     }
   ]
