@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-27",
+  "results": [
+    {
+      "item": "P8 피처 재설계 + 재학습: `g_a_per90_old`를 각 리그 시즌 평균 대비 상대",
+      "script": "models\\p8_transfer_adapt\\train.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S2 DEF pipeline 보강 + 재학습: `pipeline/scout_features",
+      "script": "models\\s2_market_value\\train_v4.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S3 K=6 재학습 확정: `models/s3_similarity/` 내 올바른 스크립트 ",
+      "script": "models\\p5_clustering\\run_clustering_k6.py",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
