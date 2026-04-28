@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-28",
+  "results": [
+    {
+      "item": "P8 이진 분류 전환: 타겟을 `적응 성공/실패 이진 레이블`로 재정의 (기준: 이적 후 ",
+      "script": "models\\p8_transfer_adapt\\train.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S3 대시보드 연동 검증 + P8 경고 배너: \"선수 유형 탐색기\" 페이지 포지션별 결과 ",
+      "script": "models\\p8_transfer_adapt\\train.py",
+      "success": true,
+      "reason": "중복 스킵"
+    },
+    {
+      "item": "S2 v4 대시보드 표시 검증: Streamlit \"S2 저평가 탐색기\" 페이지에서 v4 ",
+      "script": "models\\s2_market_value\\train_v4.py",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
