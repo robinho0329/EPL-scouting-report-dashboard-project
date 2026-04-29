@@ -321,7 +321,8 @@ df['season_year'] = df['season'].apply(season_to_year)
 df_sorted_s1 = df.sort_values(['player', 'season_year']).copy()
 df_sorted_s1['war_lag1'] = df_sorted_s1.groupby('player')['war_rating'].shift(1)
 df_sorted_s1['war_lag2'] = df_sorted_s1.groupby('player')['war_rating'].shift(2)
-df_sorted_s1['war_lag1_diff'] = df_sorted_s1['war_rating'] - df_sorted_s1['war_lag1']
+# war_lag1_diff = lag1 - lag2 (순수 역사적 추세, 현재 타겟 불포함 — 리키지 방지)
+df_sorted_s1['war_lag1_diff'] = df_sorted_s1['war_lag1'] - df_sorted_s1['war_lag2']
 df = df_sorted_s1.copy()
 df['war_lag1'] = df['war_lag1'].fillna(df.groupby('pos_group')['war_rating'].transform('median'))
 df['war_lag2'] = df['war_lag2'].fillna(df['war_lag1'])
@@ -438,14 +439,14 @@ print("  Ridge 모델 저장 완료.")
 # ── XGBoost ──
 print("\n  XGBoost 학습 중...")
 xgb_model = XGBRegressor(
-    n_estimators=700,
-    max_depth=8,
+    n_estimators=600,
+    max_depth=6,
     learning_rate=0.03,
     subsample=0.8,
     colsample_bytree=0.8,
     min_child_weight=3,
-    reg_alpha=0.05,
-    reg_lambda=1.0,
+    reg_alpha=0.1,
+    reg_lambda=2.0,
     random_state=42,
     verbosity=0,
     n_jobs=-1,

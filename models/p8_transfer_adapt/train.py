@@ -62,17 +62,17 @@ logger.info(f"transfer_dataset columns: {list(df_trans.columns)}")
 before = len(df_trans)
 if "min_old" in df_trans.columns and "min_new" in df_trans.columns:
     df_trans = df_trans[
-        (df_trans["min_old"].fillna(0) >= 500) &
-        (df_trans["min_new"].fillna(0) >= 500)
+        (df_trans["min_old"].fillna(0) >= 300) &
+        (df_trans["min_new"].fillna(0) >= 300)
     ].copy()
-    logger.info(f"500분 필터 적용: {before} → {len(df_trans)} 케이스")
+    logger.info(f"300분 필터 적용: {before} → {len(df_trans)} 케이스")
 elif "90s_old" in df_trans.columns and "90s_new" in df_trans.columns:
-    # 90s 컬럼으로 대체 (500min / 90 ≈ 5.56)
+    # 90s 컬럼으로 대체 (300min / 90 ≈ 3.33)
     df_trans = df_trans[
-        (df_trans["90s_old"].fillna(0) >= 5.5) &
-        (df_trans["90s_new"].fillna(0) >= 5.5)
+        (df_trans["90s_old"].fillna(0) >= 3.3) &
+        (df_trans["90s_new"].fillna(0) >= 3.3)
     ].copy()
-    logger.info(f"500분 필터(90s 기준) 적용: {before} → {len(df_trans)} 케이스")
+    logger.info(f"300분 필터(90s 기준) 적용: {before} → {len(df_trans)} 케이스")
 else:
     logger.warning("min/90s 컬럼 없음 — 필터 미적용")
 
