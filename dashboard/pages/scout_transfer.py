@@ -1506,7 +1506,30 @@ def render():
 
         # ── P8 이적 적응 리스크 분석 ─────────────────────────────────────────
         st.markdown("### P8 이적 적응 리스크 분석 (선수별 예측)")
-        st.caption("P8 모델이 예측한 이적 후 PIS 변화량과 적응 리스크 등급을 선수별로 확인합니다.")
+
+        # 이진 분류 결과 확인 후 배너 표시
+        import json as _json
+        _p8_summary_path = Path(__file__).resolve().parent.parent.parent / "models" / "p8_transfer_adapt" / "results_summary.json"
+        _p8_mode = "regression"
+        _p8_auc = None
+        if _p8_summary_path.exists():
+            try:
+                with open(_p8_summary_path) as _f:
+                    _p8_meta = _json.load(_f)
+                _p8_mode = _p8_meta.get("mode", "regression")
+                _p8_auc = _p8_meta.get("metrics", {}).get("auc")
+            except Exception:
+                pass
+
+        if _p8_mode == "binary_classification" and _p8_auc is not None and _p8_auc >= 0.65:
+            st.caption(f"P8 이진 분류 모델 (AUC {_p8_auc:.4f}) — 이적 적응 성공/실패 예측")
+        else:
+            _auc_str = f"AUC {_p8_auc:.4f}" if _p8_auc else "R² 0.1269"
+            st.warning(
+                f"⚠️ **P8 모델 개선 작업 중** ({_auc_str}) — 현재 결과는 참고용으로만 활용 바랍니다. "
+                "이진 분류 전환 후 AUC ≥ 0.65 달성 시 이 안내가 사라집니다."
+            )
+        st.caption("P8 모델이 예측한 이적 적응 성공 확률과 리스크 등급을 선수별로 확인합니다.")
 
         adapt_df = load_transfer_adapt_predictions()
         if adapt_df.empty:
@@ -1525,8 +1548,13 @@ def render():
             if sel_risk != "전체" and "adapt_risk" in p8_filtered.columns:
                 p8_filtered = p8_filtered[p8_filtered["adapt_risk"] == sel_risk]
 
-            # 표시 컬럼 선택 (있는 컬럼만)
-            p8_show_cols = ["player", "from_team", "to_team", "style_distance", "predicted_war_change", "adapt_risk"]
+            # 표시 컬럼 선택 (이진 분류 우선, 회귀 폴백)
+            p8_show_cols = [
+                "player", "from_team", "to_team", "style_distance",
+                "prob_success", "pred_label",          # 이진 분류 출력
+                "predicted_war_change",                # 회귀 출력 (레거시 폴백)
+                "adapt_risk",
+            ]
             p8_available = [c for c in p8_show_cols if c in p8_filtered.columns]
             p8_disp = p8_filtered[p8_available].copy()
 
@@ -1535,13 +1563,21 @@ def render():
                 risk_icon_map = {"high": "🔴 고위험", "medium": "🟡 중위험", "low": "🟢 저위험"}
                 p8_disp["adapt_risk"] = p8_disp["adapt_risk"].map(lambda x: risk_icon_map.get(x, x))
 
+            # pred_label 한국어
+            if "pred_label" in p8_disp.columns:
+                p8_disp["pred_label"] = p8_disp["pred_label"].map(
+                    {"success": "✅ 적응 성공", "partial": "🟡 부분 적응", "failure": "❌ 적응 실패"}
+                ).fillna(p8_disp["pred_label"])
+
             # 컬럼 한국어 변환
             p8_rename = {
                 "player": "선수",
                 "from_team": "이전팀",
                 "to_team": "이적팀",
                 "style_distance": "전술 거리",
-                "predicted_war_change": "예측 PIS 변화",
+                "prob_success": "적응 성공 확률",
+                "pred_label": "예측 결과",
+                "predicted_war_change": "예측 PIS 변화(레거시)",
                 "adapt_risk": "적응 리스크",
             }
             p8_disp = p8_disp.rename(columns={k: v for k, v in p8_rename.items() if k in p8_disp.columns})

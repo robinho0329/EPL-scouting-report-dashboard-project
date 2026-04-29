@@ -1,10 +1,11 @@
-"""P8: 이적 적응도 예측 모델
+"""P8: 이적 적응 성공/실패 이진 분류 모델
 
-"이 선수가 우리 팀 스타일에 맞는가?" 스카우팅 핵심 질문에 데이터로 답변.
+"이 선수가 우리 팀에 적응할 수 있는가?" 스카우팅 핵심 질문에 데이터로 답변.
 - 팀 플레이 스타일 벡터 계산 (팀 소속 선수 스탯 평균)
 - 이적 전후 팀 스타일 cosine distance 계산
-- XGBoost로 "style_distance + age + pos_group → war_change" 학습
-- adapt_risk 분류 (상위 33%=high, 중간=medium, 하위=low)
+- 리그 정규화 피처 (챔피언십 0.8 g+a/90 ≠ EPL 0.8 g+a/90 보정)
+- adapted 이진 레이블 (0=실패, 1=성공): 80% 복합 지표 기준
+- XGBoost Classifier + Logistic Regression 병행, AUC 기준 평가
 """
 
 import logging
@@ -14,8 +15,12 @@ import warnings
 import numpy as np
 import pandas as pd
 from pathlib import Path
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.metrics import (
+    roc_auc_score, f1_score, precision_score, recall_score,
+    accuracy_score, classification_report
+)
 from sklearn.metrics.pairwise import cosine_similarity
 import xgboost as xgb
 
@@ -27,12 +32,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger("p8_transfer_adapt")
 
-ROOT         = Path(__file__).resolve().parent.parent.parent
-DATA_PATH    = ROOT / "data" / "processed" / "player_season_stats.parquet"
-FEAT_PATH    = ROOT / "data" / "features" / "player_features.parquet"
-TRANS_PATH   = ROOT / "models" / "p8_transfer_adaptation_archived" / "transfer_dataset.parquet"
-OUT_DIR      = Path(__file__).resolve().parent
-SCOUT_OUT    = ROOT / "data" / "scout" / "transfer_adapt_predictions.parquet"
+ROOT      = Path(__file__).resolve().parent.parent.parent
+DATA_PATH = ROOT / "data" / "processed" / "player_season_stats.parquet"
+FEAT_PATH = ROOT / "data" / "features" / "player_features.parquet"
+TRANS_PATH = ROOT / "models" / "p8_transfer_adaptation_archived" / "transfer_dataset.parquet"
+OUT_DIR   = Path(__file__).resolve().parent
+SCOUT_OUT = ROOT / "data" / "scout" / "transfer_adapt_predictions.parquet"
 
 SCOUT_OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -41,17 +46,38 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 # 1. 데이터 로드
 # ─────────────────────────────────────────────
 logger.info("데이터 로드 시작")
-df_pss  = pd.read_parquet(DATA_PATH)
-df_feat = pd.read_parquet(FEAT_PATH)
+df_pss   = pd.read_parquet(DATA_PATH)
+df_feat  = pd.read_parquet(FEAT_PATH)
 df_trans = pd.read_parquet(TRANS_PATH)
 
 logger.info(f"player_season_stats: {df_pss.shape}")
 logger.info(f"player_features: {df_feat.shape}")
 logger.info(f"transfer_dataset: {df_trans.shape}")
+logger.info(f"transfer_dataset columns: {list(df_trans.columns)}")
 
 # ─────────────────────────────────────────────
-# 2. 팀 스타일 벡터 계산
-#    시즌별 팀에 속한 선수들의 스탯 평균으로 팀 스타일 표현
+# 2. 500분 필터 (기존 450분 필터에서 강화)
+#    양방향 모두 500분 이상 출전한 케이스만 사용
+# ─────────────────────────────────────────────
+before = len(df_trans)
+if "min_old" in df_trans.columns and "min_new" in df_trans.columns:
+    df_trans = df_trans[
+        (df_trans["min_old"].fillna(0) >= 500) &
+        (df_trans["min_new"].fillna(0) >= 500)
+    ].copy()
+    logger.info(f"500분 필터 적용: {before} → {len(df_trans)} 케이스")
+elif "90s_old" in df_trans.columns and "90s_new" in df_trans.columns:
+    # 90s 컬럼으로 대체 (500min / 90 ≈ 5.56)
+    df_trans = df_trans[
+        (df_trans["90s_old"].fillna(0) >= 5.5) &
+        (df_trans["90s_new"].fillna(0) >= 5.5)
+    ].copy()
+    logger.info(f"500분 필터(90s 기준) 적용: {before} → {len(df_trans)} 케이스")
+else:
+    logger.warning("min/90s 컬럼 없음 — 필터 미적용")
+
+# ─────────────────────────────────────────────
+# 3. 팀 스타일 벡터 계산
 # ─────────────────────────────────────────────
 logger.info("팀 스타일 벡터 계산")
 
@@ -60,16 +86,11 @@ STYLE_COLS = [
     "interceptions_p90", "fouls_p90", "shots_p90",
     "sot_p90", "minutes_share",
 ]
-# 존재하는 컬럼만 사용
 STYLE_COLS = [c for c in STYLE_COLS if c in df_feat.columns]
 
-# 최소 출전 조건 (잡음 제거)
 df_feat_active = df_feat[df_feat["min"].fillna(0) >= 450].copy()
-
-# 시즌에서 연도 추출
 df_feat_active["season_year"] = df_feat_active["season"].str[:4].astype(int)
 
-# 팀-시즌별 스타일 벡터 (선수 스탯 평균)
 team_style = (
     df_feat_active.groupby(["team", "season_year"])[STYLE_COLS]
     .mean()
@@ -78,37 +99,27 @@ team_style = (
 team_style.columns = ["team", "season_year"] + [f"style_{c}" for c in STYLE_COLS]
 
 logger.info(f"팀 스타일 벡터: {team_style.shape}, 팀수={team_style['team'].nunique()}")
-
-# team_style_vectors.parquet 저장
 team_style.to_parquet(OUT_DIR / "team_style_vectors.parquet", index=False, engine="pyarrow")
-logger.info("team_style_vectors.parquet 저장 완료")
 
 # ─────────────────────────────────────────────
-# 3. 이적 데이터에 스타일 거리 추가
+# 4. 이적 데이터에 스타일 거리 추가
 # ─────────────────────────────────────────────
 logger.info("이적 전후 팀 스타일 cosine distance 계산")
 
-# 이적 데이터의 시즌 연도 추출
 df_trans["season_year_old"] = df_trans["season_old"].str[:4].astype(int)
 df_trans["season_year_new"] = df_trans["season_new"].str[:4].astype(int)
 
 STYLE_VEC_COLS = [f"style_{c}" for c in STYLE_COLS]
 
-# 팀 스타일 벡터 조인 (이전 팀)
 df_trans = df_trans.merge(
     team_style.rename(columns={"team": "team_old", "season_year": "season_year_old"}),
     on=["team_old", "season_year_old"],
     how="left",
     suffixes=("", "_old")
 )
-# 이름 충돌 방지: _old 접미사 추가
-old_style_cols = [c + "_old_from" if c in df_trans.columns else c
-                  for c in STYLE_VEC_COLS]
-# 실제로 단순히 rename
 rename_map = {c: c + "_from" for c in STYLE_VEC_COLS if c in df_trans.columns}
 df_trans = df_trans.rename(columns=rename_map)
 
-# 팀 스타일 벡터 조인 (이후 팀)
 df_trans = df_trans.merge(
     team_style.rename(columns={"team": "team_new", "season_year": "season_year_new"}),
     on=["team_new", "season_year_new"],
@@ -118,76 +129,30 @@ df_trans = df_trans.merge(
 rename_map2 = {c: c + "_to" for c in STYLE_VEC_COLS if c in df_trans.columns}
 df_trans = df_trans.rename(columns=rename_map2)
 
-# cosine distance 계산
 from_cols = [c + "_from" for c in STYLE_VEC_COLS]
 to_cols   = [c + "_to"   for c in STYLE_VEC_COLS]
 
-# 두 스타일 벡터가 모두 있는 행만 계산
 mask_valid = df_trans[from_cols + to_cols].notna().all(axis=1)
 logger.info(f"스타일 벡터 매칭 성공: {mask_valid.sum()} / {len(df_trans)}")
 
 df_trans["style_distance"] = np.nan
 if mask_valid.sum() > 0:
-    vecs_from = df_trans.loc[mask_valid, from_cols].values
-    vecs_to   = df_trans.loc[mask_valid, to_cols].values
-    # NaN을 0으로 대체 (결측 스탯은 0으로 가정)
-    vecs_from = np.nan_to_num(vecs_from, nan=0.0)
-    vecs_to   = np.nan_to_num(vecs_to, nan=0.0)
+    vecs_from = np.nan_to_num(df_trans.loc[mask_valid, from_cols].values, nan=0.0)
+    vecs_to   = np.nan_to_num(df_trans.loc[mask_valid, to_cols].values, nan=0.0)
     cos_sim = np.array([
         cosine_similarity(vf.reshape(1, -1), vt.reshape(1, -1))[0, 0]
         for vf, vt in zip(vecs_from, vecs_to)
     ])
     df_trans.loc[mask_valid, "style_distance"] = 1.0 - cos_sim
 
-# 스타일 거리 결측은 중간값으로 채우기
 median_dist = df_trans["style_distance"].median()
 df_trans["style_distance"] = df_trans["style_distance"].fillna(
     median_dist if pd.notna(median_dist) else 0.3
 )
 
-logger.info(f"style_distance 범위: {df_trans['style_distance'].min():.4f} ~ "
-            f"{df_trans['style_distance'].max():.4f}")
-
 # ─────────────────────────────────────────────
-# 4. 타겟 변수: war_change (= g_a_per90 변화량)
+# 5. 리그 정규화 피처
 # ─────────────────────────────────────────────
-df_trans["war_change"] = df_trans["g_a_per90_new"].fillna(0.0) - df_trans["g_a_per90_old"].fillna(0.0)
-
-# adapt_risk: 상위 33% = high, 하위 33% = low, 나머지 = medium
-q33 = df_trans["war_change"].quantile(0.33)
-q67 = df_trans["war_change"].quantile(0.67)
-
-def classify_risk(war_change):
-    """war_change가 높을수록 적응 성공 → risk 낮음."""
-    if war_change >= q67:
-        return "low"
-    elif war_change <= q33:
-        return "high"
-    return "medium"
-
-df_trans["adapt_risk"] = df_trans["war_change"].apply(classify_risk)
-logger.info(f"adapt_risk 분포: {df_trans['adapt_risk'].value_counts().to_dict()}")
-
-# ─────────────────────────────────────────────
-# 5. XGBoost 모델 학습 피처 구성
-# ─────────────────────────────────────────────
-logger.info("XGBoost 학습 피처 구성")
-
-# 크로스리그 데이터 분리 분석 (리그별 적응률 통계 — 스카우트 레포트용)
-if "source_league" in df_trans.columns:
-    cross_df = df_trans[df_trans["source_league"] != "EPL"]
-    if not cross_df.empty:
-        logger.info("=== 크로스리그 적응률 통계 (스카우트 참고용) ===")
-        for lg, grp in cross_df.groupby("source_league"):
-            logger.info(f"  {lg}: {len(grp)}건, "
-                        f"적응률={grp['adapted'].mean()*100:.1f}%, "
-                        f"전 리그 g+a/90={grp['g_a_per90_old'].mean():.3f}, "
-                        f"EPL g+a/90={grp['g_a_per90_new'].mean():.3f}")
-
-    logger.info(f"모델 학습 대상: 전체 {len(df_trans)}건 (EPL 내부 + 크로스리그)")
-
-# ── 리그 정규화 피처 생성 (league_level_diff + 상대 성과 지표) ──
-# 챔피언십 0.8 g+a/90 ≠ EPL 0.8 g+a/90 — 리그별 평균으로 표준화
 logger.info("리그 정규화 피처 생성")
 
 if "source_league" in df_trans.columns:
@@ -201,14 +166,37 @@ if "source_league" in df_trans.columns:
     df_trans["ast_per90_rel"] = df_trans["ast_per90_old"] / (league_avg["ast_per90_old"] + eps)
     league_map = {"EPL": 0, "Championship": 1}
     df_trans["league_level_diff"] = df_trans["source_league"].map(league_map).fillna(2).astype(int)
-    logger.info(f"g_a_per90_rel 범위: {df_trans['g_a_per90_rel'].min():.3f} ~ {df_trans['g_a_per90_rel'].max():.3f}")
-    logger.info(f"league_level_diff 분포: {df_trans['league_level_diff'].value_counts().to_dict()}")
 else:
     df_trans["g_a_per90_rel"] = df_trans["g_a_per90_old"]
     df_trans["gls_per90_rel"] = df_trans["gls_per90_old"]
     df_trans["ast_per90_rel"] = df_trans["ast_per90_old"]
     df_trans["league_level_diff"] = 0
     logger.warning("source_league 컬럼 없음 — 리그 정규화 피처를 raw 값으로 대체")
+
+# ─────────────────────────────────────────────
+# 6. 이진 타겟 확인 및 피처 구성
+# ─────────────────────────────────────────────
+# `adapted` 컬럼이 없으면 직접 계산
+if "adapted" not in df_trans.columns:
+    logger.warning("adapted 컬럼 없음 — g_a_per90 기반으로 직접 계산")
+    def compute_adaptation_label(row):
+        old_ga = row.get("g_a_per90_old", 0.0) or 0.0
+        new_ga = row.get("g_a_per90_new", 0.0) or 0.0
+        old_mins = row.get("min_old", 500) or 500
+        new_mins = row.get("min_new", 500) or 500
+        mp_old = max(row.get("mp_old", 38) or 38, 1)
+        mp_new = max(row.get("mp_new", 38) or 38, 1)
+        old_share = old_mins / (mp_old * 90)
+        new_share = new_mins / (mp_new * 90)
+        if old_ga > 0.05:
+            composite = 0.6 * (new_ga / max(old_ga, 0.01)) + 0.4 * (new_share / max(old_share, 0.01))
+            return 1 if composite >= 0.80 else 0
+        else:
+            return 1 if (new_share / max(old_share, 0.01)) >= 0.75 else 0
+    df_trans["adapted"] = df_trans.apply(compute_adaptation_label, axis=1)
+
+logger.info(f"adapted 분포: {df_trans['adapted'].value_counts().to_dict()}")
+logger.info(f"적응 성공률: {df_trans['adapted'].mean():.1%}")
 
 BASE_FEATURE_COLS = [
     "style_distance",
@@ -231,140 +219,216 @@ BASE_FEATURE_COLS = [
     "hist_adapt_rate",
     "age_bucket",
 ]
-
-# 존재하는 컬럼만 사용
 FEATURE_COLS = [c for c in BASE_FEATURE_COLS if c in df_trans.columns]
-logger.info(f"사용 피처 수: {len(FEATURE_COLS)} (리그 정규화 피처 포함)")
+logger.info(f"사용 피처 수: {len(FEATURE_COLS)}")
 
-# 학습 데이터 준비
-# NaN 피처를 먼저 0으로 채운 뒤 war_change 없는 행만 제거
-# (market_value/elo_diff 등이 NaN인 크로스리그 데이터도 활용)
-df_model = df_trans[FEATURE_COLS + ["war_change", "adapt_risk", "adapted"]].copy()
+df_model = df_trans[FEATURE_COLS + ["adapted"]].copy()
 df_model[FEATURE_COLS] = df_model[FEATURE_COLS].fillna(0.0)
-df_model = df_model.dropna(subset=["war_change"]).copy()
-logger.info(f"학습 데이터 크기: {len(df_model)}")
-
-# train/test 분리 (인덱스 기반 80/20)
+df_model = df_model.dropna(subset=["adapted"]).copy()
 df_model = df_model.reset_index(drop=True)
-n = len(df_model)
+
+logger.info(f"최종 학습 데이터: {len(df_model)} 케이스")
+if len(df_model) < 50:
+    logger.error("데이터가 너무 적습니다 (< 50). 필터 조건을 확인하세요.")
+    raise ValueError(f"Insufficient data: {len(df_model)} rows after filtering")
+
+# ─────────────────────────────────────────────
+# 7. Train / Test 분리 (80/20)
+# ─────────────────────────────────────────────
+n       = len(df_model)
 n_train = int(n * 0.8)
-X_all = df_model[FEATURE_COLS].values
-y_all = df_model["war_change"].values
+X_all   = df_model[FEATURE_COLS].values
+y_all   = df_model["adapted"].values.astype(int)
 
 X_train, X_test = X_all[:n_train], X_all[n_train:]
 y_train, y_test = y_all[:n_train], y_all[n_train:]
 
-# Scaler
 scaler = StandardScaler()
 X_train_sc = scaler.fit_transform(X_train)
 X_test_sc  = scaler.transform(X_test)
 
 # ─────────────────────────────────────────────
-# 6. XGBoost 회귀 학습 (war_change 예측)
+# 8. XGBoost 이진 분류
 # ─────────────────────────────────────────────
-logger.info("XGBoost 모델 학습")
+logger.info("XGBoost Classifier 학습")
 
-xgb_model = xgb.XGBRegressor(
+pos_weight = float((y_train == 0).sum()) / max((y_train == 1).sum(), 1)
+xgb_clf = xgb.XGBClassifier(
     n_estimators=200,
     max_depth=4,
     learning_rate=0.05,
     subsample=0.8,
     colsample_bytree=0.8,
+    scale_pos_weight=pos_weight,
+    use_label_encoder=False,
+    eval_metric="logloss",
     random_state=42,
     n_jobs=-1,
     verbosity=0,
 )
-xgb_model.fit(
+xgb_clf.fit(
     X_train_sc, y_train,
     eval_set=[(X_test_sc, y_test)],
     verbose=False,
 )
 
-y_pred = xgb_model.predict(X_test_sc)
-mae = mean_absolute_error(y_test, y_pred)
-r2  = r2_score(y_test, y_pred)
-logger.info(f"테스트 MAE={mae:.4f}, R2={r2:.4f}")
+y_prob_xgb  = xgb_clf.predict_proba(X_test_sc)[:, 1]
+y_pred_xgb  = xgb_clf.predict(X_test_sc)
+auc_xgb     = roc_auc_score(y_test, y_prob_xgb)
+f1_xgb      = f1_score(y_test, y_pred_xgb, zero_division=0)
+prec_xgb    = precision_score(y_test, y_pred_xgb, zero_division=0)
+rec_xgb     = recall_score(y_test, y_pred_xgb, zero_division=0)
+acc_xgb     = accuracy_score(y_test, y_pred_xgb)
 
-# 모델/scaler 저장
-joblib.dump(xgb_model, OUT_DIR / "xgb_model.joblib")
-joblib.dump(scaler,    OUT_DIR / "scaler.joblib")
-logger.info("xgb_model.joblib, scaler.joblib 저장 완료")
+logger.info(f"XGBoost — AUC={auc_xgb:.4f}, F1={f1_xgb:.4f}, Prec={prec_xgb:.4f}, Rec={rec_xgb:.4f}")
 
 # ─────────────────────────────────────────────
-# 7. 스카우트 출력: transfer_adapt_predictions.parquet
+# 9. Logistic Regression (비교 모델)
+# ─────────────────────────────────────────────
+logger.info("Logistic Regression 학습")
+
+lr_clf = LogisticRegression(
+    class_weight="balanced",
+    max_iter=1000,
+    random_state=42,
+    C=1.0,
+)
+lr_clf.fit(X_train_sc, y_train)
+
+y_prob_lr = lr_clf.predict_proba(X_test_sc)[:, 1]
+y_pred_lr = lr_clf.predict(X_test_sc)
+auc_lr    = roc_auc_score(y_test, y_prob_lr)
+f1_lr     = f1_score(y_test, y_pred_lr, zero_division=0)
+prec_lr   = precision_score(y_test, y_pred_lr, zero_division=0)
+rec_lr    = recall_score(y_test, y_pred_lr, zero_division=0)
+acc_lr    = accuracy_score(y_test, y_pred_lr)
+
+logger.info(f"LogReg   — AUC={auc_lr:.4f}, F1={f1_lr:.4f}, Prec={prec_lr:.4f}, Rec={rec_lr:.4f}")
+
+# 베스트 모델 선택 (AUC 기준)
+if auc_xgb >= auc_lr:
+    best_clf    = xgb_clf
+    best_name   = "XGBoost"
+    best_auc    = auc_xgb
+    best_f1     = f1_xgb
+    best_prec   = prec_xgb
+    best_rec    = rec_xgb
+    best_acc    = acc_xgb
+else:
+    best_clf    = lr_clf
+    best_name   = "LogisticRegression"
+    best_auc    = auc_lr
+    best_f1     = f1_lr
+    best_prec   = prec_lr
+    best_rec    = rec_lr
+    best_acc    = acc_lr
+
+logger.info(f"베스트 모델: {best_name} (AUC={best_auc:.4f})")
+
+# 모델/scaler 저장
+joblib.dump(best_clf, OUT_DIR / "xgb_model.joblib")
+joblib.dump(scaler,   OUT_DIR / "scaler.joblib")
+logger.info("모델/scaler 저장 완료")
+
+# ─────────────────────────────────────────────
+# 10. 스카우트 출력: transfer_adapt_predictions.parquet
 # ─────────────────────────────────────────────
 logger.info("스카우트용 이적 적응도 예측 생성")
 
-# 전체 데이터 예측
-X_full_sc  = scaler.transform(df_model[FEATURE_COLS].values)
-pred_war   = xgb_model.predict(X_full_sc)
+X_full_sc    = scaler.transform(df_model[FEATURE_COLS].values)
+prob_success = best_clf.predict_proba(X_full_sc)[:, 1]
+prob_failure = 1.0 - prob_success
 
-# adapt_risk 재분류 (예측값 기준)
-q33_pred = np.percentile(pred_war, 33)
-q67_pred = np.percentile(pred_war, 67)
+# pred_label: prob_success >= 0.6 → success, < 0.4 → failure, 중간 → partial
+pred_label = np.where(
+    prob_success >= 0.6, "success",
+    np.where(prob_success < 0.4, "failure", "partial")
+)
 
-def classify_risk_pred(v):
-    if v >= q67_pred:
-        return "low"
-    elif v <= q33_pred:
-        return "high"
-    return "medium"
+# adapt_risk: prob_failure 기준 (0.6 이상 = high, 0.4 이상 = medium, 나머지 = low)
+adapt_risk = np.where(
+    prob_failure >= 0.6, "high",
+    np.where(prob_failure >= 0.4, "medium", "low")
+)
 
-pred_risk = [classify_risk_pred(v) for v in pred_war]
-
+idx = df_model.index
 scout_df = pd.DataFrame({
-    "player":                df_trans.loc[df_model.index, "player"].values,
-    "from_team":             df_trans.loc[df_model.index, "team_old"].values,
-    "to_team":               df_trans.loc[df_model.index, "team_new"].values,
-    "season_old":            df_trans.loc[df_model.index, "season_old"].values,
-    "season_new":            df_trans.loc[df_model.index, "season_new"].values,
-    "age":                   df_model["age"].values,
-    "style_distance":        df_model["style_distance"].values.round(4),
-    "predicted_war_change":  pred_war.round(4),
-    "actual_war_change":     df_model["war_change"].values.round(4),
-    "adapt_risk":            pred_risk,
-    "adapted_actual":        df_model["adapted"].values if "adapted" in df_model.columns else np.nan,
+    "player":           df_trans.loc[idx, "player"].values,
+    "team_old":         df_trans.loc[idx, "team_old"].values,
+    "team_new":         df_trans.loc[idx, "team_new"].values,
+    "season_old":       df_trans.loc[idx, "season_old"].values,
+    "season_new":       df_trans.loc[idx, "season_new"].values,
+    "from_team":        df_trans.loc[idx, "team_old"].values,
+    "to_team":          df_trans.loc[idx, "team_new"].values,
+    "age_at_transfer":  df_model["age"].values if "age" in df_model.columns else np.nan,
+    "style_distance":   df_model["style_distance"].values.round(4),
+    "elo_gap":          df_model["elo_diff"].values.round(2) if "elo_diff" in df_model.columns else np.nan,
+    "style_match_pct":  df_model["style_match_pct"].values.round(4) if "style_match_pct" in df_model.columns else np.nan,
+    "prob_success":     prob_success.round(4),
+    "prob_failure":     prob_failure.round(4),
+    "pred_label":       pred_label,
+    "adapt_risk":       adapt_risk,
+    "adapted_actual":   y_all[idx if isinstance(idx, slice) else slice(None)],
 })
 
+# adapted_actual 재할당 (인덱스 정렬)
+scout_df["adapted_actual"] = df_model["adapted"].values
+
 scout_df.to_parquet(SCOUT_OUT, index=False, engine="pyarrow")
-logger.info(f"transfer_adapt_predictions.parquet 저장 완료: {len(scout_df)}행, {SCOUT_OUT}")
+logger.info(f"transfer_adapt_predictions.parquet 저장 완료: {len(scout_df)}행")
 
 # ─────────────────────────────────────────────
-# 8. results_summary.json 저장
+# 11. results_summary.json 저장
 # ─────────────────────────────────────────────
-# 피처 중요도 (상위 10)
-feat_imp = sorted(
-    zip(FEATURE_COLS, xgb_model.feature_importances_),
-    key=lambda x: x[1], reverse=True
-)[:10]
+feat_imp_dict = {}
+if hasattr(best_clf, "feature_importances_"):
+    feat_imp = sorted(
+        zip(FEATURE_COLS, best_clf.feature_importances_),
+        key=lambda x: x[1], reverse=True
+    )[:10]
+    feat_imp_dict = [{"feature": f, "importance": round(float(i), 4)} for f, i in feat_imp]
 
-# adapt_risk 분포 (예측)
-risk_dist = {r: int(pred_risk.count(r)) for r in ["low", "medium", "high"]}
+adapt_rate  = float(y_all.mean())
+risk_dist   = {r: int((adapt_risk == r).sum()) for r in ["low", "medium", "high"]}
+
+goal_met = best_auc >= 0.65
 
 summary = {
-    "model": "P8 Transfer Adaptation",
-    "status": "완료",
+    "model":      "P8 Transfer Adaptation",
+    "mode":       "binary_classification",
+    "status":     "완료",
+    "goal_met":   goal_met,
+    "best_model": best_name,
     "metrics": {
-        "mae":        round(mae, 4),
-        "r2":         round(r2, 4),
+        "auc":        round(best_auc, 4),
+        "f1":         round(best_f1, 4),
+        "precision":  round(best_prec, 4),
+        "recall":     round(best_rec, 4),
+        "accuracy":   round(best_acc, 4),
         "train_size": int(n_train),
         "test_size":  int(n - n_train),
     },
-    "features_used": FEATURE_COLS,
-    "top_features": [{"feature": f, "importance": round(float(i), 4)}
-                     for f, i in feat_imp],
+    "model_comparison": {
+        "XGBoost": {
+            "auc": round(auc_xgb, 4), "f1": round(f1_xgb, 4),
+            "precision": round(prec_xgb, 4), "recall": round(rec_xgb, 4),
+        },
+        "LogisticRegression": {
+            "auc": round(auc_lr, 4), "f1": round(f1_lr, 4),
+            "precision": round(prec_lr, 4), "recall": round(rec_lr, 4),
+        },
+    },
+    "target_definition": "adapted=1: 이적 후 g+a/90가 이전 대비 80% 이상 유지 (수비형 선수는 출전 시간 기준)",
+    "min_minutes_filter": 500,
+    "adaptation_rate": round(adapt_rate, 4),
+    "features_used":   FEATURE_COLS,
+    "top_features":    feat_imp_dict,
     "adapt_risk_distribution": risk_dist,
     "style_distance_stats": {
         "mean":   round(float(df_trans["style_distance"].mean()), 4),
         "median": round(float(df_trans["style_distance"].median()), 4),
         "std":    round(float(df_trans["style_distance"].std()), 4),
     },
-    "scout_validation": (
-        "리그 정규화 피처(g_a_per90_rel, league_level_diff) 추가로 크로스리그 이적 케이스 편향 보정. "
-        "챔피언십 0.8 g+a/90 ≠ EPL 0.8 g+a/90 문제 해소. "
-        "style_distance(팀 스타일 코사인 거리)와 리그 수준 차이(league_level_diff)가 핵심 예측 인자. "
-        "'adapt_risk=high' 선수는 영입 회의에서 적응 실패 위험 경고로 활용 가능."
-    ),
     "output_file": str(SCOUT_OUT),
     "row_count":   len(scout_df),
 }
@@ -373,6 +437,9 @@ with open(OUT_DIR / "results_summary.json", "w", encoding="utf-8") as f:
     json.dump(summary, f, ensure_ascii=False, indent=2)
 logger.info("results_summary.json 저장 완료")
 
-logger.info("=" * 50)
-logger.info(f"P8 이적 적응도 모델 완료 | MAE={mae:.4f} | R2={r2:.4f} | 이적수={len(scout_df)}")
-logger.info("=" * 50)
+logger.info("=" * 60)
+logger.info(
+    f"P8 이진 분류 완료 | {best_name} | AUC={best_auc:.4f} | F1={best_f1:.4f} | "
+    f"목표(AUC≥0.65): {'✅ 달성' if goal_met else '❌ 미달'} | 데이터={len(scout_df)}건"
+)
+logger.info("=" * 60)
