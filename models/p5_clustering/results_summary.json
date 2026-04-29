@@ -373,13 +373,17 @@
     "clusters_k6_umap.png",
     "cluster_k6_radar.png",
     "cluster_k6_distribution.png",
+    "cluster_k6_heatmap.png",
+    "clusters_k6_umap.png",
+    "cluster_k6_radar.png",
+    "cluster_k6_distribution.png",
     "cluster_k6_heatmap.png"
   ],
   "kmeans_k6": {
     "metrics": {
-      "silhouette": 0.2180372806766434,
-      "davies_bouldin": 1.4995189428631817,
-      "calinski_harabasz": 2119.0515333420135
+      "silhouette": 0.21803728067664332,
+      "davies_bouldin": 1.4995189428631808,
+      "calinski_harabasz": 2119.051533342015
     },
     "n_clusters": 6,
     "cluster_profiles": {
