@@ -248,11 +248,11 @@ def render():
         fig_scatter = px.scatter(
             plot_df,
             x="mv_m", y="pv_m",
-            text="player",
             color="value_ratio" if "value_ratio" in plot_df.columns else None,
             color_continuous_scale=[[0, EPL_GREEN], [0.5, "#FFD700"], [1, EPL_MAGENTA]],
             labels={"mv_m": "시장가치 (€M)", "pv_m": "모델 예측가치 (€M)", "value_ratio": "value_ratio"},
-            hover_data={"player": True, "team": True, "value_ratio": ":.3f"},
+            hover_name="player",
+            hover_data={"team": True, "value_ratio": ":.3f"},
         )
         # 동일선 (y=x)
         max_val = max(plot_df["mv_m"].max(), plot_df["pv_m"].max())
@@ -263,13 +263,21 @@ def render():
             name="시장가치=예측가치",
             showlegend=True,
         ))
-        fig_scatter.update_traces(textposition="top center", selector=dict(mode="markers+text"))
+        # px.scatter의 기본 mode="markers"에 text 레이어 추가 (선수 이름 차트 위 표시)
+        # selector로 lines 트레이스(참조선) 제외
+        fig_scatter.update_traces(
+            mode="markers+text",
+            text=plot_df["player"].tolist(),
+            textposition="top center",
+            textfont=dict(size=8, color="rgba(255,255,255,0.85)"),
+            selector=dict(type="scatter", mode="markers"),
+        )
         fig_scatter.update_layout(
             paper_bgcolor="#0d0d1a",
             plot_bgcolor="#1a1a2e",
             font_color="#fff",
-            margin=dict(t=20, b=20, l=20, r=20),
-            height=420,
+            margin=dict(t=20, b=40, l=20, r=120),
+            height=480,
         )
         st.plotly_chart(fig_scatter, use_container_width=True, theme=None)
         st.caption("💡 선 위쪽(예측가치 > 시장가치) = 저평가 선수. 선 아래쪽 = 시장 고평가 선수.")
