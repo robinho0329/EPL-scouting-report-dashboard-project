@@ -5,13 +5,13 @@
       "item": "P8 이적 적응 AUC 개선: eval_metric=auc + early_stopping_",
       "script": "models/p8_transfer_adapt/train.py",
       "success": false,
-      "error": " [INFO] 스타일 벡터 매칭 성공: 248 / 1391\n2026-04-29 14:16:16,003 [INFO] 리그 정규화 피처 생성\n2026-04-29 14:16:16,010 [INFO] adapted 분포: {1: 1043, 0: 348}\n2026-04-29 14:16:16,010 [INFO] 적응 성공률: 75.0%\n2026-04-29 14:16:16,010 [INFO] 사용 피처 수: 19\n2026-04-29 14:16:16,015 [INFO] 최종 학습 데이터: 1391 케이스\n2026-04-29 14:16:16,017 [INFO] XGBoost Classifier 학습\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
+      "error": " [INFO] 스타일 벡터 매칭 성공: 253 / 1487\n2026-04-29 14:26:18,285 [INFO] 리그 정규화 피처 생성\n2026-04-29 14:26:18,291 [INFO] adapted 분포: {1: 1065, 0: 422}\n2026-04-29 14:26:18,291 [INFO] 적응 성공률: 71.6%\n2026-04-29 14:26:18,291 [INFO] 사용 피처 수: 19\n2026-04-29 14:26:18,296 [INFO] 최종 학습 데이터: 1487 케이스\n2026-04-29 14:26:18,298 [INFO] XGBoost Classifier 학습\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
     },
     {
       "item": "P7 성장 곡선 R² 개선: Optuna 후 train+val 합산 재학습으로 val-te",
       "script": "models/p7_growth_curve/train_v4.py",
       "success": false,
-      "error": "019 [INFO] v4 피처 엔지니어링 (v3 40개 피처 유지)\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/models/p7_growth_curve/train_v4.py\", line 193, in <module>\n    df[\"age_vs_peak_lag1\"] = df.groupby(\"player_id\")[\"age_vs_peak\"].shift(1)\n                             ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^\n  File \"/opt/hostedto"
+      "error": "159 [INFO] v4 피처 엔지니어링 (v3 40개 피처 유지)\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/models/p7_growth_curve/train_v4.py\", line 193, in <module>\n    df[\"age_vs_peak_lag1\"] = df.groupby(\"player_id\")[\"age_vs_peak\"].shift(1)\n                             ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^\n  File \"/opt/hostedto"
     },
     {
       "item": "S1 선수 레이팅 R² 개선: war_lag2+pts_per_game 피처 추가 + 포지션",
