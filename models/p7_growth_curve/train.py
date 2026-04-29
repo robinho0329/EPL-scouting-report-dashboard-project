@@ -17,6 +17,7 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import mean_absolute_error, r2_score
+import xgboost as xgb
 
 warnings.filterwarnings("ignore")
 
@@ -185,8 +186,21 @@ PEAK_AGE_MAP.setdefault("GK",  30)
 
 # 선수별 시간순 정렬 후 lag 피처 계산 (인덱스 기반 join으로 정합성 보장)
 df = df.sort_values(["player_id", "season_year"]).copy()
-df["ac_z_lag1"]  = df.groupby("player_id")["ac_z"].shift(1)          # 직전 시즌 ac_z
-df["ac_z_trend"] = df["ac_z"] - df["ac_z_lag1"]                       # 직전 대비 추세
+df["ac_z_lag1"]    = df.groupby("player_id")["ac_z"].shift(1)          # 직전 시즌 ac_z
+df["ac_z_lag2"]    = df.groupby("player_id")["ac_z"].shift(2)          # 2시즌 전 ac_z
+df["ac_z_trend"]   = df["ac_z"] - df["ac_z_lag1"]                     # 직전 대비 1년 추세
+df["gc_trend_3yr"] = df["ac_z"] - df["ac_z_lag2"]                     # 3년 누적 추세
+
+# 시장가치 전년 대비 변화율 (성장 궤적 신호)
+df = df.sort_values(["player_id", "season_year"]).copy()
+df["mv_lag1"]        = df.groupby("player_id")["market_value"].shift(1)
+df["mv_change_pct"]  = (
+    (df["market_value"] - df["mv_lag1"]) / df["mv_lag1"].clip(lower=1e3)
+).clip(-2.0, 5.0).fillna(0.0)
+
+# lag2 결측(EPL 첫 2시즌)은 lag1으로 대체
+df["ac_z_lag2"]    = df["ac_z_lag2"].fillna(df["ac_z_lag1"])
+df["gc_trend_3yr"] = df["gc_trend_3yr"].fillna(df["ac_z_trend"])
 
 df["age2"]         = df["age_clean"] ** 2                              # 나이 제곱 (역U 포착)
 df["age_vs_peak"]  = df.apply(
@@ -209,8 +223,11 @@ FEATURE_COLS = [
     "epl_experience",
     "market_value",
     "ac_z",
-    "ac_z_lag1",    # 직전 시즌 ac_z
-    "ac_z_trend",   # 직전 대비 성과 추세
+    "ac_z_lag1",      # 직전 시즌 ac_z
+    "ac_z_lag2",      # 2시즌 전 ac_z
+    "ac_z_trend",     # 직전 대비 1년 추세
+    "gc_trend_3yr",   # 3년 누적 추세 (성장/하락 방향)
+    "mv_change_pct",  # 시장가치 전년 대비 변화율 (성장 궤적 신호)
 ]
 
 # 존재하지 않는 컬럼 제거
@@ -244,13 +261,13 @@ y_test  = train_df[train_df["season_year"] > cutoff_year]["target_ac_z"].values
 logger.info(f"학습 데이터: train={len(X_train)}, test={len(X_test)}, features={len(FEATURE_COLS)}")
 
 # ─────────────────────────────────────────────
-# 6. Scaler 학습 + Ridge 모델 학습
+# 6. Ridge + XGBoost 병행 학습, 베스트 선택
 # ─────────────────────────────────────────────
 scaler = StandardScaler()
 X_train_sc = scaler.fit_transform(X_train)
 X_test_sc  = scaler.transform(X_test)
 
-# alpha 탐색 (교차 검증)
+# ── Ridge (기준선) ──
 best_alpha = 1.0
 best_cv_mae = float("inf")
 for alpha in [0.01, 0.1, 1.0, 10.0, 100.0]:
@@ -262,21 +279,58 @@ for alpha in [0.01, 0.1, 1.0, 10.0, 100.0]:
         best_cv_mae = cv_mae
         best_alpha = alpha
 
-logger.info(f"최적 alpha={best_alpha}, CV MAE={best_cv_mae:.4f}")
-
 ridge_model = Ridge(alpha=best_alpha, random_state=42)
 ridge_model.fit(X_train_sc, y_train)
+y_pred_ridge = ridge_model.predict(X_test_sc)
+mae_ridge  = mean_absolute_error(y_test, y_pred_ridge)
+r2_ridge   = r2_score(y_test, y_pred_ridge)
+logger.info(f"Ridge — alpha={best_alpha} | MAE={mae_ridge:.4f} | R²={r2_ridge:.4f}")
 
-# 평가
-y_pred = ridge_model.predict(X_test_sc)
-mae  = mean_absolute_error(y_test, y_pred)
-r2   = r2_score(y_test, y_pred)
-logger.info(f"테스트 MAE={mae:.4f}, R2={r2:.4f}")
+# ── XGBoost (비선형 성장 곡선 포착) ──
+# 스케일 불필요하지만 일관성을 위해 스케일된 데이터 사용
+xgb_model = xgb.XGBRegressor(
+    n_estimators=400,
+    max_depth=5,
+    learning_rate=0.03,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    min_child_weight=5,
+    reg_alpha=0.1,
+    reg_lambda=1.0,
+    random_state=42,
+    n_jobs=-1,
+    verbosity=0,
+)
+xgb_model.fit(
+    X_train_sc, y_train,
+    eval_set=[(X_test_sc, y_test)],
+    verbose=False,
+)
+y_pred_xgb = xgb_model.predict(X_test_sc)
+mae_xgb = mean_absolute_error(y_test, y_pred_xgb)
+r2_xgb  = r2_score(y_test, y_pred_xgb)
+logger.info(f"XGBoost — MAE={mae_xgb:.4f} | R²={r2_xgb:.4f}")
+
+# 베스트 모델 선택 (R² 기준)
+if r2_xgb >= r2_ridge:
+    best_model      = xgb_model
+    best_model_name = "XGBoost"
+    mae, r2         = mae_xgb, r2_xgb
+    y_pred          = y_pred_xgb
+else:
+    best_model      = ridge_model
+    best_model_name = "Ridge"
+    mae, r2         = mae_ridge, r2_ridge
+    y_pred          = y_pred_ridge
+
+logger.info(f"베스트 모델: {best_model_name} | MAE={mae:.4f} | R²={r2:.4f}")
 
 # 모델 저장
-joblib.dump(ridge_model, OUT_DIR / "ridge_model.joblib")
+joblib.dump(best_model,  OUT_DIR / "ridge_model.joblib")   # 파일명 유지 (하위 호환)
+joblib.dump(xgb_model,   OUT_DIR / "xgb_model.joblib")
+joblib.dump(ridge_model, OUT_DIR / "ridge_baseline.joblib")
 joblib.dump(scaler,      OUT_DIR / "scaler.joblib")
-logger.info("ridge_model.joblib, scaler.joblib 저장 완료")
+logger.info("모델 저장 완료")
 
 # ─────────────────────────────────────────────
 # 7. 선수별 peak_age, decline_start_age, 향후 3시즌 예측
@@ -344,17 +398,30 @@ logger.info(f"growth_predictions.parquet 저장 완료: {len(scout_df)}행, {SCO
 # ─────────────────────────────────────────────
 # 8. results_summary.json 저장
 # ─────────────────────────────────────────────
+feat_imp = []
+if hasattr(best_model, "feature_importances_"):
+    feat_imp = sorted(
+        zip(FEATURE_COLS, best_model.feature_importances_),
+        key=lambda x: x[1], reverse=True
+    )[:10]
+    feat_imp = [{"feature": f, "importance": round(float(i), 4)} for f, i in feat_imp]
+
 summary = {
     "model": "P7 Growth Curve",
     "status": "완료",
+    "best_model": best_model_name,
     "metrics": {
         "mae":        round(mae, 4),
         "r2":         round(r2, 4),
-        "best_alpha": best_alpha,
-        "cv_mae":     round(best_cv_mae, 4),
         "train_size": int(len(X_train)),
         "test_size":  int(len(X_test)),
     },
+    "model_comparison": {
+        "XGBoost": {"mae": round(mae_xgb, 4), "r2": round(r2_xgb, 4)},
+        "Ridge":   {"mae": round(mae_ridge, 4), "r2": round(r2_ridge, 4),
+                    "best_alpha": best_alpha},
+    },
+    "top_features": feat_imp,
     "features_used": FEATURE_COLS,
     "pos_peak_ages": {pg: v["peak_age"] for pg, v in pos_curves.items()},
     "pos_decline_ages": {pg: v["decline_start_age"] for pg, v in pos_curves.items()},

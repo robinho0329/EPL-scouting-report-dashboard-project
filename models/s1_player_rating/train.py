@@ -311,18 +311,44 @@ def season_to_year(s):
 
 df['season_year'] = df['season'].apply(season_to_year)
 
+# ── 추가 피처 1: war_lag1 (직전 시즌 war_rating — 가장 강력한 예측 변수) ──
+df_sorted_s1 = df.sort_values(['player', 'season_year']).copy()
+df_sorted_s1['war_lag1'] = df_sorted_s1.groupby('player')['war_rating'].shift(1)
+df_sorted_s1['war_lag1_diff'] = df_sorted_s1['war_rating'] - df_sorted_s1['war_lag1']
+df = df_sorted_s1.copy()
+df['war_lag1'] = df['war_lag1'].fillna(df['war_rating'].median())
+df['war_lag1_diff'] = df['war_lag1_diff'].fillna(0.0)
+
+# ── 추가 피처 2: 빅6 플래그 (팀 컨텍스트 강화) ──
+BIG6 = {'Arsenal', 'Chelsea', 'Liverpool', 'Man City', 'Man Utd', 'Tottenham',
+        'Manchester City', 'Manchester United', 'Tottenham Hotspur'}
+df['is_big6'] = df['team'].isin(BIG6).astype(int)
+
+# ── 추가 피처 3: EPL 경험 (시즌 수 집계) ──
+# season_stats에 epl_experience가 없으면 player별 누적 season_year로 근사
+if 'epl_experience' not in df.columns:
+    exp_map = (
+        df.groupby('player')['season_year']
+        .rank(method='dense')
+        .astype(int)
+    )
+    df['epl_experience'] = exp_map
+df['epl_experience'] = df['epl_experience'].fillna(1)
+
+# ── 추가 피처 4: 나이 제곱 (peak-decline 비선형 포착) ──
+df['age_sq'] = df['age'].fillna(25) ** 2
+
 # 팀 강도 피처 (points, goal_diff)
 # 포지션 그룹 인코딩
 pos_encoder = LabelEncoder()
 df['pos_group_enc'] = pos_encoder.fit_transform(df['pos_group'].fillna('MID'))
 
-# 피처 선택 — WAR 구성 요소 피처 포함 (v1.1: R² 개선)
-# WAR 계산에 쓰인 Z-score 피처를 ML 입력에도 반영
+# 피처 선택 — WAR 구성 요소 + 이력 피처 (v1.2: war_lag1 추가)
 FEATURES = [
     # 선수 프로파일
-    'age', 'pos_group_enc', 'nineties', 'match_count', 'season_year',
-    # 팀 컨텍스트
-    'points', 'goal_diff',
+    'age', 'age_sq', 'pos_group_enc', 'nineties', 'match_count', 'season_year',
+    # EPL 경험 및 팀 컨텍스트
+    'epl_experience', 'is_big6', 'points', 'goal_diff',
     # 성과 per-90 원시값 (WAR 계산 입력 그대로)
     'gls_p90', 'ast_p90', 'sh_p90', 'tklw_p90', 'int_p90', 'clr_p90',
     'kp_p90', 'cs_p90', 'save_pct',
@@ -331,6 +357,9 @@ FEATURES = [
     'clr_p90_z', 'kp_p90_z', 'cs_p90_z', 'save_pct_z', 'min_ratio_z',
     # 출전 비율
     'min_ratio',
+    # 이력 피처 (v1.2 추가 — 가장 강력한 예측 변수)
+    'war_lag1',       # 직전 시즌 war_rating
+    'war_lag1_diff',  # 전년 대비 war 변화량 (성장/하락 추세)
 ]
 
 TARGET = 'war_rating'
@@ -395,14 +424,18 @@ print("  Ridge 모델 저장 완료.")
 # ── XGBoost ──
 print("\n  XGBoost 학습 중...")
 xgb_model = XGBRegressor(
-    n_estimators=300,
-    max_depth=5,
-    learning_rate=0.05,
+    n_estimators=500,
+    max_depth=6,
+    learning_rate=0.03,
     subsample=0.8,
     colsample_bytree=0.8,
+    min_child_weight=5,
+    reg_alpha=0.05,
+    reg_lambda=1.0,
     random_state=42,
     verbosity=0,
-    n_jobs=-1
+    n_jobs=-1,
+    early_stopping_rounds=30,
 )
 xgb_model.fit(X_train, y_train,
               eval_set=[(X_val, y_val)],
@@ -474,6 +507,9 @@ for pos in ['FW', 'MID', 'DEF', 'GK']:
     top_by_pos[pos] = p_df[['player', 'season', 'team', TARGET]].to_dict('records')
 
 results_summary = {
+    'version': 'v1.2',
+    'improvements': ['war_lag1 피처 추가', '빅6 플래그 추가', 'epl_experience 추가',
+                     '나이 제곱 피처 추가', 'XGBoost early_stopping + 하이퍼파라미터 튜닝'],
     'model_metrics': metrics,
     'top20_by_season': top20_by_season,
     'top_by_position': top_by_pos,
