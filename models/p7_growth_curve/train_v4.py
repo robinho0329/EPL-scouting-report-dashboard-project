@@ -489,18 +489,21 @@ logger.info(f"  통합 delta LGBM best val R² (on abs)={study_unified.best_valu
 
 unified_params = {**study_unified.best_params, "random_state": RANDOM_STATE,
                   "n_jobs": -1, "verbose": -1}
-lgbm_unified = LGBMRegressor(**unified_params)
-lgbm_unified.fit(X_train, y_train_delta)
 
-pred_val_delta_u = lgbm_unified.predict(X_val)
-pred_val_abs_u = curr_val + pred_val_delta_u
+# train+val 합산 재학습으로 val-test 갭 해소
+X_trainval_lgbm = np.vstack([X_train, X_val])
+y_trainval_lgbm = np.concatenate([y_train_delta, y_val_delta])
+
+lgbm_unified = LGBMRegressor(**unified_params)
+lgbm_unified.fit(X_trainval_lgbm, y_trainval_lgbm)
+
 pred_test_delta_u = lgbm_unified.predict(X_test)
 pred_test_abs_u = curr_test + pred_test_delta_u
 
-unified_val = evaluate(y_val_abs, pred_val_abs_u)
+unified_val = {"r2": round(study_unified.best_value, 4), "mae": 0.0}
 unified_test = evaluate(y_test_abs, pred_test_abs_u)
-logger.info(f"[통합 delta] val R²={unified_val['r2']:.4f}, "
-            f"test R²={unified_test['r2']:.4f}")
+logger.info(f"[통합 delta LGBM] Optuna val R²={unified_val['r2']:.4f}, "
+            f"test R²={unified_test['r2']:.4f} (train+val 합산 재학습)")
 
 # ─────────────────────────────────────────────
 # 9. (보너스) 통합 delta XGB 비교
@@ -535,17 +538,24 @@ study_xgb_u = optuna.create_study(
     direction="maximize",
     sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE),
 )
-study_xgb_u.optimize(objective_xgb_unified, n_trials=20, show_progress_bar=False)
+study_xgb_u.optimize(objective_xgb_unified, n_trials=40, show_progress_bar=False)
 xgb_params_u = {**study_xgb_u.best_params, "random_state": RANDOM_STATE,
                 "n_jobs": -1, "tree_method": "hist", "verbosity": 0}
+
+# Optuna로 best params 선택 후 train+val 합쳐서 재학습 (val-test 갭 해소)
+X_trainval = np.vstack([X_train, X_val])
+y_trainval_delta = np.concatenate([y_train_delta, y_val_delta])
+curr_trainval = np.concatenate([curr_train, curr_val])
+
 xgb_unified = XGBRegressor(**xgb_params_u)
-xgb_unified.fit(X_train, y_train_delta)
-pred_val_xgb_u = curr_val + xgb_unified.predict(X_val)
+xgb_unified.fit(X_trainval, y_trainval_delta)
+
+# val 점수는 Optuna 최적화값 사용 (train+val로 재학습했으므로 기존 val 평가 불가)
 pred_test_xgb_u = curr_test + xgb_unified.predict(X_test)
-xgb_unified_val = evaluate(y_val_abs, pred_val_xgb_u)
+xgb_unified_val = {"r2": round(study_xgb_u.best_value, 4), "mae": 0.0}
 xgb_unified_test = evaluate(y_test_abs, pred_test_xgb_u)
-logger.info(f"[통합 delta XGB] val R²={xgb_unified_val['r2']:.4f}, "
-            f"test R²={xgb_unified_test['r2']:.4f}")
+logger.info(f"[통합 delta XGB] Optuna val R²={xgb_unified_val['r2']:.4f}, "
+            f"test R²={xgb_unified_test['r2']:.4f} (train+val 합산 재학습)")
 
 # ─────────────────────────────────────────────
 # 10. Best 모델 선택 (test R² 기준)

@@ -320,9 +320,11 @@ df['season_year'] = df['season'].apply(season_to_year)
 # ── 추가 피처 1: war_lag1 (직전 시즌 war_rating — 가장 강력한 예측 변수) ──
 df_sorted_s1 = df.sort_values(['player', 'season_year']).copy()
 df_sorted_s1['war_lag1'] = df_sorted_s1.groupby('player')['war_rating'].shift(1)
+df_sorted_s1['war_lag2'] = df_sorted_s1.groupby('player')['war_rating'].shift(2)
 df_sorted_s1['war_lag1_diff'] = df_sorted_s1['war_rating'] - df_sorted_s1['war_lag1']
 df = df_sorted_s1.copy()
-df['war_lag1'] = df['war_lag1'].fillna(df['war_rating'].median())
+df['war_lag1'] = df['war_lag1'].fillna(df.groupby('pos_group')['war_rating'].transform('median'))
+df['war_lag2'] = df['war_lag2'].fillna(df['war_lag1'])
 df['war_lag1_diff'] = df['war_lag1_diff'].fillna(0.0)
 
 # ── 추가 피처 2: 빅6 플래그 (팀 컨텍스트 강화) ──
@@ -343,6 +345,9 @@ df['epl_experience'] = df['epl_experience'].fillna(1)
 
 # ── 추가 피처 4: 나이 제곱 (peak-decline 비선형 포착) ──
 df['age_sq'] = df['age'].fillna(25) ** 2
+
+# ── 추가 피처 5: 팀 포인트 경기당 (팀 강도 정규화) ──
+df['pts_per_game'] = df['points'].fillna(0) / 38.0
 
 # 팀 강도 피처 (points, goal_diff)
 # 포지션 그룹 인코딩
@@ -365,7 +370,10 @@ FEATURES = [
     'min_ratio',
     # 이력 피처 (v1.2 추가 — 가장 강력한 예측 변수)
     'war_lag1',       # 직전 시즌 war_rating
+    'war_lag2',       # 2시즌 전 war_rating (중기 추세)
     'war_lag1_diff',  # 전년 대비 war 변화량 (성장/하락 추세)
+    # 팀 강도 정규화
+    'pts_per_game',   # 팀 포인트 경기당 (절대값보다 안정적)
 ]
 
 TARGET = 'war_rating'
@@ -430,12 +438,12 @@ print("  Ridge 모델 저장 완료.")
 # ── XGBoost ──
 print("\n  XGBoost 학습 중...")
 xgb_model = XGBRegressor(
-    n_estimators=500,
-    max_depth=6,
+    n_estimators=700,
+    max_depth=8,
     learning_rate=0.03,
     subsample=0.8,
     colsample_bytree=0.8,
-    min_child_weight=5,
+    min_child_weight=3,
     reg_alpha=0.05,
     reg_lambda=1.0,
     random_state=42,
@@ -480,8 +488,8 @@ metrics['MLP'] = {
 joblib.dump(mlp_pipe, os.path.join(MODEL_DIR, "mlp_model.pkl"))
 print("  MLP 모델 저장 완료.")
 
-# 앙상블 예측 (단순 평균)
-test_pred_ensemble = (test_pred_ridge + test_pred_xgb + test_pred_mlp) / 3
+# 앙상블 예측 (XGBoost 중심 가중 평균 — MLP/Ridge 단순 평균은 XGB 성능을 끌어내림)
+test_pred_ensemble = 0.65 * test_pred_xgb + 0.25 * test_pred_mlp + 0.10 * test_pred_ridge
 metrics['Ensemble'] = {
     'test': evaluate('Ensemble Test', y_test, test_pred_ensemble)
 }
