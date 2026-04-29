@@ -4,120 +4,20 @@
     {
       "item": "P8 이진 분류 실제 구현: train.py에 이진 타겟 재정의 (`gc_p90_after",
       "script": "models/p8_transfer_adapt/train.py",
-      "success": true,
-      "changes": [
-        "XGBRegressor → XGBClassifier (이진 분류)",
-        "타겟 변수: war_change(회귀) → adapted(이진 레이블, 80% 복합 기준)",
-        "500분 양방향 필터 추가 (min_old/min_new >= 500)",
-        "XGBoost + LogisticRegression 병행, AUC 기준 베스트 선택",
-        "리그 정규화 피처(g_a_per90_rel, league_level_diff) 유지",
-        "출력 parquet: prob_success, prob_failure, pred_label, adapt_risk",
-        "results_summary.json: mode=binary_classification, auc/f1 기록, goal_met(AUC≥0.65) 자동 판정"
-      ],
-      "target_metric": "AUC >= 0.65",
-      "metric_before": {"mode": "regression", "r2": 0.1269, "mae": 0.1512},
-      "metric_after": {
-        "mode": "binary_classification",
-        "auc": 0.5944,
-        "f1": 0.8758,
-        "precision": 0.8667,
-        "recall": 0.8851,
-        "accuracy": 0.7885,
-        "best_model": "XGBoost",
-        "goal_met": false,
-        "note": "이진 분류 복원 성공. AUC 0.5944로 목표(0.65) 미달. 기존 회귀(R²=0.1269)보다 분류 접근이 올바르나 피처 추가 필요."
-      },
-      "finding": "아카이브 results_summary.json 확인 결과 이진 분류 모델이 이미 존재했으며 XGBoost test AUC=0.6976. 회귀로 전환된 것이 5일 연속 하락 원인. 이진 분류 복원이 올바른 방향."
+      "success": false,
+      "error": " [INFO] 스타일 벡터 매칭 성공: 248 / 1391\n2026-04-29 14:05:57,110 [INFO] 리그 정규화 피처 생성\n2026-04-29 14:05:57,115 [INFO] adapted 분포: {1: 1043, 0: 348}\n2026-04-29 14:05:57,115 [INFO] 적응 성공률: 75.0%\n2026-04-29 14:05:57,116 [INFO] 사용 피처 수: 19\n2026-04-29 14:05:57,121 [INFO] 최종 학습 데이터: 1391 케이스\n2026-04-29 14:05:57,122 [INFO] XGBoost Classifier 학습\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
     },
     {
       "item": "P8 경고 배너 즉시 추가: scout_transfer.py 1507번째 줄 근처 P8 섹",
       "script": "models/p8_transfer_adapt/train.py",
       "success": true,
-      "changes": [
-        "P8 섹션 상단에 동적 경고 배너 추가",
-        "results_summary.json의 mode/auc 읽어 이진분류+AUC≥0.65 달성 시 배너 자동 해제",
-        "미달 또는 회귀 모드 시 st.warning() 경고 표시",
-        "표시 컬럼 업데이트: predicted_war_change → prob_success, pred_label (레거시 폴백 유지)",
-        "pred_label 한국어 매핑: success=✅ 적응 성공, partial=🟡 부분 적응, failure=❌ 적응 실패"
-      ],
-      "dashboard_status": "P8 경고 배너 AUC=0.5944로 활성 상태 유지 (AUC≥0.65 달성 시 자동 해제)"
+      "reason": "중복 스킵"
     },
     {
       "item": "S3 cluster_explorer 포지션별 출력 검증: cluster_assignment",
       "script": "models/p5_clustering/run_clustering_k6.py",
       "success": true,
-      "reason": "코드 분석으로 검증 완료 — 코드 수정 불필요",
-      "finding": "data_loader.py의 load_clusters()가 cluster_assignments_v4.parquet(S3 v4)를 올바르게 로드하며 v3 폴백 포함. scout_transfer.py의 _fix_pos_archetype()이 FW/MID/DEF/GK 포지션별 아키타입 불일치를 자동 수정. pos_groups 딕셔너리도 v4 기준으로 올바르게 정의됨. cluster_explorer.py는 P5 K=6을 사용하는 별도 페이지로 S3와 혼동 없음."
-    },
-    {
-      "item": "S1 플레이어 레이팅 개선: train_v4.py 신규 생성",
-      "script": "models/s1_player_rating/train_v4.py",
-      "file_modified": "models/s1_player_rating/train_v4.py",
-      "success": true,
-      "session": "오후 추가 개발 세션 (4.0 목표)",
-      "changes": [
-        "war_lag1 (전 시즌 WAR) 피처 추가 — 가장 강력한 예측 변수",
-        "war_lag1_diff (WAR 변화량) 추가",
-        "is_big6 플래그 (Arsenal/Chelsea/Liverpool/Man City/Man Utd/Tottenham)",
-        "epl_experience (시즌 수 프록시) 추가",
-        "age_sq (나이 제곱) 비선형 나이 효과",
-        "XGBoost 튜닝: n=500, early_stopping=30, lr=0.03",
-        "Actions auto-discover: train_v4.py > train_v3.py 우선 선택"
-      ],
-      "target_metric": "R² >= 0.55",
-      "metric_after": {
-        "XGBoost_val_r2": 0.5282,
-        "XGBoost_test_r2": 0.4867,
-        "Ridge_test_r2": 0.3024,
-        "MLP_test_r2": 0.3668,
-        "Ensemble_test_r2": 0.4546,
-        "best_model": "XGBoost",
-        "goal_met": false,
-        "note": "XGBoost R²=0.4867로 목표(0.55) 미달. Ridge 대비 대폭 향상. war_lag1 피처가 핵심 역할."
-      }
-    },
-    {
-      "item": "P7 성장 곡선 모델 — 기존 train_v4.py 현상 유지",
-      "script": "models/p7_growth_curve/train_v4.py",
-      "file_modified": null,
-      "success": false,
-      "session": "오후 추가 개발 세션 (4.0 목표)",
-      "reason": "기존 train_v4.py(LightGBM+XGBoost+Optuna)가 이미 최고 구성. 추가 개선 여지 제한적.",
-      "target_metric": "R² >= 0.60",
-      "metric_after": {
-        "best_strategy": "unified_xgb",
-        "test_r2": 0.5588,
-        "test_mae": 1.166,
-        "val_r2": 0.6691,
-        "goal_met": false,
-        "note": "R²=0.5588로 목표(0.60) 미달. val_r2=0.6691 vs test_r2=0.5588 — 일반화 갭 존재. 포지션별 모델(FWD val_r2=0.0195)은 데이터 부족으로 불안정."
-      }
-    },
-    {
-      "item": "GitHub Actions 수동 트리거 (workflow_dispatch)",
-      "run_id": 25090940623,
-      "workflow": "🤖 EPL 스카우트팀 일일 개발 루프",
-      "triggered_at": "2026-04-29T04:28:53Z",
-      "completed_at": "2026-04-29T04:36:10Z",
-      "conclusion": "success",
-      "duration_min": 7
+      "error": ""
     }
-  ],
-  "commits": [
-    "7ec48ad: daily: 2026-04-29 아침 스카우트팀 미팅 결과",
-    "b41ec95: feat: P8 이진 분류 복원 + 경고 배너 추가"
-  ],
-  "actions_summary": {
-    "run_time": "2026-04-29 04:28~04:36 UTC",
-    "p8": {"mode": "binary_classification", "auc": 0.5944, "goal_met": false},
-    "p7": {"r2": 0.5588, "goal_met": false},
-    "s1": {"xgb_r2": 0.4867, "goal_met": false},
-    "overall_targets_met": 0,
-    "overall_targets_total": 3
-  },
-  "next_pending": [
-    "P8: AUC 0.5944 → 0.65 개선 — 피처 추가 필요 (포지션별 적응률, 리그 레벨 갭)",
-    "P7: R² 0.5588 → 0.60 개선 — val-test 갭 해소 (정규화 강화, Optuna trial 수 증가)",
-    "S1: R² 0.4867 → 0.55 개선 — 팀 강도 피처, 출전시간 가중치 추가"
   ]
 }
