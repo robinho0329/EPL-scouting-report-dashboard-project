@@ -1,0 +1,54 @@
+{
+  "date": "2026-04-29",
+  "session": "오전 추가 개발 세션",
+  "results": [
+    {
+      "item": "P8 이진 분류 실제 구현: train.py 전면 재작성",
+      "script": "models/p8_transfer_adapt/train.py",
+      "file_modified": "models/p8_transfer_adapt/train.py",
+      "success": true,
+      "changes": [
+        "XGBRegressor → XGBClassifier (이진 분류)",
+        "타겟 변수: war_change(회귀) → adapted(이진 레이블, 80% 복합 기준)",
+        "500분 양방향 필터 추가 (min_old/min_new >= 500)",
+        "XGBoost + LogisticRegression 병행, AUC 기준 베스트 선택",
+        "리그 정규화 피처(g_a_per90_rel, league_level_diff) 유지",
+        "출력 parquet: prob_success, prob_failure, pred_label, adapt_risk",
+        "results_summary.json: mode=binary_classification, auc/f1 기록, goal_met(AUC≥0.65) 자동 판정"
+      ],
+      "target_metric": "AUC >= 0.65",
+      "metric_before": {"mode": "regression", "r2": 0.1269, "mae": 0.1512},
+      "metric_after": "GitHub Actions 실행 후 확인 예정",
+      "finding": "아카이브 results_summary.json 확인 결과 이진 분류 모델이 이미 존재했으며 XGBoost test AUC=0.6976. 회귀로 전환된 것이 5일 연속 하락 원인. 이진 분류 복원이 올바른 방향."
+    },
+    {
+      "item": "P8 경고 배너 추가: scout_transfer.py",
+      "script": "dashboard/pages/scout_transfer.py",
+      "file_modified": "dashboard/pages/scout_transfer.py",
+      "success": true,
+      "changes": [
+        "P8 섹션 상단에 동적 경고 배너 추가",
+        "results_summary.json의 mode/auc 읽어 이진분류+AUC≥0.65 달성 시 배너 자동 해제",
+        "미달 또는 회귀 모드 시 st.warning() 경고 표시",
+        "표시 컬럼 업데이트: predicted_war_change → prob_success, pred_label (레거시 폴백 유지)",
+        "pred_label 한국어 매핑: success=✅ 적응 성공, partial=🟡 부분 적응, failure=❌ 적응 실패"
+      ]
+    },
+    {
+      "item": "S3 v4 대시보드 연동 코드 검증",
+      "script": "dashboard/components/data_loader.py",
+      "file_modified": null,
+      "success": true,
+      "reason": "코드 분석으로 검증 완료 — 코드 수정 불필요",
+      "finding": "data_loader.py의 load_clusters()가 cluster_assignments_v4.parquet(S3 v4)를 올바르게 로드하며 v3 폴백 포함. scout_transfer.py의 _fix_pos_archetype()이 FW/MID/DEF/GK 포지션별 아키타입 불일치를 자동 수정. pos_groups 딕셔너리도 v4 기준으로 올바르게 정의됨. cluster_explorer.py는 P5 K=6을 사용하는 별도 페이지로 S3와 혼동 없음."
+    }
+  ],
+  "commits": [
+    "7ec48ad: daily: 2026-04-29 아침 스카우트팀 미팅 결과",
+    "b41ec95: feat: P8 이진 분류 복원 + 경고 배너 추가"
+  ],
+  "next_pending": [
+    "GitHub Actions 실행 후 P8 AUC 수치 확인",
+    "Streamlit Cloud 배포 후 경고 배너 동작 검증"
+  ]
+}
