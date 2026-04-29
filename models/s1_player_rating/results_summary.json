@@ -1,46 +1,54 @@
 {
+  "version": "v1.2",
+  "improvements": [
+    "war_lag1 피처 추가",
+    "빅6 플래그 추가",
+    "epl_experience 추가",
+    "나이 제곱 피처 추가",
+    "XGBoost early_stopping + 하이퍼파라미터 튜닝"
+  ],
   "model_metrics": {
     "Ridge": {
       "val": {
-        "rmse": 18.0328,
-        "mae": 13.8001,
-        "r2": 0.3273
+        "rmse": 9.8171,
+        "mae": 7.1038,
+        "r2": 0.8006
       },
       "test": {
-        "rmse": 18.1684,
-        "mae": 13.6283,
-        "r2": 0.3024
+        "rmse": 9.3452,
+        "mae": 7.0171,
+        "r2": 0.8154
       }
     },
     "XGBoost": {
       "val": {
-        "rmse": 15.1012,
-        "mae": 11.6027,
-        "r2": 0.5282
+        "rmse": 5.4859,
+        "mae": 3.7467,
+        "r2": 0.9377
       },
       "test": {
-        "rmse": 15.585,
-        "mae": 11.8426,
-        "r2": 0.4867
+        "rmse": 5.7495,
+        "mae": 3.8746,
+        "r2": 0.9301
       }
     },
     "MLP": {
       "val": {
-        "rmse": 16.0092,
-        "mae": 12.0916,
-        "r2": 0.4698
+        "rmse": 5.2463,
+        "mae": 3.9143,
+        "r2": 0.9431
       },
       "test": {
-        "rmse": 17.3085,
-        "mae": 12.7861,
-        "r2": 0.3668
+        "rmse": 5.631,
+        "mae": 4.5607,
+        "r2": 0.933
       }
     },
     "Ensemble": {
       "test": {
-        "rmse": 16.0646,
-        "mae": 12.0107,
-        "r2": 0.4546
+        "rmse": 5.3156,
+        "mae": 3.7252,
+        "r2": 0.9403
       }
     }
   },
@@ -175,12 +183,6 @@
         "war_rating": 100.0
       },
       {
-        "player": "Trevoh Chalobah",
-        "team": "Chelsea",
-        "pos_group": "DEF",
-        "war_rating": 100.0
-      },
-      {
         "player": "Martin Dúbravka",
         "team": "Newcastle",
         "pos_group": "GK",
@@ -190,6 +192,12 @@
         "player": "Son Heung-min",
         "team": "Tottenham",
         "pos_group": "MID",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Trevoh Chalobah",
+        "team": "Chelsea",
+        "pos_group": "DEF",
         "war_rating": 100.0
       },
       {
@@ -542,13 +550,39 @@
   },
   "features_used": [
     "age",
-    "market_value",
+    "age_sq",
     "pos_group_enc",
-    "points",
-    "goal_diff",
     "nineties",
     "match_count",
-    "season_year"
+    "season_year",
+    "epl_experience",
+    "is_big6",
+    "points",
+    "goal_diff",
+    "gls_p90",
+    "ast_p90",
+    "sh_p90",
+    "tklw_p90",
+    "int_p90",
+    "clr_p90",
+    "kp_p90",
+    "cs_p90",
+    "save_pct",
+    "gls_p90_z",
+    "ast_p90_z",
+    "sh_p90_z",
+    "tklw_p90_z",
+    "int_p90_z",
+    "clr_p90_z",
+    "kp_p90_z",
+    "cs_p90_z",
+    "save_pct_z",
+    "min_ratio_z",
+    "min_ratio",
+    "war_lag1",
+    "war_lag2",
+    "war_lag1_diff",
+    "pts_per_game"
   ],
   "train_size": 10299,
   "val_size": 984,
