@@ -377,6 +377,10 @@
     "clusters_k6_umap.png",
     "cluster_k6_radar.png",
     "cluster_k6_distribution.png",
+    "cluster_k6_heatmap.png",
+    "clusters_k6_umap.png",
+    "cluster_k6_radar.png",
+    "cluster_k6_distribution.png",
     "cluster_k6_heatmap.png"
   ],
   "kmeans_k6": {
