@@ -2,63 +2,83 @@
   "model": "P7 Growth Curve (v4: Position-Specific + Delta Learning)",
   "status": "완료",
   "version": "v4",
-  "best_strategy": "unified_xgb",
+  "best_strategy": "pos_specific",
   "metrics": {
-    "mae": 1.166,
-    "r2": 0.5588,
+    "mae": 1.1699,
+    "r2": 0.5648,
     "train_size": 5405,
     "val_size": 245,
     "test_size": 262
   },
   "strategy_comparison": {
     "pos_specific": {
-      "val_r2": 0.68,
-      "val_mae": 0.9826,
-      "test_r2": 0.5521,
-      "test_mae": 1.1883
+      "val_r2": 0.6769,
+      "val_mae": 0.9877,
+      "test_r2": 0.5648,
+      "test_mae": 1.1699
     },
     "unified_lgbm": {
-      "val_r2": 0.6711,
-      "val_mae": 1.0167,
-      "test_r2": 0.5489,
-      "test_mae": 1.1803
+      "val_r2": 0.6737,
+      "val_mae": 0.0,
+      "test_r2": 0.5501,
+      "test_mae": 1.1788
     },
     "unified_xgb": {
-      "val_r2": 0.6691,
-      "val_mae": 1.0038,
-      "test_r2": 0.5588,
-      "test_mae": 1.166
+      "val_r2": 0.6815,
+      "val_mae": 0.0,
+      "test_r2": 0.5535,
+      "test_mae": 1.1732
     }
   },
   "pos_specific_breakdown": {
     "FWD": {
-      "val_r2": 0.0195,
-      "val_mae": 0.9285,
-      "test_r2": 0.2351,
-      "test_mae": 0.8358,
+      "val_r2": 0.0692,
+      "val_mae": 0.9127,
+      "test_r2": 0.2483,
+      "test_mae": 0.8262,
       "n_train": 1333,
       "n_val": 60,
       "n_test": 63,
       "best_params": {
-        "n_estimators": 350,
-        "num_leaves": 98,
+        "n_estimators": 415,
+        "num_leaves": 91,
         "max_depth": 3,
-        "learning_rate": 0.0236226623838446,
-        "subsample": 0.8634491180134072,
-        "colsample_bytree": 0.8355419274167762,
-        "min_child_samples": 15,
-        "reg_alpha": 0.004505683995889376,
-        "reg_lambda": 0.36434072710733356
+        "learning_rate": 0.02361882798511971,
+        "subsample": 0.8629508678740476,
+        "colsample_bytree": 0.6076158696966371,
+        "min_child_samples": 16,
+        "reg_alpha": 0.14050827253588466,
+        "reg_lambda": 0.007347784938392711
       }
     },
     "MID": {
-      "val_r2": 0.2658,
-      "val_mae": 0.7233,
-      "test_r2": 0.1239,
-      "test_mae": 0.8472,
+      "val_r2": 0.2499,
+      "val_mae": 0.7289,
+      "test_r2": 0.0996,
+      "test_mae": 0.8607,
       "n_train": 1643,
       "n_val": 70,
       "n_test": 80,
+      "best_params": {
+        "n_estimators": 977,
+        "num_leaves": 87,
+        "max_depth": 3,
+        "learning_rate": 0.010296659827676637,
+        "subsample": 0.9988599342221308,
+        "colsample_bytree": 0.8870983927079958,
+        "min_child_samples": 40,
+        "reg_alpha": 0.052737409944535955,
+        "reg_lambda": 0.00010364205071517775
+      }
+    },
+    "DEF": {
+      "val_r2": 0.3212,
+      "val_mae": 1.3029,
+      "test_r2": 0.2273,
+      "test_mae": 1.7344,
+      "n_train": 2034,
+      "n_val": 97,
+      "n_test": 99,
       "best_params": {
         "n_estimators": 962,
         "num_leaves": 83,
@@ -71,44 +91,24 @@
         "reg_lambda": 0.00015812408680011017
       }
     },
-    "DEF": {
-      "val_r2": 0.3376,
-      "val_mae": 1.2774,
-      "test_r2": 0.1943,
-      "test_mae": 1.7855,
-      "n_train": 2034,
-      "n_val": 97,
-      "n_test": 99,
-      "best_params": {
-        "n_estimators": 309,
-        "num_leaves": 37,
-        "max_depth": 10,
-        "learning_rate": 0.010219144713746285,
-        "subsample": 0.852433737415586,
-        "colsample_bytree": 0.7292095953333527,
-        "min_child_samples": 39,
-        "reg_alpha": 0.018025553777881512,
-        "reg_lambda": 0.008454622814471045
-      }
-    },
     "GK": {
-      "val_r2": 0.4417,
-      "val_mae": 0.5832,
-      "test_r2": 0.4901,
-      "test_mae": 0.7072,
+      "val_r2": 0.4838,
+      "val_mae": 0.5461,
+      "test_r2": 0.5086,
+      "test_mae": 0.6954,
       "n_train": 395,
       "n_val": 18,
       "n_test": 20,
       "best_params": {
-        "n_estimators": 406,
-        "num_leaves": 75,
-        "max_depth": 3,
-        "learning_rate": 0.011832868671725031,
-        "subsample": 0.95621601194762,
-        "colsample_bytree": 0.6123850196223547,
-        "min_child_samples": 49,
-        "reg_alpha": 0.10862289420171278,
-        "reg_lambda": 0.00011094795126654705
+        "n_estimators": 920,
+        "num_leaves": 69,
+        "max_depth": 1,
+        "learning_rate": 0.04428848883093682,
+        "subsample": 0.789859887223544,
+        "colsample_bytree": 0.8056239626685042,
+        "min_child_samples": 31,
+        "reg_alpha": 0.2791123895905836,
+        "reg_lambda": 0.007097629680906186
       }
     }
   },
@@ -119,14 +119,14 @@
       "note": "앙상블"
     },
     "v3": {
-      "r2": 0.5404,
-      "mae": 1.2399,
+      "r2": 0.5588,
+      "mae": 1.166,
       "note": "스태킹(Ridge 메타)"
     },
     "v4": {
-      "r2": 0.5588,
-      "mae": 1.166,
-      "note": "v4 unified_xgb (delta 학습)"
+      "r2": 0.5648,
+      "mae": 1.1699,
+      "note": "v4 pos_specific (delta 학습)"
     }
   },
   "features_used": [
@@ -169,7 +169,15 @@
     "attack_contribution_lag3",
     "minutes_share_lag2",
     "minutes_share_lag3",
-    "ac_z_trend2"
+    "ac_z_trend2",
+    "goals_p90_lag4",
+    "assists_p90_lag4",
+    "ac_z_lag4",
+    "attack_contribution_lag4",
+    "minutes_share_lag4",
+    "ac_z_trend3",
+    "war_ma4",
+    "age_vs_peak_lag1"
   ],
   "target": "target_delta (next_ac - current_ac)",
   "optuna_trials": {
@@ -177,25 +185,25 @@
     "unified": 30
   },
   "unified_lgbm_best_params": {
-    "n_estimators": 1025,
-    "num_leaves": 108,
+    "n_estimators": 968,
+    "num_leaves": 111,
     "max_depth": 2,
-    "learning_rate": 0.01617911116840584,
-    "subsample": 0.8923999425709396,
-    "colsample_bytree": 0.7616401609893132,
-    "min_child_samples": 28,
-    "reg_alpha": 0.06352617034274452,
-    "reg_lambda": 0.012100699751565957
+    "learning_rate": 0.012680498729338307,
+    "subsample": 0.8143303455964156,
+    "colsample_bytree": 0.7912108321984976,
+    "min_child_samples": 26,
+    "reg_alpha": 0.3872519882701749,
+    "reg_lambda": 0.0025773513505881708
   },
   "unified_xgb_best_params": {
-    "n_estimators": 507,
+    "n_estimators": 470,
     "max_depth": 4,
-    "learning_rate": 0.019217253595341183,
-    "subsample": 0.7599922797534859,
-    "colsample_bytree": 0.81449654833591,
-    "min_child_weight": 7,
-    "reg_alpha": 0.038648056127050995,
-    "reg_lambda": 0.00011035517402844452
+    "learning_rate": 0.011097554561103107,
+    "subsample": 0.7301321323053057,
+    "colsample_bytree": 0.7554709158757928,
+    "min_child_weight": 3,
+    "reg_alpha": 1.3921548533046495,
+    "reg_lambda": 0.0060780830996819525
   },
   "pos_peak_ages": {
     "FWD": 28,
@@ -209,7 +217,7 @@
     "DEF": 27,
     "GK": 31
   },
-  "scout_validation": "v4는 'delta(변화량) 학습 + 포지션별 개별 모델' 2가지 핵심 전환. v3 0.577 → v4 0.559 (-0.018). 최종 전략: unified_xgb. 김태현 스카우트: '같은 22세 선수라도 공격수 vs 골키퍼는 성장 경로가 다르다. 포지션별 개별 모델이 실무 관점과 일치한다.'",
+  "scout_validation": "v4는 'delta(변화량) 학습 + 포지션별 개별 모델' 2가지 핵심 전환. v3 0.577 → v4 0.565 (-0.012). 최종 전략: pos_specific. 김태현 스카우트: '같은 22세 선수라도 공격수 vs 골키퍼는 성장 경로가 다르다. 포지션별 개별 모델이 실무 관점과 일치한다.'",
   "legacy_v1_ridge": {
     "r2": 0.1735,
     "mae": 0.5955
@@ -220,11 +228,11 @@
   },
   "legacy_v3": {
     "version": "v3",
-    "r2": 0.5404,
-    "mae": 1.2399,
-    "best_model_name": "ensemble",
+    "r2": 0.5588,
+    "mae": 1.166,
+    "best_model_name": "stacking",
     "note": "v3 스태킹 (Ridge 메타)"
   },
-  "output_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\scout\\growth_predictions.parquet",
+  "output_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/scout/growth_predictions.parquet",
   "row_count": 894
 }

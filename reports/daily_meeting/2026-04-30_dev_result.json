@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-30",
+  "results": [
+    {
+      "item": "P8 train.py 에러 수정 + scale_pos_weight=3.0 적용: XGBoo",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": false,
+      "error": " [INFO] 스타일 벡터 매칭 성공: 253 / 1487\n2026-04-30 21:43:45,777 [INFO] 리그 정규화 피처 생성\n2026-04-30 21:43:45,783 [INFO] adapted 분포: {1: 1065, 0: 422}\n2026-04-30 21:43:45,783 [INFO] 적응 성공률: 71.6%\n2026-04-30 21:43:45,783 [INFO] 사용 피처 수: 19\n2026-04-30 21:43:45,787 [INFO] 최종 학습 데이터: 1487 케이스\n2026-04-30 21:43:45,789 [INFO] XGBoost Classifier 학습\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
+    },
+    {
+      "item": "P7 train_v4.py `age_vs_peak` KeyError 수정: `age_vs_",
+      "script": "models/p7_growth_curve/train_v4.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S1 R²=0.9093 대시보드 반영 및 검증: war_lag1 leakage 여부 최종 ",
+      "script": "models/s1_player_rating/train_v4.py",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
