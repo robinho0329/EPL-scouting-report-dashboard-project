@@ -262,7 +262,6 @@ xgb_clf = xgb.XGBClassifier(
     min_child_weight=3,
     gamma=0.1,
     scale_pos_weight=pos_weight,
-    use_label_encoder=False,
     eval_metric="auc",
     random_state=42,
     n_jobs=-1,

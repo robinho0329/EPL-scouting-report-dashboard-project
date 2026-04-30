@@ -189,16 +189,16 @@ df["war_ma4"] = (
     .reset_index(level=0, drop=True)
 )
 
-# peak까지 거리의 1시즌 전 값 (나이에 따른 성장/하락 속도 변화 포착)
-df["age_vs_peak_lag1"] = df.groupby("player_id")["age_vs_peak"].shift(1)
-
-# 나이 비선형
+# 나이 비선형 (age_vs_peak_lag1보다 먼저 계산해야 함)
 df["age2"] = df["age_clean"] ** 2
 df["age_vs_peak"] = df.apply(
     lambda r: r["age_clean"] - PEAK_AGE_MAP.get(r["pos_group"], 27), axis=1
 )
 df["age_vs_peak2"] = df["age_vs_peak"] ** 2
 df["age_vs_peak_abs"] = df["age_vs_peak"].abs()
+
+# peak까지 거리의 1시즌 전 값 (나이에 따른 성장/하락 속도 변화 포착)
+df["age_vs_peak_lag1"] = df.groupby("player_id")["age_vs_peak"].shift(1)
 
 # v2 피처
 df["delta_war"] = df.groupby("player_id")["ac_z"].diff()
