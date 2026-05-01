@@ -18,6 +18,9 @@ from pathlib import Path
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, classification_report
 import xgboost as xgb
+import optuna
+import lightgbm as lgb
+optuna.logging.set_verbosity(optuna.logging.WARNING)
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
@@ -128,30 +131,43 @@ def evaluate(y_true, y_pred, label_enc, split_name=""):
 # ── 3. XGBoost ─────────────────────────────────────────────────────────────────
 def train_xgboost(data):
     print("\n" + "=" * 70)
-    print("MODEL 1: XGBoost")
+    print("MODEL 1: XGBoost (Optuna 40 trials)")
     print("=" * 70)
 
-    model = xgb.XGBClassifier(
-        n_estimators=500,
-        max_depth=6,
-        learning_rate=0.05,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        min_child_weight=3,
-        objective="multi:softprob",
-        num_class=3,
-        eval_metric="mlogloss",
-        early_stopping_rounds=30,
-        random_state=SEED,
-        use_label_encoder=False,
-        verbosity=0,
-    )
+    def _objective(trial):
+        params = {
+            "n_estimators": trial.suggest_int("n_estimators", 300, 900),
+            "max_depth": trial.suggest_int("max_depth", 4, 8),
+            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.1, log=True),
+            "subsample": trial.suggest_float("subsample", 0.6, 1.0),
+            "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
+            "min_child_weight": trial.suggest_int("min_child_weight", 1, 10),
+            "gamma": trial.suggest_float("gamma", 0.0, 0.5),
+            "reg_alpha": trial.suggest_float("reg_alpha", 1e-4, 5.0, log=True),
+            "reg_lambda": trial.suggest_float("reg_lambda", 1e-4, 5.0, log=True),
+            "objective": "multi:softprob",
+            "num_class": 3,
+            "eval_metric": "mlogloss",
+            "random_state": SEED,
+            "verbosity": 0,
+        }
+        m = xgb.XGBClassifier(**params)
+        m.fit(data["X_train"], data["y_train"], verbose=False)
+        preds = m.predict(data["X_val"])
+        return f1_score(data["y_val"], preds, average="macro")
 
-    model.fit(
-        data["X_train"], data["y_train"],
-        eval_set=[(data["X_val"], data["y_val"])],
-        verbose=False,
-    )
+    study = optuna.create_study(direction="maximize",
+                                sampler=optuna.samplers.TPESampler(seed=SEED))
+    study.optimize(_objective, n_trials=40, show_progress_bar=False)
+    print(f"  Optuna best val F1={study.best_value:.4f}")
+
+    best_p = {**study.best_params,
+              "objective": "multi:softprob", "num_class": 3,
+              "eval_metric": "mlogloss", "early_stopping_rounds": 30,
+              "random_state": SEED, "verbosity": 0}
+    model = xgb.XGBClassifier(**best_p)
+    model.fit(data["X_train"], data["y_train"],
+              eval_set=[(data["X_val"], data["y_val"])], verbose=False)
     print(f"  Best iteration: {model.best_iteration}")
 
     results = {}
@@ -182,7 +198,63 @@ def train_xgboost(data):
     return results
 
 
-# ── 4. MLP (PyTorch) ───────────────────────────────────────────────────────────
+# ── 4. LightGBM ───────────────────────────────────────────────────────────────
+def train_lightgbm(data):
+    print("\n" + "=" * 70)
+    print("MODEL 3: LightGBM (Optuna 40 trials)")
+    print("=" * 70)
+
+    def _lgb_objective(trial):
+        params = {
+            "n_estimators": trial.suggest_int("n_estimators", 300, 900),
+            "num_leaves": trial.suggest_int("num_leaves", 15, 127),
+            "max_depth": trial.suggest_int("max_depth", -1, 10),
+            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.1, log=True),
+            "subsample": trial.suggest_float("subsample", 0.6, 1.0),
+            "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
+            "min_child_samples": trial.suggest_int("min_child_samples", 5, 50),
+            "reg_alpha": trial.suggest_float("reg_alpha", 1e-4, 5.0, log=True),
+            "reg_lambda": trial.suggest_float("reg_lambda", 1e-4, 5.0, log=True),
+            "objective": "multiclass",
+            "num_class": 3,
+            "random_state": SEED,
+            "n_jobs": -1,
+            "verbose": -1,
+        }
+        m = lgb.LGBMClassifier(**params)
+        m.fit(data["X_train_scaled"], data["y_train"])
+        preds = m.predict(data["X_val_scaled"])
+        return f1_score(data["y_val"], preds, average="macro")
+
+    study_lgb = optuna.create_study(direction="maximize",
+                                    sampler=optuna.samplers.TPESampler(seed=SEED))
+    study_lgb.optimize(_lgb_objective, n_trials=40, show_progress_bar=False)
+    print(f"  Optuna best val F1={study_lgb.best_value:.4f}")
+
+    best_lgb_p = {**study_lgb.best_params,
+                  "objective": "multiclass", "num_class": 3,
+                  "random_state": SEED, "n_jobs": -1, "verbose": -1}
+    model = lgb.LGBMClassifier(**best_lgb_p)
+    model.fit(data["X_train_scaled"], data["y_train"])
+
+    results = {}
+    for split, X, y in [
+        ("val", data["X_val_scaled"], data["y_val"]),
+        ("test", data["X_test_scaled"], data["y_test"]),
+    ]:
+        preds = model.predict(X)
+        results[split] = evaluate(y, preds, data["label_enc"], split)
+    train_preds = model.predict(data["X_train_scaled"])
+    results["train"] = evaluate(data["y_train"], train_preds, data["label_enc"], "train")
+
+    model_path = OUTPUT_DIR / "lgbm_model.pkl"
+    with open(model_path, "wb") as f:
+        pickle.dump(model, f)
+    print(f"  Saved {model_path}")
+    return results
+
+
+# ── 5. MLP (PyTorch) ───────────────────────────────────────────────────────────
 class MLPModel(nn.Module):
     def __init__(self, input_dim, hidden_dims=(256, 128, 64), num_classes=3, dropout=0.3):
         super().__init__()
@@ -514,6 +586,9 @@ def main():
     # XGBoost
     all_results["xgboost"] = train_xgboost(data)
 
+    # LightGBM
+    all_results["lightgbm"] = train_lightgbm(data)
+
     # MLP
     all_results["mlp"] = train_mlp(data)
 
@@ -555,7 +630,7 @@ def main():
     # Print comparison table
     print(f"\n{'Model':<12} {'Val Acc':>8} {'Val F1':>8} {'Test Acc':>9} {'Test F1':>8}")
     print("-" * 50)
-    for model_name in ["xgboost", "mlp", "lstm"]:
+    for model_name in ["xgboost", "lightgbm", "mlp", "lstm"]:
         res = all_results[model_name]
         va = res.get("val", {}).get("accuracy", 0)
         vf = res.get("val", {}).get("f1_macro", 0)

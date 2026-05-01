@@ -173,7 +173,8 @@ df["ac_z_lag1"] = df.groupby("player_id")["ac_z"].shift(1)
 df["ac_z_trend"] = df["ac_z"] - df["ac_z_lag1"]
 
 # lag2 / lag3 / lag4
-for col in ["goals_p90", "assists_p90", "attack_contribution", "ac_z", "minutes_share"]:
+for col in ["goals_p90", "assists_p90", "attack_contribution", "ac_z", "minutes_share",
+            "goal_contributions_p90"]:
     df[f"{col}_lag2"] = df.groupby("player_id")[col].shift(2)
     df[f"{col}_lag3"] = df.groupby("player_id")[col].shift(3)
     df[f"{col}_lag4"] = df.groupby("player_id")[col].shift(4)
@@ -182,10 +183,10 @@ df["ac_z_trend2"] = df["ac_z"] - df["ac_z_lag2"]
 df["ac_z_trend3"] = df["ac_z"] - df["ac_z_lag3"]
 
 # v4.2 신규: gc_trend_3yr — 3시즌간 goal_contributions_p90 변화율 (raw 기준)
-if "goal_contributions_p90" in df.columns:
+if "goal_contributions_p90" in df.columns and "goal_contributions_p90_lag3" in df.columns:
     df["gc_trend_3yr"] = (
         df["goal_contributions_p90"] - df["goal_contributions_p90_lag3"]
-    )
+    ).fillna(0.0)
 else:
     df["gc_trend_3yr"] = 0.0
 

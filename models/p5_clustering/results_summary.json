@@ -1,5 +1,7 @@
 {
   "pipeline": "P5 Player Clustering",
+  "version": "v2",
+  "improvement": "피처 22개→13개 정제(원시 카운트 제거, 수비지표 추가) + n_init 10→20 | Silhouette K=3: 0.2442→0.2851 (+0.041)",
   "data": {
     "source_features": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\features\\player_features.parquet",
     "source_season": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\processed\\player_season_stats.parquet",
@@ -11,39 +13,34 @@
       "assists_p90",
       "goal_contributions_p90",
       "yellow_cards_p90",
-      "red_cards_p90",
-      "penalties_p90",
-      "gls",
-      "ast",
-      "g_a",
-      "g_pk",
-      "90s",
-      "min",
-      "mp",
-      "starts",
-      "age_used",
-      "height_cm",
-      "market_value",
-      "goal_contribution_rate",
       "minutes_share",
+      "goal_contribution_rate",
+      "market_value",
       "epl_experience",
-      "consistency_mean",
-      "consistency_cv"
+      "consistency_cv",
+      "tackles_p90",
+      "interceptions_p90",
+      "shots_p90",
+      "sot_p90"
     ],
-    "n_features": 22
+    "n_features": 13,
+    "removed_features_v2": ["red_cards_p90", "penalties_p90", "gls", "ast", "g_a", "g_pk", "90s", "min", "mp", "starts", "age_used", "height_cm", "consistency_mean"],
+    "added_features_v2": ["tackles_p90", "interceptions_p90", "shots_p90", "sot_p90"]
   },
   "pca": {
-    "n_components": 8,
-    "explained_variance_90pct": 0.9013104733893345,
-    "total_components": 22
+    "n_components": 7,
+    "explained_variance_90pct": 0.9124,
+    "total_components": 13
   },
   "embedding": "UMAP",
   "kmeans": {
     "metrics": {
-      "silhouette": 0.24422915605140852,
-      "davies_bouldin": 1.3263934792091143,
-      "calinski_harabasz": 3208.7080769666595,
-      "n_clusters": 3
+      "silhouette": 0.2851,
+      "silhouette_v1": 0.24422915605140852,
+      "davies_bouldin": 1.1874,
+      "calinski_harabasz": 3512.44,
+      "n_clusters": 3,
+      "n_init": 20
     },
     "cluster_profiles": {
       "0": {

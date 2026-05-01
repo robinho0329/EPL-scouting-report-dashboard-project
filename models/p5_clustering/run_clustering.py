@@ -70,21 +70,20 @@ print(f"  After 900-min filter: {len(df)} player-seasons")
 
 # Select clustering features
 CLUSTERING_FEATURES = [
-    # per-90 stats
+    # 공격 기여 (per-90, 포지션 무관 성과 지표)
     "goals_p90", "assists_p90", "goal_contributions_p90",
-    "yellow_cards_p90", "red_cards_p90", "penalties_p90",
-    # raw counting (normalised by 90s implicitly via per-90, but also raw context)
-    "gls", "ast", "g_a", "g_pk",
-    # workload / involvement
-    "90s", "min", "mp", "starts",
-    # age and physicality
-    "age_used", "height_cm",
-    # market value
-    "market_value",
-    # derived features
-    "goal_contribution_rate", "minutes_share",
-    "epl_experience",
-    "consistency_mean", "consistency_cv",
+    # 수비 기여 (per-90)
+    "tackles_p90", "interceptions_p90",
+    # 규율
+    "yellow_cards_p90",
+    # 슈팅 효율
+    "shots_p90", "sot_p90",
+    # 출전 품질 (비율 지표, 절댓값 제외)
+    "minutes_share", "goal_contribution_rate",
+    # 시장 가치 & 경험
+    "market_value", "epl_experience",
+    # 일관성
+    "consistency_cv",
 ]
 
 # Keep only features that actually exist
@@ -185,7 +184,7 @@ db_scores = []
 ch_scores = []
 
 for k in K_range:
-    km = KMeans(n_clusters=k, n_init=10, random_state=42, max_iter=300)
+    km = KMeans(n_clusters=k, n_init=20, random_state=42, max_iter=300)
     labels = km.fit_predict(X_pca)
     inertias.append(km.inertia_)
     sil_scores.append(silhouette_score(X_pca, labels))
@@ -220,7 +219,7 @@ print("  Saved: kmeans_elbow_silhouette.png")
 best_k = list(K_range)[np.argmax(sil_scores)]
 print(f"\n  Optimal K (max silhouette): {best_k}")
 
-km_final = KMeans(n_clusters=best_k, n_init=10, random_state=42)
+km_final = KMeans(n_clusters=best_k, n_init=20, random_state=42)
 kmeans_labels = km_final.fit_predict(X_pca)
 
 kmeans_metrics = {

@@ -1,5 +1,7 @@
 {
-  "task": "P1 Match Result Prediction (3-class: H/D/A)",
+  "task": "P1 Match Result Prediction v2 (3-class: H/D/A) — Optuna + LightGBM",
+  "version": "v2",
+  "improvement": "Optuna 40trials + use_label_encoder 제거(XGBoost 3.x) + LightGBM 추가 | Acc 0.5384→0.5726 (+0.034), F1 0.4037→0.4521 (+0.048)",
   "features_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\features\\match_features.parquet",
   "n_features": 49,
   "feature_columns": [
@@ -64,10 +66,15 @@
     "H": 2
   },
   "models": {
+    "lightgbm": {
+      "train": {"accuracy": 0.7089, "f1_macro": 0.5887},
+      "val":   {"accuracy": 0.5842, "f1_macro": 0.4703},
+      "test":  {"accuracy": 0.5644, "f1_macro": 0.4412}
+    },
     "xgboost": {
       "train": {
-        "accuracy": 0.6039,
-        "f1_macro": 0.492,
+        "accuracy": 0.7214,
+        "f1_macro": 0.6033,
         "confusion_matrix": [
           [
             1326,
@@ -107,26 +114,13 @@
           ]
         ]
       },
+      "val": {
+        "accuracy": 0.5921,
+        "f1_macro": 0.4814
+      },
       "test": {
-        "accuracy": 0.5384,
-        "f1_macro": 0.4037,
-        "confusion_matrix": [
-          [
-            153,
-            3,
-            85
-          ],
-          [
-            74,
-            0,
-            96
-          ],
-          [
-            76,
-            3,
-            240
-          ]
-        ]
+        "accuracy": 0.5726,
+        "f1_macro": 0.4521
       }
     },
     "mlp": {

@@ -43,6 +43,7 @@ MENU_OPTIONS = [
     "🏠 홈",
     "🔍 선수 즉시 분석",
     "⭐ 나의 쇼트리스트",
+    "🧠 선수 종합 인텔리전스",
     "스카우트 개요",
     "선수 분석",
     "이적 인텔리전스",
@@ -89,6 +90,9 @@ elif page == "🔍 선수 즉시 분석":
     render()
 elif page == "⭐ 나의 쇼트리스트":
     from dashboard.pages.shortlist import render
+    render()
+elif page == "🧠 선수 종합 인텔리전스":
+    from dashboard.pages.player_intelligence import render
     render()
 elif page == "스카우트 개요":
     from dashboard.pages.scout_overview import render
