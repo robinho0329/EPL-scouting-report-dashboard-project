@@ -1,26 +1,22 @@
 {
   "date": "2026-05-01",
-  "session": "오후 개발 세션 (2026-05-01 13:00 KST)",
   "results": [
     {
-      "item": "P7 v4.2: gc_trend_3yr + war_ratio 피처 추가, Optuna 70trials 강화",
+      "item": "P8 AUC 추가 개선: 피처 중요도 분석 후 하위 피처 제거, `style_distanc",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": false,
+      "error": "-01 21:41:29,955 [INFO] Optuna best val AUC=0.6260, params={'n_estimators': 252, 'max_depth': 6, 'learning_rate': 0.0225184770889096, 'subsample': 0.7327103183621441, 'colsample_bytree': 0.510005204664907, 'min_child_weight': 4, 'gamma': 0.5396201068027978, 'reg_alpha': 0.04865404358658991, 'reg_lambda': 0.00010651522920218802}\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
+    },
+    {
+      "item": "P7 R² 최종 돌파: `gc_trend_3yr`(3년 골 기여 추이), `mv_chang",
       "script": "models/p7_growth_curve/train_v4.py",
       "success": true,
-      "metrics": {"r2": 0.6089, "mae": 1.1312, "best_strategy": "unified_xgb", "goal_met": true},
       "error": ""
     },
     {
-      "item": "P8 v2: Optuna 50trials XGBoost 튜닝 + 상호작용 피처 (age_x_style, style_dist_sq)",
-      "script": "models/p8_transfer_adapt/train.py",
-      "success": true,
-      "metrics": {"auc": 0.6612, "f1": 0.8823, "goal_met": true},
-      "error": ""
-    },
-    {
-      "item": "P3: use_label_encoder 제거 (XGBoost 3.x 호환), official_metric val 기준 재정립",
+      "item": "P3 test AUC=1.0 과적합 검증: full-season XGBoost test={",
       "script": "models/p3_relegation/train_relegation.py",
       "success": true,
-      "metrics": {"val_auc": 0.9902, "val_acc": 0.975, "mid_season_val_auc": 0.9461, "note": "test=1.0은 full-season 피처 누수 — 공식지표 val 전환 완료"},
       "error": ""
     }
   ]

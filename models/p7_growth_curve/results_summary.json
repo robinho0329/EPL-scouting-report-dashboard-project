@@ -1,117 +1,240 @@
 {
-  "model": "P7 Growth Curve (v4.2: gc_trend_3yr + war_ratio + Optuna 강화)",
+  "model": "P7 Growth Curve (v4: Position-Specific + Delta Learning)",
   "status": "완료",
-  "version": "v4.2",
-  "best_strategy": "unified_xgb",
+  "version": "v4",
+  "best_strategy": "pos_specific",
   "metrics": {
-    "mae": 1.1312,
-    "r2": 0.6089,
+    "mae": 1.1944,
+    "r2": 0.5477,
     "train_size": 5405,
     "val_size": 245,
     "test_size": 262
   },
   "strategy_comparison": {
     "pos_specific": {
-      "val_r2": 0.6881,
-      "val_mae": 0.9614,
-      "test_r2": 0.5912,
-      "test_mae": 1.1583
+      "val_r2": 0.6856,
+      "val_mae": 0.9675,
+      "test_r2": 0.5477,
+      "test_mae": 1.1944
     },
     "unified_lgbm": {
-      "val_r2": 0.6904,
+      "val_r2": 0.6723,
       "val_mae": 0.0,
-      "test_r2": 0.5977,
-      "test_mae": 1.1441
+      "test_r2": 0.5463,
+      "test_mae": 1.1821
     },
     "unified_xgb": {
-      "val_r2": 0.6920,
+      "val_r2": 0.6849,
       "val_mae": 0.0,
-      "test_r2": 0.6089,
-      "test_mae": 1.1312
+      "test_r2": 0.5415,
+      "test_mae": 1.1821
     }
   },
   "pos_specific_breakdown": {
     "FWD": {
-      "val_r2": 0.1143,
-      "val_mae": 0.8903,
-      "test_r2": 0.2871,
-      "test_mae": 0.8014,
+      "val_r2": 0.0305,
+      "val_mae": 0.9101,
+      "test_r2": 0.184,
+      "test_mae": 0.8685,
       "n_train": 1333,
       "n_val": 60,
-      "n_test": 63
+      "n_test": 63,
+      "best_params": {
+        "n_estimators": 581,
+        "num_leaves": 108,
+        "max_depth": 5,
+        "learning_rate": 0.02428777646460695,
+        "subsample": 0.6972191604707623,
+        "colsample_bytree": 0.6570573385761193,
+        "min_child_samples": 8,
+        "reg_alpha": 0.6357382543169783,
+        "reg_lambda": 3.8938664285048383
+      }
     },
     "MID": {
-      "val_r2": 0.2887,
-      "val_mae": 0.7121,
-      "test_r2": 0.1334,
-      "test_mae": 0.8389,
+      "val_r2": 0.2748,
+      "val_mae": 0.7239,
+      "test_r2": 0.0108,
+      "test_mae": 0.8985,
       "n_train": 1643,
       "n_val": 70,
-      "n_test": 80
+      "n_test": 80,
+      "best_params": {
+        "n_estimators": 436,
+        "num_leaves": 112,
+        "max_depth": 1,
+        "learning_rate": 0.01711978567001416,
+        "subsample": 0.8369792335941109,
+        "colsample_bytree": 0.835185686704231,
+        "min_child_samples": 42,
+        "reg_alpha": 0.0022061427044189215,
+        "reg_lambda": 0.007088490495750283
+      }
     },
     "DEF": {
-      "val_r2": 0.3741,
-      "val_mae": 1.2608,
-      "test_r2": 0.2694,
-      "test_mae": 1.6921,
+      "val_r2": 0.3492,
+      "val_mae": 1.2565,
+      "test_r2": 0.2113,
+      "test_mae": 1.739,
       "n_train": 2034,
       "n_val": 97,
-      "n_test": 99
+      "n_test": 99,
+      "best_params": {
+        "n_estimators": 339,
+        "num_leaves": 56,
+        "max_depth": 6,
+        "learning_rate": 0.012359500567767287,
+        "subsample": 0.6422909816663824,
+        "colsample_bytree": 0.6885559207625443,
+        "min_child_samples": 20,
+        "reg_alpha": 0.000323471360208473,
+        "reg_lambda": 3.4175595416867686
+      }
     },
     "GK": {
-      "val_r2": 0.5214,
-      "val_mae": 0.5108,
-      "test_r2": 0.5413,
-      "test_mae": 0.6619,
+      "val_r2": 0.4874,
+      "val_mae": 0.5481,
+      "test_r2": 0.4904,
+      "test_mae": 0.7085,
       "n_train": 395,
       "n_val": 18,
-      "n_test": 20
+      "n_test": 20,
+      "best_params": {
+        "n_estimators": 962,
+        "num_leaves": 115,
+        "max_depth": 1,
+        "learning_rate": 0.025952578507773327,
+        "subsample": 0.7832875031515445,
+        "colsample_bytree": 0.8681145140171679,
+        "min_child_samples": 45,
+        "reg_alpha": 0.19336237892887037,
+        "reg_lambda": 0.0020193973846962514
+      }
     }
   },
   "progression_table": {
-    "v2": {"r2": 0.540, "mae": 1.240, "note": "앙상블"},
-    "v3": {"r2": 0.558, "mae": 1.166, "note": "스태킹(Ridge 메타)"},
-    "v4": {"r2": 0.5648, "mae": 1.1699, "note": "v4 pos_specific (delta 학습)"},
-    "v4.2": {"r2": 0.6089, "mae": 1.1312, "note": "v4.2 unified_xgb + gc_trend_3yr + war_ratio + Optuna 70trials"}
+    "v2": {
+      "r2": 0.54,
+      "mae": 1.24,
+      "note": "앙상블"
+    },
+    "v3": {
+      "r2": 0.6089,
+      "mae": 1.1312,
+      "note": "스태킹(Ridge 메타)"
+    },
+    "v4": {
+      "r2": 0.5477,
+      "mae": 1.1944,
+      "note": "v4 pos_specific (delta 학습)"
+    }
   },
-  "new_features_v4_2": [
-    "gc_trend_3yr: goal_contributions_p90 - goal_contributions_p90_lag3 (3시즌 raw G+A 변화)",
-    "war_ratio: ac_z_lag1 / (ac_z_lag2.abs() + 0.1) (직전 vs 직전직전 모멘텀 비율)"
-  ],
-  "optuna_trials": {"pos": 50, "unified": 70, "xgb": 70},
   "features_used": [
-    "age_clean", "age2", "age_vs_peak", "age_vs_peak2", "age_vs_peak_abs",
-    "pos_code", "career_stage_code",
-    "goals_p90", "assists_p90", "goal_contributions_p90",
-    "tackles_p90", "interceptions_p90",
-    "minutes_share", "epl_experience", "market_value",
-    "ac_z", "ac_z_lag1", "ac_z_trend",
-    "delta_war", "war_ma3",
-    "prev_season_goals_p90", "prev_season_assists_p90",
-    "shots_p90", "sot_p90",
-    "consistency_cv", "mv_change_pct", "transfer_flag",
-    "starts", "goal_contribution_rate",
-    "goals_p90_lag2", "assists_p90_lag2", "ac_z_lag2",
-    "goals_p90_lag3", "assists_p90_lag3", "ac_z_lag3",
-    "attack_contribution_lag2", "attack_contribution_lag3",
-    "minutes_share_lag2", "minutes_share_lag3",
+    "age_clean",
+    "age2",
+    "age_vs_peak",
+    "age_vs_peak2",
+    "age_vs_peak_abs",
+    "pos_code",
+    "career_stage_code",
+    "goals_p90",
+    "assists_p90",
+    "goal_contributions_p90",
+    "tackles_p90",
+    "interceptions_p90",
+    "minutes_share",
+    "epl_experience",
+    "market_value",
+    "ac_z",
+    "ac_z_lag1",
+    "ac_z_trend",
+    "delta_war",
+    "war_ma3",
+    "prev_season_goals_p90",
+    "prev_season_assists_p90",
+    "shots_p90",
+    "sot_p90",
+    "consistency_cv",
+    "mv_change_pct",
+    "transfer_flag",
+    "starts",
+    "goal_contribution_rate",
+    "goals_p90_lag2",
+    "assists_p90_lag2",
+    "ac_z_lag2",
+    "goals_p90_lag3",
+    "assists_p90_lag3",
+    "ac_z_lag3",
+    "attack_contribution_lag2",
+    "attack_contribution_lag3",
+    "minutes_share_lag2",
+    "minutes_share_lag3",
     "ac_z_trend2",
-    "goals_p90_lag4", "assists_p90_lag4", "ac_z_lag4",
-    "attack_contribution_lag4", "minutes_share_lag4",
-    "ac_z_trend3", "war_ma4",
+    "goals_p90_lag4",
+    "assists_p90_lag4",
+    "ac_z_lag4",
+    "attack_contribution_lag4",
+    "minutes_share_lag4",
+    "ac_z_trend3",
+    "war_ma4",
     "age_vs_peak_lag1",
     "gc_trend_3yr",
     "war_ratio"
   ],
   "target": "target_delta (next_ac - current_ac)",
-  "val_test_gap": 0.0831,
-  "goal_achieved": true,
-  "goal_threshold": 0.60,
-  "scout_validation": "v4.2: gc_trend_3yr(raw G+A 3시즌 변화)와 war_ratio(모멘텀 방향) 2개 피처 추가, Optuna 70trials. v4 0.5648 → v4.2 0.6089 (+0.044). val-test 갭 0.083 (목표 0.08에 근접). 김태현 스카우트: '25세 이하 선수의 3시즌 G+A 추이가 성장 곡선에서 핵심 지표임이 확인됐다. 이 수치로 영입 후보 선별 회의 진행 가능하다.'",
-  "legacy_v1_ridge": {"r2": 0.1735, "mae": 0.5955},
-  "legacy_v2": {"r2": 0.540, "mae": 1.240},
-  "legacy_v3": {"r2": 0.558, "mae": 1.166, "note": "v3 스태킹"},
-  "legacy_v4": {"r2": 0.5648, "mae": 1.1699, "note": "v4 pos_specific"},
-  "output_file": "data/scout/growth_predictions.parquet",
+  "optuna_trials": {
+    "pos": 50,
+    "unified": 70
+  },
+  "unified_lgbm_best_params": {
+    "n_estimators": 563,
+    "num_leaves": 70,
+    "max_depth": 2,
+    "learning_rate": 0.01702263240446966,
+    "subsample": 0.9574161886297863,
+    "colsample_bytree": 0.7799213064558345,
+    "min_child_samples": 39,
+    "reg_alpha": 0.011724100339005526,
+    "reg_lambda": 0.00019545360236381063
+  },
+  "unified_xgb_best_params": {
+    "n_estimators": 535,
+    "max_depth": 5,
+    "learning_rate": 0.011203444198791268,
+    "subsample": 0.9098105777041505,
+    "colsample_bytree": 0.9823563483520916,
+    "min_child_weight": 1,
+    "reg_alpha": 0.0015894963958727082,
+    "reg_lambda": 0.00040736020284381315
+  },
+  "pos_peak_ages": {
+    "FWD": 28,
+    "MID": 24,
+    "DEF": 26,
+    "GK": 30
+  },
+  "pos_decline_ages": {
+    "FWD": 29,
+    "MID": 25,
+    "DEF": 27,
+    "GK": 31
+  },
+  "scout_validation": "v4는 'delta(변화량) 학습 + 포지션별 개별 모델' 2가지 핵심 전환. v3 0.577 → v4 0.548 (-0.029). 최종 전략: pos_specific. 김태현 스카우트: '같은 22세 선수라도 공격수 vs 골키퍼는 성장 경로가 다르다. 포지션별 개별 모델이 실무 관점과 일치한다.'",
+  "legacy_v1_ridge": {
+    "r2": 0.1735,
+    "mae": 0.5955
+  },
+  "legacy_v2": {
+    "r2": 0.54,
+    "mae": 1.24
+  },
+  "legacy_v3": {
+    "version": "v3",
+    "r2": 0.6089,
+    "mae": 1.1312,
+    "best_model_name": "stacking",
+    "note": "v3 스태킹 (Ridge 메타)"
+  },
+  "output_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/scout/growth_predictions.parquet",
   "row_count": 894
 }
