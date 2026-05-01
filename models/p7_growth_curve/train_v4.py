@@ -46,8 +46,8 @@ SCOUT_OUT = ROOT / "data" / "scout" / "growth_predictions.parquet"
 SCOUT_OUT.parent.mkdir(parents=True, exist_ok=True)
 
 RANDOM_STATE = 42
-N_TRIALS_POS = 20     # 포지션별 Optuna trials
-N_TRIALS_UNIFIED = 30 # 통합 Optuna trials
+N_TRIALS_POS = 50     # 포지션별 Optuna trials (v4.2: 20→50)
+N_TRIALS_UNIFIED = 70 # 통합 Optuna trials (v4.2: 30→70)
 
 # ─────────────────────────────────────────────
 # 1. 포지션 매핑 (v3 재사용)
@@ -181,6 +181,18 @@ for col in ["goals_p90", "assists_p90", "attack_contribution", "ac_z", "minutes_
 df["ac_z_trend2"] = df["ac_z"] - df["ac_z_lag2"]
 df["ac_z_trend3"] = df["ac_z"] - df["ac_z_lag3"]
 
+# v4.2 신규: gc_trend_3yr — 3시즌간 goal_contributions_p90 변화율 (raw 기준)
+if "goal_contributions_p90" in df.columns:
+    df["gc_trend_3yr"] = (
+        df["goal_contributions_p90"] - df["goal_contributions_p90_lag3"]
+    )
+else:
+    df["gc_trend_3yr"] = 0.0
+
+# v4.2 신규: war_ratio — 직전 시즌 대비 상대 모멘텀 (성장/하락 방향 포착)
+df["war_ratio"] = df["ac_z_lag1"] / (df["ac_z_lag2"].abs() + 0.1)
+df["war_ratio"] = df["war_ratio"].clip(-5.0, 5.0).fillna(0.0)
+
 # 4시즌 이동평균 (장기 트렌드 캡처)
 df["war_ma4"] = (
     df.groupby("player_id")["ac_z"]
@@ -258,6 +270,9 @@ FEATURE_COLS = [
     "ac_z_trend3", "war_ma4",
     # peak 거리 변화율 (성장/하락 가속도)
     "age_vs_peak_lag1",
+    # v4.2 신규 피처
+    "gc_trend_3yr",   # 3시즌 goal_contributions_p90 변화 (포지션 무관 원시 변화)
+    "war_ratio",      # 직전 vs 직전직전 시즌 ac_z 비율 (모멘텀 방향성)
 ]
 FEATURE_COLS = [c for c in FEATURE_COLS if c in df.columns]
 logger.info(f"피처 {len(FEATURE_COLS)}개")
@@ -538,7 +553,7 @@ study_xgb_u = optuna.create_study(
     direction="maximize",
     sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE),
 )
-study_xgb_u.optimize(objective_xgb_unified, n_trials=40, show_progress_bar=False)
+study_xgb_u.optimize(objective_xgb_unified, n_trials=70, show_progress_bar=False)
 xgb_params_u = {**study_xgb_u.best_params, "random_state": RANDOM_STATE,
                 "n_jobs": -1, "tree_method": "hist", "verbosity": 0}
 

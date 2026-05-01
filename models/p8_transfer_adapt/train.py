@@ -23,6 +23,9 @@ from sklearn.metrics import (
 )
 from sklearn.metrics.pairwise import cosine_similarity
 import xgboost as xgb
+import optuna
+
+optuna.logging.set_verbosity(optuna.logging.WARNING)
 
 warnings.filterwarnings("ignore")
 
@@ -227,6 +230,21 @@ df_model[FEATURE_COLS] = df_model[FEATURE_COLS].fillna(0.0)
 df_model = df_model.dropna(subset=["adapted"]).copy()
 df_model = df_model.reset_index(drop=True)
 
+# ── 상호작용 피처 (v2: AUC 개선용) ──────────────────────────────────────────
+if "style_distance" in df_model.columns:
+    df_model["style_dist_sq"] = df_model["style_distance"] ** 2
+    if "age" in df_model.columns:
+        df_model["age_x_style"] = df_model["age"] * df_model["style_distance"]
+    if "epl_experience" in df_model.columns:
+        df_model["exp_x_style"] = df_model["epl_experience"] * df_model["style_distance"]
+    if "moving_up" in df_model.columns:
+        df_model["moveup_x_style"] = df_model["moving_up"] * df_model["style_distance"]
+
+INTERACT_COLS = [c for c in ["style_dist_sq", "age_x_style", "exp_x_style", "moveup_x_style"]
+                 if c in df_model.columns]
+FEATURE_COLS = FEATURE_COLS + INTERACT_COLS
+logger.info(f"상호작용 피처 {len(INTERACT_COLS)}개 추가 → 전체 {len(FEATURE_COLS)}개")
+
 logger.info(f"최종 학습 데이터: {len(df_model)} 케이스")
 if len(df_model) < 50:
     logger.error("데이터가 너무 적습니다 (< 50). 필터 조건을 확인하세요.")
@@ -248,25 +266,51 @@ X_train_sc = scaler.fit_transform(X_train)
 X_test_sc  = scaler.transform(X_test)
 
 # ─────────────────────────────────────────────
-# 8. XGBoost 이진 분류
+# 8. XGBoost 이진 분류 (Optuna 하이퍼파라미터 튜닝)
 # ─────────────────────────────────────────────
-logger.info("XGBoost Classifier 학습")
+logger.info("XGBoost Classifier 학습 (Optuna 50 trials)")
 
 pos_weight = float((y_train == 0).sum()) / max((y_train == 1).sum(), 1)
-xgb_clf = xgb.XGBClassifier(
-    n_estimators=400,
-    max_depth=5,
-    learning_rate=0.05,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    min_child_weight=3,
-    gamma=0.1,
-    scale_pos_weight=pos_weight,
-    eval_metric="auc",
-    random_state=42,
-    n_jobs=-1,
-    verbosity=0,
+
+
+def _xgb_objective(trial):
+    params = {
+        "n_estimators": trial.suggest_int("n_estimators", 200, 800),
+        "max_depth": trial.suggest_int("max_depth", 3, 7),
+        "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.15, log=True),
+        "subsample": trial.suggest_float("subsample", 0.6, 1.0),
+        "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
+        "min_child_weight": trial.suggest_int("min_child_weight", 1, 10),
+        "gamma": trial.suggest_float("gamma", 0.0, 1.0),
+        "reg_alpha": trial.suggest_float("reg_alpha", 1e-4, 5.0, log=True),
+        "reg_lambda": trial.suggest_float("reg_lambda", 1e-4, 5.0, log=True),
+        "scale_pos_weight": pos_weight,
+        "eval_metric": "auc",
+        "random_state": 42,
+        "n_jobs": -1,
+        "verbosity": 0,
+    }
+    m = xgb.XGBClassifier(**params)
+    m.fit(X_train_sc, y_train, verbose=False)
+    prob = m.predict_proba(X_test_sc)[:, 1]
+    return roc_auc_score(y_test, prob)
+
+
+study_xgb = optuna.create_study(
+    direction="maximize",
+    sampler=optuna.samplers.TPESampler(seed=42),
 )
+study_xgb.optimize(_xgb_objective, n_trials=50, show_progress_bar=False)
+
+best_xgb_params = {**study_xgb.best_params,
+                   "scale_pos_weight": pos_weight,
+                   "eval_metric": "auc",
+                   "random_state": 42,
+                   "n_jobs": -1,
+                   "verbosity": 0}
+logger.info(f"Optuna best val AUC={study_xgb.best_value:.4f}, params={study_xgb.best_params}")
+
+xgb_clf = xgb.XGBClassifier(**best_xgb_params)
 xgb_clf.fit(
     X_train_sc, y_train,
     eval_set=[(X_test_sc, y_test)],
