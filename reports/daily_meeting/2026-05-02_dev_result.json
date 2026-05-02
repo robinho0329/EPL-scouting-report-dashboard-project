@@ -1,0 +1,57 @@
+{
+  "date": "2026-05-02",
+  "session": "오전 개발 세션 (09:00 KST ~)",
+  "results": [
+    {
+      "item": "P7 v5 하이브리드: v3 스태킹(Ridge 메타) 복원 + v4 피처 확장 + GroupKFold(n=5) 블록 CV",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "error": "",
+      "note": "스크립트 작성 완료. 실행은 GitHub Actions 환경에서 (LFS 데이터 의존). github_actions_dev.py MODEL_MAP P7 → train_v5.py 업데이트 완료.",
+      "changes": [
+        "models/p7_growth_curve/train_v5.py 신규 작성 (v3 스태킹 + v4 10개 피처 + GroupKFold OOF)",
+        "scripts/github_actions_dev.py: P7 train_v4.py → train_v5.py 변경"
+      ]
+    },
+    {
+      "item": "P8 이적 리스크 필터 UI: scout_transfer.py에 고위험 필터(30세+/style_dist≥0.02) + 파레토 산점도 추가",
+      "script": "dashboard/pages/scout_transfer.py",
+      "success": true,
+      "error": "",
+      "note": "기존 P8 섹션 하단에 3가지 UI 블록 추가: (1) 고위험 필터 (나이/전술거리 슬라이더 + 메트릭), (2) 필터 결과 테이블, (3) 파레토 프론티어 산점도 (Plotly).",
+      "changes": [
+        "dashboard/pages/scout_transfer.py: P8 섹션 하단 +130라인 UI 추가",
+        "고위험 필터: age_threshold / style_threshold 슬라이더",
+        "파레토 프론티어: x=style_distance, y=prob_success, size=market_value, ⭐=파레토 최적",
+        "기준선: 빨간 세로선(style_dist=0.02), 초록 가로선(성공률 75%)"
+      ]
+    },
+    {
+      "item": "P1 오즈 피처: Football-Data.co.uk 데이터 소스 조사 + 다운로드 스크립트 작성",
+      "script": "scripts/add_odds_features.py",
+      "success": true,
+      "error": "현재 환경 IP가 football-data.co.uk에서 403 차단 → GitHub Actions 환경에서 재실행 필요",
+      "note": "스크립트 작성 완료. Football-Data.co.uk는 시즌별 E0.csv 형식으로 B365H/D/A 오즈 제공. GitHub Actions에서 실행 시 자동 다운로드 + match_features.parquet에 6개 피처 추가 예정.",
+      "changes": [
+        "scripts/add_odds_features.py 신규 작성 (25시즌 오즈 다운로드 + match_features 조인)",
+        "models/p1_match_result/train_pipeline.py: 오즈 피처 자동 감지 로직 추가",
+        "추가 예정 피처: b365_home_prob, b365_draw_prob, b365_away_prob, draw_market_prob, market_home_fav, odds_overround"
+      ]
+    }
+  ],
+  "summary": {
+    "completed": 3,
+    "failed": 0,
+    "pending_github_actions": ["P7 v5 실제 학습 실행 (LFS 데이터 필요)", "P1 오즈 다운로드 (GitHub Actions IP 사용)"],
+    "dashboard_pages": 17,
+    "new_files": [
+      "models/p7_growth_curve/train_v5.py",
+      "scripts/add_odds_features.py"
+    ],
+    "modified_files": [
+      "scripts/github_actions_dev.py",
+      "dashboard/pages/scout_transfer.py",
+      "models/p1_match_result/train_pipeline.py"
+    ]
+  }
+}

@@ -69,6 +69,17 @@ def load_data():
         "target", "data_split",
     ]
     feature_cols = [c for c in df.select_dtypes(include="number").columns if c not in exclude_cols]
+
+    # 오즈 피처 우선 포함 (add_odds_features.py 실행 후 match_features에 추가됨)
+    ODDS_FEATURES = ["b365_home_prob", "b365_draw_prob", "b365_away_prob",
+                     "draw_market_prob", "market_home_fav", "odds_overround"]
+    odds_available = [f for f in ODDS_FEATURES if f in df.columns and df[f].notna().mean() > 0.5]
+    if odds_available:
+        print(f"  오즈 피처 포함: {odds_available}")
+        feature_cols = [c for c in feature_cols if c not in odds_available] + odds_available
+    else:
+        print("  오즈 피처 없음 (add_odds_features.py 미실행 또는 데이터 부재)")
+
     print(f"  Feature columns ({len(feature_cols)}): {feature_cols}")
 
     # Split by data_split column

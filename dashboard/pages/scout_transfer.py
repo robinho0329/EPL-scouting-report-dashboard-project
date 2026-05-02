@@ -1595,6 +1595,198 @@ def render():
                 "고위험(🔴) 선수는 임대 먼저 제안하거나 이적료 할인 협상 근거로 활용하세요."
             )
 
+            st.markdown("---")
+
+            # ── 고위험 이적 필터 (30세+ / style_distance ≥ 0.02) ──────────────
+            st.markdown("#### ⚠️ 고위험 이적 필터 (30세+ & 전술거리 ≥ 0.02)")
+            st.caption(
+                "P8 모델 분석 결과: **30세 이상 + style_distance > 0.02** 이적은 "
+                "적응 실패 위험이 평균 대비 **3배** 높습니다. (age_x_style top feature)"
+            )
+
+            _age_col = next((c for c in ["age_at_transfer", "age"] if c in adapt_df.columns), None)
+            _has_age = _age_col is not None
+            _has_style = "style_distance" in adapt_df.columns
+
+            col_age_thr, col_style_thr = st.columns(2)
+            with col_age_thr:
+                age_threshold = st.slider("최소 나이", 25, 38, 30, key="p8_age_thr")
+            with col_style_thr:
+                style_threshold = st.slider("최소 전술 거리", 0.005, 0.05, 0.02, step=0.005,
+                                            format="%.3f", key="p8_style_thr")
+
+            if _has_age and _has_style:
+                high_risk_mask = (
+                    (adapt_df[_age_col] >= age_threshold) &
+                    (adapt_df["style_distance"] >= style_threshold)
+                )
+                hr_df = adapt_df[high_risk_mask].copy()
+
+                col_hr1, col_hr2, col_hr3 = st.columns(3)
+                with col_hr1:
+                    st.metric("고위험 이적 건수", f"{len(hr_df)}건",
+                              delta=f"전체 {len(adapt_df)}건 중", delta_color="inverse")
+                with col_hr2:
+                    if "prob_success" in hr_df.columns and not hr_df.empty:
+                        avg_success = hr_df["prob_success"].mean()
+                        st.metric("평균 적응 성공률", f"{avg_success:.1%}", delta="vs 전체 평균")
+                with col_hr3:
+                    if "style_distance" in hr_df.columns and not hr_df.empty:
+                        avg_dist = hr_df["style_distance"].mean()
+                        st.metric("평균 전술 거리", f"{avg_dist:.3f}")
+
+                if not hr_df.empty:
+                    hr_show = [c for c in ["player", "from_team", "to_team",
+                                           _age_col, "style_distance", "prob_success", "adapt_risk"]
+                               if c in hr_df.columns]
+                    hr_disp = hr_df[hr_show].copy()
+                    if "adapt_risk" in hr_disp.columns:
+                        hr_disp["adapt_risk"] = hr_disp["adapt_risk"].map(
+                            {"high": "🔴 고위험", "medium": "🟡 중위험", "low": "🟢 저위험"}
+                        ).fillna(hr_disp["adapt_risk"])
+                    hr_rename = {
+                        "player": "선수", "from_team": "이전팀", "to_team": "이적팀",
+                        _age_col: "나이", "style_distance": "전술 거리",
+                        "prob_success": "성공 확률", "adapt_risk": "리스크",
+                    }
+                    hr_disp = hr_disp.rename(columns={k: v for k, v in hr_rename.items() if k in hr_disp.columns})
+                    st.dataframe(hr_disp, use_container_width=True, hide_index=True)
+                else:
+                    st.info(f"조건({age_threshold}세+ / 전술거리 ≥{style_threshold:.3f})에 해당하는 이적 없음")
+            else:
+                st.info("나이 또는 style_distance 컬럼이 데이터에 없습니다.")
+
+            st.markdown("---")
+
+            # ── 가성비 산점도: 파레토 프론티어 시각화 ─────────────────────────
+            st.markdown("#### 📊 이적 가성비 분석 (파레토 프론티어)")
+            st.caption(
+                "X축: 전술 거리 (낮을수록 적응 쉬움) | Y축: 적응 성공 확률 (높을수록 좋음) | "
+                "크기: 시장가치. **우상단 선수** = 높은 성공률 + 낮은 전술 거리 = 최우선 영입 후보."
+            )
+
+            if _has_style and "prob_success" in adapt_df.columns:
+                scatter_df = adapt_df.copy()
+
+                # 파레토 프론티어 계산 (전술거리 낮고 성공확률 높은 선수)
+                scatter_df = scatter_df.sort_values("style_distance")
+                max_prob = -1.0
+                pareto_flags = []
+                for _, row_s in scatter_df.iterrows():
+                    prob = row_s.get("prob_success", 0)
+                    if pd.isna(prob):
+                        prob = 0.0
+                    if float(prob) >= max_prob:
+                        pareto_flags.append(True)
+                        max_prob = float(prob)
+                    else:
+                        pareto_flags.append(False)
+                scatter_df["is_pareto"] = pareto_flags
+                scatter_df["point_type"] = scatter_df["is_pareto"].map(
+                    {True: "파레토 최적", False: "일반"}
+                )
+
+                # 리스크 색상
+                risk_color_map = {"high": "#e90052", "medium": "#f59e0b", "low": "#00ff87"}
+                if "adapt_risk" in scatter_df.columns:
+                    scatter_df["_color"] = scatter_df["adapt_risk"].map(risk_color_map).fillna("#888888")
+                else:
+                    scatter_df["_color"] = "#04f5ff"
+
+                # 마커 크기 (시장가치 기반, 없으면 균일)
+                _mv_col = next((c for c in ["market_value", "market_value_raw"] if c in scatter_df.columns), None)
+                if _mv_col:
+                    mv_vals = scatter_df[_mv_col].fillna(0)
+                    mv_max = mv_vals.max() if mv_vals.max() > 0 else 1
+                    scatter_df["_size"] = (mv_vals / mv_max * 30 + 6).clip(6, 36)
+                else:
+                    scatter_df["_size"] = 12
+
+                hover_cols = [c for c in ["player", "from_team", "to_team",
+                                          _age_col, "adapt_risk"] if c and c in scatter_df.columns]
+
+                fig_scatter = go.Figure()
+
+                # 일반 선수
+                df_normal = scatter_df[~scatter_df["is_pareto"]]
+                if not df_normal.empty:
+                    hover_text_normal = df_normal.apply(
+                        lambda r: "<br>".join(
+                            f"{c}: {r[c]}" for c in hover_cols if pd.notna(r.get(c))
+                        ), axis=1
+                    )
+                    fig_scatter.add_trace(go.Scatter(
+                        x=df_normal["style_distance"],
+                        y=df_normal["prob_success"],
+                        mode="markers",
+                        name="일반",
+                        marker=dict(
+                            size=df_normal["_size"],
+                            color=df_normal["_color"],
+                            opacity=0.55,
+                            line=dict(width=0),
+                        ),
+                        text=hover_text_normal,
+                        hovertemplate="<b>%{text}</b><br>전술거리: %{x:.3f}<br>성공확률: %{y:.1%}<extra></extra>",
+                    ))
+
+                # 파레토 선수 (강조)
+                df_pareto = scatter_df[scatter_df["is_pareto"]]
+                if not df_pareto.empty:
+                    hover_text_pareto = df_pareto.apply(
+                        lambda r: "<br>".join(
+                            f"{c}: {r[c]}" for c in hover_cols if pd.notna(r.get(c))
+                        ), axis=1
+                    )
+                    fig_scatter.add_trace(go.Scatter(
+                        x=df_pareto["style_distance"],
+                        y=df_pareto["prob_success"],
+                        mode="markers+lines",
+                        name="파레토 최적",
+                        marker=dict(
+                            size=df_pareto["_size"] * 1.3,
+                            color=df_pareto["_color"],
+                            opacity=1.0,
+                            line=dict(width=2, color="white"),
+                            symbol="star",
+                        ),
+                        line=dict(color="rgba(255,255,255,0.3)", dash="dot", width=1),
+                        text=hover_text_pareto,
+                        hovertemplate="<b>⭐ %{text}</b><br>전술거리: %{x:.3f}<br>성공확률: %{y:.1%}<extra></extra>",
+                    ))
+
+                # 고위험 기준선
+                fig_scatter.add_vline(x=0.02, line_dash="dash",
+                                      line_color="#e90052", opacity=0.6,
+                                      annotation_text="고위험 임계값 (0.02)",
+                                      annotation_position="top right")
+                fig_scatter.add_hline(y=0.75, line_dash="dash",
+                                      line_color="#00ff87", opacity=0.5,
+                                      annotation_text="목표 성공률 (75%)",
+                                      annotation_position="right")
+
+                fig_scatter.update_layout(
+                    height=420,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(30,30,50,0.8)",
+                    font=dict(color="white", size=11),
+                    xaxis=dict(title="전술 거리 (낮을수록 적응 유리)",
+                               gridcolor="rgba(255,255,255,0.1)", zerolinecolor="rgba(255,255,255,0.2)"),
+                    yaxis=dict(title="적응 성공 확률",
+                               tickformat=".0%",
+                               gridcolor="rgba(255,255,255,0.1)", zerolinecolor="rgba(255,255,255,0.2)"),
+                    legend=dict(bgcolor="rgba(0,0,0,0.4)", bordercolor="rgba(255,255,255,0.2)", borderwidth=1),
+                    margin=dict(l=60, r=20, t=30, b=50),
+                )
+                st.plotly_chart(fig_scatter, use_container_width=True)
+                st.caption(
+                    "⭐ **파레토 최적 선수**: 같은 전술 거리에서 가장 높은 성공 확률 보유. "
+                    "🔴 고위험 / 🟡 중위험 / 🟢 저위험. "
+                    "빨간 세로선 우측(전술거리 > 0.02) 선수는 특별 관리 필요."
+                )
+            else:
+                st.info("산점도를 표시하려면 style_distance 및 prob_success 컬럼이 필요합니다.")
+
     # ══════════════════════════════════════════
     # TAB 4: 이적 시나리오 시뮬레이터 (What-if 슬라이더 기반)
     # ══════════════════════════════════════════

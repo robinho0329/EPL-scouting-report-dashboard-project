@@ -33,7 +33,7 @@ STREAMLIT_WAIT  = int(os.getenv("STREAMLIT_WAIT_SEC", "90"))  # 재배포 대기
 # ────────────────────────────────────────────────────────────────────
 MODEL_MAP = [
     (["p8", "이적 적응", "transfer adapt"],     "p8_transfer_adapt",    None),
-    (["p7", "성장 곡선", "growth curve"],        "p7_growth_curve",      "train_v4.py"),
+    (["p7", "성장 곡선", "growth curve"],        "p7_growth_curve",      "train_v5.py"),
     (["s2", "시장가치", "market value def"],     "s2_market_value",      None),
     (["s1", "레이팅", "player rating"],          "s1_player_rating",     None),
     (["p1", "경기 결과", "match result"],        "p1_match_result",      "train_pipeline.py"),
