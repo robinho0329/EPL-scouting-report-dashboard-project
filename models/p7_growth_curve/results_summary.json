@@ -1,132 +1,106 @@
 {
-  "model": "P7 Growth Curve (v4: Position-Specific + Delta Learning)",
+  "model": "P7 Growth Curve (v5: v3 Stacking + v4 Features + GroupKFold OOF)",
   "status": "완료",
-  "version": "v4",
-  "best_strategy": "pos_specific",
+  "version": "v5",
+  "best_model_name": "lgbm",
   "metrics": {
-    "mae": 1.1944,
-    "r2": 0.5477,
+    "mae": 1.1619,
+    "r2": 0.586,
     "train_size": 5405,
     "val_size": 245,
     "test_size": 262
   },
-  "strategy_comparison": {
-    "pos_specific": {
-      "val_r2": 0.6856,
-      "val_mae": 0.9675,
-      "test_r2": 0.5477,
-      "test_mae": 1.1944
-    },
-    "unified_lgbm": {
-      "val_r2": 0.6723,
-      "val_mae": 0.0,
-      "test_r2": 0.5463,
-      "test_mae": 1.1821
-    },
-    "unified_xgb": {
-      "val_r2": 0.6849,
-      "val_mae": 0.0,
-      "test_r2": 0.5415,
-      "test_mae": 1.1821
-    }
+  "val_test_gap": 0.055,
+  "goal_met": false,
+  "stacking_metrics": {
+    "val_r2": 0.6302,
+    "test_r2": 0.5752,
+    "gap": 0.055,
+    "cv_method": "GroupKFold(n=5, groups=season_year)"
   },
-  "pos_specific_breakdown": {
-    "FWD": {
-      "val_r2": 0.0305,
-      "val_mae": 0.9101,
-      "test_r2": 0.184,
-      "test_mae": 0.8685,
-      "n_train": 1333,
-      "n_val": 60,
-      "n_test": 63,
-      "best_params": {
-        "n_estimators": 581,
-        "num_leaves": 108,
-        "max_depth": 5,
-        "learning_rate": 0.02428777646460695,
-        "subsample": 0.6972191604707623,
-        "colsample_bytree": 0.6570573385761193,
-        "min_child_samples": 8,
-        "reg_alpha": 0.6357382543169783,
-        "reg_lambda": 3.8938664285048383
-      }
-    },
-    "MID": {
-      "val_r2": 0.2748,
-      "val_mae": 0.7239,
-      "test_r2": 0.0108,
-      "test_mae": 0.8985,
-      "n_train": 1643,
-      "n_val": 70,
-      "n_test": 80,
-      "best_params": {
-        "n_estimators": 436,
-        "num_leaves": 112,
-        "max_depth": 1,
-        "learning_rate": 0.01711978567001416,
-        "subsample": 0.8369792335941109,
-        "colsample_bytree": 0.835185686704231,
-        "min_child_samples": 42,
-        "reg_alpha": 0.0022061427044189215,
-        "reg_lambda": 0.007088490495750283
-      }
-    },
-    "DEF": {
-      "val_r2": 0.3492,
-      "val_mae": 1.2565,
-      "test_r2": 0.2113,
-      "test_mae": 1.739,
-      "n_train": 2034,
-      "n_val": 97,
-      "n_test": 99,
-      "best_params": {
-        "n_estimators": 339,
-        "num_leaves": 56,
-        "max_depth": 6,
-        "learning_rate": 0.012359500567767287,
-        "subsample": 0.6422909816663824,
-        "colsample_bytree": 0.6885559207625443,
-        "min_child_samples": 20,
-        "reg_alpha": 0.000323471360208473,
-        "reg_lambda": 3.4175595416867686
-      }
-    },
-    "GK": {
-      "val_r2": 0.4874,
-      "val_mae": 0.5481,
-      "test_r2": 0.4904,
-      "test_mae": 0.7085,
-      "n_train": 395,
-      "n_val": 18,
-      "n_test": 20,
-      "best_params": {
-        "n_estimators": 962,
-        "num_leaves": 115,
-        "max_depth": 1,
-        "learning_rate": 0.025952578507773327,
-        "subsample": 0.7832875031515445,
-        "colsample_bytree": 0.8681145140171679,
-        "min_child_samples": 45,
-        "reg_alpha": 0.19336237892887037,
-        "reg_lambda": 0.0020193973846962514
-      }
-    }
+  "step_progression": {
+    "v2_baseline_test_r2": 0.54,
+    "v3_stacking_test_r2": 0.6089,
+    "v4_delta_test_r2": 0.5477,
+    "v5_feature_baseline_xgb_val_r2": 0.6037,
+    "v5_stacking_val_r2": 0.6302,
+    "v5_stacking_test_r2": 0.5752,
+    "v5_final_best_test_r2": 0.586
   },
-  "progression_table": {
-    "v2": {
-      "r2": 0.54,
-      "mae": 1.24,
-      "note": "앙상블"
+  "model_comparison": {
+    "ridge": {
+      "val": {
+        "mae": 1.3425,
+        "r2": 0.4617
+      },
+      "test": {
+        "mae": 1.4332,
+        "r2": 0.4299
+      }
     },
-    "v3": {
-      "r2": 0.6089,
-      "mae": 1.1312,
-      "note": "스태킹(Ridge 메타)"
+    "gbr": {
+      "val": {
+        "mae": 1.0593,
+        "r2": 0.633
+      },
+      "test": {
+        "mae": 1.1729,
+        "r2": 0.5748
+      }
     },
-    "v4": {
-      "r2": 0.5477,
-      "mae": 1.1944,
-      "note": "v4 pos_specific (delta 학습)"
+    "xgb": {
+      "val": {
+        "mae": 1.064,
+        "r2": 0.6347
+      },
+      "test": {
+        "mae": 1.1782,
+        "r2": 0.5706
+      }
+    },
+    "lgbm": {
+      "val": {
+        "mae": 1.0615,
+        "r2": 0.6395
+      },
+      "test": {
+        "mae": 1.1619,
+        "r2": 0.586
+      }
+    },
+    "ensemble": {
+      "val": {
+        "mae": 1.0794,
+        "r2": 0.6275
+      },
+      "test": {
+        "mae": 1.1852,
+        "r2": 0.5739
+      },
+      "weights": {
+        "ridge": 0.1949,
+        "gbr": 0.2672,
+        "xgb": 0.2679,
+        "lgbm": 0.2699
+      }
+    },
+    "stacking": {
+      "val": {
+        "mae": 1.0705,
+        "r2": 0.6302
+      },
+      "test": {
+        "mae": 1.1731,
+        "r2": 0.5752
+      },
+      "meta_coefs": {
+        "ridge": 0.0928,
+        "gbr": 0.814,
+        "xgb": -0.157,
+        "lgbm": 0.2213
+      },
+      "meta_intercept": 0.0849,
+      "cv_method": "GroupKFold(n_splits=5, groups=season_year)"
     }
   },
   "features_used": [
@@ -181,31 +155,50 @@
     "gc_trend_3yr",
     "war_ratio"
   ],
-  "target": "target_delta (next_ac - current_ac)",
-  "optuna_trials": {
-    "pos": 50,
-    "unified": 70
-  },
-  "unified_lgbm_best_params": {
-    "n_estimators": 563,
-    "num_leaves": 70,
-    "max_depth": 2,
-    "learning_rate": 0.01702263240446966,
-    "subsample": 0.9574161886297863,
-    "colsample_bytree": 0.7799213064558345,
-    "min_child_samples": 39,
-    "reg_alpha": 0.011724100339005526,
-    "reg_lambda": 0.00019545360236381063
-  },
-  "unified_xgb_best_params": {
-    "n_estimators": 535,
-    "max_depth": 5,
-    "learning_rate": 0.011203444198791268,
-    "subsample": 0.9098105777041505,
-    "colsample_bytree": 0.9823563483520916,
-    "min_child_weight": 1,
-    "reg_alpha": 0.0015894963958727082,
-    "reg_lambda": 0.00040736020284381315
+  "n_features": 50,
+  "feature_additions_v5_from_v3": [
+    "goals_p90_lag4",
+    "assists_p90_lag4",
+    "ac_z_lag4",
+    "attack_contribution_lag4",
+    "minutes_share_lag4",
+    "ac_z_trend3",
+    "war_ma4",
+    "age_vs_peak_lag1",
+    "gc_trend_3yr",
+    "war_ratio"
+  ],
+  "optuna_trials_per_model": 35,
+  "best_hyperparams": {
+    "gbr": {
+      "n_estimators": 636,
+      "max_depth": 4,
+      "learning_rate": 0.01294080454405871,
+      "subsample": 0.6284340069435541,
+      "min_samples_leaf": 30
+    },
+    "xgb": {
+      "n_estimators": 492,
+      "max_depth": 6,
+      "learning_rate": 0.01309430200414042,
+      "subsample": 0.7239498176573883,
+      "colsample_bytree": 0.7431112214919919,
+      "min_child_weight": 3,
+      "reg_alpha": 8.945239748571879,
+      "reg_lambda": 0.4496576076972145
+    },
+    "lgbm": {
+      "n_estimators": 482,
+      "num_leaves": 66,
+      "max_depth": 6,
+      "learning_rate": 0.015930597272664746,
+      "subsample": 0.9483188464457354,
+      "colsample_bytree": 0.8289446895776453,
+      "min_child_samples": 37,
+      "reg_alpha": 0.049024729495057616,
+      "reg_lambda": 0.20180617085797017
+    },
+    "ridge_alpha": 100.0
   },
   "pos_peak_ages": {
     "FWD": 28,
@@ -219,7 +212,6 @@
     "DEF": 27,
     "GK": 31
   },
-  "scout_validation": "v4는 'delta(변화량) 학습 + 포지션별 개별 모델' 2가지 핵심 전환. v3 0.577 → v4 0.548 (-0.029). 최종 전략: pos_specific. 김태현 스카우트: '같은 22세 선수라도 공격수 vs 골키퍼는 성장 경로가 다르다. 포지션별 개별 모델이 실무 관점과 일치한다.'",
   "legacy_v1_ridge": {
     "r2": 0.1735,
     "mae": 0.5955
@@ -229,12 +221,16 @@
     "mae": 1.24
   },
   "legacy_v3": {
-    "version": "v3",
     "r2": 0.6089,
     "mae": 1.1312,
-    "best_model_name": "stacking",
-    "note": "v3 스태킹 (Ridge 메타)"
+    "note": "v3 스태킹 (KFold shuffle)"
   },
+  "legacy_v4": {
+    "r2": 0.5477,
+    "mae": 1.1944,
+    "note": "v4 delta+포지션별 (성능 퇴보 확인)"
+  },
+  "scout_validation": "v5는 v3 스태킹 복원 + v4 피처 확장 + GroupKFold(n=5) 시간순 CV 결합. v4 delta 학습이 노이즈 증폭 확인 → 절대값 타겟으로 복원. test R²=0.5860, val-test 갭=0.0550. 김태현 스카우트: 'GroupKFold로 시즌 경계를 존중한 CV가 더 신뢰할 수 있는 선수 성장 예측을 만든다.'",
   "output_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/scout/growth_predictions.parquet",
   "row_count": 894
 }

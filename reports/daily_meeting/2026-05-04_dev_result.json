@@ -1,0 +1,23 @@
+{
+  "date": "2026-05-04",
+  "results": [
+    {
+      "item": "P2 득점 예측 신규 개발: `player_features.parquet` + `playe",
+      "script": "models/p2_goal_scoring/train.py",
+      "success": false,
+      "error": "\n  File \"/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/json/encoder.py\", line 432, in _iterencode\n    yield from _iterencode_dict(o, _current_indent_level)\n  File \"/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/json/encoder.py\", line 406, in _iterencode_dict\n    yield from chunks\n  File \"/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/json/encoder.py\", line 406, in _iterenc"
+    },
+    {
+      "item": "P7 v5 수동 재실행 + 결과 검증: `models/p7_growth_curve/trai",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P1 오즈 피처 재시도: `scripts/add_odds_features.py` 실행 재트",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": false,
+      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/models/p1_match_result/train_pipeline.py\", line 24, in <module>\n    import torch\nModuleNotFoundError: No module named 'torch'\n"
+    }
+  ]
+}

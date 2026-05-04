@@ -1,0 +1,63 @@
+{
+  "task": "P2 Season Goals Prediction v2 (LightGBM + XGBoost Optuna + GroupKFold)",
+  "version": "v2",
+  "target": "gls (시즌 총 득점 수)",
+  "goal_target": "R² ≥ 0.65 / MAE ≤ 3.5골",
+  "goal_met": true,
+  "best_model": "XGBoost",
+  "features_used": [
+    "age_clean",
+    "epl_experience",
+    "pos_FWD",
+    "pos_MID",
+    "pos_DEF",
+    "pos_GK",
+    "minutes_share",
+    "prev_goals_p90",
+    "prev_assists_p90",
+    "prev_gls",
+    "prev2_gls",
+    "prev_minutes_share",
+    "market_value",
+    "goal_contribution_rate"
+  ],
+  "n_features": 14,
+  "splits": {
+    "train": 5843,
+    "val": 608,
+    "test": 577
+  },
+  "metrics": {
+    "lightgbm": {
+      "val": {
+        "r2": 0.9131,
+        "mae": 0.7758
+      },
+      "test": {
+        "r2": 0.8876,
+        "mae": 0.9546
+      }
+    },
+    "xgboost": {
+      "val": {
+        "r2": 0.9062,
+        "mae": 0.8033
+      },
+      "test": {
+        "r2": 0.8877,
+        "mae": 0.9566
+      }
+    }
+  },
+  "best_metrics": {
+    "val_r2": 0.9062,
+    "val_mae": 0.8033,
+    "test_r2": 0.8877,
+    "test_mae": 0.9566,
+    "val_test_gap_r2": 0.0185
+  },
+  "optuna_trials": 50,
+  "cv_strategy": "GroupKFold(n=5, groups=season_year)",
+  "min_minutes_filter": 500,
+  "feature_importance_top15": {
+    "goal_contribution_rate": 
