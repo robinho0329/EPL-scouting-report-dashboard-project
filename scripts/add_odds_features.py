@@ -119,8 +119,41 @@ def fd_season_to_our_season(fd_season: str) -> str:
     return f"{year1}/{fd_season[2:]}"
 
 
+import time
+
+_SESSION: requests.Session = None  # 모듈 수준 세션 (쿠키 유지)
+
+def _get_session() -> requests.Session:
+    """메인 페이지 방문 후 쿠키가 포함된 세션 반환."""
+    global _SESSION
+    if _SESSION is not None:
+        return _SESSION
+
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        ),
+        "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-GB,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection":      "keep-alive",
+        "DNT":             "1",
+    })
+    # 메인 페이지 방문으로 쿠키 획득
+    try:
+        session.get("https://www.football-data.co.uk/englandm.php", timeout=15)
+        logger.info("    세션 초기화 완료 (메인 페이지 쿠키 획득)")
+    except Exception as e:
+        logger.warning("    세션 초기화 실패 (계속 진행): %s", e)
+    _SESSION = session
+    return session
+
+
 def download_season(season_code: str) -> pd.DataFrame:
-    """단일 시즌 오즈 CSV 다운로드 (캐시 우선)."""
+    """단일 시즌 오즈 CSV 다운로드 (캐시 우선, 세션 재사용, 재시도 2회)."""
     cache_path = ODDS_CACHE_DIR / f"E0_{season_code}.csv"
 
     if cache_path.exists():
@@ -133,28 +166,36 @@ def download_season(season_code: str) -> pd.DataFrame:
             pass
 
     url = FD_BASE.format(season=season_code)
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Safari/537.36"
-        ),
-        "Referer": "https://www.football-data.co.uk/englandm.php",
-    }
-    try:
-        resp = requests.get(url, headers=headers, timeout=30)
-        resp.raise_for_status()
-        df = pd.read_csv(io.StringIO(resp.text), encoding="latin-1", on_bad_lines="skip")
-        if len(df) > 0:
-            df.to_csv(cache_path, index=False, encoding="utf-8")
-            logger.info(f"    다운로드: {season_code} ({len(df)}행)")
-            return df
-        else:
-            logger.warning(f"    빈 데이터: {season_code}")
+    session = _get_session()
+
+    for attempt in range(3):
+        try:
+            if attempt > 0:
+                time.sleep(2 ** attempt)  # 2s, 4s 백오프
+                logger.info("    재시도 %d: %s", attempt, season_code)
+            session.headers["Referer"] = "https://www.football-data.co.uk/englandm.php"
+            resp = session.get(url, timeout=30)
+            resp.raise_for_status()
+            df = pd.read_csv(io.StringIO(resp.text), encoding="latin-1", on_bad_lines="skip")
+            if len(df) > 0:
+                df.to_csv(cache_path, index=False, encoding="utf-8")
+                logger.info(f"    다운로드: {season_code} ({len(df)}행)")
+                return df
+            else:
+                logger.warning(f"    빈 데이터: {season_code}")
+                return pd.DataFrame()
+        except requests.exceptions.HTTPError as e:
+            if e.response is not None and e.response.status_code == 403:
+                logger.warning(f"    403 차단: {season_code} (시도 {attempt+1}/3)")
+                if attempt == 2:
+                    return pd.DataFrame()
+            else:
+                logger.warning(f"    다운로드 실패: {season_code} — {e}")
+                return pd.DataFrame()
+        except Exception as e:
+            logger.warning(f"    다운로드 실패: {season_code} — {e}")
             return pd.DataFrame()
-    except Exception as e:
-        logger.warning(f"    다운로드 실패: {season_code} — {e}")
-        return pd.DataFrame()
+    return pd.DataFrame()
 
 
 def parse_odds_df(df: pd.DataFrame, season_code: str) -> pd.DataFrame:

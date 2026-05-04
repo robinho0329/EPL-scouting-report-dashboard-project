@@ -1,626 +1,327 @@
-"""
-P2: Goal Scoring Prediction Model — English Premier League
-==========================================================
-Sub-task A: Match total goals prediction (regression)
-Sub-task B: Player goal probability (classification)
+"""P2 v2: 선수 시즌 득점 예측 (Season Goals Regression)
 
-Models:
-  - XGBoost Regressor         (match goals)
-  - Poisson GLM via statsmodels (match goals)
-  - MLP Regressor via sklearn  (match goals)
-  - XGBoost Classifier        (player goal probability)
-  - MLP Classifier via sklearn (player goal probability)
+이전 버전(v1)은 경기별 득점/선수 득점 확률 분류 → R²=-0.12, 미팅 목표와 불일치.
+v2에서 미팅 계획대로 '시즌 총 득점 수 회귀' 로 전면 재설계.
 
-Time-based split:
-  Train  : 2000/01 – 2020/21
-  Val    : 2021/22 – 2022/23
-  Test   : 2023/24 – 2024/25
+타겟: gls (시즌 총 득점 수)
+피처: 직전 시즌 stats 기반 lag 피처 + 포지션/나이/출전 기회
+모델: LightGBM + XGBoost, Optuna 50 trials, GroupKFold(n=5, groups=season_year)
+목표: R² ≥ 0.65 / MAE ≤ 3.5골
 """
 
-import os
 import json
+import logging
 import warnings
-import numpy as np
-import pandas as pd
 from pathlib import Path
 
-# scikit-learn
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.metrics import (
-    mean_absolute_error, mean_squared_error, r2_score,
-    roc_auc_score, f1_score, precision_score, average_precision_score,
-    classification_report,
-)
-from sklearn.neural_network import MLPRegressor, MLPClassifier
-from sklearn.pipeline import Pipeline
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.model_selection import GroupKFold
 
-# XGBoost
-import xgboost as xgb
+import optuna
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
 
-# statsmodels for Poisson GLM
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
-
+optuna.logging.set_verbosity(optuna.logging.WARNING)
 warnings.filterwarnings("ignore")
 
-# ─────────────────────────────────────────────
-# Paths
-# ─────────────────────────────────────────────
-BASE = Path(__file__).resolve().parent.parent.parent
-DATA = BASE / "data" / "processed"
-OUT  = BASE / "models" / "p2_goal_scoring"
-OUT.mkdir(parents=True, exist_ok=True)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("p2_goal_scoring_v2")
 
-MATCH_FILE   = DATA / "match_results.parquet"
-PLAYER_FILE  = DATA / "player_match_logs.parquet"
-SEASON_FILE  = DATA / "player_season_stats.parquet"
+ROOT      = Path(__file__).resolve().parent.parent.parent
+DATA_PATH = ROOT / "data" / "features" / "player_features.parquet"
+OUT_DIR   = Path(__file__).resolve().parent
+SCOUT_OUT = ROOT / "data" / "scout" / "goal_predictions.parquet"
+SCOUT_OUT.parent.mkdir(parents=True, exist_ok=True)
 
-# ─────────────────────────────────────────────
-# Season split helpers
-# ─────────────────────────────────────────────
-TRAIN_SEASONS = [f"{y}/{str(y+1)[-2:]}" for y in range(2000, 2021)]
-VAL_SEASONS   = ["2021/22", "2022/23"]
-TEST_SEASONS  = ["2023/24", "2024/25"]
+RANDOM_STATE = 42
+N_TRIALS     = 50
 
-def season_split(df, season_col="Season"):
-    train = df[df[season_col].isin(TRAIN_SEASONS)]
-    val   = df[df[season_col].isin(VAL_SEASONS)]
-    test  = df[df[season_col].isin(TEST_SEASONS)]
-    return train, val, test
-
-# ─────────────────────────────────────────────────────────────────────────────
-# ╔══════════════════════════════════════════════════════╗
-# ║  PART A – MATCH TOTAL GOALS PREDICTION (REGRESSION) ║
-# ╚══════════════════════════════════════════════════════╝
-# ─────────────────────────────────────────────────────────────────────────────
-
-print("=" * 70)
-print("PART A — Match Total Goals Regression")
-print("=" * 70)
-
-# ── Load & basic prep ──────────────────────────────────────────────────────
-mr = pd.read_parquet(MATCH_FILE)
-mr = mr.sort_values("MatchDate").reset_index(drop=True)
-mr["TotalGoals"]    = mr["FullTimeHomeGoals"] + mr["FullTimeAwayGoals"]
-mr["HomeGoals"]     = mr["FullTimeHomeGoals"]
-mr["AwayGoals"]     = mr["FullTimeAwayGoals"]
-
-# ── Rolling team strength features ─────────────────────────────────────────
-print("Building match-level rolling features...")
-
-# Build per-team rolling stats using historical rows only (avoid leakage)
-# We iterate in chronological order and track a rolling dictionary.
-WINDOWS = [5, 10, 20]
-
-for team_role in ("Home", "Away"):
-    for w in WINDOWS:
-        mr[f"{team_role}Team_AvgScored_{w}"]   = np.nan
-        mr[f"{team_role}Team_AvgConceded_{w}"] = np.nan
-
-# track last N results per team — store (scored, conceded) tuples
-from collections import defaultdict, deque
-
-team_history: dict = defaultdict(lambda: deque(maxlen=max(WINDOWS)))
-
-for idx, row in mr.iterrows():
-    ht = row["HomeTeam"]
-    at = row["AwayTeam"]
-    hg = row["HomeGoals"]
-    ag = row["AwayGoals"]
-
-    for w in WINDOWS:
-        # Home team rolling
-        hist = list(team_history[ht])[-w:]
-        if hist:
-            mr.at[idx, f"HomeTeam_AvgScored_{w}"]   = np.mean([x[0] for x in hist])
-            mr.at[idx, f"HomeTeam_AvgConceded_{w}"] = np.mean([x[1] for x in hist])
-        # Away team rolling
-        hist_a = list(team_history[at])[-w:]
-        if hist_a:
-            mr.at[idx, f"AwayTeam_AvgScored_{w}"]   = np.mean([x[0] for x in hist_a])
-            mr.at[idx, f"AwayTeam_AvgConceded_{w}"] = np.mean([x[1] for x in hist_a])
-
-    # update history after features computed (no leakage)
-    team_history[ht].append((hg, ag))
-    team_history[at].append((ag, hg))
-
-# ── H2H average goals ───────────────────────────────────────────────────────
-print("Building H2H features...")
-
-h2h_history: dict = defaultdict(deque)
-
-mr["H2H_AvgTotalGoals"] = np.nan
-mr["H2H_Count"]         = 0
-
-for idx, row in mr.iterrows():
-    key = tuple(sorted([row["HomeTeam"], row["AwayTeam"]]))
-    hist = list(h2h_history[key])
-    if hist:
-        mr.at[idx, "H2H_AvgTotalGoals"] = np.mean(hist)
-        mr.at[idx, "H2H_Count"]         = len(hist)
-    h2h_history[key].append(row["TotalGoals"])
-
-# ── Season average goals trend ──────────────────────────────────────────────
-season_avg = (
-    mr.groupby("Season")["TotalGoals"]
-    .mean()
-    .rename("SeasonAvgGoals")
-    .reset_index()
-)
-mr = mr.merge(season_avg, on="Season", how="left")
-
-# ── Home/away scoring rates per season ─────────────────────────────────────
-# We compute cumulative seasonal average up to but not including current match
-mr = mr.sort_values(["Season", "MatchDate"]).reset_index(drop=True)
-mr["SeasonMatchIdx"] = mr.groupby("Season").cumcount()
-
-# expanding within season — shift(1) to avoid leakage
-mr["SeasonCumAvgGoals"] = (
-    mr.groupby("Season")["TotalGoals"]
-    .transform(lambda x: x.expanding().mean().shift(1))
-)
-
-# ── Assemble match feature matrix ───────────────────────────────────────────
-match_feature_cols = (
-    [f"HomeTeam_AvgScored_{w}"   for w in WINDOWS] +
-    [f"HomeTeam_AvgConceded_{w}" for w in WINDOWS] +
-    [f"AwayTeam_AvgScored_{w}"   for w in WINDOWS] +
-    [f"AwayTeam_AvgConceded_{w}" for w in WINDOWS] +
-    ["H2H_AvgTotalGoals", "H2H_Count",
-     "SeasonMatchIdx", "SeasonCumAvgGoals"]
-)
-
-TARGET_MATCH = "TotalGoals"
-
-# Drop rows where ALL rolling features are NaN (first few rows per team)
-mr_model = mr.dropna(subset=[f"HomeTeam_AvgScored_{WINDOWS[0]}",
-                               f"AwayTeam_AvgScored_{WINDOWS[0]}"],
-                      how="all").copy()
-
-# Fill remaining NaNs with median
-for c in match_feature_cols:
-    mr_model[c] = mr_model[c].fillna(mr_model[c].median())
-
-print(f"Match dataset: {len(mr_model)} rows after dropping cold-start rows")
-
-# ── Split ───────────────────────────────────────────────────────────────────
-train_m, val_m, test_m = season_split(mr_model, "Season")
-print(f"  Train: {len(train_m)}  Val: {len(val_m)}  Test: {len(test_m)}")
-
-X_train_m = train_m[match_feature_cols].values
-y_train_m = train_m[TARGET_MATCH].values
-X_val_m   = val_m[match_feature_cols].values
-y_val_m   = val_m[TARGET_MATCH].values
-X_test_m  = test_m[match_feature_cols].values
-y_test_m  = test_m[TARGET_MATCH].values
-
-X_trainval_m = np.vstack([X_train_m, X_val_m])
-y_trainval_m = np.concatenate([y_train_m, y_val_m])
-
-scaler_m = StandardScaler()
-X_train_m_sc  = scaler_m.fit_transform(X_train_m)
-X_val_m_sc    = scaler_m.transform(X_val_m)
-X_test_m_sc   = scaler_m.transform(X_test_m)
-X_trainval_m_sc = scaler_m.transform(X_trainval_m)
-
-def match_metrics(y_true, y_pred, label=""):
-    mae  = mean_absolute_error(y_true, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-    r2   = r2_score(y_true, y_pred)
-    print(f"  {label:30s}  MAE={mae:.4f}  RMSE={rmse:.4f}  R²={r2:.4f}")
-    return {"mae": round(mae, 4), "rmse": round(rmse, 4), "r2": round(r2, 4)}
-
-results: dict = {"match_goals": {}, "player_goals": {}}
-
-# ── Model A1: XGBoost Regressor ─────────────────────────────────────────────
-print("\n[A1] XGBoost Regressor — tuning on val set")
-
-xgb_reg = xgb.XGBRegressor(
-    n_estimators=500,
-    learning_rate=0.05,
-    max_depth=6,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    min_child_weight=5,
-    objective="reg:squarederror",
-    eval_metric="mae",
-    early_stopping_rounds=30,
-    random_state=42,
-    verbosity=0,
-)
-xgb_reg.fit(
-    X_train_m, y_train_m,
-    eval_set=[(X_val_m, y_val_m)],
-    verbose=False,
-)
-
-pred_val_xgb  = xgb_reg.predict(X_val_m)
-pred_test_xgb = xgb_reg.predict(X_test_m)
-
-print("  Validation:")
-results["match_goals"]["xgboost_val"]  = match_metrics(y_val_m,  pred_val_xgb,  "XGBoost val")
-print("  Test:")
-results["match_goals"]["xgboost_test"] = match_metrics(y_test_m, pred_test_xgb, "XGBoost test")
-
-# Feature importance
-feat_imp = pd.DataFrame({
-    "feature": match_feature_cols,
-    "importance": xgb_reg.feature_importances_,
-}).sort_values("importance", ascending=False)
-feat_imp.to_csv(OUT / "match_xgb_feature_importance.csv", index=False)
-print(f"  Top 5 features: {feat_imp['feature'].head(5).tolist()}")
-
-# ── Model A2: Poisson GLM (statsmodels) ─────────────────────────────────────
-print("\n[A2] Poisson GLM")
-
-# Fit on train only, evaluate on val & test
-# Add small constant to target to avoid log(0) issues (Poisson handles 0 natively)
-train_poisson_df = train_m[match_feature_cols + [TARGET_MATCH]].copy()
-val_poisson_df   = val_m[match_feature_cols + [TARGET_MATCH]].copy()
-test_poisson_df  = test_m[match_feature_cols + [TARGET_MATCH]].copy()
-
-# Use scaled arrays via sm.GLM
-X_train_poi = sm.add_constant(X_train_m_sc)
-X_val_poi   = sm.add_constant(X_val_m_sc)
-X_test_poi  = sm.add_constant(X_test_m_sc)
-
-poisson_model = sm.GLM(
-    y_train_m, X_train_poi,
-    family=sm.families.Poisson()
-).fit(disp=False)
-
-pred_val_poi  = poisson_model.predict(X_val_poi)
-pred_test_poi = poisson_model.predict(X_test_poi)
-
-print("  Validation:")
-results["match_goals"]["poisson_val"]  = match_metrics(y_val_m,  pred_val_poi,  "Poisson val")
-print("  Test:")
-results["match_goals"]["poisson_test"] = match_metrics(y_test_m, pred_test_poi, "Poisson test")
-
-# Save Poisson summary
-with open(OUT / "poisson_summary.txt", "w") as f:
-    f.write(str(poisson_model.summary()))
-
-# ── Model A3: MLP Regressor ─────────────────────────────────────────────────
-print("\n[A3] MLP Regressor (sklearn)")
-
-mlp_reg = MLPRegressor(
-    hidden_layer_sizes=(128, 64, 32),
-    activation="relu",
-    solver="adam",
-    learning_rate_init=1e-3,
-    max_iter=500,
-    early_stopping=True,
-    validation_fraction=0.1,
-    n_iter_no_change=20,
-    random_state=42,
-    batch_size=256,
-)
-mlp_reg.fit(X_train_m_sc, y_train_m)
-
-pred_val_mlp_r  = mlp_reg.predict(X_val_m_sc)
-pred_test_mlp_r = mlp_reg.predict(X_test_m_sc)
-
-print("  Validation:")
-results["match_goals"]["mlp_val"]  = match_metrics(y_val_m,  pred_val_mlp_r,  "MLP val")
-print("  Test:")
-results["match_goals"]["mlp_test"] = match_metrics(y_test_m, pred_test_mlp_r, "MLP test")
-
-# ── Summary comparison (match goals) ────────────────────────────────────────
-print("\n--- Match Goals Summary (Test set) ---")
-models_test_preds = {
-    "XGBoost":  pred_test_xgb,
-    "Poisson":  pred_test_poi,
-    "MLP":      pred_test_mlp_r,
-}
-best_model_name = None
-best_mae = float("inf")
-for name, preds in models_test_preds.items():
-    m = match_metrics(y_test_m, preds, name)
-    if m["mae"] < best_mae:
-        best_mae = m["mae"]
-        best_model_name = name
-
-print(f"  Best match model (by MAE): {best_model_name} — MAE={best_mae:.4f}")
-results["match_goals"]["best_model"] = best_model_name
-
-# ─────────────────────────────────────────────────────────────────────────────
-# ╔══════════════════════════════════════════════════════════╗
-# ║  PART B – PLAYER GOAL PROBABILITY (CLASSIFICATION)      ║
-# ╚══════════════════════════════════════════════════════════╝
-# ─────────────────────────────────────────────────────────────────────────────
-
-print("\n" + "=" * 70)
-print("PART B — Player Goal Probability Classification")
-print("=" * 70)
-
-# ── Load player match logs ──────────────────────────────────────────────────
-ml = pd.read_parquet(PLAYER_FILE)
-ps = pd.read_parquet(SEASON_FILE)
-
-# Filter to players who actually played (not squad non-participant)
-ml = ml[ml["pos"] != "On matchday squad, but did not play"].copy()
-ml = ml[ml["min"].notna() & (ml["min"] > 0)].copy()
-
-# Ensure date sorted
-ml = ml.sort_values(["player", "date"]).reset_index(drop=True)
-
-# Binary target
-ml["scored"] = (ml["gls"] > 0).astype(int)
-
-print(f"Player match log rows after filtering: {len(ml)}")
-print(f"  Scored: {ml['scored'].sum()} ({100*ml['scored'].mean():.2f}%)")
-
-# ── Position encoding ──────────────────────────────────────────────────────
-# Consolidate positions
 POS_MAP = {
-    "FW": 4, "AM": 3, "LW": 3, "RW": 3,
-    "CM": 2, "LM": 2, "RM": 2,
-    "DM": 1, "CB": 0, "LB": 0, "RB": 0, "GK": -1,
-    "None": 1, None: 1,
+    "Goalkeeper":          "GK",
+    "Centre-Back":         "DEF", "Right-Back": "DEF", "Left-Back": "DEF", "Defender": "DEF",
+    "Defensive Midfield":  "MID", "Central Midfield": "MID",
+    "Attacking Midfield":  "MID", "Left Midfield": "MID", "Right Midfield": "MID", "Midfielder": "MID",
+    "Left Winger":         "FWD", "Right Winger": "FWD",
+    "Centre-Forward":      "FWD", "Second Striker": "FWD", "Striker": "FWD",
 }
-ml["pos_score"] = ml["pos"].map(POS_MAP).fillna(1)  # default = mid
 
-# ── Merge market value from player_season_stats ─────────────────────────────
-# Use per-season market value
-ps_mv = ps[["player", "season", "market_value", "position"]].dropna(subset=["player", "season"])
-ps_mv = ps_mv.rename(columns={"season": "season", "market_value": "mv_season"})
-ps_mv["position_tm"] = ps_mv["position"].fillna("Unknown")
+TRAIN_END = 2021
+VAL_END   = 2023
 
-ml = ml.merge(ps_mv[["player", "season", "mv_season", "position_tm"]],
-              on=["player", "season"], how="left")
-ml["mv_season"] = ml["mv_season"].fillna(0)
+BENCHMARK_PLAYERS = [
+    {"player": "Mohamed Salah",  "season": "2024/25", "actual_goals": 29},
+    {"player": "Erling Haaland", "season": "2024/25", "actual_goals": 22},
+    {"player": "Alexander Isak", "season": "2024/25", "actual_goals": 23},
+    {"player": "Bryan Mbeumo",   "season": "2024/25", "actual_goals": 20},
+    {"player": "Ollie Watkins",  "season": "2023/24", "actual_goals": 19},
+    {"player": "Cole Palmer",    "season": "2023/24", "actual_goals": 22},
+]
 
-# Log-transform market value
-ml["log_mv"] = np.log1p(ml["mv_season"])
+# ─────────────────────────────────────────────
+# 1. 데이터 로드
+# ─────────────────────────────────────────────
+logger.info("데이터 로드 시작: %s", DATA_PATH)
+df = pd.read_parquet(DATA_PATH)
+logger.info("로드 완료: %s", df.shape)
 
-# ── Rolling player goal rate ────────────────────────────────────────────────
-print("Computing player rolling goal rates...")
+# ─────────────────────────────────────────────
+# 2. 기본 전처리
+# ─────────────────────────────────────────────
+df["pos_group"]   = df["position"].map(POS_MAP).fillna("MID")
+df["age_clean"]   = df["age_used"].fillna(df.get("age", pd.Series(25.0, index=df.index))).fillna(25.0).clip(15, 40)
+df["season_year"] = df["season"].str[:4].astype(int)
 
-PLAYER_WINDOWS = [5, 10]
+for pos in ["FWD", "MID", "DEF", "GK"]:
+    df[f"pos_{pos}"] = (df["pos_group"] == pos).astype(int)
 
-for w in PLAYER_WINDOWS:
-    ml[f"player_goal_rate_{w}"] = np.nan
-    ml[f"player_min_avg_{w}"]   = np.nan
+if "gls" not in df.columns:
+    if "goals" in df.columns:
+        df["gls"] = df["goals"]
+    else:
+        raise KeyError("득점 컬럼(gls 또는 goals)을 찾을 수 없습니다.")
 
-# Group by player and compute rolling stats with shift(1) to avoid leakage
-ml = ml.sort_values(["player", "date"]).reset_index(drop=True)
+min_col = next((c for c in ["min", "minutes_played", "minutes"] if c in df.columns), None)
+if min_col:
+    df = df[df[min_col] >= 500].copy()
 
-for w in PLAYER_WINDOWS:
-    grp = ml.groupby("player")
-    ml[f"player_goal_rate_{w}"] = grp["gls"].transform(
-        lambda x: x.shift(1).rolling(w, min_periods=1).mean()
-    )
-    ml[f"player_min_avg_{w}"] = grp["min"].transform(
-        lambda x: x.shift(1).rolling(w, min_periods=1).mean()
-    )
+logger.info("500분 이상 필터 후: %s", df.shape)
 
-# Season cumulative goal rate (within season, shifted)
-ml["player_season_goal_rate"] = ml.groupby(["player", "season"])["gls"].transform(
-    lambda x: x.shift(1).expanding().mean()
-)
+# ─────────────────────────────────────────────
+# 3. Lag 피처 생성
+# ─────────────────────────────────────────────
+logger.info("lag 피처 생성 중...")
 
-# ── Opponent defensive strength ─────────────────────────────────────────────
-print("Computing opponent defensive strength...")
+player_col = next((c for c in ["player", "player_name", "name"] if c in df.columns), None)
+if player_col:
+    df = df.sort_values([player_col, "season_year"]).reset_index(drop=True)
+    grp = df.groupby(player_col)
+    for col in ["goals_p90", "assists_p90", "gls", "minutes_share", "ac_z"]:
+        if col in df.columns:
+            df[f"prev_{col}"] = grp[col].shift(1)
+    if "gls" in df.columns:
+        df["prev2_gls"] = grp["gls"].shift(2)
 
-# From match_results, build opponent avg goals conceded (rolling)
-# We use team_history already built for match model
-# Simpler: compute season-level avg goals conceded per team from match_results
-opp_conceded = pd.concat([
-    mr[["Season", "AwayTeam", "HomeGoals"]].rename(
-        columns={"AwayTeam": "team", "HomeGoals": "goals_conceded"}),
-    mr[["Season", "HomeTeam", "AwayGoals"]].rename(
-        columns={"HomeTeam": "team", "AwayGoals": "goals_conceded"}),
-])
-opp_season_def = (
-    opp_conceded.groupby(["Season", "team"])["goals_conceded"]
-    .mean().rename("opp_avg_conceded").reset_index()
-)
-opp_season_def.columns = ["season", "opponent", "opp_avg_conceded"]
+logger.info("lag 피처 생성 완료")
 
-ml = ml.merge(opp_season_def, on=["season", "opponent"], how="left")
-ml["opp_avg_conceded"] = ml["opp_avg_conceded"].fillna(ml["opp_avg_conceded"].median())
+# ─────────────────────────────────────────────
+# 4. 피처 컬럼 확정
+# ─────────────────────────────────────────────
+CANDIDATE_FEATURES = [
+    "age_clean", "epl_experience", "pos_FWD", "pos_MID", "pos_DEF", "pos_GK",
+    "minutes_share",
+    "prev_goals_p90", "prev_assists_p90", "prev_gls", "prev2_gls",
+    "prev_minutes_share", "prev_ac_z",
+    "market_value", "war_norm",
+    "ac_z_lag1", "ac_z_lag2",
+    "log_mv_norm",
+    "goal_contribution_rate",
+]
 
-# ── Home/Away flag ────────────────────────────────────────────────────────
-ml["is_home"] = (ml["venue"] == "Home").astype(int)
+FEATURE_COLS = [c for c in CANDIDATE_FEATURES if c in df.columns]
+logger.info("사용 피처 (%d개): %s", len(FEATURE_COLS), FEATURE_COLS)
 
-# ── Assemble player feature matrix ─────────────────────────────────────────
-player_feature_cols = (
-    [f"player_goal_rate_{w}" for w in PLAYER_WINDOWS] +
-    [f"player_min_avg_{w}"   for w in PLAYER_WINDOWS] +
-    ["player_season_goal_rate",
-     "pos_score", "log_mv",
-     "opp_avg_conceded", "is_home", "min"]
-)
+TARGET = "gls"
 
-TARGET_PLAYER = "scored"
+df_model = df.dropna(subset=[TARGET] + [c for c in FEATURE_COLS if c.startswith("prev_")]).copy()
+df_model[FEATURE_COLS] = df_model[FEATURE_COLS].fillna(0.0)
+logger.info("모델 데이터 최종: %s", df_model.shape)
 
-ml_model = ml.copy()
+# ─────────────────────────────────────────────
+# 5. Train / Val / Test 분할
+# ─────────────────────────────────────────────
+train_df = df_model[df_model["season_year"] <  TRAIN_END]
+val_df   = df_model[(df_model["season_year"] >= TRAIN_END) & (df_model["season_year"] < VAL_END)]
+test_df  = df_model[df_model["season_year"] >= VAL_END].copy()
 
-# Fill NaN rolling stats with 0 for early matches (cold start)
-for c in player_feature_cols:
-    ml_model[c] = ml_model[c].fillna(0)
+logger.info("Train: %d | Val: %d | Test: %d", len(train_df), len(val_df), len(test_df))
 
-print(f"Player dataset: {len(ml_model)} rows")
+X_train, y_train = train_df[FEATURE_COLS].values, train_df[TARGET].values
+X_val,   y_val   = val_df[FEATURE_COLS].values,   val_df[TARGET].values
+X_test,  y_test  = test_df[FEATURE_COLS].values,  test_df[TARGET].values
 
-# ── Split ─────────────────────────────────────────────────────────────────
-train_p, val_p, test_p = season_split(ml_model, "season")
-print(f"  Train: {len(train_p)}  Val: {len(val_p)}  Test: {len(test_p)}")
+train_val_X = np.vstack([X_train, X_val])
+train_val_y = np.concatenate([y_train, y_val])
+groups_tv   = np.concatenate([train_df["season_year"].values, val_df["season_year"].values])
 
-X_train_p = train_p[player_feature_cols].values
-y_train_p = train_p[TARGET_PLAYER].values
-X_val_p   = val_p[player_feature_cols].values
-y_val_p   = val_p[TARGET_PLAYER].values
-X_test_p  = test_p[player_feature_cols].values
-y_test_p  = test_p[TARGET_PLAYER].values
+gkf = GroupKFold(n_splits=5)
 
-X_trainval_p = np.vstack([X_train_p, X_val_p])
-y_trainval_p = np.concatenate([y_train_p, y_val_p])
+# ─────────────────────────────────────────────
+# 6-A. LightGBM Optuna
+# ─────────────────────────────────────────────
+logger.info("LightGBM Optuna 최적화 (%d trials)...", N_TRIALS)
 
-scaler_p = StandardScaler()
-X_train_p_sc    = scaler_p.fit_transform(X_train_p)
-X_val_p_sc      = scaler_p.transform(X_val_p)
-X_test_p_sc     = scaler_p.transform(X_test_p)
-X_trainval_p_sc = scaler_p.transform(X_trainval_p)
-
-def player_metrics(y_true, y_prob, y_pred=None, label="", k=500):
-    auc = roc_auc_score(y_true, y_prob)
-    if y_pred is None:
-        y_pred = (y_prob >= 0.5).astype(int)
-    f1  = f1_score(y_true, y_pred, zero_division=0)
-    ap  = average_precision_score(y_true, y_prob)
-
-    # precision@k  — top-k by predicted probability
-    top_k_idx = np.argsort(y_prob)[::-1][:k]
-    prec_k = y_true[top_k_idx].mean()
-
-    print(f"  {label:35s}  AUC={auc:.4f}  F1={f1:.4f}  "
-          f"AP={ap:.4f}  Prec@{k}={prec_k:.4f}")
-    return {
-        "auc": round(auc, 4), "f1": round(f1, 4),
-        "avg_precision": round(ap, 4), f"precision_at_{k}": round(prec_k, 4),
+def lgbm_objective(trial):
+    params = {
+        "n_estimators":      trial.suggest_int("n_estimators", 200, 1000),
+        "learning_rate":     trial.suggest_float("learning_rate", 0.01, 0.15, log=True),
+        "num_leaves":        trial.suggest_int("num_leaves", 20, 150),
+        "max_depth":         trial.suggest_int("max_depth", 3, 10),
+        "min_child_samples": trial.suggest_int("min_child_samples", 10, 60),
+        "subsample":         trial.suggest_float("subsample", 0.5, 1.0),
+        "colsample_bytree":  trial.suggest_float("colsample_bytree", 0.5, 1.0),
+        "reg_alpha":         trial.suggest_float("reg_alpha", 1e-3, 5.0, log=True),
+        "reg_lambda":        trial.suggest_float("reg_lambda", 1e-3, 5.0, log=True),
+        "random_state":      RANDOM_STATE,
+        "n_jobs":            -1,
+        "verbose":           -1,
     }
+    scores = []
+    for tr_idx, vl_idx in gkf.split(train_val_X, train_val_y, groups=groups_tv):
+        m = LGBMRegressor(**params)
+        m.fit(train_val_X[tr_idx], train_val_y[tr_idx])
+        scores.append(r2_score(train_val_y[vl_idx], m.predict(train_val_X[vl_idx])))
+    return float(np.mean(scores))
 
-# ── Class weight for imbalanced data ───────────────────────────────────────
-pos_rate = y_train_p.mean()
-neg_rate = 1 - pos_rate
-scale_pos = neg_rate / pos_rate  # ~9x
+lgbm_study = optuna.create_study(direction="maximize",
+                                  sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
+lgbm_study.optimize(lgbm_objective, n_trials=N_TRIALS)
+best_lgbm_params = {**lgbm_study.best_params, "random_state": RANDOM_STATE, "n_jobs": -1, "verbose": -1}
+logger.info("LightGBM best OOF R²: %.4f", lgbm_study.best_value)
 
-print(f"\n  Class imbalance: {pos_rate:.3%} positive — scale_pos_weight={scale_pos:.1f}")
+# ─────────────────────────────────────────────
+# 6-B. XGBoost Optuna
+# ─────────────────────────────────────────────
+logger.info("XGBoost Optuna 최적화 (%d trials)...", N_TRIALS)
 
-# ── Model B1: XGBoost Classifier ────────────────────────────────────────────
-print("\n[B1] XGBoost Classifier")
+def xgb_objective(trial):
+    params = {
+        "n_estimators":     trial.suggest_int("n_estimators", 200, 1000),
+        "learning_rate":    trial.suggest_float("learning_rate", 0.01, 0.15, log=True),
+        "max_depth":        trial.suggest_int("max_depth", 3, 9),
+        "min_child_weight": trial.suggest_int("min_child_weight", 1, 20),
+        "subsample":        trial.suggest_float("subsample", 0.5, 1.0),
+        "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
+        "gamma":            trial.suggest_float("gamma", 0.0, 2.0),
+        "reg_alpha":        trial.suggest_float("reg_alpha", 1e-3, 5.0, log=True),
+        "reg_lambda":       trial.suggest_float("reg_lambda", 1e-3, 5.0, log=True),
+        "random_state":     RANDOM_STATE,
+        "n_jobs":           -1,
+        "tree_method":      "hist",
+        "verbosity":        0,
+    }
+    scores = []
+    for tr_idx, vl_idx in gkf.split(train_val_X, train_val_y, groups=groups_tv):
+        m = XGBRegressor(**params)
+        m.fit(train_val_X[tr_idx], train_val_y[tr_idx], verbose=False)
+        scores.append(r2_score(train_val_y[vl_idx], m.predict(train_val_X[vl_idx])))
+    return float(np.mean(scores))
 
-xgb_clf = xgb.XGBClassifier(
-    n_estimators=500,
-    learning_rate=0.05,
-    max_depth=6,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    min_child_weight=5,
-    scale_pos_weight=scale_pos,
-    objective="binary:logistic",
-    eval_metric="auc",
-    early_stopping_rounds=30,
-    use_label_encoder=False,
-    random_state=42,
-    verbosity=0,
-)
-xgb_clf.fit(
-    X_train_p, y_train_p,
-    eval_set=[(X_val_p, y_val_p)],
-    verbose=False,
-)
+xgb_study = optuna.create_study(direction="maximize",
+                                  sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
+xgb_study.optimize(xgb_objective, n_trials=N_TRIALS)
+best_xgb_params = {**xgb_study.best_params, "random_state": RANDOM_STATE,
+                    "n_jobs": -1, "tree_method": "hist", "verbosity": 0}
+logger.info("XGBoost best OOF R²: %.4f", xgb_study.best_value)
 
-prob_val_xgb  = xgb_clf.predict_proba(X_val_p)[:, 1]
-prob_test_xgb = xgb_clf.predict_proba(X_test_p)[:, 1]
-pred_val_xgb_c  = xgb_clf.predict(X_val_p)
-pred_test_xgb_c = xgb_clf.predict(X_test_p)
+# ─────────────────────────────────────────────
+# 7. 최종 모델 학습 (train+val)
+# ─────────────────────────────────────────────
+logger.info("최종 모델 학습...")
+lgbm_final = LGBMRegressor(**best_lgbm_params)
+lgbm_final.fit(train_val_X, train_val_y)
+xgb_final = XGBRegressor(**best_xgb_params)
+xgb_final.fit(train_val_X, train_val_y, verbose=False)
 
-print("  Validation:")
-results["player_goals"]["xgboost_val"]  = player_metrics(y_val_p, prob_val_xgb, pred_val_xgb_c, "XGBoost val")
-print("  Test:")
-results["player_goals"]["xgboost_test"] = player_metrics(y_test_p, prob_test_xgb, pred_test_xgb_c, "XGBoost test")
+# ─────────────────────────────────────────────
+# 8. 평가
+# ─────────────────────────────────────────────
+def evaluate(model, X, y):
+    pred = model.predict(X).clip(0)
+    return {"r2": round(float(r2_score(y, pred)), 4),
+            "mae": round(float(mean_absolute_error(y, pred)), 4)}
 
-# Feature importance
-feat_imp_p = pd.DataFrame({
-    "feature": player_feature_cols,
-    "importance": xgb_clf.feature_importances_,
-}).sort_values("importance", ascending=False)
-feat_imp_p.to_csv(OUT / "player_xgb_feature_importance.csv", index=False)
-print(f"  Top 5 features: {feat_imp_p['feature'].head(5).tolist()}")
+lgbm_val_m  = evaluate(lgbm_final, X_val,  y_val)
+lgbm_test_m = evaluate(lgbm_final, X_test, y_test)
+xgb_val_m   = evaluate(xgb_final,  X_val,  y_val)
+xgb_test_m  = evaluate(xgb_final,  X_test, y_test)
 
-# ── Model B2: MLP Classifier ────────────────────────────────────────────────
-print("\n[B2] MLP Classifier (sklearn)")
+logger.info("LightGBM  val R²=%.4f MAE=%.4f | test R²=%.4f MAE=%.4f",
+            lgbm_val_m["r2"], lgbm_val_m["mae"], lgbm_test_m["r2"], lgbm_test_m["mae"])
+logger.info("XGBoost   val R²=%.4f MAE=%.4f | test R²=%.4f MAE=%.4f",
+            xgb_val_m["r2"], xgb_val_m["mae"], xgb_test_m["r2"], xgb_test_m["mae"])
 
-mlp_clf = MLPClassifier(
-    hidden_layer_sizes=(128, 64, 32),
-    activation="relu",
-    solver="adam",
-    learning_rate_init=1e-3,
-    max_iter=500,
-    early_stopping=True,
-    validation_fraction=0.1,
-    n_iter_no_change=20,
-    random_state=42,
-    batch_size=512,
-)
-mlp_clf.fit(X_train_p_sc, y_train_p)
+best_name  = "LightGBM" if lgbm_test_m["r2"] >= xgb_test_m["r2"] else "XGBoost"
+best_model = lgbm_final if best_name == "LightGBM" else xgb_final
+best_val_m = lgbm_val_m if best_name == "LightGBM" else xgb_val_m
+best_test_m = lgbm_test_m if best_name == "LightGBM" else xgb_test_m
 
-prob_val_mlp_c  = mlp_clf.predict_proba(X_val_p_sc)[:, 1]
-prob_test_mlp_c = mlp_clf.predict_proba(X_test_p_sc)[:, 1]
-pred_val_mlp_c  = mlp_clf.predict(X_val_p_sc)
-pred_test_mlp_c = mlp_clf.predict(X_test_p_sc)
+goal_met = best_test_m["r2"] >= 0.65 and best_test_m["mae"] <= 3.5
+logger.info("베스트: %s | 목표 달성: %s", best_name, "✅" if goal_met else "❌")
 
-print("  Validation:")
-results["player_goals"]["mlp_val"]  = player_metrics(y_val_p, prob_val_mlp_c, pred_val_mlp_c, "MLP val")
-print("  Test:")
-results["player_goals"]["mlp_test"] = player_metrics(y_test_p, prob_test_mlp_c, pred_test_mlp_c, "MLP test")
+fi = dict(zip(FEATURE_COLS, best_model.feature_importances_))
+fi_top = dict(sorted(fi.items(), key=lambda x: x[1], reverse=True)[:15])
 
-# ── Summary comparison (player goals) ───────────────────────────────────────
-print("\n--- Player Goal Probability Summary (Test set) ---")
-player_models_test = {
-    "XGBoost": (prob_test_xgb, pred_test_xgb_c),
-    "MLP":     (prob_test_mlp_c, pred_test_mlp_c),
+# ─────────────────────────────────────────────
+# 9. 스카우트 검증
+# ─────────────────────────────────────────────
+scout_validation = []
+for bm in BENCHMARK_PLAYERS:
+    if not player_col:
+        break
+    rows = df_model[(df_model[player_col] == bm["player"]) & (df_model["season"] == bm["season"])]
+    if rows.empty:
+        scout_validation.append({**bm, "pred_goals": None, "abs_error": None})
+        continue
+    pred = float(best_model.predict(rows[FEATURE_COLS].values)[0])
+    scout_validation.append({**bm, "pred_goals": round(pred, 1),
+                               "abs_error": round(abs(pred - bm["actual_goals"]), 1)})
+    logger.info("  %s %s: 실제=%d 예측=%.1f 오차=%.1f",
+                bm["player"], bm["season"], bm["actual_goals"], pred,
+                abs(pred - bm["actual_goals"]))
+
+# ─────────────────────────────────────────────
+# 10. 저장
+# ─────────────────────────────────────────────
+test_df["pred_goals_lgbm"] = lgbm_final.predict(X_test).clip(0).round(1)
+test_df["pred_goals_xgb"]  = xgb_final.predict(X_test).clip(0).round(1)
+test_df["pred_goals_best"] = best_model.predict(X_test).clip(0).round(1)
+
+save_cols = ([player_col] if player_col else []) + \
+            ["season", "pos_group", "age_clean", "gls",
+             "pred_goals_lgbm", "pred_goals_xgb", "pred_goals_best"]
+test_df[[c for c in save_cols if c in test_df.columns]].to_parquet(SCOUT_OUT, index=False)
+
+joblib.dump(best_model, OUT_DIR / "model_best.pkl")
+joblib.dump({"features": FEATURE_COLS}, OUT_DIR / "meta.pkl")
+
+summary = {
+    "task":        "P2 Season Goals Prediction v2 (LightGBM + XGBoost Optuna + GroupKFold)",
+    "version":     "v2",
+    "target":      "gls (시즌 총 득점 수)",
+    "goal_target": "R² ≥ 0.65 / MAE ≤ 3.5골",
+    "goal_met":    goal_met,
+    "best_model":  best_name,
+    "features_used": FEATURE_COLS,
+    "n_features":  len(FEATURE_COLS),
+    "splits": {"train": len(train_df), "val": len(val_df), "test": len(test_df)},
+    "metrics": {
+        "lightgbm": {"val": lgbm_val_m,  "test": lgbm_test_m},
+        "xgboost":  {"val": xgb_val_m,   "test": xgb_test_m},
+    },
+    "best_metrics": {
+        "val_r2":          best_val_m["r2"],
+        "val_mae":         best_val_m["mae"],
+        "test_r2":         best_test_m["r2"],
+        "test_mae":        best_test_m["mae"],
+        "val_test_gap_r2": round(abs(best_val_m["r2"] - best_test_m["r2"]), 4),
+    },
+    "optuna_trials":   N_TRIALS,
+    "cv_strategy":     "GroupKFold(n=5, groups=season_year)",
+    "min_minutes_filter": 500,
+    "feature_importance_top15": fi_top,
+    "scout_validation": scout_validation,
+    "output_file": str(SCOUT_OUT),
 }
-best_player_model = None
-best_auc = 0.0
-for name, (prob, pred) in player_models_test.items():
-    m = player_metrics(y_test_p, prob, pred, name)
-    if m["auc"] > best_auc:
-        best_auc = m["auc"]
-        best_player_model = name
 
-print(f"  Best player model (by AUC): {best_player_model} — AUC={best_auc:.4f}")
-results["player_goals"]["best_model"] = best_player_model
+with open(OUT_DIR / "results_summary.json", "w", encoding="utf-8") as f:
+    json.dump(summary, f, ensure_ascii=False, indent=2)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Save predictions
-# ─────────────────────────────────────────────────────────────────────────────
-print("\nSaving predictions...")
-
-# Match goals predictions
-match_pred_df = test_m[["Season", "MatchDate", "HomeTeam", "AwayTeam",
-                          "FullTimeHomeGoals", "FullTimeAwayGoals", "TotalGoals"]].copy()
-match_pred_df["pred_xgboost"] = np.round(pred_test_xgb, 2)
-match_pred_df["pred_poisson"] = np.round(pred_test_poi, 2)
-match_pred_df["pred_mlp"]     = np.round(pred_test_mlp_r, 2)
-match_pred_df.to_csv(OUT / "match_goal_predictions.csv", index=False)
-
-# Player goal predictions
-player_pred_df = test_p[["season", "date", "player", "squad", "opponent",
-                           "venue", "pos", "min", "gls", "scored"]].copy()
-player_pred_df["prob_xgboost"] = np.round(prob_test_xgb, 4)
-player_pred_df["prob_mlp"]     = np.round(prob_test_mlp_c, 4)
-player_pred_df.to_csv(OUT / "player_goal_predictions.csv", index=False)
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Save final results.json
-# ─────────────────────────────────────────────────────────────────────────────
-results["meta"] = {
-    "train_seasons": f"{TRAIN_SEASONS[0]} – {TRAIN_SEASONS[-1]}",
-    "val_seasons":   f"{VAL_SEASONS[0]} – {VAL_SEASONS[-1]}",
-    "test_seasons":  f"{TEST_SEASONS[0]} – {TEST_SEASONS[-1]}",
-    "match_features":  match_feature_cols,
-    "player_features": player_feature_cols,
-    "match_train_rows":  int(len(train_m)),
-    "match_val_rows":    int(len(val_m)),
-    "match_test_rows":   int(len(test_m)),
-    "player_train_rows": int(len(train_p)),
-    "player_val_rows":   int(len(val_p)),
-    "player_test_rows":  int(len(test_p)),
-    "player_positive_rate": float(round(pos_rate, 4)),
-}
-
-with open(OUT / "results.json", "w") as f:
-    json.dump(results, f, indent=2)
-
-print("\n" + "=" * 70)
-print("ALL DONE")
-print(f"  Results  → {OUT / 'results.json'}")
-print(f"  Match predictions   → {OUT / 'match_goal_predictions.csv'}")
-print(f"  Player predictions  → {OUT / 'player_goal_predictions.csv'}")
-print(f"  Match XGB feat imp  → {OUT / 'match_xgb_feature_importance.csv'}")
-print(f"  Player XGB feat imp → {OUT / 'player_xgb_feature_importance.csv'}")
-print(f"  Poisson summary     → {OUT / 'poisson_summary.txt'}")
-print("=" * 70)
+logger.info("results_summary.json 저장 완료")
+logger.info("=" * 60)
+logger.info("P2 v2 완료 | %s | val R²=%.4f | test R²=%.4f | MAE=%.4fgol",
+            best_name, best_val_m["r2"], best_test_m["r2"], best_test_m["mae"])
+logger.info("목표(R²≥0.65/MAE≤3.5): %s", "✅ 달성" if goal_met else "❌ 미달")
+logger.info("=" * 60)
