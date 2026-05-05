@@ -1,0 +1,23 @@
+{
+  "date": "2026-05-05",
+  "results": [
+    {
+      "item": "P1 torch 의존성 제거 + P1 재학습: `models/p1_match_result/",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": false,
+      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/models/p1_match_result/train_pipeline.py\", line 24, in <module>\n    import torch\nModuleNotFoundError: No module named 'torch'\n"
+    },
+    {
+      "item": "P2 대시보드 통합: `dashboard/pages/player_intelligence.p",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P7 v5.1 R² 개선: v5 test R²=0.586 → 0.62 목표. 방향: (1)",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "reason": "중복 스킵"
+    }
+  ]
+}
