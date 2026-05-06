@@ -45,5 +45,15 @@ Thumbs.db
 # Streamlit cache
 .streamlit/secrets.toml
 
-# Claude
-.claude/
+# Claude (세션/프로젝트 데이터 제외, agents/skills는 포함)
+.claude/projects/
+.claude/sessions/
+.claude/backups/
+.claude/shell-snapshots/
+.claude/settings.json
+.claude/stop-hook-git-check.sh
+
+# PPT Team Agent
+node_modules/
+reports/portfolio_ppt/output/
+reports/portfolio_ppt/slides/

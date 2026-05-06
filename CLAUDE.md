@@ -61,10 +61,44 @@ base64 인코딩 파일은 디코딩해서 읽을 것.
 | 미팅 시뮬레이션 | CCR RemoteTrigger | 매일 09:00 KST |
 | 모델 학습 + Streamlit 체크 | GitHub Actions | 매일 09:15 KST (cron: 20:50 UTC, 지연 3h24m 역산) |
 | 로컬 실행 (PC 켤 때) | Windows Task Scheduler | 매일 09:15 KST |
+| **데일리 PPT 생성** | 미팅 루틴 5단계 (아래 참고) | 매일 09:00 KST (미팅 노트 생성 직후) |
 
 - **학습**: 기존 train 스크립트 직접 실행 (Claude API 불필요)
 - **Streamlit 체크**: playwright 헤드리스 브라우저 (두 환경 동일)
 - **에러 자동수정**: 로컬에서만 Claude CLI로 수정
+
+## PPT Team Agent
+
+### 아키텍처
+```
+미팅 노트 + results_summary.json
+    ↓
+ppt-organizer 에이전트   → reports/portfolio_ppt/slide-outline.md
+    ↓
+ppt-designer 에이전트    → reports/portfolio_ppt/slides/slide-NN.html
+    ↓
+node reports/portfolio_ppt/build_ppt.js
+    ↓
+reports/portfolio_ppt/output/EPL_Scout_Briefing_YYYY-MM-DD.pptx
+```
+
+### 에이전트 파일
+| 파일 | 역할 |
+|------|------|
+| `.claude/agents/ppt-organizer.md` | 데이터 읽기 → slide-outline.md 생성 |
+| `.claude/agents/ppt-designer.md` | outline → slide-NN.html 생성 |
+| `.claude/skills/design-skill/SKILL.md` | HTML 디자인 시스템 |
+| `.claude/skills/pptx-skill/scripts/html2pptx.cjs` | Playwright 렌더링 → PPTX 변환 |
+| `reports/portfolio_ppt/build_ppt.js` | 빌드 진입점 |
+
+### HTML 슬라이드 작성 규칙 (ppt-designer 필수 준수)
+- **텍스트는 반드시 `<p>`, `<h1>`~`<h6>`, `<ul>`, `<ol>` 태그로 감쌀 것** — `<div>` 안에 직접 텍스트 금지
+- 슬라이드 크기: `width: 720pt; height: 405pt` (body에 고정)
+- 외부 폰트 CDN은 허용하나, ERR_CERT 환경에서도 fallback 폰트로 렌더링 가능하게 설정
+- JS 없이 정적 HTML만 사용
+
+### 데일리 PPT 생성 수동 호출
+"PPT 만들어줘" 또는 "데일리 브리핑 PPT" → ppt-organizer → ppt-designer → build_ppt.js 순으로 자동 실행
 
 ## Streamlit Cloud
 

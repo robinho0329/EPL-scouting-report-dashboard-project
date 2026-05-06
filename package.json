@@ -1,0 +1,16 @@
+{
+  "name": "epl-scouting-ppt",
+  "version": "1.0.0",
+  "description": "EPL Scout Intelligence PPT Builder",
+  "type": "module",
+  "scripts": {
+    "build-ppt": "node reports/portfolio_ppt/build_ppt.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "playwright-core": "^1.59.1",
+    "pptxgenjs": "^3.12.0",
+    "puppeteer": "^24.42.0",
+    "sharp": "^0.33.0"
+  }
+}
