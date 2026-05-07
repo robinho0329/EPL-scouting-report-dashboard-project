@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 960px; height: 540px;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: #e6edf3;
+    overflow: hidden;
+    position: relative;
+  }
+  :root {
+    --epl-accent: #e94560;
+    --epl-gold: #f5a623;
+    --epl-text: #e6edf3;
+    --epl-muted: #8b949e;
+    --epl-card: #16213e;
+    --epl-border: #30363d;
+  }
+
+  /* 좌측 컬러 바 — 솔리드 */
+  .left-bar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: #e94560;
+  }
+
+  .slide-inner {
+    position: absolute;
+    top: 0; left: 4px; right: 0; bottom: 0;
+    padding: 28px 44px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #e6edf3;
+  }
+  h2 span { color: #e94560; }
+  .slide-num {
+    font-size: 11px;
+    color: #8b949e;
+  }
+
+  /* 체크리스트 카드들 */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .check-card {
+    background: rgba(233, 69, 96, 0.07);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+    border-left: 4px solid #e94560;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .fail-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(233, 69, 96, 0.2);
+    border: 2px solid #e94560;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .fail-icon span {
+    font-size: 14px;
+    font-weight: 900;
+    color: #e94560;
+    line-height: 1;
+  }
+
+  .check-content { flex: 1; }
+
+  .check-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+  .check-title h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e6edf3;
+  }
+  .item-num {
+    font-size: 9px;
+    font-weight: 700;
+    color: #e94560;
+    background: rgba(233, 69, 96, 0.15);
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  .check-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .meta-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: #8b949e;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .meta-value {
+    font-size: 9px;
+    color: #e6edf3;
+    font-family: 'Courier New', monospace;
+  }
+
+  .error-box {
+    background: rgba(15, 52, 96, 0.5);
+    border: 1px solid rgba(233, 69, 96, 0.25);
+    border-radius: 4px;
+    padding: 5px 10px;
+    display: inline-block;
+    max-width: 100%;
+  }
+  .error-box p {
+    font-size: 10px;
+    color: #ff8fa3;
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cause-tag {
+    display: inline-block;
+    background: rgba(245, 166, 35, 0.15);
+    border: 1px solid rgba(245, 166, 35, 0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-top: 4px;
+  }
+  .cause-tag p {
+    font-size: 9px;
+    color: #f5a623;
+    font-weight: 700;
+  }
+
+  /* 경고 배너 */
+  .warning-banner {
+    margin-top: 8px;
+    background: rgba(245, 166, 35, 0.1);
+    border: 1px solid rgba(245, 166, 35, 0.4);
+    border-radius: 6px;
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .warning-banner .left-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .warning-icon { font-size: 16px; }
+  .warning-banner p {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f5a623;
+  }
+
+  /* 5일 정체 타임라인 */
+  .timeline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tl-label {
+    font-size: 9px;
+    color: #8b949e;
+    margin-right: 4px;
+  }
+  .tl-dot {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .tl-circle {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(233, 69, 96, 0.2);
+    border: 1px solid #e94560;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tl-circle span {
+    font-size: 7px;
+    font-weight: 700;
+    color: #e94560;
+  }
+  .tl-arrow {
+    width: 10px; height: 1px;
+    background: #30363d;
+  }
+  .tl-score {
+    font-size: 9px;
+    font-weight: 800;
+    color: #f5a623;
+    margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="left-bar"></div>
+  <div class="slide-inner">
+    <div class="header">
+      <h2>어제(2026-05-06) 달성·미달 체크리스트 <span>— 3개 전부 실패</span></h2>
+      <p class="slide-num">03 / 06 &nbsp;·&nbsp; 2026-05-07</p>
+    </div>
+
+    <div class="checklist">
+      <!-- 항목 1 -->
+      <div class="check-card">
+        <div class="fail-icon"><span>&#10005;</span></div>
+        <div class="check-content">
+          <div class="check-title">
+            <span class="item-num">#1 긴급</span>
+            <h3>P1 torch 조건부 임포트 수정 + 재학습</h3>
+          </div>
+          <div class="check-meta">
+            <div class="meta-item">
+              <p class="meta-label">스크립트</p>
+              <p class="meta-value">models/p1_match_result/train_pipeline.py</p>
+            </div>
+          </div>
+          <div class="error-box">
+            <p>ModuleNotFoundError: No module named 'torch' — train_pipeline.py 파일 미수정, 4연속 동일 오류</p>
+          </div>
+          <div class="cause-tag"><p>원인: 코드 파일 편집 없이 Actions 재실행만 반복</p></div>
+        </div>
+      </div>
+
+      <!-- 항목 2 -->
+      <div class="check-card">
+        <div class="fail-icon"><span>&#10005;</span></div>
+        <div class="check-content">
+          <div class="check-title">
+            <span class="item-num">#2 스크립트 매핑 오류</span>
+            <h3>P2 대시보드 통합 (기한 당일)</h3>
+          </div>
+          <div class="check-meta">
+            <div class="meta-item">
+              <p class="meta-label">실제 실행된 스크립트</p>
+              <p class="meta-value">models/p7_growth_curve/train_v5.py</p>
+              <p class="meta-label" style="margin-left:8px; color:#f5a623;">P2 항목에서 P7 스크립트가 실행됨</p>
+            </div>
+          </div>
+          <div class="error-box">
+            <p>actions.json 스크립트 매핑 오류 — 대시보드 코드 한 줄도 미작성, dev_result에는 success:true 기록</p>
+          </div>
+          <div class="cause-tag"><p>원인: Actions workflow actions.json 스크립트 경로 혼선</p></div>
+        </div>
+      </div>
+
+      <!-- 항목 3 -->
+      <div class="check-card">
+        <div class="fail-icon"><span>&#10005;</span></div>
+        <div class="check-content">
+          <div class="check-title">
+            <span class="item-num">#3 중복 스킵</span>
+            <h3>P7 v5.1 착수</h3>
+          </div>
+          <div class="check-meta">
+            <div class="meta-item">
+              <p class="meta-label">스크립트</p>
+              <p class="meta-value">models/p7_growth_curve/train_v5.py</p>
+            </div>
+          </div>
+          <div class="error-box">
+            <p>train_v5_1.py 파일 미존재 → 기존 train_v5.py 중복 실행 후 스킵 처리</p>
+          </div>
+          <div class="cause-tag"><p>원인: 새 스크립트 파일 신규 작성 0건 — 전략 논의 3일, 코드 편집 0건</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 경고 배너 -->
+    <div class="warning-banner">
+      <div class="left-info">
+        <span class="warning-icon">&#9888;</span>
+        <p>어제 신규 달성 0건 — 5일 연속 평가 점수 정체 (4.80 / 5.0)</p>
+      </div>
+      <div class="timeline">
+        <p class="tl-label">5/2~5/6</p>
+        <div class="tl-dot"><div class="tl-circle"><span>5/2</span></div></div>
+        <div class="tl-arrow"></div>
+        <div class="tl-dot"><div class="tl-circle"><span>5/3</span></div></div>
+        <div class="tl-arrow"></div>
+        <div class="tl-dot"><div class="tl-circle"><span>5/4</span></div></div>
+        <div class="tl-arrow"></div>
+        <div class="tl-dot"><div class="tl-circle"><span>5/5</span></div></div>
+        <div class="tl-arrow"></div>
+        <div class="tl-dot"><div class="tl-circle"><span>5/6</span></div></div>
+        <p class="tl-score">전부 4.80</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

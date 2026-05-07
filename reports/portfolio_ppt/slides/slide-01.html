@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 960px; height: 540px;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    color: #e6edf3;
+    overflow: hidden;
+    position: relative;
+  }
+  :root {
+    --epl-dark: #0d1117;
+    --epl-surface: #161b22;
+    --epl-card: #16213e;
+    --epl-border: #30363d;
+    --epl-accent: #e94560;
+    --epl-gold: #f5a623;
+    --epl-green: #2ecc71;
+    --epl-teal: #00d4aa;
+    --epl-blue: #0f3460;
+    --epl-text: #e6edf3;
+    --epl-muted: #8b949e;
+  }
+
+  /* 좌측 컬러 바 — 솔리드 색상 */
+  .left-bar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 6px; height: 100%;
+    background: #e94560;
+  }
+
+  /* 메인 컨텐츠 영역 */
+  .content {
+    position: absolute;
+    top: 0; left: 6px; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 60px;
+  }
+
+  /* 상단 배너 */
+  .alert-banner {
+    position: absolute;
+    top: 0; left: 6px; right: 0;
+    background: rgba(233, 69, 96, 0.15);
+    border-bottom: 2px solid #e94560;
+    padding: 10px 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .alert-banner p {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e94560;
+    letter-spacing: 0.03em;
+  }
+  .alert-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #e94560;
+    flex-shrink: 0;
+  }
+
+  /* EPL 태그 */
+  .tag {
+    display: inline-block;
+    background: rgba(233, 69, 96, 0.15);
+    border: 1px solid rgba(233, 69, 96, 0.5);
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin-bottom: 20px;
+  }
+  .tag p {
+    font-size: 10px;
+    font-weight: 700;
+    color: #e94560;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* 메인 제목 */
+  h1 {
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #e6edf3;
+    margin-bottom: 10px;
+  }
+  h1 span {
+    color: #e94560;
+  }
+
+  /* 날짜 */
+  .date-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .date-row p {
+    font-size: 20px;
+    font-weight: 600;
+    color: #f5a623;
+  }
+  .date-divider {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #8b949e;
+  }
+  .date-row .sub {
+    font-size: 14px;
+    color: #8b949e;
+    font-weight: 400;
+  }
+
+  /* 구분선 — 솔리드 색상 */
+  .divider {
+    width: 80px; height: 3px;
+    background: #e94560;
+    margin-bottom: 24px;
+    border-radius: 2px;
+  }
+
+  /* 하단 팀 정보 */
+  .team-info {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .team-info p {
+    font-size: 13px;
+    color: #8b949e;
+  }
+  .team-info .highlight {
+    color: #e6edf3;
+    font-weight: 600;
+  }
+  .team-sep {
+    width: 1px; height: 14px;
+    background: #30363d;
+  }
+
+  /* 점수 배지 (우하단) */
+  .score-badge {
+    position: absolute;
+    right: 60px;
+    bottom: 40px;
+    background: #16213e;
+    border: 1px solid #f5a623;
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+  }
+  .score-badge .label {
+    font-size: 10px;
+    color: #8b949e;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .score-badge .score {
+    font-size: 32px;
+    font-weight: 900;
+    color: #f5a623;
+    line-height: 1;
+  }
+  .score-badge .score-max {
+    font-size: 14px;
+    color: #8b949e;
+  }
+  .score-badge .note {
+    font-size: 9px;
+    color: #8b949e;
+    margin-top: 6px;
+  }
+
+  /* 미팅 회차 배지 */
+  .meeting-badge {
+    position: absolute;
+    right: 60px;
+    top: 50px;
+    background: rgba(15, 52, 96, 0.8);
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 8px 16px;
+    text-align: center;
+  }
+  .meeting-badge p {
+    font-size: 11px;
+    color: #4dabf7;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* 게이지 바 트랙 */
+  .gauge-track {
+    width: 160px; height: 4px;
+    background: #30363d;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .gauge-fill {
+    width: 96%;
+    height: 100%;
+    background: #f5a623;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+  <div class="left-bar"></div>
+
+  <!-- 상단 긴급 배너 -->
+  <div class="alert-banner">
+    <div class="alert-dot"></div>
+    <p>P1 torch 오류 4연속 — 오늘 코드 직접 수정 + 낙관 시나리오 5.0 달성 목표</p>
+  </div>
+
+  <!-- 미팅 회차 배지 -->
+  <div class="meeting-badge">
+    <p>제 15 회 정기 미팅</p>
+  </div>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="content" style="padding-top: 50px;">
+    <div class="tag">
+      <p>EPL Scout Intelligence · Daily Briefing</p>
+    </div>
+
+    <h1>EPL 스카우트 <span>인텔리전스</span></h1>
+
+    <div class="date-row">
+      <p>2026년 05월 07일 (목)</p>
+      <div class="date-divider"></div>
+      <p class="sub">09:00 KST · 데일리 브리핑</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="team-info">
+      <p><span class="highlight">김태현 스카우트</span></p>
+      <div class="team-sep"></div>
+      <p><span class="highlight">Marcus Webb</span> Analytics Agent</p>
+      <div class="team-sep"></div>
+      <p>자율 개발팀 코디네이터</p>
+    </div>
+  </div>
+
+  <!-- 점수 배지 (우하단) -->
+  <div class="score-badge">
+    <p class="label">스카우트 평가</p>
+    <p class="score">4.80 <span class="score-max">/ 5.0</span></p>
+    <div class="gauge-track">
+      <div class="gauge-fill"></div>
+    </div>
+    <p class="note">5일 연속 정체 · 오늘 5.0 목표</p>
+  </div>
+</body>
+</html>
