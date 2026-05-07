@@ -1,8 +1,6 @@
 {
-  "task": "P1 Match Result Prediction v2 (3-class: H/D/A) — Optuna + LightGBM",
-  "version": "v2",
-  "improvement": "Optuna 40trials + use_label_encoder 제거(XGBoost 3.x) + LightGBM 추가 | Acc 0.5384→0.5726 (+0.034), F1 0.4037→0.4521 (+0.048)",
-  "features_file": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\features\\match_features.parquet",
+  "task": "P1 Match Result Prediction (3-class: H/D/A)",
+  "features_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/features/match_features.parquet",
   "n_features": 49,
   "feature_columns": [
     "season_year",
@@ -66,189 +64,132 @@
     "H": 2
   },
   "models": {
-    "lightgbm": {
-      "train": {"accuracy": 0.7089, "f1_macro": 0.5887},
-      "val":   {"accuracy": 0.5842, "f1_macro": 0.4703},
-      "test":  {"accuracy": 0.5644, "f1_macro": 0.4412}
-    },
     "xgboost": {
       "train": {
-        "accuracy": 0.7214,
-        "f1_macro": 0.6033,
+        "accuracy": 0.5743,
+        "f1_macro": 0.4312,
         "confusion_matrix": [
           [
-            1326,
-            6,
-            957
+            1190,
+            1,
+            1098
           ],
           [
-            458,
-            183,
-            1327
+            448,
+            41,
+            1479
           ],
           [
-            370,
-            7,
-            3256
+            332,
+            1,
+            3300
           ]
         ]
       },
       "val": {
-        "accuracy": 0.5395,
-        "f1_macro": 0.411,
+        "accuracy": 0.5368,
+        "f1_macro": 0.3942,
         "confusion_matrix": [
           [
-            142,
-            2,
-            94
+            134,
+            0,
+            104
+          ],
+          [
+            62,
+            0,
+            113
           ],
           [
             73,
-            4,
-            98
-          ],
-          [
-            81,
-            2,
-            264
-          ]
-        ]
-      },
-      "val": {
-        "accuracy": 0.5921,
-        "f1_macro": 0.4814
-      },
-      "test": {
-        "accuracy": 0.5726,
-        "f1_macro": 0.4521
-      }
-    },
-    "mlp": {
-      "train": {
-        "accuracy": 0.5243,
-        "f1_macro": 0.5089,
-        "confusion_matrix": [
-          [
-            1284,
-            613,
-            392
-          ],
-          [
-            551,
-            822,
-            595
-          ],
-          [
-            627,
-            975,
-            2031
-          ]
-        ]
-      },
-      "val": {
-        "accuracy": 0.4934,
-        "f1_macro": 0.4644,
-        "confusion_matrix": [
-          [
-            152,
-            49,
-            37
-          ],
-          [
-            77,
-            49,
-            49
-          ],
-          [
-            97,
-            76,
-            174
+            0,
+            274
           ]
         ]
       },
       "test": {
-        "accuracy": 0.5014,
-        "f1_macro": 0.4609,
+        "accuracy": 0.5479,
+        "f1_macro": 0.4065,
         "confusion_matrix": [
           [
-            162,
-            47,
-            32
+            144,
+            0,
+            97
           ],
           [
-            76,
-            36,
-            58
+            68,
+            0,
+            102
           ],
           [
-            84,
-            67,
-            168
+            63,
+            0,
+            256
           ]
         ]
       }
     },
-    "lstm": {
+    "lightgbm": {
       "train": {
-        "accuracy": 0.5603,
-        "f1_macro": 0.5463,
+        "accuracy": 0.9991,
+        "f1_macro": 0.9991,
         "confusion_matrix": [
           [
-            1355,
-            557,
-            350
+            2285,
+            0,
+            4
           ],
           [
-            434,
-            927,
-            572
+            0,
+            1965,
+            3
           ],
           [
-            826,
-            684,
-            2080
+            0,
+            0,
+            3633
           ]
         ]
       },
       "val": {
-        "accuracy": 0.4709,
-        "f1_macro": 0.434,
+        "accuracy": 0.5079,
+        "f1_macro": 0.4488,
         "confusion_matrix": [
           [
-            149,
-            31,
-            56
+            151,
+            26,
+            61
           ],
           [
-            77,
-            38,
-            60
+            83,
+            28,
+            64
           ],
           [
-            119,
-            57,
-            169
+            96,
+            44,
+            207
           ]
         ]
       },
       "test": {
-        "accuracy": 0.4437,
-        "f1_macro": 0.3995,
+        "accuracy": 0.5055,
+        "f1_macro": 0.4371,
         "confusion_matrix": [
           [
-            99,
-            51,
-            90
+            164,
+            23,
+            54
           ],
           [
-            53,
-            33,
-            83
+            76,
+            20,
+            74
           ],
           [
-            77,
-            51,
-            191
+            102,
+            32,
+            185
           ]
         ]
       }

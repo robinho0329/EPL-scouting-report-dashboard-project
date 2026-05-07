@@ -1,0 +1,23 @@
+{
+  "date": "2026-05-07",
+  "results": [
+    {
+      "item": "P1 train_pipeline.py 직접 수정 + 재학습: `models/p1_match",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P7 v5.1 train_v5_1.py 작성 + 즉시 로컬 학습: `models/p7_gr",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P2 대시보드 통합 완료 (최종 기한): `dashboard/pages/player_int",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "reason": "중복 스킵"
+    }
+  ]
+}
