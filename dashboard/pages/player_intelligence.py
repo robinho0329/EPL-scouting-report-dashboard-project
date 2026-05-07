@@ -355,6 +355,91 @@ def render():
         else:
             st.info("성장 곡선 데이터 없음")
 
+    # ── P2 득점 예측 ──────────────────────────────────────────────────────────
+    st.markdown("---")
+    st.subheader("⚽ P2 득점 예측 (시즌 득점 전망)")
+
+    try:
+        from pathlib import Path as _Path
+        _p2_path = _Path(__file__).resolve().parent.parent.parent / "models" / "p2_goal_scoring" / "player_goal_predictions.csv"
+        if _p2_path.exists():
+            _p2_df = pd.read_csv(_p2_path)
+            _p2_player = _p2_df[_p2_df["player"] == selected_player]
+            if not _p2_player.empty:
+                # 시즌별 예측 득점 합산 (per-match 확률 합산)
+                _p2_season = (
+                    _p2_player.groupby("season")
+                    .agg(
+                        pred_goals=("prob_xgboost", "sum"),
+                        actual_goals=("gls", "sum"),
+                        matches=("prob_xgboost", "count"),
+                    )
+                    .reset_index()
+                    .sort_values("season", ascending=False)
+                )
+
+                latest_season = _p2_season.iloc[0]
+                pred_g = latest_season["pred_goals"]
+                act_g = latest_season["actual_goals"]
+                season_label = latest_season["season"]
+
+                # 포지션별 리그 평균 예측 득점 계산
+                _pos_val = p_row.get("pos_group", "MID")
+                _p2_pos_avg = (
+                    _p2_df[_p2_df["season"] == season_label]
+                    .groupby("player")["prob_xgboost"].sum()
+                )
+                _pos_rank = (_p2_pos_avg < pred_g).sum()
+                _pos_total = len(_p2_pos_avg)
+                _pct = int(_pos_rank / max(_pos_total, 1) * 100)
+
+                pc1, pc2, pc3 = st.columns(3)
+                with pc1:
+                    st.metric(
+                        f"예측 득점 ({season_label})",
+                        f"{pred_g:.1f}골",
+                        help="P2 XGBoost 시즌 득점 예측"
+                    )
+                with pc2:
+                    delta_v = pred_g - act_g
+                    st.metric("실제 득점", f"{act_g:.0f}골",
+                              delta=f"예측 대비 {delta_v:+.1f}",
+                              delta_color="inverse")
+                with pc3:
+                    st.metric("리그 내 순위 백분위", f"상위 {100 - _pct}%",
+                              help=f"전체 {_pos_total}명 기준")
+
+                # 시즌별 추이 차트
+                if len(_p2_season) >= 2:
+                    fig_p2 = go.Figure()
+                    fig_p2.add_trace(go.Bar(
+                        x=_p2_season["season"], y=_p2_season["pred_goals"],
+                        name="예측 득점", marker_color=EPL_CYAN, opacity=0.8,
+                    ))
+                    fig_p2.add_trace(go.Scatter(
+                        x=_p2_season["season"], y=_p2_season["actual_goals"],
+                        name="실제 득점", mode="lines+markers",
+                        line=dict(color=EPL_GOLD, width=2),
+                        marker=dict(size=8),
+                    ))
+                    fig_p2.update_layout(
+                        height=220,
+                        margin=dict(t=10, b=20, l=20, r=20),
+                        paper_bgcolor="rgba(0,0,0,0)",
+                        plot_bgcolor="rgba(20,0,30,0.5)",
+                        font_color="white",
+                        legend=dict(orientation="h", y=1.1),
+                        xaxis_title="시즌",
+                        yaxis_title="득점",
+                    )
+                    st.plotly_chart(fig_p2, use_container_width=True)
+            else:
+                st.info("P2 득점 예측 데이터 없음 (해당 선수 포함 안 됨)")
+        else:
+            st.info("P2 모델 미학습 — GitHub Actions 실행 후 재확인")
+    except Exception:
+        st.info("P2 득점 예측 로드 중 오류")
+
     # ── 영입 종합 권고 ────────────────────────────────────────────────────────
     st.markdown("---")
     st.subheader("📋 영입 종합 권고")

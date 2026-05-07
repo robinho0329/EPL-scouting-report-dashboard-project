@@ -21,9 +21,20 @@ import xgboost as xgb
 import optuna
 import lightgbm as lgb
 optuna.logging.set_verbosity(optuna.logging.WARNING)
-import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
+try:
+    import torch
+    import torch.nn as nn
+    from torch.utils.data import DataLoader, TensorDataset
+    TORCH_AVAILABLE = True
+except ImportError:
+    import types
+    torch = None
+    nn = types.SimpleNamespace(Module=object, LSTM=None, Linear=None,
+                               BatchNorm1d=None, ReLU=None, Dropout=None,
+                               Sequential=None, CrossEntropyLoss=None)
+    DataLoader = None
+    TensorDataset = None
+    TORCH_AVAILABLE = False
 
 warnings.filterwarnings("ignore")
 
@@ -34,10 +45,13 @@ RESULTS_PATH = PROJECT_ROOT / "data" / "processed" / "match_results.parquet"
 OUTPUT_DIR = PROJECT_ROOT / "models" / "p1_match_result"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 SEED = 42
 np.random.seed(SEED)
-torch.manual_seed(SEED)
+if TORCH_AVAILABLE:
+    DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    torch.manual_seed(SEED)
+else:
+    DEVICE = "cpu"
 
 
 # ── 1. Load & Prepare Data ────────────────────────────────────────────────────
@@ -263,6 +277,8 @@ def train_lightgbm(data):
         pickle.dump(model, f)
     print(f"  Saved {model_path}")
     return results
+
+
 
 
 # ── 5. MLP (PyTorch) ───────────────────────────────────────────────────────────
@@ -601,10 +617,16 @@ def main():
     all_results["lightgbm"] = train_lightgbm(data)
 
     # MLP
-    all_results["mlp"] = train_mlp(data)
+    if TORCH_AVAILABLE:
+        all_results["mlp"] = train_mlp(data)
+    else:
+        print("  MLP: 스킵 (torch 미설치)")
 
     # LSTM
-    all_results["lstm"] = train_lstm(data)
+    if TORCH_AVAILABLE:
+        all_results["lstm"] = train_lstm(data)
+    else:
+        print("  LSTM: 스킵 (torch 미설치)")
 
     # ── Summary ────────────────────────────────────────────────────────────────
     print("\n" + "=" * 70)
@@ -641,7 +663,10 @@ def main():
     # Print comparison table
     print(f"\n{'Model':<12} {'Val Acc':>8} {'Val F1':>8} {'Test Acc':>9} {'Test F1':>8}")
     print("-" * 50)
-    for model_name in ["xgboost", "lightgbm", "mlp", "lstm"]:
+    models_to_print = ["xgboost", "lightgbm"]
+    if TORCH_AVAILABLE:
+        models_to_print += ["mlp", "lstm"]
+    for model_name in models_to_print:
         res = all_results[model_name]
         va = res.get("val", {}).get("accuracy", 0)
         vf = res.get("val", {}).get("f1_macro", 0)
