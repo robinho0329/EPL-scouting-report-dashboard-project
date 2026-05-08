@@ -8,337 +8,220 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 960px; height: 540px;
-    background: #0d1117;
+    background: #0a0e1a;
     font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #e6edf3;
+    color: #e8eaf0;
     overflow: hidden;
     position: relative;
   }
   :root {
-    --epl-accent: #e94560;
-    --epl-gold: #f5a623;
-    --epl-teal: #00d4aa;
-    --epl-blue: #4dabf7;
-    --epl-green: #2ecc71;
-    --epl-card: #16213e;
-    --epl-border: #30363d;
-    --epl-muted: #8b949e;
-    --epl-text: #e6edf3;
+    --bg: #0a0e1a;
+    --surface: #161b2e;
+    --card-bg: #131829;
+    --border: #2a3050;
+    --accent: #ff6b35;
+    --cyan: #00d4ff;
+    --gold: #f5a623;
+    --green: #3fb950;
+    --blue: #0f3460;
+    --text: #e8eaf0;
+    --muted: #8b94b0;
+    --red: #e94560;
   }
-
-  /* 좌측 컬러 바 — 솔리드 */
-  .left-bar {
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: #e94560;
+  .top-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: #00d4ff;
   }
-
-  .slide-inner {
-    position: absolute;
-    top: 0; left: 4px; right: 0; bottom: 0;
-    padding: 22px 36px 16px;
-    display: flex;
-    flex-direction: column;
+  .slide-wrap {
+    position: absolute; top: 4px; left: 0; right: 0; bottom: 0;
+    padding: 14px 24px 10px;
+    display: flex; flex-direction: column; gap: 8px;
   }
-
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  h2 {
-    font-size: 20px;
-    font-weight: 800;
-    color: #e6edf3;
-  }
-  h2 span { color: #f5a623; }
-  .slide-num {
-    font-size: 11px;
-    color: #8b949e;
-  }
-
-  /* 3열 카드 레이아웃 */
+  .slide-header { display: flex; align-items: baseline; gap: 12px; flex-shrink: 0; }
+  h2 { font-size: 19px; font-weight: 800; color: var(--text); }
+  .slide-header p.sub { font-size: 11px; color: var(--muted); }
   .cards-row {
-    display: flex;
-    gap: 14px;
-    flex: 1;
-    margin-bottom: 14px;
+    display: flex; gap: 12px; flex: 1;
   }
-
   .action-card {
     flex: 1;
-    background: #16213e;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: 3px solid transparent;
     border-radius: 10px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    padding: 13px 14px;
+    display: flex; flex-direction: column; gap: 7px;
   }
-
-  .card-1 {
-    border: 1px solid rgba(233, 69, 96, 0.5);
-    border-top: 3px solid #e94560;
+  .action-card.card-1 { border-top-color: var(--red); border-color: rgba(233,69,96,0.3); background: #130a0c; }
+  .action-card.card-2 { border-top-color: var(--gold); border-color: rgba(245,166,35,0.3); background: #130f00; }
+  .action-card.card-3 { border-top-color: var(--cyan); border-color: rgba(0,212,255,0.25); background: #0a1318; }
+  .card-rank {
+    display: flex; align-items: center; gap: 7px;
   }
-  .card-2 {
-    border: 1px solid rgba(245, 166, 35, 0.5);
-    border-top: 3px solid #f5a623;
-  }
-  .card-3 {
-    border: 1px solid rgba(77, 171, 247, 0.4);
-    border-top: 3px solid #4dabf7;
-  }
-
   .rank-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 9px;
-    font-weight: 800;
+    padding: 2px 9px; border-radius: 10px;
+    font-size: 9px; font-weight: 800;
     letter-spacing: 0.05em;
-    margin-bottom: 8px;
-    text-transform: uppercase;
   }
-  .rank-1 { background: rgba(233, 69, 96, 0.2); color: #e94560; }
-  .rank-2 { background: rgba(245, 166, 35, 0.2); color: #f5a623; }
-  .rank-3 { background: rgba(77, 171, 247, 0.2); color: #4dabf7; }
-
-  .card-title {
-    font-size: 12px;
-    font-weight: 700;
-    color: #e6edf3;
-    line-height: 1.4;
-    margin-bottom: 8px;
+  .rank-badge.r1 { background: #2a0a10; color: var(--red); border: 1px solid rgba(233,69,96,0.4); }
+  .rank-badge.r2 { background: #1a1000; color: var(--gold); border: 1px solid rgba(245,166,35,0.35); }
+  .rank-badge.r3 { background: #001520; color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
+  .card-assignee { font-size: 9px; color: var(--muted); }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .card-tasks ul {
+    list-style: none; display: flex; flex-direction: column; gap: 3px;
   }
-
-  .card-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
+  .card-tasks ul li {
+    font-size: 9px; color: var(--muted); line-height: 1.45;
+    padding-left: 11px; position: relative;
   }
-  .meta-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 6px;
+  .card-tasks ul li::before {
+    content: ''; position: absolute; left: 2px; top: 5px;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--border);
   }
-  .meta-key {
-    font-size: 8px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    min-width: 36px;
-    flex-shrink: 0;
-    padding-top: 1px;
-  }
-  .meta-val {
-    font-size: 9px;
-    color: #e6edf3;
-    line-height: 1.4;
-  }
-
+  .card-tasks ul li strong { color: var(--text); }
   .goal-box {
-    margin-top: 10px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    border-left: 3px solid;
+    background: #0a0c10;
+    border: 1px solid rgba(245,166,35,0.25);
+    border-radius: 6px; padding: 6px 10px;
+    margin-top: auto;
   }
-  .goal-1 { background: rgba(233, 69, 96, 0.1); border-color: #e94560; }
-  .goal-2 { background: rgba(245, 166, 35, 0.1); border-color: #f5a623; }
-  .goal-3 { background: rgba(77, 171, 247, 0.1); border-color: #4dabf7; }
+  .goal-box p.goal-label { font-size: 8.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .goal-box p.goal-val { font-size: 11px; font-weight: 700; color: var(--gold); }
+  .goal-box p.deadline { font-size: 8.5px; color: var(--muted); margin-top: 2px; }
+  .goal-box p.effect { font-size: 8.5px; color: var(--green); margin-top: 2px; font-weight: 600; }
 
-  .goal-label {
-    font-size: 8px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 3px;
+  .scenario-table {
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
   }
-  .goal-value {
-    font-size: 10px;
-    font-weight: 700;
+  .scenario-table table {
+    width: 100%; border-collapse: collapse; font-size: 9px;
   }
-  .goal-1 .goal-value { color: #e94560; }
-  .goal-2 .goal-value { color: #f5a623; }
-  .goal-3 .goal-value { color: #4dabf7; }
-
-  .score-effect {
-    margin-top: 6px;
-    font-size: 9px;
-    font-weight: 700;
-    color: #2ecc71;
-    text-align: right;
+  .scenario-table table thead tr { background: var(--blue); }
+  .scenario-table table thead th {
+    padding: 5px 12px; text-align: left;
+    color: var(--muted); font-weight: 700;
+    font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.06em;
   }
-
-  /* 시나리오 표 */
-  .scenario-section {
-    background: rgba(22, 33, 62, 0.6);
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 10px 16px;
-  }
-  .scenario-header {
-    font-size: 9px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-  .scenario-row {
-    display: flex;
-    gap: 8px;
-    align-items: stretch;
-  }
-  .scenario-item {
-    flex: 1;
-    padding: 6px 10px;
-    border-radius: 6px;
-    text-align: center;
-  }
-  .s-opt  { background: rgba(245, 166, 35, 0.15); border: 1px solid rgba(245, 166, 35, 0.4); }
-  .s-base { background: rgba(0, 212, 170, 0.1);   border: 1px solid rgba(0, 212, 170, 0.3); }
-  .s-min  { background: rgba(77, 171, 247, 0.1);  border: 1px solid rgba(77, 171, 247, 0.3); }
-  .s-hold { background: rgba(233, 69, 96, 0.08);  border: 1px solid rgba(233, 69, 96, 0.3); }
-
-  .s-label {
-    font-size: 8px;
-    font-weight: 700;
-    color: #8b949e;
-    margin-bottom: 3px;
-  }
-  .s-score {
-    font-size: 16px;
-    font-weight: 900;
-    line-height: 1;
-  }
-  .s-opt  .s-score { color: #f5a623; }
-  .s-base .s-score { color: #00d4aa; }
-  .s-min  .s-score { color: #4dabf7; }
-  .s-hold .s-score { color: #e94560; }
-  .s-cond {
-    font-size: 8px;
-    color: #8b949e;
-    margin-top: 2px;
-    line-height: 1.3;
-  }
+  .scenario-table table tbody tr { border-top: 1px solid rgba(42,48,80,0.5); }
+  .scenario-table table tbody tr.highlight { background: #150f00; }
+  .scenario-table table tbody td { padding: 4.5px 12px; color: var(--muted); }
+  .scenario-table table tbody td.scenario-name { color: var(--text); font-weight: 600; }
+  .scenario-table table tbody td.score { color: var(--text); font-weight: 800; text-align: right; }
+  .scenario-table table tbody tr.highlight td.score { color: var(--gold); }
 </style>
 </head>
 <body>
-  <div class="left-bar"></div>
-  <div class="slide-inner">
-    <div class="header">
-      <h2>오늘 액션아이템 <span>Top 3</span></h2>
-      <p class="slide-num">04 / 06 &nbsp;·&nbsp; 2026-05-07</p>
+  <div class="top-bar"></div>
+  <div class="slide-wrap">
+    <div class="slide-header">
+      <h2>오늘 액션아이템 Top 3</h2>
+      <p class="sub">P1 정확도 회복 &rarr; P7 v5.1 작성 &rarr; P2 통합 &nbsp;|&nbsp; 3건 달성 시 낙관 5.0</p>
     </div>
 
     <div class="cards-row">
-      <!-- 카드 1: P1 torch 수정 -->
       <div class="action-card card-1">
-        <span class="rank-badge rank-1">1순위 긴급</span>
-        <p class="card-title">P1 train_pipeline.py 직접 수정 + 재학습</p>
-        <div class="card-meta">
-          <div class="meta-row">
-            <p class="meta-key">담당</p>
-            <p class="meta-val">Marcus Webb</p>
-          </div>
-          <div class="meta-row">
-            <p class="meta-key">작업</p>
-            <p class="meta-val">import torch → try/except 블록 교체, LSTM·MLP 조건부 실행, requirements.txt 주석 처리</p>
-          </div>
-          <div class="meta-row">
-            <p class="meta-key">기한</p>
-            <p class="meta-val" style="color:#e94560;">09:15 Actions 재학습</p>
-          </div>
+        <div class="card-rank">
+          <span class="rank-badge r1">1순위 긴급</span>
+          <span class="card-assignee">Marcus Webb</span>
         </div>
-        <div class="goal-box goal-1">
+        <p class="card-title">P1 정확도 회복 + 재학습</p>
+        <div class="card-tasks">
+          <ul>
+            <li><strong>train_pipeline.py</strong> 전처리 파이프라인 검토</li>
+            <li>피처 스케일링&middot;데이터 분할 로직 확인 (TORCH_AVAILABLE=False 이후 차이 규명)</li>
+            <li>XGBoost 단독 최적화 &rarr; 커밋&middot;푸시 &rarr; Actions 재학습</li>
+          </ul>
+        </div>
+        <div class="goal-box">
           <p class="goal-label">목표 지표</p>
-          <p class="goal-value">P1 학습 성공 / XGBoost Acc &ge; 57%</p>
+          <p class="goal-val">XGBoost test Acc &ge; 57%</p>
+          <p class="deadline">현재 54.79% &mdash; 갭 2.21%p &nbsp;|&nbsp; 기한 09:15</p>
+          <p class="effect">+0.03 &rarr; 4.82 &rarr; 4.85</p>
         </div>
-        <p class="score-effect">4.80 → +0.05 → 4.85</p>
       </div>
 
-      <!-- 카드 2: P7 v5.1 -->
       <div class="action-card card-2">
-        <span class="rank-badge rank-2">2순위 오후</span>
-        <p class="card-title">P7 v5.1 학습 스크립트 신규 작성 + 로컬 학습</p>
-        <div class="card-meta">
-          <div class="meta-row">
-            <p class="meta-key">담당</p>
-            <p class="meta-val">Marcus Webb</p>
-          </div>
-          <div class="meta-row">
-            <p class="meta-key">작업</p>
-            <p class="meta-val">train_v5_1.py 신규 작성, FW/MID 분리, Optuna 100 trials, 메타모델 LinearRegression(positive=True)</p>
-          </div>
-          <div class="meta-row">
-            <p class="meta-key">기한</p>
-            <p class="meta-val" style="color:#f5a623;">오늘 오후 (학습 2~3시간)</p>
-          </div>
+        <div class="card-rank">
+          <span class="rank-badge r2">2순위</span>
+          <span class="card-assignee">Marcus Webb</span>
         </div>
-        <div class="goal-box goal-2">
+        <p class="card-title">P7 v5.1 신규 파일 작성 + 로컬 학습</p>
+        <div class="card-tasks">
+          <ul>
+            <li><strong>train_v5_1.py</strong> 신규 생성 (3일째 미생성)</li>
+            <li>FW/MID 분리 모델, <strong>gc_trend_3yr</strong> 피처 복원</li>
+            <li>Optuna 100 trials, LinearRegression(positive=True) 메타모델</li>
+            <li>GroupKFold(n=5) 유지 &rarr; results_summary.json v5.1 업데이트</li>
+          </ul>
+        </div>
+        <div class="goal-box">
           <p class="goal-label">목표 지표</p>
-          <p class="goal-value">test R&sup2; &ge; 0.62 / val-test 갭 &le; 0.07</p>
+          <p class="goal-val">test R&sup2; &ge; 0.62 / 갭 &le; 0.07</p>
+          <p class="deadline">현재 R&sup2; 0.586, 갭 0.055 &nbsp;|&nbsp; 오늘 종일</p>
+          <p class="effect">+0.10 &rarr; 4.90 &rarr; 5.0</p>
         </div>
-        <p class="score-effect">4.90 → +0.10 → 5.0</p>
       </div>
 
-      <!-- 카드 3: P2 대시보드 통합 -->
       <div class="action-card card-3">
-        <span class="rank-badge rank-3">3순위 저녁</span>
-        <p class="card-title">P2 대시보드 통합 완료 — 이월 없음</p>
-        <div class="card-meta">
-          <div class="meta-row">
-            <p class="meta-key">담당</p>
-            <p class="meta-val">Marcus Webb</p>
-          </div>
-          <div class="meta-row">
-            <p class="meta-key">작업</p>
-            <p class="meta-val">player_intelligence.py에 st.columns(2) 추가, P2 XGBoost 모델 로드, 포지션별 백분위 출력 블록</p>
-          </div>
-          <div class="meta-row">
-            <p class="meta-key">기한</p>
-            <p class="meta-val" style="color:#4dabf7;">오늘 저녁 — 최종 기한</p>
-          </div>
+        <div class="card-rank">
+          <span class="rank-badge r3">3순위</span>
+          <span class="card-assignee">Marcus Webb</span>
         </div>
-        <div class="goal-box goal-3">
+        <p class="card-title">P2 대시보드 통합 완료 (4일 이월 절대 불가)</p>
+        <div class="card-tasks">
+          <ul>
+            <li><strong>player_intelligence.py</strong> 성장 예측 섹션</li>
+            <li><strong>st.columns(2)</strong> 추가 &rarr; 우측 컬럼 P2 XGBoost 연동</li>
+            <li>포지션별 백분위 계산 &rarr; "내년 예상 득점 X.X골 (±1.9골, FW 상위 Z%)"</li>
+            <li>약 60~80줄 작성</li>
+          </ul>
+        </div>
+        <div class="goal-box">
           <p class="goal-label">목표 지표</p>
-          <p class="goal-value">P2 UI 통합 완료 / player_intelligence P2 블록 활성화</p>
+          <p class="goal-val">P2 득점 예측 블록 통합</p>
+          <p class="deadline">R&sup2;=0.8877 영입 회의 활용 &nbsp;|&nbsp; 저녁 완료</p>
+          <p class="effect">+0.05 &rarr; 4.85 &rarr; 4.90</p>
         </div>
-        <p class="score-effect">4.85 → +0.05 → 4.90</p>
       </div>
     </div>
 
-    <!-- 시나리오 표 -->
-    <div class="scenario-section">
-      <p class="scenario-header">오늘 예상 점수 시나리오</p>
-      <div class="scenario-row">
-        <div class="scenario-item s-opt">
-          <p class="s-label">낙관</p>
-          <p class="s-score">5.0</p>
-          <p class="s-cond">P1+P2+P7 v5.1</p>
-        </div>
-        <div class="scenario-item s-base">
-          <p class="s-label">기본</p>
-          <p class="s-score">4.90</p>
-          <p class="s-cond">P1+P2 통합</p>
-        </div>
-        <div class="scenario-item s-min">
-          <p class="s-label">최소</p>
-          <p class="s-score">4.85</p>
-          <p class="s-cond">P1만 성공</p>
-        </div>
-        <div class="scenario-item s-hold">
-          <p class="s-label">유지</p>
-          <p class="s-score">4.80</p>
-          <p class="s-cond">전부 실패 (6일 연속 정체)</p>
-        </div>
-      </div>
+    <div class="scenario-table">
+      <table>
+        <thead>
+          <tr>
+            <th>시나리오</th>
+            <th>조건</th>
+            <th style="text-align:right;">예상 점수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td class="scenario-name">낙관</td>
+            <td>P1 &ge;57% + P2 UI 통합 + P7 v5.1 R&sup2;&ge;0.62</td>
+            <td class="score">5.0</td>
+          </tr>
+          <tr>
+            <td class="scenario-name">기본</td>
+            <td>P1 회복 + P2 UI 통합</td>
+            <td class="score">4.90</td>
+          </tr>
+          <tr>
+            <td class="scenario-name">최소</td>
+            <td>P1 정확도 회복만</td>
+            <td class="score">4.85</td>
+          </tr>
+          <tr>
+            <td class="scenario-name">유지</td>
+            <td>전부 실패</td>
+            <td class="score" style="color:var(--muted);">4.82</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </body>

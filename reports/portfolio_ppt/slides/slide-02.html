@@ -8,197 +8,120 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 960px; height: 540px;
-    background: #0d1117;
+    background: #0a0e1a;
     font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #e6edf3;
+    color: #e8eaf0;
     overflow: hidden;
     position: relative;
   }
   :root {
-    --epl-dark: #0d1117;
-    --epl-surface: #161b22;
-    --epl-card: #16213e;
-    --epl-border: #30363d;
-    --epl-accent: #e94560;
-    --epl-gold: #f5a623;
-    --epl-green: #2ecc71;
-    --epl-teal: #00d4aa;
-    --epl-blue: #0f3460;
-    --epl-text: #e6edf3;
-    --epl-muted: #8b949e;
+    --bg: #0a0e1a;
+    --surface: #161b2e;
+    --hdr: #0f1f3d;
+    --border: #2a3050;
+    --accent: #ff6b35;
+    --cyan: #00d4ff;
+    --gold: #f5a623;
+    --green: #3fb950;
+    --teal: #00d4aa;
+    --text: #e8eaf0;
+    --muted: #8b94b0;
+    --red: #e94560;
   }
-
-  /* 좌측 컬러 바 — 솔리드 */
-  .left-bar {
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: #e94560;
+  .top-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: #00d4ff;
   }
-
-  .slide-inner {
-    position: absolute;
-    top: 0; left: 4px; right: 0; bottom: 0;
-    padding: 24px 36px 20px;
-    display: flex;
-    flex-direction: column;
+  .slide-wrap {
+    position: absolute; top: 4px; left: 0; right: 0; bottom: 0;
+    padding: 18px 30px 12px;
+    display: flex; flex-direction: column; gap: 10px;
   }
-
-  /* 헤더 */
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 14px;
+  .slide-header {
+    display: flex; align-items: baseline; gap: 14px;
+    flex-shrink: 0;
   }
-  h2 {
-    font-size: 20px;
-    font-weight: 800;
-    color: #e6edf3;
+  .slide-header h2 {
+    font-size: 20px; font-weight: 800; color: var(--text);
   }
-  .slide-num {
-    font-size: 11px;
-    color: #8b949e;
-    font-weight: 500;
+  .slide-header p.sub {
+    font-size: 11px; color: var(--muted);
   }
-
-  /* 테이블 */
   table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 10px;
+    width: 100%; border-collapse: collapse;
+    font-size: 9.5px; flex: 1;
   }
   thead tr {
-    background: #0f3460;
+    background: var(--hdr);
   }
-  th {
-    padding: 6px 8px;
-    text-align: left;
-    color: #8ab4f8;
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  thead th {
+    padding: 7px 8px; text-align: left;
+    color: var(--muted); font-weight: 700;
+    letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
+    font-size: 9px; text-transform: uppercase;
   }
-  th:nth-child(3) { text-align: right; }
-  th:nth-child(4) { text-align: center; }
-
+  thead th:nth-child(3),
+  thead th:nth-child(4) { text-align: center; }
+  thead th:nth-child(5) { text-align: right; }
   tbody tr {
-    border-bottom: 1px solid rgba(48, 54, 61, 0.6);
+    border-bottom: 1px solid rgba(42,48,80,0.6);
   }
-  tbody tr:nth-child(even) {
-    background: rgba(22, 27, 34, 0.4);
+  tbody tr.row-red { background: #1a0508; }
+  tbody tr.row-yellow { background: #150f00; }
+  tbody tr.row-normal { background: transparent; }
+  tbody td {
+    padding: 5.5px 8px; color: var(--text);
+    vertical-align: middle;
   }
-  tbody tr.row-critical {
-    background: rgba(233, 69, 96, 0.08);
-    border-left: 3px solid #e94560;
-  }
-  tbody tr.row-warn {
-    background: rgba(245, 166, 35, 0.06);
-    border-left: 3px solid #f5a623;
-  }
-  td {
-    padding: 5px 8px;
-  }
-  td:nth-child(1) {
-    font-weight: 700;
-    font-size: 9px;
-    color: #8b949e;
+  tbody td.model-id {
+    font-weight: 800; font-size: 10px; color: var(--cyan);
     width: 34px;
   }
-  td:nth-child(2) { font-weight: 600; font-size: 10px; }
-  td:nth-child(3) {
-    font-size: 9px;
-    color: #8b949e;
-    text-align: center;
-    width: 48px;
-  }
-  td:nth-child(4) {
-    text-align: right;
-    font-size: 9px;
-    font-weight: 600;
-  }
-  td:nth-child(5) {
-    text-align: center;
-    width: 70px;
-  }
-
-  /* 상태 배지 */
+  tbody td.model-name { font-weight: 600; }
+  tbody td.version { color: var(--muted); font-size: 9px; text-align: center; }
+  tbody td.metric { text-align: right; font-size: 9px; font-family: monospace; }
+  tbody td.metric.green { color: var(--teal); }
+  tbody td.metric.yellow { color: var(--gold); }
+  tbody td.metric.red { color: var(--red); }
+  tbody td.status-cell { text-align: center; width: 80px; }
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-size: 8px;
-    font-weight: 700;
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 7px; border-radius: 10px;
+    font-size: 8.5px; font-weight: 700;
   }
-  .badge-critical {
-    background: rgba(233, 69, 96, 0.2);
-    color: #e94560;
-    border: 1px solid rgba(233, 69, 96, 0.4);
+  .badge.red { background: #2a0a10; color: var(--red); border: 1px solid rgba(233,69,96,0.4); }
+  .badge.yellow { background: #1a1000; color: var(--gold); border: 1px solid rgba(245,166,35,0.35); }
+  .badge.green { background: #0a1a0a; color: var(--green); border: 1px solid rgba(63,185,80,0.35); }
+  .badge.teal { background: #001a18; color: var(--teal); border: 1px solid rgba(0,212,170,0.35); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot.red { background: var(--red); }
+  .dot.yellow { background: var(--gold); }
+  .dot.green { background: var(--green); }
+  .dot.teal { background: var(--teal); }
+  .summary-bar {
+    flex-shrink: 0;
+    display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+    padding-top: 4px;
   }
-  .badge-warn {
-    background: rgba(245, 166, 35, 0.2);
-    color: #f5a623;
-    border: 1px solid rgba(245, 166, 35, 0.4);
+  .summary-chip {
+    display: flex; align-items: center; gap: 5px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 10px;
   }
-  .badge-ok {
-    background: rgba(46, 204, 113, 0.15);
-    color: #2ecc71;
-    border: 1px solid rgba(46, 204, 113, 0.3);
-  }
-  .badge-best {
-    background: rgba(0, 212, 170, 0.15);
-    color: #00d4aa;
-    border: 1px solid rgba(0, 212, 170, 0.3);
-  }
-
-  /* 지표 강조 */
-  .metric-good { color: #2ecc71; font-weight: 700; }
-  .metric-best { color: #00d4aa; font-weight: 700; }
-  .metric-warn { color: #f5a623; font-weight: 700; }
-  .metric-bad  { color: #e94560; font-weight: 700; }
-
-  /* 하단 요약 카운터 */
-  .summary-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid #30363d;
-  }
-  .summary-label {
-    font-size: 9px;
-    color: #8b949e;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-right: 4px;
-  }
-  .counter {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 9px;
-    font-weight: 700;
-  }
-  .counter-best { background: rgba(0, 212, 170, 0.15); color: #00d4aa; }
-  .counter-ok   { background: rgba(46, 204, 113, 0.12); color: #2ecc71; }
-  .counter-warn { background: rgba(245, 166, 35, 0.15); color: #f5a623; }
-  .counter-bad  { background: rgba(233, 69, 96, 0.15); color: #e94560; }
-  .counter-dot  { width: 6px; height: 6px; border-radius: 50%; }
+  .summary-chip p { font-size: 9px; color: var(--muted); }
+  .summary-chip .chip-num { font-size: 14px; font-weight: 800; }
+  .summary-chip .chip-num.teal { color: var(--teal); }
+  .summary-chip .chip-num.green { color: var(--green); }
+  .summary-chip .chip-num.yellow { color: var(--gold); }
+  .summary-chip .chip-num.red { color: var(--red); }
 </style>
 </head>
 <body>
-  <div class="left-bar"></div>
-  <div class="slide-inner">
-    <div class="header">
+  <div class="top-bar"></div>
+  <div class="slide-wrap">
+    <div class="slide-header">
       <h2>12개 모델 성능 현황</h2>
-      <p class="slide-num">02 / 06 &nbsp;·&nbsp; 2026-05-07</p>
+      <p class="sub">2026-05-08 기준 &nbsp;|&nbsp; 빨간불 1건 &middot; 노란불 2건 &middot; 안정 9건</p>
     </div>
 
     <table>
@@ -207,117 +130,128 @@
           <th>ID</th>
           <th>모델명</th>
           <th style="text-align:center;">버전</th>
-          <th style="text-align:right;">핵심 지표</th>
-          <th style="text-align:center;">상태</th>
+          <th style="text-align:center;">핵심 지표</th>
+          <th style="text-align:right;">상태</th>
+          <th>전일 변동</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="row-critical">
-          <td>P1</td>
-          <td>경기 결과 예측 (H/D/A)</td>
-          <td>v2</td>
-          <td><span class="metric-bad">Acc 57.26%</span> &nbsp;F1 45.21%</td>
-          <td><span class="badge badge-critical">긴급</span></td>
+        <tr class="row-red">
+          <td class="model-id">P1</td>
+          <td class="model-name">경기 결과 예측 (H/D/A)</td>
+          <td class="version">v2</td>
+          <td class="metric red">Acc <strong>54.79%</strong> / F1 40.65%</td>
+          <td class="status-cell"><span class="badge red"><span class="dot red"></span>긴급</span></td>
+          <td style="font-size:9px; color:var(--muted);">torch 수정 성공 BUT 57.26%&rarr;54.79% 하락</td>
         </tr>
-        <tr class="row-warn">
-          <td>P2</td>
-          <td>시즌 득점 예측</td>
-          <td>v2</td>
-          <td><span class="metric-best">R&sup2; 0.8877</span> &nbsp;MAE 0.96골</td>
-          <td><span class="badge badge-warn">이월</span></td>
+        <tr class="row-yellow">
+          <td class="model-id">P2</td>
+          <td class="model-name">시즌 득점 예측</td>
+          <td class="version">v2</td>
+          <td class="metric yellow">R&sup2; <strong>0.8877</strong> / MAE 0.96골</td>
+          <td class="status-cell"><span class="badge yellow"><span class="dot yellow"></span>이월</span></td>
+          <td style="font-size:9px; color:var(--muted);">모델 탁월, 대시보드 미통합 4일 이월</td>
         </tr>
-        <tr>
-          <td>P3</td>
-          <td>강등권 예측</td>
-          <td>v2</td>
-          <td><span class="metric-best">AUC 100%</span> (test)</td>
-          <td><span class="badge badge-best">최우수</span></td>
+        <tr class="row-normal">
+          <td class="model-id">P3</td>
+          <td class="model-name">강등권 예측</td>
+          <td class="version">v2</td>
+          <td class="metric green">AUC val <strong>99.02%</strong> / test <strong>100%</strong></td>
+          <td class="status-cell"><span class="badge teal"><span class="dot teal"></span>최우수</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>P4</td>
-          <td>MVP 스코어링</td>
-          <td>—</td>
-          <td><span class="metric-best">Spearman 0.9987</span></td>
-          <td><span class="badge badge-best">최우수</span></td>
+        <tr class="row-normal">
+          <td class="model-id">P4</td>
+          <td class="model-name">MVP 스코어링</td>
+          <td class="version">&mdash;</td>
+          <td class="metric green">Spearman <strong>0.9987</strong> / NDCG@10 0.9993</td>
+          <td class="status-cell"><span class="badge teal"><span class="dot teal"></span>최우수</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>P5</td>
-          <td>선수 클러스터링</td>
-          <td>v2</td>
-          <td><span class="metric-good">Silhouette 0.2851</span> (K=3)</td>
-          <td><span class="badge badge-ok">정상</span></td>
+        <tr class="row-normal">
+          <td class="model-id">P5</td>
+          <td class="model-name">선수 클러스터링</td>
+          <td class="version">v2</td>
+          <td class="metric green">K-means K=3 Sil <strong>0.2851</strong></td>
+          <td class="status-cell"><span class="badge green"><span class="dot green"></span>정상</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>P6</td>
-          <td>시장가치 예측</td>
-          <td>—</td>
-          <td><span class="metric-good">R&sup2; 0.8734</span> &nbsp;MAE £3.28M</td>
-          <td><span class="badge badge-ok">정상</span></td>
+        <tr class="row-normal">
+          <td class="model-id">P6</td>
+          <td class="model-name">시장가치 예측</td>
+          <td class="version">&mdash;</td>
+          <td class="metric green">R&sup2; <strong>0.8734</strong> / MAE &pound;3.28M</td>
+          <td class="status-cell"><span class="badge green"><span class="dot green"></span>정상</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr class="row-warn">
-          <td>P7</td>
-          <td>성장 곡선 예측</td>
-          <td>v5</td>
-          <td><span class="metric-warn">R&sup2; 0.586</span> &nbsp;갭 0.055</td>
-          <td><span class="badge badge-warn">이월</span></td>
+        <tr class="row-yellow">
+          <td class="model-id">P7</td>
+          <td class="model-name">성장 곡선 예측</td>
+          <td class="version">v5</td>
+          <td class="metric yellow">R&sup2; <strong>0.586</strong> / val 0.640 / 갭 0.055</td>
+          <td class="status-cell"><span class="badge yellow"><span class="dot yellow"></span>이월</span></td>
+          <td style="font-size:9px; color:var(--muted);">v5.1 파일 미생성 3일 이월</td>
         </tr>
-        <tr>
-          <td>P8</td>
-          <td>이적 적응 예측</td>
-          <td>v2</td>
-          <td><span class="metric-good">AUC 0.6612</span> &nbsp;F1 88.23%</td>
-          <td><span class="badge badge-ok">정상</span></td>
+        <tr class="row-normal">
+          <td class="model-id">P8</td>
+          <td class="model-name">이적 적응 예측</td>
+          <td class="version">v2</td>
+          <td class="metric green">AUC <strong>0.6612</strong> / F1 88.23%</td>
+          <td class="status-cell"><span class="badge green"><span class="dot green"></span>정상</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>S1</td>
-          <td>선수 종합 레이팅</td>
-          <td>v1.2</td>
-          <td><span class="metric-best">R&sup2; 0.9093</span> &nbsp;MAE 4.66</td>
-          <td><span class="badge badge-best">최우수</span></td>
+        <tr class="row-normal">
+          <td class="model-id">S1</td>
+          <td class="model-name">선수 종합 레이팅</td>
+          <td class="version">v1.2</td>
+          <td class="metric green">R&sup2; <strong>0.9093</strong> / MAE 4.66</td>
+          <td class="status-cell"><span class="badge teal"><span class="dot teal"></span>최우수</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>S2</td>
-          <td>포지션별 시장가치</td>
-          <td>v4</td>
-          <td><span class="metric-good">R&sup2; 0.8812</span> &nbsp;MAE £3.23M</td>
-          <td><span class="badge badge-ok">정상</span></td>
+        <tr class="row-normal">
+          <td class="model-id">S2</td>
+          <td class="model-name">포지션별 시장가치</td>
+          <td class="version">v4</td>
+          <td class="metric green">R&sup2; <strong>0.8812</strong> / MAE &pound;3.23M</td>
+          <td class="status-cell"><span class="badge green"><span class="dot green"></span>정상</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>S3</td>
-          <td>유사 선수 탐색</td>
-          <td>v4</td>
-          <td><span class="metric-good">Silhouette 0.3224</span> (K=20)</td>
-          <td><span class="badge badge-ok">정상</span></td>
+        <tr class="row-normal">
+          <td class="model-id">S3</td>
+          <td class="model-name">유사 선수 탐색</td>
+          <td class="version">v4</td>
+          <td class="metric green">Silhouette <strong>0.3224</strong> (K=20)</td>
+          <td class="status-cell"><span class="badge green"><span class="dot green"></span>정상</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
-        <tr>
-          <td>S6</td>
-          <td>선수 하락세 감지</td>
-          <td>—</td>
-          <td><span class="metric-good">AUC 0.8324</span> &nbsp;F1 61.74%</td>
-          <td><span class="badge badge-ok">정상</span></td>
+        <tr class="row-normal">
+          <td class="model-id">S6</td>
+          <td class="model-name">선수 하락세 감지</td>
+          <td class="version">&mdash;</td>
+          <td class="metric green">AUC <strong>0.8324</strong> / F1 61.74%</td>
+          <td class="status-cell"><span class="badge green"><span class="dot green"></span>정상</span></td>
+          <td style="font-size:9px; color:var(--muted);">변동 없음</td>
         </tr>
       </tbody>
     </table>
 
-    <div class="summary-row">
-      <p class="summary-label">요약</p>
-      <div class="counter counter-best">
-        <div class="counter-dot" style="background:#00d4aa;"></div>
-        <span>최우수 4건</span>
+    <div class="summary-bar">
+      <div class="summary-chip">
+        <p class="chip-num teal">3</p>
+        <p>최우수 (2단계)</p>
       </div>
-      <div class="counter counter-ok">
-        <div class="counter-dot" style="background:#2ecc71;"></div>
-        <span>정상 5건</span>
+      <div class="summary-chip">
+        <p class="chip-num green">6</p>
+        <p>정상 달성</p>
       </div>
-      <div class="counter counter-warn">
-        <div class="counter-dot" style="background:#f5a623;"></div>
-        <span>이월 2건</span>
+      <div class="summary-chip">
+        <p class="chip-num yellow">2</p>
+        <p>노란불 이월</p>
       </div>
-      <div class="counter counter-bad">
-        <div class="counter-dot" style="background:#e94560;"></div>
-        <span>긴급 1건</span>
+      <div class="summary-chip">
+        <p class="chip-num red">1</p>
+        <p>빨간불 긴급</p>
       </div>
-      <p style="font-size:9px; color:#8b949e; margin-left:auto;">어제 신규 달성 0건 · Actions 3개 전부 실패</p>
     </div>
   </div>
 </body>

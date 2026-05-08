@@ -14,265 +14,155 @@
     overflow: hidden;
     position: relative;
   }
-
-  /* 배경 미세 격자 */
-  .bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
+  :root {
+    --bg: #0a0e1a;
+    --surface: #161b2e;
+    --border: #2a3050;
+    --accent: #ff6b35;
+    --cyan: #00d4ff;
+    --gold: #f5a623;
+    --green: #3fb950;
+    --teal: #00d4aa;
+    --text: #e8eaf0;
+    --muted: #8b94b0;
+    --red: #e94560;
   }
-
-  /* 상단 컬러 바 */
   .top-bar {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #e94560, #f5a623, #00d4ff);
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: #00d4ff;
   }
-
-  /* 좌측 컬러 바 */
-  .left-bar {
-    position: absolute;
-    top: 4px; left: 0;
-    width: 4px; height: calc(100% - 4px);
-    background: linear-gradient(180deg, #e94560, #f5a623);
+  .epl-badge {
+    position: absolute; top: 22px; left: 34px;
+    display: flex; align-items: center; gap: 10px;
   }
-
-  /* 메인 내용 */
-  .slide-inner {
-    position: absolute;
-    top: 4px; left: 4px; right: 0; bottom: 0;
-    padding: 0 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  .epl-badge .icon-box {
+    width: 34px; height: 34px;
+    border: 2px solid var(--cyan); border-radius: 7px;
+    background: #0a1a2e;
+    display: flex; align-items: center; justify-content: center;
   }
-
-  /* 상단 배너 */
-  .alert-banner {
-    position: absolute;
-    top: 0; left: 4px; right: 0;
-    background: rgba(245, 166, 35, 0.12);
-    border-bottom: 2px solid #f5a623;
-    padding: 9px 60px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .epl-badge .icon-box p { font-size: 18px; line-height: 1; }
+  .epl-badge .label p {
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--cyan); text-transform: uppercase; font-weight: 700;
   }
-  .alert-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #f5a623;
-    flex-shrink: 0;
-  }
-  .alert-banner p {
-    font-size: 11px;
-    font-weight: 700;
-    color: #f5a623;
-  }
-  .alert-banner p span.red { color: #e94560; }
-
-  /* EPL 뱃지 태그 */
-  .tag {
-    display: inline-block;
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.35);
-    border-radius: 4px;
-    padding: 4px 14px;
-    margin-bottom: 18px;
-  }
-  .tag p {
-    font-size: 10px;
-    font-weight: 700;
-    color: #00d4ff;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-
-  /* 메인 타이틀 */
-  h1 {
-    font-size: 46px;
-    font-weight: 900;
-    line-height: 1.1;
-    color: #e8eaf0;
-    margin-bottom: 10px;
-  }
-  h1 span { color: #00d4ff; }
-
-  /* 날짜 행 */
-  .date-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 28px;
-  }
-  .date-row p.main-date {
-    font-size: 20px;
-    font-weight: 700;
-    color: #f5a623;
-  }
-  .date-dot {
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: #8b949e;
-  }
-  .date-row p.sub-date {
-    font-size: 13px;
-    color: #8b949e;
-    font-weight: 400;
-  }
-
-  /* 구분선 */
-  .divider {
-    width: 80px; height: 3px;
-    background: #e94560;
-    border-radius: 2px;
-    margin-bottom: 22px;
-  }
-
-  /* 팀 정보 */
-  .team-row {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  .team-row p {
-    font-size: 13px;
-    color: #8b949e;
-  }
-  .team-row p strong { color: #e8eaf0; font-weight: 700; }
-  .team-sep {
-    width: 1px; height: 14px;
-    background: #30363d;
-  }
-
-  /* 미팅 회차 배지 (우상단) */
   .meeting-badge {
-    position: absolute;
-    top: 54px; right: 60px;
-    background: rgba(15, 52, 96, 0.7);
-    border: 1px solid #0f3460;
-    border-radius: 8px;
-    padding: 8px 18px;
-    text-align: center;
+    position: absolute; top: 22px; right: 34px;
+    background: #0a1a2e;
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 20px; padding: 5px 16px;
   }
-  .meeting-badge p.m-label {
-    font-size: 10px;
-    color: #00d4ff;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+  .meeting-badge p {
+    font-size: 10px; color: var(--cyan);
+    letter-spacing: 0.1em; font-weight: 600;
   }
-  .meeting-badge p.m-sub {
-    font-size: 9px;
-    color: #e94560;
-    font-weight: 600;
-    margin-top: 3px;
+  .main-content {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
+    text-align: center; width: 800px;
   }
-
-  /* 점수 배지 (우하단) */
+  .category-label p {
+    font-size: 10px; letter-spacing: 0.22em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 54px; font-weight: 800; color: var(--text);
+    line-height: 1.05; margin-bottom: 10px; letter-spacing: -0.02em;
+  }
+  h1 span { color: var(--cyan); }
+  .subtitle p {
+    font-size: 17px; color: var(--muted); font-weight: 400; margin-bottom: 18px;
+  }
+  .divider {
+    width: 60px; height: 3px;
+    background: #00d4ff;
+    margin: 0 auto 18px; border-radius: 2px;
+  }
+  .meta-row {
+    display: flex; justify-content: center; gap: 30px; margin-bottom: 16px;
+  }
+  .meta-item p { font-size: 10px; color: var(--muted); }
+  .meta-item .val {
+    font-size: 13px; color: var(--text); font-weight: 600; margin-top: 3px;
+  }
+  .meta-item .val.gold { color: var(--gold); }
+  .team-line {
+    display: flex; justify-content: center; align-items: center; gap: 10px;
+  }
+  .team-line p { font-size: 11px; color: var(--muted); }
+  .sep { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
   .score-badge {
-    position: absolute;
-    right: 60px;
-    bottom: 44px;
-    background: #16213e;
-    border: 1px solid #f5a623;
-    border-radius: 12px;
-    padding: 14px 22px;
-    text-align: center;
+    position: absolute; bottom: 60px; right: 34px;
+    background: #1a1200;
+    border: 1px solid rgba(245,166,35,0.4);
+    border-radius: 10px; padding: 10px 18px; text-align: center;
   }
-  .score-badge p.s-label {
-    font-size: 9px;
-    color: #8b949e;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
+  .score-badge .score-num {
+    font-size: 30px; font-weight: 800; color: var(--gold); line-height: 1;
   }
-  .score-badge p.s-value {
-    font-size: 34px;
-    font-weight: 900;
-    color: #f5a623;
-    line-height: 1;
+  .score-badge .score-label { font-size: 8px; color: var(--muted); letter-spacing: 0.1em; margin-top: 3px; text-transform: uppercase; }
+  .score-badge .delta p { font-size: 9px; color: var(--green); margin-top: 3px; }
+  .status-banner {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #120e00;
+    border-top: 2px solid rgba(245,166,35,0.45);
+    padding: 9px 36px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .score-badge p.s-max {
-    font-size: 13px;
-    color: #8b949e;
-    margin-bottom: 8px;
-  }
-  .gauge-track {
-    width: 120px; height: 5px;
-    background: #30363d;
-    border-radius: 3px;
-    overflow: hidden;
-    margin: 0 auto;
-  }
-  .gauge-fill {
-    width: 96.4%;
-    height: 100%;
-    background: #f5a623;
-    border-radius: 3px;
-  }
-  .score-badge p.s-delta {
-    font-size: 9px;
-    color: #2ecc71;
-    margin-top: 5px;
-  }
+  .banner-icon p { font-size: 14px; line-height: 1; }
+  .banner-text p { font-size: 10px; color: var(--gold); font-weight: 500; line-height: 1.55; }
+  .banner-text strong { color: var(--accent); }
 </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
   <div class="top-bar"></div>
-  <div class="left-bar"></div>
 
-  <!-- 상단 경고 배너 -->
-  <div class="alert-banner">
-    <div class="alert-dot"></div>
-    <p>P1 파이프라인 성공 — 단 정확도 54.79%로 하락 (목표 &ge;57% 미달). <span class="red">P7 v5.1 파일 3일 미생성.</span> P2 대시보드 4일 이월. <strong>오늘이 진짜 마지막.</strong></p>
+  <div class="epl-badge">
+    <div class="icon-box"><p>&#9917;</p></div>
+    <div class="label"><p>EPL Scout Intelligence</p></div>
   </div>
 
-  <!-- 미팅 회차 배지 -->
   <div class="meeting-badge">
-    <p class="m-label">제 16 회 정기 미팅</p>
-    <p class="m-sub">이번 주 마지막 미팅</p>
+    <p>제16회 정기 미팅 &nbsp;|&nbsp; 이번 주 마지막</p>
   </div>
 
-  <!-- 메인 콘텐츠 -->
-  <div class="slide-inner" style="padding-top: 44px;">
-    <div class="tag">
-      <p>EPL Scout Intelligence · Daily Briefing</p>
-    </div>
-
+  <div class="main-content">
+    <div class="category-label"><p>Daily Briefing &mdash; 2026-05-08 (Fri)</p></div>
     <h1>EPL 스카우트 <span>인텔리전스</span></h1>
-
-    <div class="date-row">
-      <p class="main-date">2026년 05월 08일 (금)</p>
-      <div class="date-dot"></div>
-      <p class="sub-date">09:00 KST · 데일리 브리핑</p>
-    </div>
-
+    <div class="subtitle"><p>2026년 05월 08일 (금) &mdash; 데일리 브리핑</p></div>
     <div class="divider"></div>
-
-    <div class="team-row">
-      <p><strong>김태현 스카우트</strong></p>
-      <div class="team-sep"></div>
-      <p><strong>Marcus Webb</strong> Analytics Agent</p>
-      <div class="team-sep"></div>
-      <p>현재 평가 <strong style="color:#f5a623;">4.82 / 5.0</strong> (전일 +0.02)</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <p>미팅 회차</p>
+        <p class="val">제16회 정기 미팅</p>
+      </div>
+      <div class="meta-item">
+        <p>주간 위치</p>
+        <p class="val">이번 주 마지막</p>
+      </div>
+      <div class="meta-item">
+        <p>현재 평가</p>
+        <p class="val gold">4.82 / 5.0</p>
+      </div>
+    </div>
+    <div class="team-line">
+      <p>김태현 스카우트</p>
+      <div class="sep"></div>
+      <p>Marcus Webb (Analytics Agent)</p>
     </div>
   </div>
 
-  <!-- 점수 배지 -->
   <div class="score-badge">
-    <p class="s-label">스카우트 평가</p>
-    <p class="s-value">4.82</p>
-    <p class="s-max">/ 5.0</p>
-    <div class="gauge-track">
-      <div class="gauge-fill"></div>
+    <p class="score-num">4.82</p>
+    <p class="score-label">/ 5.0 종합 평가</p>
+    <div class="delta"><p>+0.02 전일 대비</p></div>
+  </div>
+
+  <div class="status-banner">
+    <div class="banner-icon"><p>&#9888;</p></div>
+    <div class="banner-text">
+      <p>P1 파이프라인 성공 &mdash; 단 정확도 <strong>54.79%로 하락</strong> (목표 &ge;57% 미달) &nbsp;|&nbsp; P7 v5.1 파일 <strong>3일 미생성</strong> &nbsp;|&nbsp; P2 대시보드 <strong>4일 이월</strong> &nbsp;|&nbsp; <strong>오늘이 진짜 마지막.</strong></p>
     </div>
-    <p class="s-delta">전일 대비 +0.02</p>
   </div>
 </body>
 </html>

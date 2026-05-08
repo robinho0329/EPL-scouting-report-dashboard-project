@@ -8,435 +8,263 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 960px; height: 540px;
-    background: #0d1117;
+    background: #0a0e1a;
     font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #e6edf3;
+    color: #e8eaf0;
     overflow: hidden;
     position: relative;
   }
-
-  /* 좌측 컬러 바 — 솔리드 */
-  .left-bar {
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: #f5a623;
+  :root {
+    --bg: #0a0e1a;
+    --surface: #161b2e;
+    --card: #131829;
+    --border: #2a3050;
+    --accent: #ff6b35;
+    --cyan: #00d4ff;
+    --gold: #f5a623;
+    --green: #3fb950;
+    --teal: #00d4aa;
+    --text: #e8eaf0;
+    --muted: #8b94b0;
+    --red: #e94560;
+  }
+  .top-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: #00d4ff;
+  }
+  .slide-wrap {
+    position: absolute; top: 4px; left: 0; right: 0; bottom: 0;
+    padding: 14px 24px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .slide-header { display: flex; align-items: baseline; gap: 12px; flex-shrink: 0; }
+  h2 { font-size: 19px; font-weight: 800; color: var(--text); }
+  .slide-header p.sub { font-size: 11px; color: var(--muted); }
+  .body-row {
+    display: flex; gap: 14px; flex: 1; min-height: 0;
   }
 
-  .slide-inner {
-    position: absolute;
-    top: 0; left: 4px; right: 0; bottom: 0;
-    padding: 22px 36px 18px;
-    display: flex;
-    flex-direction: column;
+  /* Left: gauge panel using CSS only */
+  .gauge-panel {
+    width: 240px; flex-shrink: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
   }
+  .gauge-label p { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; text-align: center; }
 
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  h2 {
-    font-size: 20px;
-    font-weight: 800;
-    color: #e6edf3;
-  }
-  h2 span { color: #f5a623; }
-  .slide-num { font-size: 11px; color: #8b949e; }
-
-  /* 메인 2열 레이아웃 */
-  .main-layout {
-    display: flex;
-    gap: 24px;
-    flex: 1;
-    margin-bottom: 14px;
-  }
-
-  /* 좌측: 점수 카드 + 게이지 바 + 코멘트 */
-  .left-panel {
-    width: 220px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  /* 점수 카드 */
-  .score-card {
-    width: 100%;
-    background: #16213e;
-    border: 2px solid #f5a623;
-    border-radius: 12px;
-    padding: 16px 12px;
-    text-align: center;
-  }
-  .score-label {
-    font-size: 9px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 6px;
-  }
-  .score-num {
-    font-size: 52px;
-    font-weight: 900;
-    color: #f5a623;
-    line-height: 1;
-  }
-  .score-denom {
-    font-size: 16px;
-    color: #8b949e;
-    font-weight: 600;
-  }
-  .score-stagnation {
-    font-size: 10px;
-    color: #e94560;
-    font-weight: 700;
-    margin-top: 6px;
-  }
-
-  /* 게이지 바 */
-  .gauge-wrap {
-    width: 100%;
-  }
-  .gauge-label-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-  }
-  .gauge-label-row p {
-    font-size: 8px;
-    color: #8b949e;
-  }
-  .gauge-track {
-    width: 100%;
-    height: 10px;
-    background: #30363d;
-    border-radius: 5px;
+  /* CSS semicircle gauge */
+  .gauge-outer {
+    width: 160px;
+    height: 80px;
+    border-radius: 80px 80px 0 0;
+    border: 14px solid #1a1e2e;
+    border-bottom: none;
+    position: relative;
     overflow: hidden;
   }
   .gauge-fill {
-    width: 96%;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 80px 80px 0 0;
+    border: 14px solid #f5a623;
+    border-bottom: none;
+    border-right: none;
+    /* 96.4% fill = approx 173 deg of 180 deg arc */
+    transform: rotate(0deg);
+  }
+
+  .score-display { text-align: center; }
+  .score-display p.score-big { font-size: 42px; font-weight: 800; color: var(--gold); line-height: 1; }
+  .score-display p.score-denom { font-size: 16px; color: var(--muted); margin-top: 2px; }
+  .score-display p.delta { font-size: 11px; color: var(--green); margin-top: 4px; font-weight: 600; }
+
+  .gauge-bar-wrap {
+    width: 100%; background: #1a1e2e; border-radius: 6px; height: 8px; overflow: hidden;
+  }
+  .gauge-bar-fill {
     height: 100%;
     background: #f5a623;
-    border-radius: 5px;
-  }
-
-  /* 코멘트 박스 */
-  .comment-box {
-    width: 100%;
-    background: #16213e;
-    border: 1px solid rgba(245, 166, 35, 0.3);
-    border-left: 3px solid #f5a623;
     border-radius: 6px;
-    padding: 10px 12px;
+    width: 96.4%;
   }
-  .comment-label {
-    font-size: 8px;
-    font-weight: 700;
-    color: #f5a623;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 5px;
-  }
-  .comment-text {
-    font-size: 9px;
-    color: #8b949e;
-    line-height: 1.5;
-  }
-  .comment-text strong {
-    color: #e6edf3;
-    font-weight: 700;
-  }
+  .pct-label p { font-size: 9px; color: var(--muted); }
+  .plus-label p { font-size: 9px; color: var(--green); font-weight: 600; }
 
-  /* 우측: 달성 체크리스트 */
+  /* Right: table + roadmap */
   .right-panel {
-    flex: 1;
-    overflow: hidden;
+    flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0;
   }
-
-  .achieve-label {
-    font-size: 9px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-
   .achieve-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 9px;
-  }
-  .achieve-table thead tr {
-    background: #0f3460;
-  }
-  .achieve-table th {
-    padding: 5px 8px;
-    text-align: left;
-    font-size: 8px;
-    font-weight: 700;
-    color: #8ab4f8;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .achieve-table tbody tr {
-    border-bottom: 1px solid rgba(48, 54, 61, 0.5);
-  }
-  .achieve-table tbody tr:nth-child(even) {
-    background: rgba(22, 27, 34, 0.3);
-  }
-  .achieve-table td {
-    padding: 4px 8px;
-  }
-  .check-icon {
-    font-size: 11px;
-    text-align: center;
-    color: #2ecc71;
-  }
-  .metric-val {
-    font-weight: 700;
-    color: #00d4aa;
-  }
-  .util-badge {
-    display: inline-block;
-    padding: 1px 6px;
-    border-radius: 8px;
-    font-size: 7px;
-    font-weight: 700;
-    background: rgba(0, 212, 170, 0.12);
-    color: #00d4aa;
-  }
-
-  /* 하단 로드맵 */
-  .roadmap-section {
-    background: #16213e;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 10px 16px;
-  }
-  .roadmap-label {
-    font-size: 9px;
-    font-weight: 700;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-  .roadmap-row {
-    display: flex;
-    align-items: center;
-  }
-  .rm-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-  .rm-score {
-    font-size: 15px;
-    font-weight: 900;
-    color: #f5a623;
-  }
-  .rm-score.current { color: #e94560; font-size: 18px; }
-  .rm-score.target  { color: #00d4aa; font-size: 18px; }
-  .rm-sublabel {
-    font-size: 7px;
-    color: #8b949e;
-    text-align: center;
-    max-width: 72px;
-    line-height: 1.3;
-  }
-  .rm-arrow {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 4px;
-    margin-bottom: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
   }
-  .rm-plus {
-    font-size: 9px;
-    font-weight: 800;
-    color: #2ecc71;
-    white-space: nowrap;
+  .achieve-table table { width: 100%; border-collapse: collapse; font-size: 9px; }
+  .achieve-table table thead tr { background: #0f1f3d; }
+  .achieve-table table thead th {
+    padding: 5px 10px; text-align: left;
+    color: var(--muted); font-weight: 700;
+    font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.06em;
   }
-  .rm-line {
-    width: 100%;
-    height: 2px;
-    background: #2ecc71;
-    margin-top: 2px;
-    position: relative;
+  .achieve-table table tbody tr { border-top: 1px solid rgba(42,48,80,0.5); }
+  .achieve-table table tbody td { padding: 4px 10px; color: var(--muted); vertical-align: middle; }
+  .achieve-table table tbody td.name { color: var(--text); font-weight: 600; font-size: 9.5px; }
+  .achieve-table table tbody td.metric { font-family: monospace; color: var(--teal); }
+  .achieve-table table tbody td.usage { font-size: 8.5px; }
+
+  /* Roadmap */
+  .roadmap-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; flex-shrink: 0;
   }
-  .rm-line::after {
-    content: '';
-    position: absolute;
-    right: -1px; top: -3px;
-    border-left: 6px solid #2ecc71;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
+  h4 { font-size: 10px; color: var(--cyan); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .road-steps {
+    display: flex; align-items: center; gap: 0;
   }
-  .rm-task {
-    font-size: 7px;
-    color: #8b949e;
-    white-space: nowrap;
-    margin-top: 2px;
+  .road-node {
+    background: #0a1220;
+    border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 10px;
+    text-align: center; flex-shrink: 0;
   }
+  .road-node p.rn-score { font-size: 14px; font-weight: 800; color: var(--gold); line-height: 1; }
+  .road-node p.rn-label { font-size: 8px; color: var(--muted); margin-top: 1px; }
+  .road-node.final p.rn-score { color: var(--teal); font-size: 16px; }
+  .road-arrow {
+    flex: 1; text-align: center; padding: 0 4px;
+  }
+  .road-arrow p.plus { font-size: 10px; font-weight: 700; color: var(--accent); }
+  .road-arrow p.action { font-size: 7.5px; color: var(--muted); margin-top: 1px; line-height: 1.3; }
+
+  .comment-box {
+    background: #080e18;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-left: 3px solid var(--cyan);
+    border-radius: 6px; padding: 8px 12px; flex-shrink: 0;
+  }
+  .comment-box p { font-size: 9.5px; color: var(--muted); line-height: 1.5; font-style: italic; }
+  .comment-box strong { color: var(--text); font-style: normal; }
 </style>
 </head>
 <body>
-  <div class="left-bar"></div>
-  <div class="slide-inner">
-    <div class="header">
-      <h2>김태현 스카우트 종합 평가 <span>4.80 / 5.0</span></h2>
-      <p class="slide-num">05 / 06 &nbsp;·&nbsp; 2026-05-07</p>
+  <div class="top-bar"></div>
+  <div class="slide-wrap">
+    <div class="slide-header">
+      <h2>김태현 스카우트 종합 평가</h2>
+      <p class="sub">4.82 / 5.0 &nbsp;|&nbsp; 오늘 3건 달성 시 5.0 달성</p>
     </div>
 
-    <div class="main-layout">
-      <!-- 좌측 패널 -->
-      <div class="left-panel">
-        <div class="score-card">
-          <p class="score-label">스카우트 종합 평가</p>
-          <p class="score-num">4.80</p>
+    <div class="body-row">
+      <!-- Left: CSS gauge -->
+      <div class="gauge-panel">
+        <div class="gauge-label"><p>종합 평가 게이지</p></div>
+        <div class="gauge-outer">
+          <div class="gauge-fill"></div>
+        </div>
+        <div class="score-display">
+          <p class="score-big">4.82</p>
           <p class="score-denom">/ 5.0</p>
-          <p class="score-stagnation">5일 연속 정체</p>
+          <p class="delta">+0.02 전일 대비</p>
+        </div>
+        <div class="gauge-bar-wrap">
+          <div class="gauge-bar-fill"></div>
+        </div>
+        <div class="pct-label"><p>96.4% (전일 대비 +0.4%p)</p></div>
+        <div class="plus-label"><p>+0.02 P1 torch 해소 크레딧</p></div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="right-panel">
+        <div class="achieve-table">
+          <table>
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>핵심 지표</th>
+                <th>실무 활용도</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="name">P2 득점 예측 v2</td>
+                <td class="metric">R&sup2; 0.8877 / MAE 0.96골</td>
+                <td class="usage">영입 회의 즉시 활용 (대시보드 통합 시)</td>
+              </tr>
+              <tr>
+                <td class="name">P3 강등 예측 v2</td>
+                <td class="metric">val AUC 99.02% / test 100%</td>
+                <td class="usage">강등 예측 최고 신뢰도</td>
+              </tr>
+              <tr>
+                <td class="name">P4 MVP 스코어링</td>
+                <td class="metric">Spearman 0.9987 / NDCG@10 0.9993</td>
+                <td class="usage">MVP 순위 안정</td>
+              </tr>
+              <tr>
+                <td class="name">P6 시장가치 예측</td>
+                <td class="metric">R&sup2; 0.8734 / MAE &pound;3.28M</td>
+                <td class="usage">이적 협상 근거 자료</td>
+              </tr>
+              <tr>
+                <td class="name">S1 선수 레이팅 v1.2</td>
+                <td class="metric">R&sup2; 0.9093 / MAE 4.66</td>
+                <td class="usage">스카우트 핵심 &mdash; 포지션별 WAR</td>
+              </tr>
+              <tr>
+                <td class="name">S2 포지션별 시장가치 v4</td>
+                <td class="metric">overall R&sup2; 0.8812 / MAE &pound;3.23M</td>
+                <td class="usage">저평가 선수 탐색 즉시 활용</td>
+              </tr>
+              <tr>
+                <td class="name">대시보드 16페이지</td>
+                <td class="metric">전방위 커버리지</td>
+                <td class="usage">Streamlit Cloud 배포 완료</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="gauge-wrap">
-          <div class="gauge-label-row">
-            <p>0</p>
-            <p>진행률 96%</p>
-            <p>5.0</p>
-          </div>
-          <div class="gauge-track">
-            <div class="gauge-fill"></div>
+        <div class="roadmap-box">
+          <h4>5.0 달성 로드맵 (오늘 2026-05-08 최종)</h4>
+          <div class="road-steps">
+            <div class="road-node">
+              <p class="rn-score">4.82</p>
+              <p class="rn-label">현재</p>
+            </div>
+            <div class="road-arrow">
+              <p class="plus">+0.03</p>
+              <p class="action">P1 Acc &ge;57%<br>09:15 Actions</p>
+            </div>
+            <div class="road-node">
+              <p class="rn-score">4.85</p>
+              <p class="rn-label">P1 달성</p>
+            </div>
+            <div class="road-arrow">
+              <p class="plus">+0.05</p>
+              <p class="action">P2 대시보드<br>오늘 저녁</p>
+            </div>
+            <div class="road-node">
+              <p class="rn-score">4.90</p>
+              <p class="rn-label">P2 달성</p>
+            </div>
+            <div class="road-arrow">
+              <p class="plus">+0.10</p>
+              <p class="action">P7 v5.1<br>R&sup2;&ge;0.62<br>오늘 오후</p>
+            </div>
+            <div class="road-node final">
+              <p class="rn-score">5.0</p>
+              <p class="rn-label">낙관 목표</p>
+            </div>
           </div>
         </div>
 
         <div class="comment-box">
-          <p class="comment-label">김태현 코멘트</p>
-          <p class="comment-text">
-            <strong>모델 품질은 흠잡을 데 없습니다.</strong>
-            P2 R&sup2;=0.8877이면 영입 회의에서 바로 쓸 수 있는 수준입니다.
-            <strong>개발 실행력이 문제입니다.</strong>
-            오늘 오전 P1 파일을 직접 고치고, 오후 P7 v5.1을 돌리면 5.0이 가능합니다.
-          </p>
-          <p class="comment-text" style="margin-top:5px; color:#e94560; font-weight:700;">
-            오늘이 이번 주 마지막 기회
-          </p>
-        </div>
-      </div>
-
-      <!-- 우측 패널: 달성 체크리스트 -->
-      <div class="right-panel">
-        <p class="achieve-label">누적 달성 항목 (탄탄한 기반)</p>
-        <table class="achieve-table">
-          <thead>
-            <tr>
-              <th style="width:18px;"></th>
-              <th>항목</th>
-              <th>핵심 지표</th>
-              <th>실무 활용도</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>P2 득점 예측 v2</td>
-              <td><span class="metric-val">R&sup2; 0.8877</span>, MAE 0.96골</td>
-              <td><span class="util-badge">즉시 활용</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>P3 강등 예측</td>
-              <td><span class="metric-val">AUC 100%</span> (test)</td>
-              <td><span class="util-badge">최고 신뢰도</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>P4 MVP 스코어링</td>
-              <td><span class="metric-val">Spearman 0.9987</span></td>
-              <td><span class="util-badge">MVP 안정</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>P7 v5 갭 0.055</td>
-              <td>val-test 갭 목표 달성</td>
-              <td><span class="util-badge">과적합 해소</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>P8 이적 적응 v2</td>
-              <td><span class="metric-val">AUC 0.6612</span>, F1 88.23%</td>
-              <td><span class="util-badge">이적 리스크</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>S1 선수 레이팅</td>
-              <td><span class="metric-val">R&sup2; 0.9093</span>, MAE 4.66</td>
-              <td><span class="util-badge">스카우트 핵심</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>S2 시장가치</td>
-              <td><span class="metric-val">R&sup2; 0.8812</span>, MAE £3.23M</td>
-              <td><span class="util-badge">스카우트 핵심</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>S3 + S6</td>
-              <td>Silhouette 0.3224 / AUC 0.8324</td>
-              <td><span class="util-badge">유사·하락세</span></td>
-            </tr>
-            <tr>
-              <td class="check-icon">&#10003;</td>
-              <td>대시보드 16페이지</td>
-              <td>전방위 커버리지</td>
-              <td><span class="util-badge">배포 완료</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 하단 로드맵 -->
-    <div class="roadmap-section">
-      <p class="roadmap-label">5.0 달성 로드맵 (오늘 기준 최종)</p>
-      <div class="roadmap-row">
-        <div class="rm-node">
-          <p class="rm-score current">4.80</p>
-          <p class="rm-sublabel">현재 상태<br>5일 연속 정체</p>
-        </div>
-        <div class="rm-arrow">
-          <p class="rm-plus">+0.05</p>
-          <div class="rm-line"></div>
-          <p class="rm-task">P1 torch 수정 [09:15]</p>
-        </div>
-        <div class="rm-node">
-          <p class="rm-score">4.85</p>
-          <p class="rm-sublabel">P1 성공</p>
-        </div>
-        <div class="rm-arrow">
-          <p class="rm-plus">+0.05</p>
-          <div class="rm-line"></div>
-          <p class="rm-task">P2 대시보드 통합 [저녁]</p>
-        </div>
-        <div class="rm-node">
-          <p class="rm-score">4.90</p>
-          <p class="rm-sublabel">P2 통합 완료</p>
-        </div>
-        <div class="rm-arrow">
-          <p class="rm-plus">+0.10</p>
-          <div class="rm-line"></div>
-          <p class="rm-task">P7 v5.1 R&sup2; &ge;0.62 [오후]</p>
-        </div>
-        <div class="rm-node">
-          <p class="rm-score target">5.0</p>
-          <p class="rm-sublabel">낙관 시나리오<br>달성 목표</p>
+          <p>"16번째 미팅, 이번 주 마지막. 시스템 모델 품질은 P2, P3, P4, S1 모두 <strong>영입 회의 즉시 활용 수준</strong>. 이제 남은 건 <strong>실행력</strong>뿐. P1 정확도 회복, P7 v5.1 파일 생성, P2 대시보드 통합 &mdash; 오늘 세 가지 모두 결과물이 나와야." &mdash; <strong>김태현 스카우트</strong></p>
         </div>
       </div>
     </div>
