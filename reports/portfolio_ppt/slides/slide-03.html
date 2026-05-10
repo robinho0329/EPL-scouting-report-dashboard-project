@@ -2,159 +2,170 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 960px; height: 540px;
     background: #0a0e1a;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #e8eaf0;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-  :root {
-    --bg: #0a0e1a;
-    --surface: #161b2e;
-    --card: #131829;
-    --border: #2a3050;
-    --accent: #ff6b35;
-    --cyan: #00d4ff;
-    --gold: #f5a623;
-    --green: #3fb950;
-    --teal: #00d4aa;
-    --text: #e8eaf0;
-    --muted: #8b94b0;
-    --red: #e94560;
-  }
-  .top-bar {
-    position: absolute; top: 0; left: 0; right: 0; height: 4px;
-    background: #00d4ff;
-  }
-  .slide-wrap {
-    position: absolute; top: 4px; left: 0; right: 0; bottom: 0;
-    padding: 16px 30px 14px;
-    display: flex; flex-direction: column; gap: 10px;
-  }
+
+  .top-bar-r { position: absolute; top: 0; left: 0; width: 320px; height: 3px; background: #ef4444; }
+  .top-bar-y { position: absolute; top: 0; left: 320px; width: 320px; height: 3px; background: #f59e0b; }
+  .top-bar-b { position: absolute; top: 0; left: 640px; right: 0; height: 3px; background: #38bdf8; }
+
+  /* 헤더 */
   .slide-header {
-    display: flex; align-items: baseline; gap: 14px; flex-shrink: 0;
+    position: absolute; top: 12px; left: 40px; right: 40px;
+    display: flex; align-items: baseline; justify-content: space-between;
   }
-  h2 { font-size: 20px; font-weight: 800; color: var(--text); }
-  .slide-header p.sub { font-size: 11px; color: var(--muted); }
-  .cards-row {
-    display: flex; flex-direction: column; gap: 8px; flex: 1;
+  .slide-header h2 { font-size: 17px; font-weight: 800; color: #e6edf3; }
+  .slide-header p { font-size: 9px; color: #8b949e; }
+
+  /* 체크리스트 카드 영역 */
+  .left-col {
+    position: absolute; top: 42px; left: 40px; right: 316px;
   }
+
   .check-card {
-    border-radius: 9px; padding: 12px 16px;
-    display: flex; gap: 14px; align-items: flex-start;
-    border-left: 4px solid var(--border);
-    background: var(--card);
-    flex: 1;
+    background: #16213e;
+    border-radius: 8px; padding: 10px 14px;
+    margin-bottom: 7px;
+    display: flex; align-items: flex-start; gap: 12px;
+    border-left: 4px solid #8b949e;
   }
-  .check-card.partial { border-left-color: var(--gold); background: #150f00; }
-  .check-card.fail { border-left-color: var(--red); background: #150508; }
-  .card-num {
-    width: 28px; height: 28px; border-radius: 50%;
+  .check-card.achieved { border-left-color: #22c55e; }
+  .check-card.missed   { border-left-color: #ef4444; }
+
+  .check-icon {
+    width: 24px; height: 24px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 800; flex-shrink: 0;
-    margin-top: 1px;
+    flex-shrink: 0; margin-top: 1px;
   }
-  .card-num.partial { background: #2a2000; color: var(--gold); }
-  .card-num.fail { background: #2a0a10; color: var(--red); }
-  .card-body { flex: 1; }
-  .card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
-  .card-top h3 { font-size: 13px; font-weight: 700; color: var(--text); }
-  .status-pill {
-    padding: 2px 9px; border-radius: 10px;
-    font-size: 9px; font-weight: 700;
+  .check-icon.ok   { background: #0d2a1a; border: 1px solid #22c55e; }
+  .check-icon.fail { background: #2a0d0d; border: 1px solid #ef4444; }
+  .check-icon span { font-size: 12px; line-height: 1; }
+
+  .check-body { flex: 1; }
+  .check-title { font-size: 11px; font-weight: 700; color: #e6edf3; margin-bottom: 3px; }
+  .check-desc  { font-size: 9px; color: #8b949e; line-height: 1.45; }
+  .check-desc strong { color: #f59e0b; font-weight: 700; }
+
+  .check-badge {
+    flex-shrink: 0;
+    border-radius: 12px; padding: 3px 10px;
+    font-size: 8px; font-weight: 700;
+    align-self: center;
   }
-  .status-pill.partial {
-    background: #2a2000; color: var(--gold);
-    border: 1px solid rgba(245,166,35,0.4);
+  .check-badge.ok   { background: #0d2a1a; color: #22c55e; border: 1px solid #22c55e; }
+  .check-badge.fail { background: #2a0d0d; color: #ef4444; border: 1px solid #ef4444; }
+
+  /* 원인 진단 사이드박스 */
+  .diag-box {
+    position: absolute; top: 42px; right: 40px;
+    width: 256px; bottom: 60px;
+    background: #16213e;
+    border: 1px solid #1a4a80;
+    border-radius: 8px; padding: 12px 14px;
   }
-  .status-pill.fail {
-    background: #2a0a10; color: var(--red);
-    border: 1px solid rgba(233,69,96,0.4);
+  .diag-box h4 { font-size: 10px; font-weight: 700; color: #38bdf8; margin-bottom: 10px; letter-spacing: 0.04em; }
+  .diag-item { margin-bottom: 10px; }
+  .diag-item h5 { font-size: 9px; font-weight: 700; color: #ef4444; margin-bottom: 3px; }
+  .diag-item p  { font-size: 8.5px; color: #8b949e; line-height: 1.45; }
+  .diag-item p strong { color: #c0c8d8; }
+
+  /* 하단 소결 배너 */
+  .summary-banner {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #16213e;
+    border-top: 2px solid #f59e0b;
+    padding: 9px 40px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .card-detail p { font-size: 10px; color: var(--muted); line-height: 1.55; }
-  .card-detail strong { color: var(--text); }
-  .card-detail em { color: var(--red); font-style: normal; font-weight: 600; }
-  .lessons-box {
-    background: #0a1220;
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 16px; flex-shrink: 0;
-  }
-  .lessons-box h4 { font-size: 10px; color: var(--cyan); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
-  .lessons-box ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-  .lessons-box ul li {
-    font-size: 9.5px; color: var(--muted); line-height: 1.45;
-    padding-left: 14px; position: relative;
-  }
-  .lessons-box ul li::before {
-    content: ''; position: absolute; left: 3px; top: 6px;
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--accent);
-  }
-  .lessons-box ul li strong { color: var(--gold); }
+  .summary-banner p { font-size: 9.5px; color: #c0c8d8; line-height: 1.4; }
+  .summary-banner strong { color: #f59e0b; }
 </style>
 </head>
 <body>
-  <div class="top-bar"></div>
-  <div class="slide-wrap">
-    <div class="slide-header">
-      <h2>어제(2026-05-07) 달성&middot;미달 체크리스트</h2>
-      <p class="sub">부분 달성 1건 &middot; 미달 2건</p>
+  <div class="top-bar-r"></div>
+  <div class="top-bar-y"></div>
+  <div class="top-bar-b"></div>
+
+  <div class="slide-header">
+    <h2>어제(2026-05-09) 달성 &middot; 미달 체크리스트</h2>
+    <p>주말 이틀 연속 P1·P7·Actions 3개 이월</p>
+  </div>
+
+  <!-- 왼쪽 체크리스트 -->
+  <div class="left-col">
+    <div class="check-card achieved">
+      <div class="check-icon ok"><span style="color:#22c55e; font-weight:900;">&#10003;</span></div>
+      <div class="check-body">
+        <p class="check-title">P2 대시보드 통합</p>
+        <p class="check-desc">"내년 득점 X.X골" 예측 즉시 활용 가능 &mdash; <strong>이번 주 최대 달성</strong></p>
+      </div>
+      <span class="check-badge ok">달성</span>
     </div>
 
-    <div class="cards-row">
-      <div class="check-card partial">
-        <div class="card-num partial"><p>1</p></div>
-        <div class="card-body">
-          <div class="card-top">
-            <h3>P1 torch 조건부 임포트 수정 + 재학습</h3>
-            <span class="status-pill partial">&#9900; 부분 달성</span>
-          </div>
-          <div class="card-detail">
-            <p>파이프라인 실행 성공 (success: true), LSTM/MLP 제외됨. XGBoost 단독 정확도 <strong>57.26% &rarr; 54.79%</strong> <em>하락</em> &mdash; 목표 &ge;57% <em>미달</em>. "실행 성공"과 "목표 달성"은 다르다.</p>
-          </div>
-        </div>
+    <div class="check-card missed">
+      <div class="check-icon fail"><span style="color:#ef4444; font-weight:900;">&#10007;</span></div>
+      <div class="check-body">
+        <p class="check-title">P1 XGBoost Acc &ge; 57%</p>
+        <p class="check-desc">54.79% 유지 (3일째 동일, 목표 <strong>2.21%p 미달</strong>)</p>
       </div>
-
-      <div class="check-card fail">
-        <div class="card-num fail"><p>2</p></div>
-        <div class="card-body">
-          <div class="card-top">
-            <h3>P7 v5.1 신규 파일 작성 + 로컬 학습</h3>
-            <span class="status-pill fail">&#10007; 미달 (3일 이월)</span>
-          </div>
-          <div class="card-detail">
-            <p><em>train_v5_1.py 파일 미생성</em> &rarr; Actions가 폴백으로 train_v5.py 재실행. 전략 논의 3일, 파일 생성 <strong>0건</strong>. 현재 test R&sup2; 0.586 (목표 &ge;0.62 미달).</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="check-card fail">
-        <div class="card-num fail"><p>3</p></div>
-        <div class="card-body">
-          <div class="card-top">
-            <h3>P2 대시보드 통합 완료</h3>
-            <span class="status-pill fail">&#10007; 미달 (4일 이월)</span>
-          </div>
-          <div class="card-detail">
-            <p>중복 스킵 처리. <em>player_intelligence.py 코드 미작성</em>. P2 R&sup2;=0.8877 모델은 탁월하나 대시보드 연동 없음 &mdash; 영입 회의에 즉시 활용 불가 상태 지속.</p>
-          </div>
-        </div>
-      </div>
+      <span class="check-badge fail">미달</span>
     </div>
 
-    <div class="lessons-box">
-      <h4>핵심 교훈</h4>
-      <ul>
-        <li><strong>"파이프라인이 돌아간다"</strong>와 <strong>"쓸 수 있는 성능이 나온다"</strong>는 다르다 (김태현) &mdash; TORCH_AVAILABLE=False 처리 후 전처리 로직 차이로 XGBoost 단독 정확도 하락</li>
-        <li>P7 v5.1 착수 3일째 &mdash; <strong>파일이 없으면 Actions는 이전 파일을 실행한다</strong>. 오늘(금) 3건 미달 시 이번 주 4.82 마감</li>
-      </ul>
+    <div class="check-card missed">
+      <div class="check-icon fail"><span style="color:#ef4444; font-weight:900;">&#10007;</span></div>
+      <div class="check-body">
+        <p class="check-title">P7 v5.1 로컬 학습 실행</p>
+        <p class="check-desc">train_v5_1.py 생성 완료, <strong>학습 2일째 미실행</strong> (패키지 의존성 충돌)</p>
+      </div>
+      <span class="check-badge fail">미달</span>
     </div>
+
+    <div class="check-card missed">
+      <div class="check-icon fail"><span style="color:#ef4444; font-weight:900;">&#10007;</span></div>
+      <div class="check-body">
+        <p class="check-title">Actions dev_result.json 정상화</p>
+        <p class="check-desc">2026-05-08, 2026-05-09 <strong>연속 미생성</strong> (자동화 신뢰도 위기)</p>
+      </div>
+      <span class="check-badge fail">미달</span>
+    </div>
+  </div>
+
+  <!-- 오른쪽 원인 진단 박스 -->
+  <div class="diag-box">
+    <h4>미달 원인 진단</h4>
+
+    <div class="diag-item">
+      <h5>P1</h5>
+      <p>torch 제거 후 시퀀스 피처 공백 미보완.<br>
+      <strong>ELO 파생 피처</strong>(elo_trend_3, form_elo_composite) 추가 및 RobustScaler 교체 미완료.</p>
+    </div>
+
+    <div class="diag-item">
+      <h5>P7</h5>
+      <p>train_v5_1.py 이틀째 존재하나<br>
+      <strong>특정 패키지 버전 의존성 충돌</strong>로 학습 블로킹.</p>
+    </div>
+
+    <div class="diag-item">
+      <h5>GitHub Actions</h5>
+      <p>push 권한(GITHUB_TOKEN 스코프) /<br>Python 경로 / JSON 생성 로직 —<br>
+      <strong>3가지 원인 중 미특정</strong> 상태 지속.</p>
+    </div>
+  </div>
+
+  <!-- 하단 소결 배너 -->
+  <div class="summary-banner">
+    <p><strong>이번 주 성과 소결:</strong> P2 대시보드 통합(4일 이월 끝 완료)이 이번 주 유일한 주요 달성. P1·P7·Actions 3개는 오늘 마지막 기회.</p>
   </div>
 </body>
 </html>

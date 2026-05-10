@@ -2,226 +2,215 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 960px; height: 540px;
     background: #0a0e1a;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #e8eaf0;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-  :root {
-    --bg: #0a0e1a;
-    --surface: #161b2e;
-    --card-bg: #131829;
-    --border: #2a3050;
-    --accent: #ff6b35;
-    --cyan: #00d4ff;
-    --gold: #f5a623;
-    --green: #3fb950;
-    --blue: #0f3460;
-    --text: #e8eaf0;
-    --muted: #8b94b0;
-    --red: #e94560;
+
+  .top-bar-r { position: absolute; top: 0; left: 0; width: 320px; height: 3px; background: #ef4444; }
+  .top-bar-y { position: absolute; top: 0; left: 320px; width: 320px; height: 3px; background: #f59e0b; }
+  .top-bar-b { position: absolute; top: 0; left: 640px; right: 0; height: 3px; background: #38bdf8; }
+
+  /* 헤더 */
+  .slide-header {
+    position: absolute; top: 12px; left: 40px; right: 40px;
+    display: flex; align-items: baseline; justify-content: space-between;
   }
-  .top-bar {
-    position: absolute; top: 0; left: 0; right: 0; height: 4px;
-    background: #00d4ff;
-  }
-  .slide-wrap {
-    position: absolute; top: 4px; left: 0; right: 0; bottom: 0;
-    padding: 14px 24px 10px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .slide-header { display: flex; align-items: baseline; gap: 12px; flex-shrink: 0; }
-  h2 { font-size: 19px; font-weight: 800; color: var(--text); }
-  .slide-header p.sub { font-size: 11px; color: var(--muted); }
+  .slide-header h2 { font-size: 17px; font-weight: 800; color: #e6edf3; }
+  .slide-header p { font-size: 9px; color: #8b949e; }
+
+  /* 3개 카드 레이아웃 */
   .cards-row {
-    display: flex; gap: 12px; flex: 1;
+    position: absolute; top: 44px; left: 40px; right: 40px;
+    display: flex; gap: 10px; height: 380px;
   }
+
   .action-card {
-    flex: 1;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-top: 3px solid transparent;
-    border-radius: 10px;
-    padding: 13px 14px;
+    flex: 1; background: #16213e;
+    border-radius: 10px; padding: 14px 14px 12px;
+    border-top: 3px solid #8b949e;
     display: flex; flex-direction: column; gap: 7px;
   }
-  .action-card.card-1 { border-top-color: var(--red); border-color: rgba(233,69,96,0.3); background: #130a0c; }
-  .action-card.card-2 { border-top-color: var(--gold); border-color: rgba(245,166,35,0.3); background: #130f00; }
-  .action-card.card-3 { border-top-color: var(--cyan); border-color: rgba(0,212,255,0.25); background: #0a1318; }
-  .card-rank {
-    display: flex; align-items: center; gap: 7px;
-  }
-  .rank-badge {
-    padding: 2px 9px; border-radius: 10px;
-    font-size: 9px; font-weight: 800;
-    letter-spacing: 0.05em;
-  }
-  .rank-badge.r1 { background: #2a0a10; color: var(--red); border: 1px solid rgba(233,69,96,0.4); }
-  .rank-badge.r2 { background: #1a1000; color: var(--gold); border: 1px solid rgba(245,166,35,0.35); }
-  .rank-badge.r3 { background: #001520; color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
-  .card-assignee { font-size: 9px; color: var(--muted); }
-  .card-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
-  .card-tasks ul {
-    list-style: none; display: flex; flex-direction: column; gap: 3px;
-  }
-  .card-tasks ul li {
-    font-size: 9px; color: var(--muted); line-height: 1.45;
-    padding-left: 11px; position: relative;
-  }
-  .card-tasks ul li::before {
-    content: ''; position: absolute; left: 2px; top: 5px;
-    width: 4px; height: 4px; border-radius: 50%;
-    background: var(--border);
-  }
-  .card-tasks ul li strong { color: var(--text); }
-  .goal-box {
-    background: #0a0c10;
-    border: 1px solid rgba(245,166,35,0.25);
-    border-radius: 6px; padding: 6px 10px;
-    margin-top: auto;
-  }
-  .goal-box p.goal-label { font-size: 8.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
-  .goal-box p.goal-val { font-size: 11px; font-weight: 700; color: var(--gold); }
-  .goal-box p.deadline { font-size: 8.5px; color: var(--muted); margin-top: 2px; }
-  .goal-box p.effect { font-size: 8.5px; color: var(--green); margin-top: 2px; font-weight: 600; }
+  .action-card.c1 { border-top-color: #f59e0b; border: 1px solid #2a2216; border-top: 3px solid #f59e0b; }
+  .action-card.c2 { border-top-color: #c0c0c0; }
+  .action-card.c3 { border-top-color: #cd7f32; }
 
-  .scenario-table {
-    flex-shrink: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px; overflow: hidden;
+  /* 순위 뱃지 */
+  .rank-badge {
+    display: inline-block;
+    font-size: 8.5px; font-weight: 800; letter-spacing: 0.06em;
+    padding: 3px 10px; border-radius: 12px;
+    align-self: flex-start;
   }
-  .scenario-table table {
-    width: 100%; border-collapse: collapse; font-size: 9px;
+  .rank-badge.gold   { background: #2a2003; color: #f59e0b; border: 1px solid #f59e0b; }
+  .rank-badge.silver { background: #1e2020; color: #c0c0c0; border: 1px solid #c0c0c0; }
+  .rank-badge.bronze { background: #201510; color: #cd7f32; border: 1px solid #cd7f32; }
+
+  .assignee { font-size: 8px; color: #38bdf8; font-weight: 600; letter-spacing: 0.04em; }
+  .task-title { font-size: 13px; font-weight: 800; color: #e6edf3; line-height: 1.3; }
+
+  /* 현재 상태 */
+  .current-state { background: #0d1525; border-radius: 5px; padding: 6px 9px; }
+  .current-state p { font-size: 8.5px; color: #8b949e; line-height: 1.5; }
+  .current-state strong { color: #ef4444; font-weight: 700; }
+
+  /* 세부 작업 */
+  .task-steps { flex: 1; }
+  .task-steps ul { list-style: none; padding: 0; }
+  .task-steps ul li {
+    font-size: 8px; color: #8b949e; line-height: 1.5;
+    padding-left: 12px; position: relative; margin-bottom: 2px;
   }
-  .scenario-table table thead tr { background: var(--blue); }
-  .scenario-table table thead th {
-    padding: 5px 12px; text-align: left;
-    color: var(--muted); font-weight: 700;
-    font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.06em;
+  .task-steps ul li::before { content: '›'; position: absolute; left: 0; color: #38bdf8; font-weight: 700; }
+
+  /* 목표 지표 박스 */
+  .target-box { background: #0d1a24; border: 1px solid #1a4a80; border-radius: 5px; padding: 5px 9px; }
+  .target-box p { font-size: 8px; color: #38bdf8; font-weight: 700; }
+
+  /* 기한 + 점수 효과 */
+  .meta-row { display: flex; justify-content: space-between; align-items: center; }
+  .deadline { font-size: 8px; color: #ef4444; font-weight: 700; background: #2a0d0d; border-radius: 4px; padding: 2px 7px; }
+  .score-effect { font-size: 8px; color: #22c55e; font-weight: 800; }
+
+  /* 하단 시나리오 바 */
+  .scenario-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #16213e;
+    border-top: 1px solid #1e2530;
+    padding: 7px 40px;
+    display: flex; align-items: center; gap: 6px;
   }
-  .scenario-table table tbody tr { border-top: 1px solid rgba(42,48,80,0.5); }
-  .scenario-table table tbody tr.highlight { background: #150f00; }
-  .scenario-table table tbody td { padding: 4.5px 12px; color: var(--muted); }
-  .scenario-table table tbody td.scenario-name { color: var(--text); font-weight: 600; }
-  .scenario-table table tbody td.score { color: var(--text); font-weight: 800; text-align: right; }
-  .scenario-table table tbody tr.highlight td.score { color: var(--gold); }
+  .scenario-label { font-size: 8.5px; color: #8b949e; font-weight: 700; flex-shrink: 0; margin-right: 4px; }
+  .sc-item {
+    flex: 1; text-align: center;
+    background: #0d1525; border-radius: 5px; padding: 4px 6px;
+    border: 1px solid #1e2530;
+  }
+  .sc-item.highlight { background: #1a1400; border-color: #f59e0b; }
+  .sc-item p.sc-name { font-size: 7.5px; color: #8b949e; }
+  .sc-item p.sc-score { font-size: 11px; font-weight: 800; color: #e6edf3; }
+  .sc-item.highlight p.sc-score { color: #f59e0b; }
+  .sc-item p.sc-cond { font-size: 7px; color: #8b949e; line-height: 1.3; }
 </style>
 </head>
 <body>
-  <div class="top-bar"></div>
-  <div class="slide-wrap">
-    <div class="slide-header">
-      <h2>오늘 액션아이템 Top 3</h2>
-      <p class="sub">P1 정확도 회복 &rarr; P7 v5.1 작성 &rarr; P2 통합 &nbsp;|&nbsp; 3건 달성 시 낙관 5.0</p>
-    </div>
+  <div class="top-bar-r"></div>
+  <div class="top-bar-y"></div>
+  <div class="top-bar-b"></div>
 
-    <div class="cards-row">
-      <div class="action-card card-1">
-        <div class="card-rank">
-          <span class="rank-badge r1">1순위 긴급</span>
-          <span class="card-assignee">Marcus Webb</span>
-        </div>
-        <p class="card-title">P1 정확도 회복 + 재학습</p>
-        <div class="card-tasks">
-          <ul>
-            <li><strong>train_pipeline.py</strong> 전처리 파이프라인 검토</li>
-            <li>피처 스케일링&middot;데이터 분할 로직 확인 (TORCH_AVAILABLE=False 이후 차이 규명)</li>
-            <li>XGBoost 단독 최적화 &rarr; 커밋&middot;푸시 &rarr; Actions 재학습</li>
-          </ul>
-        </div>
-        <div class="goal-box">
-          <p class="goal-label">목표 지표</p>
-          <p class="goal-val">XGBoost test Acc &ge; 57%</p>
-          <p class="deadline">현재 54.79% &mdash; 갭 2.21%p &nbsp;|&nbsp; 기한 09:15</p>
-          <p class="effect">+0.03 &rarr; 4.82 &rarr; 4.85</p>
-        </div>
+  <div class="slide-header">
+    <h2>오늘 액션아이템 Top 3</h2>
+    <p>P7 오늘 완료 &rarr; 4.95 &nbsp;|&nbsp; 3개 전부 &rarr; 5.0</p>
+  </div>
+
+  <div class="cards-row">
+    <!-- 카드 1: P7 -->
+    <div class="action-card c1">
+      <span class="rank-badge gold">1순위 — 오늘 필수</span>
+      <p class="assignee">Marcus Webb</p>
+      <p class="task-title">P7 v5.1 로컬 학습 실행</p>
+      <div class="current-state">
+        <p>현재: v5 test R&sup2; 0.586 (<strong>목표 0.034p 미달</strong>)<br>train_v5_1.py 이틀째 대기</p>
       </div>
-
-      <div class="action-card card-2">
-        <div class="card-rank">
-          <span class="rank-badge r2">2순위</span>
-          <span class="card-assignee">Marcus Webb</span>
-        </div>
-        <p class="card-title">P7 v5.1 신규 파일 작성 + 로컬 학습</p>
-        <div class="card-tasks">
-          <ul>
-            <li><strong>train_v5_1.py</strong> 신규 생성 (3일째 미생성)</li>
-            <li>FW/MID 분리 모델, <strong>gc_trend_3yr</strong> 피처 복원</li>
-            <li>Optuna 100 trials, LinearRegression(positive=True) 메타모델</li>
-            <li>GroupKFold(n=5) 유지 &rarr; results_summary.json v5.1 업데이트</li>
-          </ul>
-        </div>
-        <div class="goal-box">
-          <p class="goal-label">목표 지표</p>
-          <p class="goal-val">test R&sup2; &ge; 0.62 / 갭 &le; 0.07</p>
-          <p class="deadline">현재 R&sup2; 0.586, 갭 0.055 &nbsp;|&nbsp; 오늘 종일</p>
-          <p class="effect">+0.10 &rarr; 4.90 &rarr; 5.0</p>
-        </div>
+      <div class="task-steps">
+        <ul>
+          <li>환경 의존성 확인 후 Optuna 100 trials</li>
+          <li>FW/MID 분리 모델 검증</li>
+          <li>gc_trend_3yr 피처 복원</li>
+          <li>LinearRegression(positive=True) 메타모델</li>
+          <li>results_summary.json v5.1 업데이트 후 커밋</li>
+        </ul>
       </div>
-
-      <div class="action-card card-3">
-        <div class="card-rank">
-          <span class="rank-badge r3">3순위</span>
-          <span class="card-assignee">Marcus Webb</span>
-        </div>
-        <p class="card-title">P2 대시보드 통합 완료 (4일 이월 절대 불가)</p>
-        <div class="card-tasks">
-          <ul>
-            <li><strong>player_intelligence.py</strong> 성장 예측 섹션</li>
-            <li><strong>st.columns(2)</strong> 추가 &rarr; 우측 컬럼 P2 XGBoost 연동</li>
-            <li>포지션별 백분위 계산 &rarr; "내년 예상 득점 X.X골 (±1.9골, FW 상위 Z%)"</li>
-            <li>약 60~80줄 작성</li>
-          </ul>
-        </div>
-        <div class="goal-box">
-          <p class="goal-label">목표 지표</p>
-          <p class="goal-val">P2 득점 예측 블록 통합</p>
-          <p class="deadline">R&sup2;=0.8877 영입 회의 활용 &nbsp;|&nbsp; 저녁 완료</p>
-          <p class="effect">+0.05 &rarr; 4.85 &rarr; 4.90</p>
-        </div>
+      <div class="target-box">
+        <p>목표: test R&sup2; &ge; 0.62 / val-test 갭 &le; 0.07</p>
+      </div>
+      <div class="meta-row">
+        <span class="deadline">2026-05-10 종일 (필수)</span>
+        <span class="score-effect">+0.10 (4.85 &rarr; 4.95)</span>
       </div>
     </div>
 
-    <div class="scenario-table">
-      <table>
-        <thead>
-          <tr>
-            <th>시나리오</th>
-            <th>조건</th>
-            <th style="text-align:right;">예상 점수</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="highlight">
-            <td class="scenario-name">낙관</td>
-            <td>P1 &ge;57% + P2 UI 통합 + P7 v5.1 R&sup2;&ge;0.62</td>
-            <td class="score">5.0</td>
-          </tr>
-          <tr>
-            <td class="scenario-name">기본</td>
-            <td>P1 회복 + P2 UI 통합</td>
-            <td class="score">4.90</td>
-          </tr>
-          <tr>
-            <td class="scenario-name">최소</td>
-            <td>P1 정확도 회복만</td>
-            <td class="score">4.85</td>
-          </tr>
-          <tr>
-            <td class="scenario-name">유지</td>
-            <td>전부 실패</td>
-            <td class="score" style="color:var(--muted);">4.82</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- 카드 2: P1 -->
+    <div class="action-card c2">
+      <span class="rank-badge silver">2순위 — 09:15 전</span>
+      <p class="assignee">Marcus Webb</p>
+      <p class="task-title">P1 피처 보강 및 재학습</p>
+      <div class="current-state">
+        <p>현재: 54.79% (<strong>3일 연속, 2.21%p 미달</strong>)<br>ELO 피처 공백 미보완 상태</p>
+      </div>
+      <div class="task-steps">
+        <ul>
+          <li>elo_trend_3, form_elo_composite, gd_trend_diff 추가</li>
+          <li>StandardScaler &rarr; RobustScaler 교체</li>
+          <li>n_estimators=600 / max_depth=5 / lr=0.03 재튜닝</li>
+          <li>수정 완료 후 커밋·푸시 (Actions 트리거 전)</li>
+        </ul>
+      </div>
+      <div class="target-box">
+        <p>목표: XGBoost test Acc &ge; 57%</p>
+      </div>
+      <div class="meta-row">
+        <span class="deadline">09:15 전 완료</span>
+        <span class="score-effect">+0.03 (4.95 &rarr; 4.98)</span>
+      </div>
+    </div>
+
+    <!-- 카드 3: Actions -->
+    <div class="action-card c3">
+      <span class="rank-badge bronze">3순위 — 오전 완료</span>
+      <p class="assignee">Marcus Webb</p>
+      <p class="task-title">Actions dev_result.json 근본 수정</p>
+      <div class="current-state">
+        <p>현재: 2일 연속 미생성 (<strong>자동화 신뢰도 위기</strong>)<br>원인 3가지 중 미특정</p>
+      </div>
+      <div class="task-steps">
+        <ul>
+          <li>daily_dev_loop.yml 워크플로 직접 분석</li>
+          <li>GITHUB_TOKEN 스코프 / Python 경로 / JSON 로직 특정</li>
+          <li>workflow_dispatch 수동 트리거 테스트</li>
+          <li>2026-05-10_dev_result.json 정상 생성 확인</li>
+        </ul>
+      </div>
+      <div class="target-box">
+        <p>목표: 2026-05-10_dev_result.json 정상 생성</p>
+      </div>
+      <div class="meta-row">
+        <span class="deadline">오전 완료</span>
+        <span class="score-effect">+0.02 (4.98 &rarr; 5.0)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 하단 시나리오 바 -->
+  <div class="scenario-bar">
+    <p class="scenario-label">오늘 예상 점수</p>
+    <div class="sc-item highlight">
+      <p class="sc-name">낙관</p>
+      <p class="sc-score">5.0</p>
+      <p class="sc-cond">P7+P1+Actions</p>
+    </div>
+    <div class="sc-item">
+      <p class="sc-name">기본</p>
+      <p class="sc-score">4.98</p>
+      <p class="sc-cond">P7+P1 달성</p>
+    </div>
+    <div class="sc-item">
+      <p class="sc-name">최소</p>
+      <p class="sc-score">4.95</p>
+      <p class="sc-cond">P7만 달성</p>
+    </div>
+    <div class="sc-item">
+      <p class="sc-name">유지</p>
+      <p class="sc-score" style="color:#ef4444;">4.85</p>
+      <p class="sc-cond">전부 미달</p>
     </div>
   </div>
 </body>

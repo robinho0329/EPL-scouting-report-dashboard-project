@@ -2,257 +2,220 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 960px; height: 540px;
     background: #0a0e1a;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-    color: #e8eaf0;
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-  :root {
-    --bg: #0a0e1a;
-    --surface: #161b2e;
-    --card: #131829;
-    --border: #2a3050;
-    --accent: #ff6b35;
-    --cyan: #00d4ff;
-    --gold: #f5a623;
-    --green: #3fb950;
-    --teal: #00d4aa;
-    --blue: #0f3460;
-    --text: #e8eaf0;
-    --muted: #8b94b0;
-    --red: #e94560;
-  }
-  .top-bar {
-    position: absolute; top: 0; left: 0; right: 0; height: 4px;
-    background: #00d4ff;
-  }
-  .slide-wrap {
-    position: absolute; top: 4px; left: 0; right: 0; bottom: 0;
-    padding: 14px 24px 10px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .slide-header { display: flex; align-items: baseline; gap: 12px; flex-shrink: 0; }
-  h2 { font-size: 19px; font-weight: 800; color: var(--text); }
-  .slide-header p.sub { font-size: 11px; color: var(--muted); }
-  .body-row {
-    display: flex; gap: 14px; flex: 1; min-height: 0;
-  }
 
-  .left-panel {
-    width: 240px; flex-shrink: 0;
-    display: flex; flex-direction: column; gap: 10px;
+  .top-bar-r { position: absolute; top: 0; left: 0; width: 320px; height: 3px; background: #ef4444; }
+  .top-bar-y { position: absolute; top: 0; left: 320px; width: 320px; height: 3px; background: #f59e0b; }
+  .top-bar-b { position: absolute; top: 0; left: 640px; right: 0; height: 3px; background: #38bdf8; }
+
+  /* 헤더 */
+  .slide-header {
+    position: absolute; top: 12px; left: 40px; right: 40px;
+    display: flex; align-items: baseline; justify-content: space-between;
   }
-  .pages-badge {
-    background: var(--card);
-    border: 1px solid rgba(245,166,35,0.3);
-    border-radius: 10px; padding: 16px 14px;
+  .slide-header h2 { font-size: 17px; font-weight: 800; color: #e6edf3; }
+  .slide-header p  { font-size: 9px; color: #8b949e; }
+
+  /* 상단 3개 수치 박스 */
+  .stats-row {
+    position: absolute; top: 40px; left: 40px; right: 40px;
+    display: flex; gap: 10px;
+  }
+  .stat-box {
+    flex: 1; background: #16213e;
+    border-radius: 8px; padding: 10px 14px;
     text-align: center;
+    border-top: 3px solid #8b949e;
   }
-  .pages-badge p.pg-num { font-size: 64px; font-weight: 900; color: var(--gold); line-height: 1; }
-  .pages-badge p.pg-label { font-size: 12px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
-  .pages-badge p.pg-sub { font-size: 9px; color: var(--muted); margin-top: 4px; }
+  .stat-box.total { border-top-color: #38bdf8; }
+  .stat-box.ready { border-top-color: #22c55e; }
+  .stat-box.wait  { border-top-color: #ef4444; }
+  .stat-num { font-size: 32px; font-weight: 900; line-height: 1; display: block; margin-bottom: 2px; }
+  .stat-box.total .stat-num { color: #38bdf8; }
+  .stat-box.ready .stat-num { color: #22c55e; }
+  .stat-box.wait  .stat-num { color: #ef4444; }
+  .stat-label { font-size: 8.5px; color: #8b949e; display: block; }
+  .stat-sub   { font-size: 7.5px; color: #8b949e; display: block; margin-top: 2px; }
 
-  .url-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 12px;
+  /* 즉시 활용 카드 그리드 섹션 */
+  .ready-section {
+    position: absolute; top: 118px; left: 40px; right: 40px;
+    bottom: 118px;
   }
-  .url-box p.url-label { font-size: 8.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
-  .url-box p.url-text {
-    font-size: 8px; color: var(--cyan); font-family: monospace;
-    word-break: break-all; line-height: 1.5;
+  .section-title { font-size: 9.5px; font-weight: 700; color: #22c55e; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .pages-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+  .page-card {
+    background: #16213e;
+    border: 1px solid #22c55e;
+    border-radius: 7px; padding: 8px 6px;
+    text-align: center;
+    border-top: 2px solid #22c55e;
   }
-  .url-box p.gh-label { font-size: 8px; color: var(--muted); margin-top: 6px; }
-  .url-box p.gh-text { font-size: 8px; color: var(--muted); font-family: monospace; }
 
-  .qr-placeholder {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    flex: 1;
+  /* pg-num: <div> 래퍼로 background 적용, <p>에는 background 없음 */
+  .pg-num-wrap {
+    background: #0d2a1a;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 1px 5px;
+    margin-bottom: 4px;
   }
-  .qr-placeholder p { font-size: 9px; color: var(--muted); text-align: center; line-height: 1.5; }
+  .page-card p.pg-num {
+    font-size: 8px; color: #22c55e; font-weight: 800;
+  }
+  .page-card p.pg-model { font-size: 11px; font-weight: 800; color: #38bdf8; margin-bottom: 4px; line-height: 1; }
+  .page-card p.pg-name  { font-size: 7.5px; color: #e6edf3; font-weight: 600; margin-bottom: 4px; line-height: 1.25; }
+  .page-card p.pg-metric { font-size: 7px; color: #8b949e; line-height: 1.3; }
 
-  .right-panel { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-  .page-table {
-    flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px; overflow: hidden;
+  /* 대기 페이지 경고 박스 */
+  .wait-section {
+    position: absolute; bottom: 52px; left: 40px; right: 40px;
   }
-  .page-table table { width: 100%; border-collapse: collapse; font-size: 9px; }
-  .page-table table thead tr { background: var(--blue); }
-  .page-table table thead th {
-    padding: 5.5px 10px; text-align: left;
-    color: var(--muted); font-weight: 700;
-    font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.06em;
-  }
-  .page-table table tbody tr { border-top: 1px solid rgba(42,48,80,0.4); }
-  .page-table table tbody td { padding: 3.5px 10px; vertical-align: middle; }
-  .page-table table tbody td.pg-num { color: var(--muted); font-size: 8.5px; width: 28px; }
-  .page-table table tbody td.pg-name { color: var(--text); font-weight: 500; font-size: 9.5px; }
-  .cat-badge {
-    display: inline-block; padding: 1.5px 7px; border-radius: 8px;
-    font-size: 7.5px; font-weight: 700;
-  }
-  .cat-badge.scout { background: #2a0a10; color: var(--red); border: 1px solid rgba(233,69,96,0.3); }
-  .cat-badge.stat { background: #0a1430; color: #7baef5; border: 1px solid rgba(15,52,96,0.8); }
-  .cat-badge.analysis { background: #1a1000; color: var(--gold); border: 1px solid rgba(245,166,35,0.3); }
-  .cat-badge.hub { background: #001520; color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
-
-  .today-banner {
-    flex-shrink: 0;
-    background: #150508;
-    border: 1px solid rgba(233,69,96,0.35);
-    border-left: 4px solid var(--red);
-    border-radius: 7px; padding: 8px 14px;
+  .wait-boxes { display: flex; gap: 10px; }
+  .wait-box {
+    flex: 1; background: #1a0d12;
+    border: 1px solid #ef4444;
+    border-radius: 7px; padding: 8px 12px;
     display: flex; align-items: center; gap: 10px;
   }
-  .today-banner p.banner-icon { font-size: 16px; line-height: 1; }
-  .today-banner .banner-body p { font-size: 10px; color: var(--text); font-weight: 600; }
-  .today-banner .banner-body p.banner-sub { font-size: 9px; color: var(--muted); margin-top: 2px; font-weight: 400; }
+  .wait-icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #2a0d0d;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .wait-icon span { font-size: 12px; color: #ef4444; font-weight: 900; }
+  .wait-body p.wt-label  { font-size: 9px; font-weight: 700; color: #ef4444; margin-bottom: 2px; }
+  .wait-body p.wt-detail { font-size: 8px; color: #8b949e; line-height: 1.4; }
+  .wait-body strong { color: #e6edf3; }
+
+  /* 하단 URL 바 */
+  .url-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #16213e;
+    border-top: 1px solid #1a4a80;
+    padding: 10px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .url-bar p.url-label { font-size: 8.5px; color: #38bdf8; font-weight: 700; letter-spacing: 0.05em; }
+  .url-bar p.url-addr  { font-size: 9px; color: #8b949e; font-family: 'Courier New', monospace; }
+  .url-bar p.url-addr strong { color: #38bdf8; }
+  .url-bar p.scenario-note { font-size: 8px; color: #f59e0b; font-weight: 600; }
 </style>
 </head>
 <body>
-  <div class="top-bar"></div>
-  <div class="slide-wrap">
-    <div class="slide-header">
-      <h2>Streamlit 대시보드 현황</h2>
-      <p class="sub">16페이지 전방위 가동 &nbsp;|&nbsp; Streamlit Cloud 배포 완료 &nbsp;|&nbsp; 오늘 P2 블록 추가 예정</p>
+  <div class="top-bar-r"></div>
+  <div class="top-bar-y"></div>
+  <div class="top-bar-b"></div>
+
+  <div class="slide-header">
+    <h2>Streamlit 대시보드 현황</h2>
+    <p>16페이지 &middot; 7개 영입 회의 즉시 투입 가능</p>
+  </div>
+
+  <!-- 상단 수치 박스 -->
+  <div class="stats-row">
+    <div class="stat-box total">
+      <span class="stat-num">16</span>
+      <span class="stat-label">총 페이지</span>
+      <span class="stat-sub">Streamlit Cloud 배포 완료</span>
     </div>
+    <div class="stat-box ready">
+      <span class="stat-num">7</span>
+      <span class="stat-label">즉시 활용 가능</span>
+      <span class="stat-sub">영입 회의 투입 가능 수준</span>
+    </div>
+    <div class="stat-box wait">
+      <span class="stat-num">2</span>
+      <span class="stat-label">활성화 대기</span>
+      <span class="stat-sub">P1·P7 해결 후 9개로 확장</span>
+    </div>
+  </div>
 
-    <div class="body-row">
-      <div class="left-panel">
-        <div class="pages-badge">
-          <p class="pg-num">16</p>
-          <p class="pg-label">PAGES</p>
-          <p class="pg-sub">전방위 커버리지 완성</p>
-        </div>
+  <!-- 즉시 활용 7개 카드 그리드 -->
+  <div class="ready-section">
+    <p class="section-title">즉시 활용 가능 7개 페이지 &mdash; 노팅엄 / 브렌트포드 수준 영입 회의 제시 가능</p>
+    <div class="pages-grid">
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">01</p></div>
+        <p class="pg-model">S1</p>
+        <p class="pg-name">선수 종합 레이팅</p>
+        <p class="pg-metric">R&sup2; 0.9093<br>WAR 기반</p>
+      </div>
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">02</p></div>
+        <p class="pg-model">P2</p>
+        <p class="pg-name">시즌 득점 예측</p>
+        <p class="pg-metric">R&sup2; 0.8877<br>"내년 X.X골"</p>
+      </div>
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">03</p></div>
+        <p class="pg-model">P4</p>
+        <p class="pg-name">MVP 스코어링</p>
+        <p class="pg-metric">Spearman<br>0.9987</p>
+      </div>
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">04</p></div>
+        <p class="pg-model">P6</p>
+        <p class="pg-name">시장가치 예측</p>
+        <p class="pg-metric">MAE<br>&pound;3.28M</p>
+      </div>
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">05</p></div>
+        <p class="pg-model">S3</p>
+        <p class="pg-name">유사선수 탐색</p>
+        <p class="pg-metric">포지션별<br>클러스터링</p>
+      </div>
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">06</p></div>
+        <p class="pg-model">P8</p>
+        <p class="pg-name">이적 적응 예측</p>
+        <p class="pg-metric">AUC 0.6612<br>리스크 UI</p>
+      </div>
+      <div class="page-card">
+        <div class="pg-num-wrap"><p class="pg-num">07</p></div>
+        <p class="pg-model">P3</p>
+        <p class="pg-name">강등권 예측</p>
+        <p class="pg-metric">AUC<br>100%</p>
+      </div>
+    </div>
+  </div>
 
-        <div class="url-box">
-          <p class="url-label">Streamlit Cloud URL</p>
-          <p class="url-text">https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
-          <p class="gh-label">GitHub</p>
-          <p class="gh-text">robinho0329 / EPL-scouting-report-dashboard-project</p>
-        </div>
-
-        <div class="qr-placeholder">
-          <p>QR Code<br>Placeholder</p>
+  <!-- 대기 페이지 경고 박스 -->
+  <div class="wait-section">
+    <div class="wait-boxes">
+      <div class="wait-box">
+        <div class="wait-icon"><span>!</span></div>
+        <div class="wait-body">
+          <p class="wt-label">P1 경기 결과 예측 — 활성화 대기</p>
+          <p class="wt-detail">현재 Acc <strong>54.79%</strong> (목표 57% 미달) — 영입 회의 제시 불가</p>
         </div>
       </div>
-
-      <div class="right-panel">
-        <div class="page-table">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>페이지명</th>
-                <th>분류</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="pg-num">1</td>
-                <td class="pg-name">홈</td>
-                <td><span class="cat-badge hub">허브</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">2</td>
-                <td class="pg-name">선수 즉시 분석</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">3</td>
-                <td class="pg-name">나의 쇼트리스트</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">4</td>
-                <td class="pg-name">선수 종합 인텔리전스</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">5</td>
-                <td class="pg-name">스카우트 개요</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">6</td>
-                <td class="pg-name">선수 분석</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">7</td>
-                <td class="pg-name">이적 인텔리전스</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">8</td>
-                <td class="pg-name">강등권 탐색기</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">9</td>
-                <td class="pg-name">S2 저평가 탐색기</td>
-                <td><span class="cat-badge scout">스카우트 도구</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">10</td>
-                <td class="pg-name">팀 프로파일</td>
-                <td><span class="cat-badge stat">통계</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">11</td>
-                <td class="pg-name">선수 통계 순위</td>
-                <td><span class="cat-badge stat">통계</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">12</td>
-                <td class="pg-name">시즌 개요</td>
-                <td><span class="cat-badge stat">통계</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">13</td>
-                <td class="pg-name">선수 비교</td>
-                <td><span class="cat-badge stat">통계</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">14</td>
-                <td class="pg-name">역대 기록</td>
-                <td><span class="cat-badge stat">통계</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">15</td>
-                <td class="pg-name">모델 설명 (SHAP)</td>
-                <td><span class="cat-badge analysis">분석</span></td>
-              </tr>
-              <tr>
-                <td class="pg-num">16</td>
-                <td class="pg-name">선수 유형 탐색기</td>
-                <td><span class="cat-badge analysis">분석</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="today-banner">
-          <p class="banner-icon">&#128197;</p>
-          <div class="banner-body">
-            <p>오늘 변경 예정 (이번 주 최종 기한): player_intelligence (#4) 내 P2 득점 예측 블록 추가</p>
-            <p class="banner-sub">st.columns(2) 우측 컬럼 &mdash; XGBoost R&sup2;=0.8877 모델 연동, 포지션별 백분위 출력 (약 60~80줄) &mdash; 영입 회의 완전 지원 달성</p>
-          </div>
+      <div class="wait-box">
+        <div class="wait-icon"><span>!</span></div>
+        <div class="wait-body">
+          <p class="wt-label">P7 성장 곡선 예측 — 활성화 대기</p>
+          <p class="wt-detail">현재 R&sup2; <strong>0.586</strong> (목표 0.62 미달) — 신뢰도 부족</p>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 하단 URL 바 -->
+  <div class="url-bar">
+    <p class="url-label">Streamlit Cloud</p>
+    <p class="url-addr"><strong>https://</strong>epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
+    <p class="scenario-note">P1·P7 해결 시 &rarr; 9개 페이지</p>
   </div>
 </body>
 </html>
