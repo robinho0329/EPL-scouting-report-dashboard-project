@@ -1,0 +1,23 @@
+{
+  "date": "2026-05-10",
+  "results": [
+    {
+      "item": "P7 v5.1 로컬 학습 실행: `models/p7_growth_curve/train_v5",
+      "script": "models/p7_growth_curve/train_v5.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P1 근본 원인 분석 및 재학습: `models/p1_match_result/train_p",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "GitHub Actions dev_result.json 생성 실패 근본 수정: `.gith",
+      "script": null,
+      "success": false,
+      "reason": "스크립트 없음"
+    }
+  ]
+}
