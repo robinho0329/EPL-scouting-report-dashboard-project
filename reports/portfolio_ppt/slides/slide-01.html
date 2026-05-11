@@ -2,167 +2,259 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
-    background: #0a0e1a;
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    width: 720pt;
+    height: 405pt;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-
-  /* 상단 강조 바 — solid color 분할로 구현 */
-  .top-bar-r { position: absolute; top: 0; left: 0; width: 320px; height: 4px; background: #ef4444; }
-  .top-bar-y { position: absolute; top: 0; left: 320px; width: 320px; height: 4px; background: #f59e0b; }
-  .top-bar-b { position: absolute; top: 0; left: 640px; right: 0; height: 4px; background: #38bdf8; }
-
-  /* 좌측 세로 강조 선 */
-  .left-accent { position: absolute; top: 80px; left: 0; width: 4px; height: 360px; background: #ef4444; }
-
-  /* 좌상단 로고 */
-  .logo-area {
-    position: absolute; top: 22px; left: 40px;
-    display: flex; align-items: center; gap: 10px;
+  :root {
+    --accent: #e94560;
+    --gold: #f5a623;
+    --green: #2ecc71;
+    --teal: #00d4aa;
+    --blue: #0f3460;
+    --surface: #16213e;
+    --muted: #8b949e;
+    --text: #e6edf3;
   }
-  .logo-badge {
-    width: 38px; height: 38px;
-    background: #ef4444;
-    border-radius: 9px;
-    display: flex; align-items: center; justify-content: center;
+  .slide {
+    width: 720pt;
+    height: 405pt;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-  .logo-badge span { font-size: 13px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
-  .logo-text p { font-size: 9px; letter-spacing: 0.16em; color: #8b949e; text-transform: uppercase; line-height: 1.35; }
-
-  /* 우상단 미팅 회차 배지 */
-  .meeting-badge {
-    position: absolute; top: 22px; right: 40px;
-    background: #16213e;
-    border: 1px solid #38bdf8;
-    border-radius: 20px; padding: 5px 16px;
-  }
-  .meeting-badge p { font-size: 9px; color: #38bdf8; letter-spacing: 0.06em; font-weight: 700; }
-
-  /* 중앙 콘텐츠 */
-  .main-content {
+  .bg-layer {
     position: absolute;
-    top: 46%; left: 50%;
-    transform: translate(-50%, -54%);
-    text-align: center; width: 680px;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 40% 60% at 15% 50%, rgba(15,52,96,0.55) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 40% at 85% 20%, rgba(26,26,46,0.6) 0%, transparent 70%),
+      #0d1117;
   }
-  .eyebrow { font-size: 9.5px; letter-spacing: 0.24em; color: #8b949e; text-transform: uppercase; margin-bottom: 14px; }
-  .main-title { font-size: 50px; font-weight: 900; color: #e6edf3; line-height: 1.04; margin-bottom: 10px; }
-  .main-title span { color: #38bdf8; }
-  .date-line { font-size: 19px; font-weight: 700; color: #f59e0b; margin-bottom: 7px; }
-  .sub-line { font-size: 11px; color: #8b949e; margin-bottom: 22px; line-height: 1.5; }
-
-  /* 구분선 — gradient 대신 단색 */
-  .divider { width: 72px; height: 3px; background: #ef4444; border-radius: 2px; margin: 0 auto 22px; }
-
-  /* 참석자 */
-  .attendees { display: flex; justify-content: center; gap: 18px; }
-  .attendee-pill {
-    background: #16213e;
-    border: 1px solid #38bdf8;
-    border-radius: 20px; padding: 7px 18px;
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3pt;
+    background: linear-gradient(90deg, #e94560, #f5a623, #00d4aa);
   }
-  .attendee-pill p { font-size: 10px; color: #38bdf8; font-weight: 700; }
-  .attendee-pill span { font-size: 8.5px; color: #8b949e; display: block; margin-top: 2px; }
-
-  /* 우하단 점수 링 — conic-gradient 제거, 단순 원형으로 대체 */
-  .score-badge {
-    position: absolute; bottom: 62px; right: 44px;
+  .deco-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1pt solid rgba(15,52,96,0.5);
+  }
+  .ring-1 { width: 130pt; height: 130pt; top: -35pt; right: 70pt; }
+  .ring-2 { width: 220pt; height: 220pt; bottom: -70pt; left: -50pt; opacity: 0.35; }
+  /* 좌상단 배지 */
+  .header-badge {
+    position: absolute;
+    top: 18pt;
+    left: 26pt;
+    display: flex;
+    align-items: center;
+    gap: 7pt;
+    z-index: 2;
+  }
+  .emblem {
+    width: 30pt;
+    height: 30pt;
+    background: linear-gradient(135deg, #e94560, #a01030);
+    border-radius: 4pt;
+    border: 1.5pt solid #f5a623;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .emblem p {
+    font-size: 5.5pt;
+    font-weight: 800;
+    color: #fff;
     text-align: center;
+    line-height: 1.3;
+  }
+  .meeting-info-top {
+    line-height: 1.35;
+  }
+  .meeting-info-top p {
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+  .meeting-info-top p strong {
+    color: var(--text);
+    font-size: 9pt;
+    display: block;
+  }
+  /* 우하단 점수 배지 */
+  .score-badge {
+    position: absolute;
+    bottom: 44pt;
+    right: 26pt;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4pt;
   }
   .score-ring-outer {
-    width: 92px; height: 92px;
+    width: 66pt;
+    height: 66pt;
     border-radius: 50%;
-    background: #16213e;
-    border: 6px solid #f59e0b;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 0 2px rgba(245,158,11,0.2);
+    background: conic-gradient(
+      #f5a623 0deg 347deg,
+      #30363d 347deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .score-ring-inner {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+    width: 52pt;
+    height: 52pt;
+    border-radius: 50%;
+    background: #161b22;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-  .score-ring-inner span.num { font-size: 22px; font-weight: 900; color: #f59e0b; line-height: 1; }
-  .score-ring-inner span.denom { font-size: 9px; color: #8b949e; margin-top: 1px; }
-  .score-badge p { font-size: 8px; color: #8b949e; margin-top: 5px; }
-
+  .score-ring-inner p { text-align: center; }
+  .score-num { font-size: 15pt; font-weight: 800; color: #f5a623; line-height: 1; }
+  .score-denom { font-size: 7pt; color: var(--muted); line-height: 1; }
+  .score-label p { font-size: 7pt; color: var(--muted); text-align: center; line-height: 1.3; }
+  /* 중앙 메인 */
+  .main {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 0 80pt 0 40pt;
+    width: 100%;
+  }
+  .category-tag {
+    display: inline-block;
+    margin-bottom: 10pt;
+  }
+  .category-tag p {
+    font-size: 6.5pt;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 34pt;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 6pt;
+  }
+  h1 em {
+    color: #e94560;
+    font-style: normal;
+  }
+  .divider {
+    width: 48pt;
+    height: 2pt;
+    background: linear-gradient(90deg, #e94560, #f5a623);
+    margin: 8pt auto;
+    border-radius: 2pt;
+  }
+  .date-line p {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #f5a623;
+    margin-bottom: 5pt;
+  }
+  .sub-info p {
+    font-size: 8.5pt;
+    color: var(--muted);
+    margin-bottom: 2pt;
+  }
   /* 하단 경고 배너 */
-  .alert-banner {
-    position: absolute; bottom: 0; left: 0; right: 0;
+  .warning-banner {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
     background: #16213e;
-    border-top: 2px solid #ef4444;
-    padding: 9px 40px;
-    display: flex; align-items: center; gap: 10px;
+    border-top: 2pt solid #e94560;
+    padding: 7pt 26pt;
+    display: flex;
+    align-items: flex-start;
+    gap: 9pt;
+    z-index: 2;
   }
-  .alert-icon {
-    width: 18px; height: 18px;
-    background: #ef4444; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+  .banner-icon { font-size: 11pt; flex-shrink: 0; margin-top: 1pt; }
+  .banner-text p {
+    font-size: 7.5pt;
+    color: #c9d1d9;
+    line-height: 1.5;
   }
-  .alert-icon span { font-size: 11px; color: #fff; font-weight: 900; line-height: 1; }
-  .alert-banner p { font-size: 9.5px; color: #c0c8d8; line-height: 1.45; }
-  .alert-banner strong { color: #f59e0b; }
+  .banner-text strong { color: #e94560; }
 </style>
 </head>
 <body>
-  <div class="top-bar-r"></div>
-  <div class="top-bar-y"></div>
-  <div class="top-bar-b"></div>
-  <div class="left-accent"></div>
+<div class="slide">
+  <div class="bg-layer"></div>
+  <div class="deco-ring ring-1"></div>
+  <div class="deco-ring ring-2"></div>
+  <div class="top-bar"></div>
 
-  <div class="logo-area">
-    <div class="logo-badge"><span>EPL</span></div>
-    <div class="logo-text">
-      <p>Scout Intelligence</p>
-      <p>Analytics System</p>
+  <!-- 좌상단 엠블럼 + 회차 -->
+  <div class="header-badge">
+    <div class="emblem">
+      <p>EPL<br>SI</p>
+    </div>
+    <div class="meeting-info-top">
+      <p><strong>제19회 정기 미팅</strong>월요일 주간 킥오프</p>
     </div>
   </div>
 
-  <div class="meeting-badge">
-    <p>제18회 정기 미팅 &middot; 주말 최종 점검</p>
-  </div>
-
-  <div class="main-content">
-    <p class="eyebrow">EPL Scout Intelligence &middot; Daily Briefing</p>
-    <h1 class="main-title">데일리 <span>브리핑</span></h1>
-    <p class="date-line">2026년 05월 10일 (일)</p>
-    <p class="sub-line">P7 학습 오늘 완료 시 4.95 &mdash; 3개 전부 달성 시 5.0</p>
+  <!-- 중앙 콘텐츠 -->
+  <div class="main">
+    <div class="category-tag">
+      <p>EPL Scout Intelligence &nbsp;·&nbsp; Daily Briefing</p>
+    </div>
+    <h1>EPL 스카우트 <em>인텔리전스</em></h1>
     <div class="divider"></div>
-    <div class="attendees">
-      <div class="attendee-pill">
-        <p>김태현 스카우트</p>
-        <span>EPL Scout Lead</span>
-      </div>
-      <div class="attendee-pill">
-        <p>Marcus Webb</p>
-        <span>Analytics Agent</span>
-      </div>
+    <div class="date-line">
+      <p>2026년 05월 11일 (월) — 데일리 브리핑</p>
+    </div>
+    <div class="sub-info">
+      <p>제19회 정기 미팅 &nbsp;|&nbsp; 월요일 주간 킥오프 미팅</p>
+      <p>김태현 스카우트 &nbsp;×&nbsp; Marcus Webb (Analytics Agent)</p>
     </div>
   </div>
 
+  <!-- 우하단 점수 배지 -->
   <div class="score-badge">
     <div class="score-ring-outer">
       <div class="score-ring-inner">
-        <span class="num">4.85</span>
-        <span class="denom">/ 5.0</span>
+        <p class="score-num">4.82</p>
+        <p class="score-denom">/ 5.0</p>
       </div>
     </div>
-    <p>전일 대비 &minus;0.02</p>
+    <div class="score-label">
+      <p>스카우트<br>종합 평가</p>
+    </div>
   </div>
 
-  <div class="alert-banner">
-    <div class="alert-icon"><span>!</span></div>
-    <p>주말 이틀 동안 P1 &middot; P7 &middot; Actions 전부 미달. P2 대시보드 통합이 이번 주 유일한 달성.
-    <strong>오늘 P7 학습 완료 여부가 5.0의 마지막 분기점.</strong></p>
+  <!-- 하단 경고 배너 -->
+  <div class="warning-banner">
+    <span class="banner-icon">⚠</span>
+    <div class="banner-text">
+      <p>
+        주말 내내 success=true가 찍혔으나 숫자가 하나도 안 바뀌었습니다.
+        <strong>코드 수정과 스크립트 실행은 다릅니다.</strong> 오늘 반드시 메워야 합니다.
+      </p>
+    </div>
   </div>
+</div>
 </body>
 </html>
