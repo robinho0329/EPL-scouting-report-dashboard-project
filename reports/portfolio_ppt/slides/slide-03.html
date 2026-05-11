@@ -2,170 +2,176 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
-    background: #0a0e1a;
-    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    width: 720pt;
+    height: 405pt;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
 
-  .top-bar-r { position: absolute; top: 0; left: 0; width: 320px; height: 3px; background: #ef4444; }
-  .top-bar-y { position: absolute; top: 0; left: 320px; width: 320px; height: 3px; background: #f59e0b; }
-  .top-bar-b { position: absolute; top: 0; left: 640px; right: 0; height: 3px; background: #38bdf8; }
+  .top-r { position: absolute; top: 0; left: 0; width: 240pt; height: 3pt; background: #e94560; }
+  .top-g { position: absolute; top: 0; left: 240pt; width: 240pt; height: 3pt; background: #f5a623; }
+  .top-b { position: absolute; top: 0; left: 480pt; right: 0; height: 3pt; background: #00d4aa; }
 
-  /* 헤더 */
   .slide-header {
-    position: absolute; top: 12px; left: 40px; right: 40px;
+    position: absolute; top: 9pt; left: 24pt; right: 24pt;
     display: flex; align-items: baseline; justify-content: space-between;
   }
-  .slide-header h2 { font-size: 17px; font-weight: 800; color: #e6edf3; }
-  .slide-header p { font-size: 9px; color: #8b949e; }
+  .slide-header h2 { font-size: 15pt; font-weight: 800; color: #e6edf3; }
+  .slide-header p  { font-size: 7.5pt; color: #8b949e; }
 
-  /* 체크리스트 카드 영역 */
+  /* 왼쪽 체크리스트 */
   .left-col {
-    position: absolute; top: 42px; left: 40px; right: 316px;
+    position: absolute; top: 34pt; left: 24pt; right: 278pt;
   }
 
   .check-card {
     background: #16213e;
-    border-radius: 8px; padding: 10px 14px;
-    margin-bottom: 7px;
-    display: flex; align-items: flex-start; gap: 12px;
-    border-left: 4px solid #8b949e;
+    border-radius: 6pt; padding: 8pt 11pt;
+    margin-bottom: 6pt;
+    display: flex; align-items: flex-start; gap: 9pt;
+    border-left: 4pt solid #8b949e;
   }
-  .check-card.achieved { border-left-color: #22c55e; }
-  .check-card.missed   { border-left-color: #ef4444; }
+  .check-card.partial  { border-left-color: #f5a623; background: #1e1800; }
+  .check-card.achieved { border-left-color: #2ecc71; background: #001e00; }
 
   .check-icon {
-    width: 24px; height: 24px; border-radius: 50%;
+    width: 20pt; height: 20pt; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px;
+    flex-shrink: 0; margin-top: 1pt;
   }
-  .check-icon.ok   { background: #0d2a1a; border: 1px solid #22c55e; }
-  .check-icon.fail { background: #2a0d0d; border: 1px solid #ef4444; }
-  .check-icon span { font-size: 12px; line-height: 1; }
+  .check-icon.warn { background: #1e1200; border: 1pt solid #f5a623; }
+  .check-icon.ok   { background: #001200; border: 1pt solid #2ecc71; }
+  .check-icon span { font-size: 10pt; line-height: 1; }
 
   .check-body { flex: 1; }
-  .check-title { font-size: 11px; font-weight: 700; color: #e6edf3; margin-bottom: 3px; }
-  .check-desc  { font-size: 9px; color: #8b949e; line-height: 1.45; }
-  .check-desc strong { color: #f59e0b; font-weight: 700; }
+  .check-title { font-size: 9.5pt; font-weight: 700; color: #e6edf3; margin-bottom: 3pt; }
+  .check-desc  { font-size: 7.5pt; color: #8b949e; line-height: 1.45; }
+  .check-desc strong { color: #f5a623; font-weight: 700; }
 
   .check-badge {
     flex-shrink: 0;
-    border-radius: 12px; padding: 3px 10px;
-    font-size: 8px; font-weight: 700;
+    border-radius: 9pt; padding: 2pt 8pt;
+    font-size: 7pt; font-weight: 700;
     align-self: center;
   }
-  .check-badge.ok   { background: #0d2a1a; color: #22c55e; border: 1px solid #22c55e; }
-  .check-badge.fail { background: #2a0d0d; color: #ef4444; border: 1px solid #ef4444; }
+  .check-badge.warn { background: #1e1200; color: #f5a623; border: 1pt solid #f5a623; }
+  .check-badge.ok   { background: #001200; color: #2ecc71; border: 1pt solid #2ecc71; }
 
-  /* 원인 진단 사이드박스 */
-  .diag-box {
-    position: absolute; top: 42px; right: 40px;
-    width: 256px; bottom: 60px;
-    background: #16213e;
-    border: 1px solid #1a4a80;
-    border-radius: 8px; padding: 12px 14px;
+  /* 오른쪽 패널 */
+  .right-col {
+    position: absolute; top: 34pt; right: 24pt;
+    width: 240pt; bottom: 52pt;
+    display: flex; flex-direction: column; gap: 7pt;
   }
-  .diag-box h4 { font-size: 10px; font-weight: 700; color: #38bdf8; margin-bottom: 10px; letter-spacing: 0.04em; }
-  .diag-item { margin-bottom: 10px; }
-  .diag-item h5 { font-size: 9px; font-weight: 700; color: #ef4444; margin-bottom: 3px; }
-  .diag-item p  { font-size: 8.5px; color: #8b949e; line-height: 1.45; }
-  .diag-item p strong { color: #c0c8d8; }
 
-  /* 하단 소결 배너 */
+  .lesson-box {
+    background: #16213e;
+    border-left: 3pt solid #e94560;
+    border-radius: 0 5pt 5pt 0;
+    padding: 9pt 11pt;
+  }
+  .lesson-box h4 { font-size: 8.5pt; font-weight: 800; color: #e94560; margin-bottom: 6pt; letter-spacing: 0.04em; text-transform: uppercase; }
+  .lesson-box ul { list-style: none; padding: 0; }
+  .lesson-box ul li { font-size: 7.5pt; color: #c9d1d9; line-height: 1.5; padding-left: 11pt; position: relative; margin-bottom: 2pt; }
+  .lesson-box ul li::before { content: '"'; position: absolute; left: 0; color: #e94560; font-weight: 900; font-size: 9pt; }
+
+  .diag-box {
+    background: #16213e;
+    border: 1pt solid #1a4a80;
+    border-radius: 5pt;
+    padding: 9pt 11pt;
+    flex: 1;
+  }
+  .diag-box h4 { font-size: 8.5pt; font-weight: 700; color: #58a6ff; margin-bottom: 7pt; letter-spacing: 0.04em; text-transform: uppercase; }
+  .diag-item { margin-bottom: 7pt; }
+  .diag-item h5 { font-size: 7.5pt; font-weight: 700; color: #e94560; margin-bottom: 2pt; }
+  .diag-item p  { font-size: 7pt; color: #8b949e; line-height: 1.45; }
+  .diag-item p strong { color: #c0c8d8; }
+  .diag-item:last-child { margin-bottom: 0; }
+
+  /* 하단 배너 */
   .summary-banner {
     position: absolute; bottom: 0; left: 0; right: 0;
     background: #16213e;
-    border-top: 2px solid #f59e0b;
-    padding: 9px 40px;
-    display: flex; align-items: center; gap: 10px;
+    border-top: 2pt solid #f5a623;
+    padding: 8pt 24pt;
+    display: flex; align-items: center; gap: 8pt;
   }
-  .summary-banner p { font-size: 9.5px; color: #c0c8d8; line-height: 1.4; }
-  .summary-banner strong { color: #f59e0b; }
+  .summary-banner p { font-size: 8pt; color: #c0c8d8; line-height: 1.4; }
+  .summary-banner strong { color: #f5a623; }
 </style>
 </head>
 <body>
-  <div class="top-bar-r"></div>
-  <div class="top-bar-y"></div>
-  <div class="top-bar-b"></div>
+  <div class="top-r"></div>
+  <div class="top-g"></div>
+  <div class="top-b"></div>
 
   <div class="slide-header">
-    <h2>어제(2026-05-09) 달성 &middot; 미달 체크리스트</h2>
-    <p>주말 이틀 연속 P1·P7·Actions 3개 이월</p>
+    <h2>어제(2026-05-10) 달성&middot;미달 체크리스트</h2>
+    <p>success=true 허위 양성 &mdash; 코드 미반영 4일 연속</p>
   </div>
 
-  <!-- 왼쪽 체크리스트 -->
   <div class="left-col">
+    <div class="check-card partial">
+      <div class="check-icon warn"><span style="color:#f5a623;">&#9888;</span></div>
+      <div class="check-body">
+        <p class="check-title">P7 v5.1 로컬 학습</p>
+        <p class="check-desc">스크립트 실행됨(success=true) / <strong>v5.1 코드 미반영</strong> / R&sup2;=0.586 동일 (4일 연속)</p>
+      </div>
+      <span class="check-badge warn">허위 성공</span>
+    </div>
+
+    <div class="check-card partial">
+      <div class="check-icon warn"><span style="color:#f5a623;">&#9888;</span></div>
+      <div class="check-body">
+        <p class="check-title">P1 재학습 실행</p>
+        <p class="check-desc">스크립트 실행됨(success=true) / <strong>RobustScaler&middot;ELO trend 미수정</strong> / Acc=54.79% 동일</p>
+      </div>
+      <span class="check-badge warn">허위 성공</span>
+    </div>
+
     <div class="check-card achieved">
-      <div class="check-icon ok"><span style="color:#22c55e; font-weight:900;">&#10003;</span></div>
-      <div class="check-body">
-        <p class="check-title">P2 대시보드 통합</p>
-        <p class="check-desc">"내년 득점 X.X골" 예측 즉시 활용 가능 &mdash; <strong>이번 주 최대 달성</strong></p>
-      </div>
-      <span class="check-badge ok">달성</span>
-    </div>
-
-    <div class="check-card missed">
-      <div class="check-icon fail"><span style="color:#ef4444; font-weight:900;">&#10007;</span></div>
-      <div class="check-body">
-        <p class="check-title">P1 XGBoost Acc &ge; 57%</p>
-        <p class="check-desc">54.79% 유지 (3일째 동일, 목표 <strong>2.21%p 미달</strong>)</p>
-      </div>
-      <span class="check-badge fail">미달</span>
-    </div>
-
-    <div class="check-card missed">
-      <div class="check-icon fail"><span style="color:#ef4444; font-weight:900;">&#10007;</span></div>
-      <div class="check-body">
-        <p class="check-title">P7 v5.1 로컬 학습 실행</p>
-        <p class="check-desc">train_v5_1.py 생성 완료, <strong>학습 2일째 미실행</strong> (패키지 의존성 충돌)</p>
-      </div>
-      <span class="check-badge fail">미달</span>
-    </div>
-
-    <div class="check-card missed">
-      <div class="check-icon fail"><span style="color:#ef4444; font-weight:900;">&#10007;</span></div>
+      <div class="check-icon ok"><span style="color:#2ecc71;">&#10003;</span></div>
       <div class="check-body">
         <p class="check-title">Actions dev_result.json 정상화</p>
-        <p class="check-desc">2026-05-08, 2026-05-09 <strong>연속 미생성</strong> (자동화 신뢰도 위기)</p>
+        <p class="check-desc">2026-05-10_dev_result.json 생성 확인 &mdash; <strong>워크플로 복구 신호</strong></p>
       </div>
-      <span class="check-badge fail">미달</span>
+      <span class="check-badge ok">부분 달성</span>
     </div>
   </div>
 
-  <!-- 오른쪽 원인 진단 박스 -->
-  <div class="diag-box">
-    <h4>미달 원인 진단</h4>
-
-    <div class="diag-item">
-      <h5>P1</h5>
-      <p>torch 제거 후 시퀀스 피처 공백 미보완.<br>
-      <strong>ELO 파생 피처</strong>(elo_trend_3, form_elo_composite) 추가 및 RobustScaler 교체 미완료.</p>
+  <div class="right-col">
+    <div class="lesson-box">
+      <h4>핵심 교훈</h4>
+      <ul>
+        <li>스크립트 실행 완료 = 코드 수정 완료가 아님</li>
+        <li>P7: R&sup2; &ge; 0.60 달성 시에만 success=true</li>
+        <li>P1: Acc &ge; 57% 달성 시에만 success=true</li>
+      </ul>
     </div>
 
-    <div class="diag-item">
-      <h5>P7</h5>
-      <p>train_v5_1.py 이틀째 존재하나<br>
-      <strong>특정 패키지 버전 의존성 충돌</strong>로 학습 블로킹.</p>
-    </div>
-
-    <div class="diag-item">
-      <h5>GitHub Actions</h5>
-      <p>push 권한(GITHUB_TOKEN 스코프) /<br>Python 경로 / JSON 생성 로직 —<br>
-      <strong>3가지 원인 중 미특정</strong> 상태 지속.</p>
+    <div class="diag-box">
+      <h4>미달 원인 진단</h4>
+      <div class="diag-item">
+        <h5>P7 성장 곡선</h5>
+        <p>train_v5_1.py 실행됐으나 <strong>FW/MID 분리 모델 + gc_trend_3yr 코드 미삽입</strong>. 긍정: LGBM val R&sup2;=0.6395 &mdash; 알고리즘 자체 문제 없음</p>
+      </div>
+      <div class="diag-item">
+        <h5>P1 경기 결과</h5>
+        <p>train_pipeline.py 실행됐으나 <strong>RobustScaler 교체&middot;elo_trend_3&middot;form_elo_composite 추가 코드 미삽입</strong></p>
+      </div>
     </div>
   </div>
 
-  <!-- 하단 소결 배너 -->
   <div class="summary-banner">
-    <p><strong>이번 주 성과 소결:</strong> P2 대시보드 통합(4일 이월 끝 완료)이 이번 주 유일한 주요 달성. P1·P7·Actions 3개는 오늘 마지막 기회.</p>
+    <p><strong>핵심:</strong> P7 val R&sup2;=0.6395 &mdash; 실제 코드 반영 시 목표 달성 가능. 오늘 코드 커밋으로만 마감 처리.</p>
   </div>
 </body>
 </html>
