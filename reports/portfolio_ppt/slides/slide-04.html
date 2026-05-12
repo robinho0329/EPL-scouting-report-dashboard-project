@@ -9,12 +9,11 @@
     width: 720pt;
     height: 405pt;
     background: #0d1117;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-
   .top-r { position: absolute; top: 0; left: 0; width: 240pt; height: 3pt; background: #e94560; }
   .top-g { position: absolute; top: 0; left: 240pt; width: 240pt; height: 3pt; background: #f5a623; }
   .top-b { position: absolute; top: 0; left: 480pt; right: 0; height: 3pt; background: #00d4aa; }
@@ -31,22 +30,19 @@
     position: absolute; top: 33pt; left: 24pt; right: 24pt;
     display: flex; gap: 8pt; height: 318pt;
   }
-
   .action-card {
     flex: 1; background: #16213e;
     border-radius: 8pt; padding: 11pt 11pt 9pt;
     border-top: 3pt solid #8b949e;
-    display: flex; flex-direction: column; gap: 6pt;
+    display: flex; flex-direction: column; gap: 5pt;
   }
   .action-card.c1 { border-top-color: #f5a623; }
   .action-card.c2 { border-top-color: #c0c0c0; }
   .action-card.c3 { border-top-color: #cd7f32; }
 
   .rank-badge {
-    display: inline-block;
-    font-size: 7pt; font-weight: 800; letter-spacing: 0.04em;
-    padding: 2pt 8pt; border-radius: 9pt;
-    align-self: flex-start;
+    display: inline-block; font-size: 7pt; font-weight: 800;
+    letter-spacing: 0.04em; padding: 2pt 8pt; border-radius: 9pt; align-self: flex-start;
   }
   .rank-badge.gold   { background: #1e1600; color: #f5a623; border: 1pt solid #f5a623; }
   .rank-badge.silver { background: #141414; color: #c0c0c0; border: 1pt solid #c0c0c0; }
@@ -55,38 +51,57 @@
   .assignee   { font-size: 7pt; color: #58a6ff; font-weight: 600; }
   .task-title { font-size: 11pt; font-weight: 800; color: #e6edf3; line-height: 1.25; }
 
-  .current-state { background: #0d1525; border-radius: 4pt; padding: 5pt 7pt; }
-  .current-state p { font-size: 7.5pt; color: #8b949e; line-height: 1.45; }
+  /* 현재 상태 박스 */
+  .current-state { background: #0d1117; border-radius: 4pt; padding: 5pt 7pt; }
+  .current-state p { font-size: 7.5pt; color: #8b949e; line-height: 1.4; }
   .current-state strong { color: #e94560; font-weight: 700; }
 
-  .task-steps { flex: 1; }
-  .task-steps ul { list-style: none; padding: 0; }
-  .task-steps ul li {
-    font-size: 7pt; color: #8b949e; line-height: 1.5;
-    padding-left: 10pt; position: relative; margin-bottom: 1.5pt;
-  }
-  .task-steps ul li::before { content: '›'; position: absolute; left: 0; color: #58a6ff; font-weight: 700; }
+  /* 프로그레스 바 */
+  .progress-wrap { }
+  .progress-label { font-size: 6.5pt; color: #8b949e; display: flex; justify-content: space-between; margin-bottom: 2pt; }
+  .progress-label em { color: #e94560; font-style: normal; }
+  .progress-label span { color: #2ecc71; }
+  .progress-track { height: 7pt; background: #1e2530; border-radius: 4pt; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4pt; }
+  .progress-fill.p7 { width: 94.5%; background: #f5a623; }
+  .progress-fill.p1 { width: 96.1%; background: #c0c0c0; }
 
+  /* 코드 스니펫 박스 */
+  .code-block {
+    background: #0d1117; border: 1pt solid #1e2530;
+    border-radius: 4pt; padding: 5pt 7pt; flex: 1;
+  }
+  .code-block p.code-head { font-size: 6.5pt; color: #58a6ff; font-weight: 700; margin-bottom: 3pt; }
+  .code-block ul { list-style: none; padding: 0; }
+  .code-block ul li {
+    font-size: 6.5pt; color: #8b949e; line-height: 1.5;
+    padding-left: 8pt; position: relative; margin-bottom: 1pt;
+  }
+  .code-block ul li::before { content: '›'; position: absolute; left: 0; color: #58a6ff; font-weight: 700; }
+  .code-block ul li code { font-family: 'Courier New', monospace; color: #e6edf3; font-size: 6pt; }
+
+  /* 목표 박스 */
   .target-box { background: #0d1a24; border: 1pt solid #1a4a80; border-radius: 4pt; padding: 4pt 7pt; }
   .target-box p { font-size: 7pt; color: #58a6ff; font-weight: 700; }
 
+  /* 하단 메타 */
   .meta-row { display: flex; justify-content: space-between; align-items: center; }
   .deadline     { font-size: 7pt; color: #e94560; font-weight: 700; background: #200808; border-radius: 3pt; padding: 2pt 5pt; }
-  .score-effect { font-size: 7.5pt; color: #2ecc71; font-weight: 800; }
+  .deadline.am  { color: #c0c0c0; background: #141414; }
+  .deadline.pm  { color: #cd7f32; background: #140e08; }
+  .score-effect { font-size: 7.5pt; color: #00e676; font-weight: 800; }
 
   /* 하단 시나리오 바 */
   .scenario-bar {
     position: absolute; bottom: 0; left: 0; right: 0;
-    background: #16213e;
-    border-top: 1pt solid #1e2530;
+    background: #16213e; border-top: 1pt solid #1e2530;
     padding: 5pt 24pt;
     display: flex; align-items: center; gap: 6pt;
   }
   .scenario-label { font-size: 7.5pt; color: #8b949e; font-weight: 700; flex-shrink: 0; margin-right: 4pt; }
   .sc-item {
-    flex: 1; text-align: center;
-    background: #0d1525; border-radius: 4pt; padding: 3.5pt 5pt;
-    border: 1pt solid #1e2530;
+    flex: 1; text-align: center; background: #0d1525;
+    border-radius: 4pt; padding: 3.5pt 5pt; border: 1pt solid #1e2530;
   }
   .sc-item.highlight { background: #1a1400; border-color: #f5a623; }
   .sc-item p.sc-name  { font-size: 6.5pt; color: #8b949e; }
@@ -101,83 +116,100 @@
   <div class="top-b"></div>
 
   <div class="slide-header">
-    <h2>오늘 액션아이템 Top 3</h2>
-    <p>계획이 아닌 코드 커밋으로만 마감 &mdash; 3개 완료 시 5.0</p>
+    <h2>오늘 액션아이템 Top 3 &mdash; 코드 직접 작성</h2>
+    <p>스크립트 실행이 아닌 파일에 코드 블록 직접 작성 &mdash; P7&middot;P1 오늘 돌파</p>
   </div>
 
   <div class="cards-row">
-    <!-- 카드 1: P7 -->
+    <!-- 카드 1: P7 v5.1 -->
     <div class="action-card c1">
       <span class="rank-badge gold">1순위 &mdash; 오늘 종일</span>
       <p class="assignee">Marcus Webb</p>
-      <p class="task-title">P7 v5.1 실질 구현</p>
+      <p class="task-title">P7 v5.1 포지션 분리<br>모델 직접 구현</p>
       <div class="current-state">
-        <p>현재: test R&sup2; 0.586 / val 0.6395<br><strong>목표까지 +0.034p</strong></p>
+        <p>현재: test R&sup2; 0.586 / val 0.6395<br><strong>목표까지 &minus;0.034 미달</strong></p>
       </div>
-      <div class="task-steps">
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <em>현재 94.5%</em><span>목표 0.62</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill p7"></div></div>
+      </div>
+      <div class="code-block">
+        <p class="code-head">핵심 코드 (train_v5_1.py)</p>
         <ul>
-          <li>FW/MID 포지션 분리 모델 실제 구현</li>
-          <li>gc_trend_3yr 피처 복원 (분리 모델 적용)</li>
-          <li>Optuna 100 trials (v5의 35에서 확장)</li>
-          <li>LinearRegression(positive=True) 메타모델</li>
-          <li>results_summary.json v5.1 업데이트 후 커밋</li>
+          <li><code>pos_group</code>으로 FW / MID 데이터 분리</li>
+          <li>각 포지션별 독립 XGBoost 학습</li>
+          <li><code>gc_trend_3yr = market_value.shift(3)</code> 피처 추가</li>
+          <li>포지션별 예측 결합 후 stacking</li>
+          <li>results_summary.json version:v5.1 업데이트 커밋</li>
         </ul>
       </div>
       <div class="target-box">
         <p>목표: test R&sup2; &ge; 0.62 / val-test 갭 &le; 0.07</p>
       </div>
       <div class="meta-row">
-        <span class="deadline">2026-05-11 종일</span>
-        <span class="score-effect">+0.10 &rarr; 4.92</span>
+        <span class="deadline">오늘 종일</span>
+        <span class="score-effect">+0.07 &rarr; 4.92</span>
       </div>
     </div>
 
     <!-- 카드 2: P1 -->
     <div class="action-card c2">
-      <span class="rank-badge silver">2순위 &mdash; 오전 중</span>
+      <span class="rank-badge silver">2순위 &mdash; 오전</span>
       <p class="assignee">Marcus Webb</p>
-      <p class="task-title">P1 코드 수정 및 재학습</p>
+      <p class="task-title">P1 피처 추가 및<br>재학습 (코드 직접 수정)</p>
       <div class="current-state">
-        <p>현재: Acc 54.79% / F1 40.65%<br><strong>목표까지 +2.21%p</strong></p>
+        <p>현재: Acc 54.79% / F1 40.65%<br><strong>목표까지 &minus;2.21%p 미달</strong></p>
       </div>
-      <div class="task-steps">
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <em>현재 96.1%</em><span>목표 57%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill p1"></div></div>
+      </div>
+      <div class="code-block">
+        <p class="code-head">핵심 코드 (train_pipeline.py)</p>
         <ul>
-          <li>StandardScaler &rarr; RobustScaler 교체</li>
-          <li>elo_trend_3, form_elo_composite 추가</li>
-          <li>n_estimators=600 / max_depth=5 / lr=0.03</li>
-          <li>수정 완료 후 재학습 &rarr; 커밋&middot;푸시</li>
+          <li><code>elo_trend_3 = home_elo_pre.diff(3)</code> 추가</li>
+          <li><code>form_elo_composite = elo_diff * form_diff_5</code> 추가</li>
+          <li>StandardScaler &rarr; <code>RobustScaler</code> 교체</li>
+          <li><code>n_estimators=600</code> / <code>max_depth=5</code> / <code>lr=0.03</code></li>
+          <li>수정 완료 후 학습 실행 및 커밋</li>
         </ul>
       </div>
       <div class="target-box">
         <p>목표: XGBoost test Acc &ge; 57%</p>
       </div>
       <div class="meta-row">
-        <span class="deadline">오전 중 완료</span>
+        <span class="deadline am">오전 중 완료</span>
         <span class="score-effect">+0.05 &rarr; 4.97</span>
       </div>
     </div>
 
-    <!-- 카드 3: P2 -->
+    <!-- 카드 3: dev_result.json 강화 -->
     <div class="action-card c3">
-      <span class="rank-badge bronze">3순위 &mdash; 오전</span>
+      <span class="rank-badge bronze">3순위 &mdash; 오후</span>
       <p class="assignee">Marcus Webb</p>
-      <p class="task-title">P2 JSON 오류 수정</p>
+      <p class="task-title">dev_result.json<br>성공 판단 로직 강화</p>
       <div class="current-state">
-        <p>현재: 63번째 줄 NaN/Infinity<br><strong>대시보드 파싱 불가</strong></p>
+        <p>현재: 종료코드 0 = success:true<br><strong>목표 지표 달성 여부와 무관</strong></p>
       </div>
-      <div class="task-steps">
+      <div class="code-block" style="flex: 1;">
+        <p class="code-head">핵심 변경 (GitHub Actions + 생성 로직)</p>
         <ul>
-          <li>63번째 줄 NaN / Infinity 특정</li>
-          <li>유효한 수치로 교체 또는 null 처리</li>
-          <li>json.load() 파싱 성공 확인</li>
-          <li>대시보드 P2 페이지 오류 없음 확인</li>
+          <li>results_summary.json 목표 지표 임계값 체크 추가</li>
+          <li>P7: R&sup2; &ge; 0.60 달성 시에만 <code>success:true</code></li>
+          <li>P1: Acc &ge; 0.57 달성 시에만 <code>success:true</code></li>
+          <li><code>success:false</code> + 실제 지표값 기록 형식으로 개선</li>
+          <li>허위 양성 방지 &mdash; 진짜 달성 여부 반영</li>
         </ul>
       </div>
       <div class="target-box">
-        <p>목표: json.load() 파싱 성공 / 대시보드 정상</p>
+        <p>목표: 수치 임계값 달성 여부가 반영된 dev_result.json</p>
       </div>
       <div class="meta-row">
-        <span class="deadline">오전 완료</span>
+        <span class="deadline pm">오후 완료</span>
         <span class="score-effect">+0.03 &rarr; 5.0</span>
       </div>
     </div>
@@ -186,24 +218,24 @@
   <div class="scenario-bar">
     <p class="scenario-label">오늘 예상 점수</p>
     <div class="sc-item highlight">
-      <p class="sc-name">완전 달성</p>
+      <p class="sc-name">3개 완전 달성</p>
       <p class="sc-score">5.0</p>
-      <p class="sc-cond">P7+P1+P2</p>
+      <p class="sc-cond">P7+P1+로직 강화</p>
     </div>
     <div class="sc-item">
       <p class="sc-name">P7+P1 달성</p>
       <p class="sc-score">4.97</p>
-      <p class="sc-cond">P2 미완</p>
+      <p class="sc-cond">로직 미완</p>
     </div>
     <div class="sc-item">
       <p class="sc-name">P7만 달성</p>
       <p class="sc-score">4.92</p>
-      <p class="sc-cond">P1&middot;P2 미완</p>
+      <p class="sc-cond">P1 미완</p>
     </div>
     <div class="sc-item">
-      <p class="sc-name">전부 미달</p>
-      <p class="sc-score" style="color:#e94560;">4.82</p>
-      <p class="sc-cond">내일 이월</p>
+      <p class="sc-name">현재 유지</p>
+      <p class="sc-score" style="color:#f5a623;">4.85</p>
+      <p class="sc-cond">오늘 아침 P2 복구 반영</p>
     </div>
   </div>
 </body>

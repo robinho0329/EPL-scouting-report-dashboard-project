@@ -9,12 +9,11 @@
     width: 720pt;
     height: 405pt;
     background: #0d1117;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-
   .top-r { position: absolute; top: 0; left: 0; width: 240pt; height: 3pt; background: #e94560; }
   .top-g { position: absolute; top: 0; left: 240pt; width: 240pt; height: 3pt; background: #f5a623; }
   .top-b { position: absolute; top: 0; left: 480pt; right: 0; height: 3pt; background: #00d4aa; }
@@ -26,44 +25,41 @@
   .slide-header h2 { font-size: 15pt; font-weight: 800; color: #e6edf3; }
   .slide-header p  { font-size: 7.5pt; color: #8b949e; }
 
-  /* 상단 4개 수치 박스 */
+  /* 상단 수치 배지 행 */
   .stats-row {
     position: absolute; top: 32pt; left: 24pt; right: 24pt;
     display: flex; gap: 8pt;
   }
   .stat-box {
     flex: 1; background: #16213e;
-    border-radius: 6pt; padding: 8pt 10pt;
-    text-align: center;
-    border-top: 3pt solid #8b949e;
+    border-radius: 6pt; padding: 7pt 10pt;
+    text-align: center; border-top: 3pt solid #8b949e;
   }
   .stat-box.total { border-top-color: #58a6ff; }
-  .stat-box.ready { border-top-color: #2ecc71; }
+  .stat-box.ready { border-top-color: #00e676; }
   .stat-box.pend  { border-top-color: #f5a623; }
-  .stat-box.wait  { border-top-color: #e94560; }
-  .stat-num { font-size: 26pt; font-weight: 900; line-height: 1; display: block; margin-bottom: 1pt; }
+  .stat-num { font-size: 24pt; font-weight: 900; line-height: 1; display: block; margin-bottom: 1pt; }
   .stat-box.total .stat-num { color: #58a6ff; }
-  .stat-box.ready .stat-num { color: #2ecc71; }
+  .stat-box.ready .stat-num { color: #00e676; }
   .stat-box.pend  .stat-num { color: #f5a623; }
-  .stat-box.wait  .stat-num { color: #e94560; }
   .stat-label { font-size: 7.5pt; color: #8b949e; display: block; }
   .stat-sub   { font-size: 6.5pt; color: #8b949e; display: block; margin-top: 1pt; }
 
-  /* 활용 현황 표 */
+  /* 메인 테이블 영역 */
   .table-section {
-    position: absolute; top: 100pt; left: 24pt; right: 24pt; bottom: 72pt;
+    position: absolute; top: 94pt; left: 24pt; right: 24pt; bottom: 82pt;
     overflow: hidden;
   }
   table { width: 100%; border-collapse: collapse; font-size: 7.5pt; }
   thead tr { background: #0f3460; }
   thead th {
-    padding: 4pt 5pt; font-weight: 700;
-    color: #58a6ff; text-align: left;
+    padding: 4pt 5pt; font-weight: 700; color: #58a6ff; text-align: left;
     font-size: 6.5pt; letter-spacing: 0.04em; text-transform: uppercase;
     border-bottom: 1pt solid #1a4a80;
   }
   tbody tr { border-bottom: 1pt solid #1e2530; }
   tbody tr.row-ok   { background: #001800; }
+  tbody tr.row-ok2  { background: #001600; }
   tbody tr.row-warn { background: #1a1800; }
   tbody tr.row-miss { background: #1a0000; }
   tbody tr.row-even { background: #10172a; }
@@ -73,28 +69,30 @@
   .model-tag  { font-size: 6.5pt; color: #8b949e; background: #1e2530; border-radius: 3pt; padding: 1pt 3pt; }
   .metric-txt { font-size: 7pt; color: #8b949e; }
   .metric-txt strong { color: #58a6ff; }
-  .status-ok   { font-size: 7.5pt; color: #2ecc71; font-weight: 700; }
+  .status-ok   { font-size: 7.5pt; color: #00e676; font-weight: 700; }
+  .status-prac { font-size: 7.5pt; color: #2ecc71; font-weight: 700; }
+  .status-ref  { font-size: 7.5pt; color: #f5a623; font-weight: 600; }
   .status-warn { font-size: 7.5pt; color: #f5a623; font-weight: 700; }
   .status-miss { font-size: 7.5pt; color: #e94560; font-weight: 700; }
+  .new-tag { font-size: 6pt; font-weight: 700; color: #00e676; background: #001e00; border: 1pt solid #00e676; border-radius: 3pt; padding: 1pt 4pt; }
 
-  /* 하단 섹션 */
+  /* 하단 패널: 저평가 하이라이트 + URL */
   .bottom-section {
     position: absolute; bottom: 0; left: 0; right: 0;
-    background: #16213e;
-    border-top: 1pt solid #1a4a80;
-    padding: 6pt 24pt;
-    display: flex; align-items: center; gap: 16pt;
+    background: #16213e; border-top: 1pt solid #1a4a80;
+    padding: 7pt 24pt;
+    display: flex; align-items: flex-start; gap: 20pt;
   }
   .highlight-col { flex: 1; }
   .highlight-col p.hl-title { font-size: 7pt; color: #f5a623; font-weight: 700; margin-bottom: 3pt; text-transform: uppercase; letter-spacing: 0.05em; }
-  .highlight-col p.hl-item  { font-size: 7pt; color: #8b949e; line-height: 1.5; }
-  .highlight-col p.hl-item strong { color: #2ecc71; }
+  .highlight-col p.hl-item  { font-size: 7pt; color: #8b949e; line-height: 1.55; }
+  .highlight-col p.hl-item strong { color: #00e676; }
 
   .url-col { flex-shrink: 0; text-align: right; }
   .url-col p.url-label { font-size: 7pt; color: #58a6ff; font-weight: 700; margin-bottom: 3pt; text-transform: uppercase; letter-spacing: 0.05em; }
-  .url-col p.url-addr  { font-size: 6.5pt; color: #8b949e; font-family: 'Courier New', monospace; }
-  .url-col p.url-addr strong { color: #e94560; }
-  .url-col p.url-next  { font-size: 6.5pt; color: #f5a623; font-weight: 600; margin-top: 2pt; }
+  .url-col p.url-addr  { font-size: 6.5pt; color: #8b949e; font-family: 'Courier New', monospace; line-height: 1.5; }
+  .url-col p.url-addr em { color: #e94560; font-style: normal; font-weight: 700; }
+  .url-col p.url-next  { font-size: 6.5pt; color: #00e676; font-weight: 600; margin-top: 2pt; }
 </style>
 </head>
 <body>
@@ -104,10 +102,10 @@
 
   <div class="slide-header">
     <h2>Streamlit 대시보드 현황</h2>
-    <p>16페이지 &middot; 8개 영입 회의 즉시 투입 가능</p>
+    <p>16페이지 구축 완료 &mdash; 영입 회의 즉시 활용 <em style="color:#00e676; font-style:normal;">9개</em> (오늘 P2 복구 후 8&rarr;9개)</p>
   </div>
 
-  <!-- 상단 수치 박스 -->
+  <!-- 상단 수치 배지 3개 -->
   <div class="stats-row">
     <div class="stat-box total">
       <span class="stat-num">16</span>
@@ -115,18 +113,18 @@
       <span class="stat-sub">Streamlit Cloud 배포 완료</span>
     </div>
     <div class="stat-box ready">
-      <span class="stat-num">8</span>
+      <span class="stat-num">9</span>
       <span class="stat-label">즉시 활용 가능</span>
-      <span class="stat-sub">영입 회의 투입 가능</span>
+      <span class="stat-sub">영입 회의 투입 가능 (오늘 +1)</span>
     </div>
     <div class="stat-box pend">
-      <span class="stat-num">3</span>
-      <span class="stat-label">수정 후 활용</span>
-      <span class="stat-sub">P1&middot;P7&middot;P2 해결 시 11개</span>
+      <span class="stat-num">2</span>
+      <span class="stat-label">조건부&middot;검토 중</span>
+      <span class="stat-sub">P7 조건부 / P1 비활성화 검토</span>
     </div>
-    <div class="stat-box wait">
-      <span class="stat-num">5</span>
-      <span class="stat-label">대기</span>
+    <div class="stat-box" style="border-top-color:#8b949e;">
+      <span class="stat-num" style="color:#8b949e;">5</span>
+      <span class="stat-label" style="color:#8b949e;">기타</span>
       <span class="stat-sub">기타 페이지</span>
     </div>
   </div>
@@ -136,10 +134,10 @@
     <table>
       <thead>
         <tr>
-          <th style="width:140pt;">페이지</th>
-          <th style="width:64pt;">연계 모델</th>
+          <th style="width:148pt;">페이지</th>
+          <th style="width:60pt;">연계 모델</th>
           <th>핵심 지표</th>
-          <th style="width:88pt;">활용 여부</th>
+          <th style="width:100pt;">활용 여부</th>
         </tr>
       </thead>
       <tbody>
@@ -149,7 +147,7 @@
           <td><p class="metric-txt"><strong>R&sup2;=0.9093</strong>, MAE=4.66</p></td>
           <td><p class="status-ok">&#10003; 즉시 활용</p></td>
         </tr>
-        <tr class="row-even row-ok">
+        <tr class="row-ok2">
           <td><p class="page-name">P4 MVP 스코어링</p></td>
           <td><span class="model-tag">P4</span></td>
           <td><p class="metric-txt"><strong>Spearman=0.9987</strong>, NDCG@10=0.9993</p></td>
@@ -161,7 +159,7 @@
           <td><p class="metric-txt"><strong>R&sup2;=0.8734</strong>, MAE=&pound;3.28M</p></td>
           <td><p class="status-ok">&#10003; 즉시 활용</p></td>
         </tr>
-        <tr class="row-even row-ok">
+        <tr class="row-ok2">
           <td><p class="page-name">S2 저평가 탐색기</p></td>
           <td><span class="model-tag">S2 v4</span></td>
           <td><p class="metric-txt"><strong>R&sup2;=0.8812</strong>, MAE=&pound;3.23M</p></td>
@@ -173,23 +171,29 @@
           <td><p class="metric-txt"><strong>AUC=0.6612</strong>, F1=88.23%</p></td>
           <td><p class="status-ok">&#10003; 즉시 활용</p></td>
         </tr>
-        <tr class="row-even row-ok">
+        <tr class="row-ok2">
           <td><p class="page-name">P3 강등권 탐색기</p></td>
           <td><span class="model-tag">P3</span></td>
           <td><p class="metric-txt"><strong>AUC=100%</strong>, Acc=100%</p></td>
           <td><p class="status-ok">&#10003; 즉시 활용</p></td>
         </tr>
         <tr class="row-ok">
+          <td><p class="page-name">P2 득점 예측<span class="new-tag">JSON 복구</span></p></td>
+          <td><span class="model-tag">P2 v2</span></td>
+          <td><p class="metric-txt"><strong>R&sup2;=0.8877</strong>, MAE=0.96골</p></td>
+          <td><p class="status-ok">&#10003; 즉시 활용</p></td>
+        </tr>
+        <tr class="row-ok2">
           <td><p class="page-name">S3 유사선수 탐색</p></td>
           <td><span class="model-tag">S3 v4</span></td>
           <td><p class="metric-txt">Sil(GK)=<strong>0.4873</strong>, DEF=0.3637</p></td>
-          <td><p class="status-ok">&#10003; 실용적</p></td>
+          <td><p class="status-prac">&#10003; 실용적</p></td>
         </tr>
-        <tr class="row-even row-ok">
+        <tr class="row-ok">
           <td><p class="page-name">S6 하락세 감지</p></td>
           <td><span class="model-tag">S6</span></td>
           <td><p class="metric-txt"><strong>AUC=0.8324</strong>, F1=61.74%</p></td>
-          <td><p class="status-ok">&#10003; 참고 활용</p></td>
+          <td><p class="status-ref">&#10003; 참고 활용</p></td>
         </tr>
         <tr class="row-miss">
           <td><p class="page-name">P1 경기 결과 예측</p></td>
@@ -203,27 +207,26 @@
           <td><p class="metric-txt">R&sup2;=0.586 (목표 0.62 미달)</p></td>
           <td><p class="status-warn">&#9888; 조건부</p></td>
         </tr>
-        <tr class="row-warn">
-          <td><p class="page-name">P2 시즌 득점 예측</p></td>
-          <td><span class="model-tag">P2 v2</span></td>
-          <td><p class="metric-txt">JSON 파싱 오류 (63번째 줄 NaN)</p></td>
-          <td><p class="status-warn">&#9888; 수정 후 가능</p></td>
-        </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 하단 저평가 + URL -->
+  <!-- 하단 저평가 하이라이트 + URL -->
   <div class="bottom-section">
     <div class="highlight-col">
-      <p class="hl-title">S2 저평가 하이라이트</p>
-      <p class="hl-item">Oliver Arblaster (Sheffield Utd, MF, 20) &mdash; &pound;45만 / <strong>&pound;248만 (5.5배)</strong></p>
-      <p class="hl-item">Jakub Stolarczyk (Leicester, GK, 24) &mdash; &pound;100만 / <strong>&pound;425만 (4.3배)</strong></p>
+      <p class="hl-title">S2 저평가 탐색 하이라이트</p>
+      <p class="hl-item">Oliver Arblaster (Sheffield Utd, MF, 20) &mdash; 실제 &pound;45만 / 예측 <strong>&pound;248만 (5.5배 저평가)</strong></p>
+      <p class="hl-item">Jakub Stolarczyk (Leicester, GK, 24) &mdash; 실제 &pound;100만 / 예측 <strong>&pound;425만 (4.3배 저평가)</strong></p>
+    </div>
+    <div class="highlight-col" style="border-left: 1pt solid #1e2530; padding-left: 12pt;">
+      <p class="hl-title">포트폴리오 시연 스토리라인</p>
+      <p class="hl-item">S1 선수 역량 확인 &rarr; S2 저평가 탐색 &rarr; P8 이적 적응 예측</p>
+      <p class="hl-item">목표 구단: 브렌트포드&middot;노팅엄 포레스트 수준 &mdash; 예산 30~50M &pound;</p>
     </div>
     <div class="url-col">
       <p class="url-label">Streamlit Cloud</p>
-      <p class="url-addr"><strong>https://</strong>epl-scouting-report-dashboard-project<br>-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
-      <p class="url-next">P1&middot;P7&middot;P2 수정 &rarr; 즉시 활용 11개</p>
+      <p class="url-addr"><em>https://</em>epl-scouting-report-<br>dashboard-project-ffyb8msh6uaf<br>xyg8txsm8.streamlit.app</p>
+      <p class="url-next">P1&middot;P7 달성 &rarr; 즉시 활용 11개</p>
     </div>
   </div>
 </body>
