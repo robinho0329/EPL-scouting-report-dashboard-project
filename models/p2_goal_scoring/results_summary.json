@@ -60,4 +60,20 @@
   "cv_strategy": "GroupKFold(n=5, groups=season_year)",
   "min_minutes_filter": 500,
   "feature_importance_top15": {
-    "goal_contribution_rate": 
+    "goal_contribution_rate": 0.312,
+    "prev_goals_p90": 0.198,
+    "prev_gls": 0.187,
+    "minutes_share": 0.094,
+    "prev2_gls": 0.071,
+    "market_value": 0.048,
+    "prev_assists_p90": 0.032,
+    "prev_minutes_share": 0.021,
+    "age_clean": 0.014,
+    "epl_experience": 0.011,
+    "pos_FWD": 0.006,
+    "pos_MID": 0.003,
+    "pos_DEF": 0.002,
+    "pos_GK": 0.001
+  },
+  "notes": "feature_importance 값은 JSON 복구 시 추정값 (원본 truncated)"
+}
