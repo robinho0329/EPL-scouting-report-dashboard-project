@@ -6,256 +6,73 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    position: relative;
-  }
-  :root {
-    --epl-dark: #0d1117;
-    --epl-surface: #16213e;
-    --epl-accent: #e94560;
-    --epl-gold: #f5a623;
-    --epl-green: #00e676;
-    --epl-blue: #0f3460;
-    --epl-text: #e6edf3;
-    --epl-muted: #8b949e;
-  }
-  .bg-circle-1 {
-    position: absolute;
-    width: 320pt;
-    height: 320pt;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(15,52,96,0.45) 0%, transparent 70%);
-    top: -110pt;
-    right: -80pt;
-  }
-  .bg-circle-2 {
-    position: absolute;
-    width: 180pt;
-    height: 180pt;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(233,69,96,0.12) 0%, transparent 70%);
-    bottom: -50pt;
-    left: 30pt;
-  }
-  .epl-badge {
-    position: absolute;
-    top: 22pt;
-    left: 30pt;
+    padding: 32pt 48pt 28pt 48pt;
     display: flex;
-    align-items: center;
-    gap: 9pt;
-  }
-  .epl-badge-icon {
-    width: 30pt;
-    height: 30pt;
-    background: var(--epl-accent);
-    border-radius: 5pt;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .epl-badge-icon p {
-    font-size: 16pt;
-    font-weight: 900;
-    color: white;
-    line-height: 1;
-  }
-  .epl-badge-text .meeting-num {
-    font-size: 9.5pt;
-    color: var(--epl-gold);
-    font-weight: 700;
-    line-height: 1.3;
-  }
-  .epl-badge-text .brand {
-    font-size: 8pt;
-    color: var(--epl-muted);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    line-height: 1.3;
-  }
-  .score-badge {
-    position: absolute;
-    top: 18pt;
-    right: 30pt;
-    text-align: center;
-    background: var(--epl-surface);
-    border: 1.5pt solid var(--epl-gold);
-    border-radius: 10pt;
-    padding: 8pt 14pt;
-  }
-  .score-num {
-    font-size: 24pt;
-    font-weight: 800;
-    color: var(--epl-gold);
-    line-height: 1;
-  }
-  .score-denom {
-    font-size: 10pt;
-    color: var(--epl-muted);
-  }
-  .score-label {
-    font-size: 7.5pt;
-    color: var(--epl-muted);
-    margin-top: 3pt;
-  }
-  .score-delta {
-    font-size: 8pt;
-    color: #8b949e;
-    margin-top: 4pt;
-    background: rgba(139,148,158,0.12);
-    border-radius: 4pt;
-    padding: 2pt 5pt;
-  }
-  .main-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -52%);
-    text-align: center;
-    width: 590pt;
-  }
-  .brand-label {
-    font-size: 9pt;
-    letter-spacing: 0.22em;
-    color: var(--epl-muted);
-    text-transform: uppercase;
-    margin-bottom: 10pt;
-  }
-  h1.main-title {
-    font-size: 40pt;
-    font-weight: 900;
-    color: var(--epl-text);
-    line-height: 1.05;
-    margin-bottom: 9pt;
-    letter-spacing: -0.02em;
-  }
-  h2.main-subtitle {
-    font-size: 16pt;
-    font-weight: 600;
-    color: var(--epl-accent);
-    margin-bottom: 5pt;
-  }
-  .date-line {
-    font-size: 10.5pt;
-    color: var(--epl-muted);
-    margin-bottom: 18pt;
-  }
-  .divider {
-    width: 52pt;
-    height: 2.5pt;
-    background: linear-gradient(90deg, var(--epl-accent), var(--epl-gold));
-    margin: 0 auto 18pt;
-    border-radius: 2pt;
-  }
-  .slogan-box {
-    background: var(--epl-blue);
-    border: 1.5pt solid var(--epl-accent);
-    border-radius: 8pt;
-    padding: 12pt 22pt;
-    margin: 0 auto;
-    max-width: 490pt;
-    position: relative;
-    text-align: left;
-  }
-  .slogan-box::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3.5pt;
-    background: var(--epl-accent);
-    border-radius: 8pt 0 0 8pt;
-  }
-  .slogan-main {
-    font-size: 12.5pt;
-    font-weight: 700;
-    color: var(--epl-text);
-    line-height: 1.5;
-  }
-  .slogan-sub {
-    font-size: 9pt;
-    color: var(--epl-muted);
-    margin-top: 4pt;
-    line-height: 1.4;
-  }
-  .attendee-bar {
-    position: absolute;
-    bottom: 16pt;
-    left: 0; right: 0;
-    display: flex;
-    justify-content: center;
-    gap: 26pt;
-  }
-  .attendee-item {
-    display: flex;
-    align-items: center;
-    gap: 6pt;
-  }
-  .attendee-dot {
-    width: 6pt;
-    height: 6pt;
-    background: var(--epl-gold);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .attendee-item p {
-    font-size: 9pt;
-    color: var(--epl-muted);
-  }
-  .attendee-item .name {
-    font-weight: 700;
-    color: var(--epl-text);
+    flex-direction: column;
+    justify-content: space-between;
   }
 </style>
 </head>
 <body>
+  <!-- Top bar (3pt accent bar simulated with a narrow div) -->
+  <div style="position: absolute; top: 0; left: 0; width: 720pt; height: 3pt; background: #e94560;"></div>
 
-  <div class="bg-circle-1"></div>
-  <div class="bg-circle-2"></div>
-
-  <div class="epl-badge">
-    <div class="epl-badge-icon">
-      <p>E</p>
+  <!-- Header row -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-top: 6pt;">
+    <!-- Left: brand badge -->
+    <div style="display: flex; align-items: center; gap: 9pt;">
+      <div style="width: 30pt; height: 30pt; background: #e94560; border-radius: 5pt; display: flex; align-items: center; justify-content: center;">
+        <p style="font-size: 16pt; font-weight: 900; color: #ffffff; line-height: 1;">E</p>
+      </div>
+      <div>
+        <p style="font-size: 9.5pt; color: #f5a623; font-weight: 700; line-height: 1.3;">22번째 정기 미팅</p>
+        <p style="font-size: 8pt; color: #8b949e; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.3;">EPL Scout Intelligence</p>
+      </div>
     </div>
-    <div class="epl-badge-text">
-      <p class="meeting-num">22번째 정기 미팅</p>
-      <p class="brand">EPL Scout Intelligence</p>
-    </div>
-  </div>
 
-  <div class="score-badge">
-    <p class="score-num">4.85</p>
-    <p class="score-denom">/ 5.0</p>
-    <p class="score-label">종합 평가 점수</p>
-    <p class="score-delta">→ 전일 대비 유지</p>
-  </div>
-
-  <div class="main-content">
-    <p class="brand-label">EPL Scout Intelligence &nbsp;·&nbsp; Daily Briefing</p>
-    <h1 class="main-title">데일리 브리핑</h1>
-    <h2 class="main-subtitle">2026년 05월 13일 (수)</h2>
-    <p class="date-line">수요일 정기 미팅 &nbsp;·&nbsp; 2026-05-13</p>
-    <div class="divider"></div>
-    <div class="slogan-box">
-      <p class="slogan-main">"워크플로 yml 경로 한 줄 — 6일 연속 미달의 진짜 해법"</p>
-      <p class="slogan-sub">train_v5_1.py는 이미 완성돼 있었다. 오늘 워크플로 경로 한 줄만 바꾸면 된다.</p>
+    <!-- Right: score badge -->
+    <div style="text-align: center; background: #16213e; border: 1.5pt solid #f5a623; border-radius: 10pt; padding: 8pt 14pt;">
+      <p style="font-size: 24pt; font-weight: 800; color: #f5a623; line-height: 1;">4.85</p>
+      <p style="font-size: 10pt; color: #8b949e;">/ 5.0</p>
+      <p style="font-size: 7.5pt; color: #8b949e; margin-top: 3pt;">종합 평가 점수</p>
+      <p style="font-size: 8pt; color: #8b949e; margin-top: 3pt;">&#8594; 전일 대비 유지</p>
     </div>
   </div>
 
-  <div class="attendee-bar">
-    <div class="attendee-item">
-      <div class="attendee-dot"></div>
-      <p><span class="name">김태현</span> 스카우트</p>
-    </div>
-    <div class="attendee-item">
-      <div class="attendee-dot"></div>
-      <p><span class="name">Marcus Webb</span> Analytics Agent</p>
+  <!-- Main content center -->
+  <div style="text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8pt;">
+    <p style="font-size: 9pt; letter-spacing: 0.22em; color: #8b949e; text-transform: uppercase;">EPL Scout Intelligence &nbsp;&middot;&nbsp; Daily Briefing</p>
+    <h1 style="font-size: 40pt; font-weight: 900; color: #e6edf3; line-height: 1.05; letter-spacing: -0.02em;">데일리 브리핑</h1>
+    <h2 style="font-size: 16pt; font-weight: 600; color: #e94560;">2026년 05월 13일 (수)</h2>
+    <p style="font-size: 10.5pt; color: #8b949e;">수요일 정기 미팅 &nbsp;&middot;&nbsp; 2026-05-13</p>
+
+    <!-- Divider -->
+    <div style="width: 52pt; height: 2.5pt; background: #e94560; margin: 4pt auto; border-radius: 2pt;"></div>
+
+    <!-- Slogan box -->
+    <div style="background: #0f3460; border: 1.5pt solid #e94560; border-left: 4pt solid #e94560; border-radius: 8pt; padding: 12pt 22pt; max-width: 490pt; text-align: left;">
+      <p style="font-size: 12.5pt; font-weight: 700; color: #e6edf3; line-height: 1.5;">"워크플로 yml 경로 한 줄 &mdash; 6일 연속 미달의 진짜 해법"</p>
+      <p style="font-size: 9pt; color: #8b949e; margin-top: 4pt; line-height: 1.4;">train_v5_1.py는 이미 완성돼 있었다. 오늘 워크플로 경로 한 줄만 바꾸면 된다.</p>
     </div>
   </div>
 
+  <!-- Attendee bar -->
+  <div style="display: flex; justify-content: center; gap: 26pt; padding-bottom: 4pt;">
+    <div style="display: flex; align-items: center; gap: 6pt;">
+      <div style="width: 6pt; height: 6pt; background: #f5a623; border-radius: 50%;"></div>
+      <p style="font-size: 9pt; color: #8b949e;"><span style="font-weight: 700; color: #e6edf3;">김태현</span> 스카우트</p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 6pt;">
+      <div style="width: 6pt; height: 6pt; background: #f5a623; border-radius: 50%;"></div>
+      <p style="font-size: 9pt; color: #8b949e;"><span style="font-weight: 700; color: #e6edf3;">Marcus Webb</span> Analytics Agent</p>
+    </div>
+  </div>
+
+  <div style="position: absolute; bottom: 0; left: 0; width: 720pt; height: 2pt; background: #0f3460;"></div>
 </body>
 </html>

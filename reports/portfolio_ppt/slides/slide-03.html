@@ -6,213 +6,137 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    position: relative;
+    padding: 14pt 24pt 8pt 24pt;
+    display: flex;
+    flex-direction: column;
+    gap: 7pt;
   }
-  .top-r { position: absolute; top: 0; left: 0; width: 240pt; height: 3pt; background: #e94560; }
-  .top-g { position: absolute; top: 0; left: 240pt; width: 240pt; height: 3pt; background: #f5a623; }
-  .top-b { position: absolute; top: 0; left: 480pt; right: 0; height: 3pt; background: #00d4aa; }
-
-  .slide-header {
-    position: absolute; top: 9pt; left: 24pt; right: 24pt;
-    display: flex; align-items: baseline; justify-content: space-between;
-  }
-  .slide-header h2 { font-size: 15pt; font-weight: 800; color: #e6edf3; }
-  .slide-header p  { font-size: 7.5pt; color: #8b949e; }
-
-  /* 3열 카드 레이아웃 */
-  .cards-area {
-    position: absolute; top: 33pt; left: 24pt; right: 24pt;
-    display: flex; gap: 8pt; height: 264pt;
-  }
-
-  /* 공통 카드 */
-  .card {
-    flex: 1; border-radius: 7pt; padding: 10pt 11pt;
-    display: flex; flex-direction: column; gap: 5pt;
-  }
-  .card.red-card   { background: #2a0a0a; border: 1.5pt solid #e94560; }
-  .card.green-card { background: #0a2a0a; border: 1.5pt solid #00e676; }
-  .card.blue-card  { background: #0f2040; border: 1.5pt solid #1a4a80; }
-
-  .card-header { display: flex; align-items: center; gap: 6pt; margin-bottom: 2pt; }
-  .card-icon { font-size: 11pt; flex-shrink: 0; }
-  .card h3 { font-size: 9pt; font-weight: 800; }
-  .card.red-card   h3 { color: #e94560; }
-  .card.green-card h3 { color: #00e676; }
-  .card.blue-card  h3 { color: #58a6ff; }
-  .card-subtitle { font-size: 7pt; color: #8b949e; margin-bottom: 3pt; }
-
-  /* 체크리스트 항목 */
-  .check-item {
-    background: rgba(0,0,0,0.25); border-radius: 4pt;
-    padding: 6pt 8pt;
-    display: flex; align-items: flex-start; gap: 7pt;
-    margin-bottom: 4pt;
-  }
-  .check-item:last-child { margin-bottom: 0; }
-  .ci-icon { width: 16pt; height: 16pt; border-radius: 50%; flex-shrink: 0; margin-top: 0.5pt;
-             display: flex; align-items: center; justify-content: center; }
-  .ci-icon.fail    { background: #1e0000; border: 1pt solid #e94560; }
-  .ci-icon.success { background: #001e00; border: 1pt solid #00e676; }
-  .ci-icon span { font-size: 8pt; font-weight: 900; }
-  .ci-icon.fail span    { color: #e94560; }
-  .ci-icon.success span { color: #00e676; }
-
-  .ci-body { flex: 1; }
-  .ci-title { font-size: 8.5pt; font-weight: 700; color: #e6edf3; margin-bottom: 2pt; }
-  .ci-desc  { font-size: 7pt; color: #8b949e; line-height: 1.45; }
-  .ci-desc strong { color: #e94560; }
-  .ci-desc em { color: #00e676; font-style: normal; font-weight: 700; }
-
-  .ci-badge { flex-shrink: 0; border-radius: 9pt; padding: 2pt 7pt; font-size: 6.5pt; font-weight: 700; align-self: center; }
-  .ci-badge.fail    { background: #1e0000; color: #e94560; border: 1pt solid #e94560; }
-  .ci-badge.success { background: #001e00; color: #00e676; border: 1pt solid #00e676; }
-
-  /* 우측 원인 카드 리스트 */
-  .cause-item { margin-bottom: 7pt; }
-  .cause-item h4 { font-size: 8pt; font-weight: 700; color: #e94560; margin-bottom: 2pt; }
-  .cause-item p  { font-size: 7pt; color: #8b949e; line-height: 1.45; }
-  .cause-item p strong { color: #c0c8d8; }
-
-  .strategy-box {
-    margin-top: auto;
-    background: rgba(0,0,0,0.2);
-    border-left: 2.5pt solid #f5a623;
-    border-radius: 0 4pt 4pt 0;
-    padding: 6pt 8pt;
-  }
-  .strategy-box p { font-size: 7pt; color: #f5a623; font-weight: 700; line-height: 1.45; }
-
-  /* 하단 요약 배너 */
-  .summary-banner {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: #16213e; border-top: 2pt solid #f5a623;
-    padding: 7pt 24pt;
-    display: flex; align-items: center; gap: 8pt;
-  }
-  .summary-banner p { font-size: 8pt; color: #c0c8d8; line-height: 1.45; }
-  .summary-banner strong { color: #f5a623; }
-  .summary-banner em { color: #00e676; font-style: normal; font-weight: 700; }
-
-  /* 페이지 카운터 */
-  .page-counter {
-    position: absolute; right: 24pt; bottom: 0;
-    padding: 7pt 0;
-    display: flex; align-items: center; gap: 6pt;
-  }
-  .pc-old { font-size: 14pt; font-weight: 700; color: #8b949e; }
-  .pc-arrow { font-size: 12pt; color: #f5a623; }
-  .pc-new { font-size: 18pt; font-weight: 900; color: #00e676; }
-  .pc-label { font-size: 7pt; color: #8b949e; }
 </style>
 </head>
 <body>
-  <div class="top-r"></div>
-  <div class="top-g"></div>
-  <div class="top-b"></div>
+  <!-- Top accent bars -->
+  <div style="position: absolute; top: 0; left: 0; width: 240pt; height: 3pt; background: #e94560;"></div>
+  <div style="position: absolute; top: 0; left: 240pt; width: 240pt; height: 3pt; background: #f5a623;"></div>
+  <div style="position: absolute; top: 0; left: 480pt; width: 240pt; height: 3pt; background: #00d4aa;"></div>
 
-  <div class="slide-header">
-    <h2>어제(05-11) 달성&middot;미달 + 오늘 아침 직접 수정 결과</h2>
-    <p>어제 3개 항목 전부 미달 &mdash; 오늘 아침 P2 직접 복구로 활용 페이지 9개 확보</p>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 4pt;">
+    <h2 style="font-size: 14pt; font-weight: 800; color: #e6edf3;">어제(05-12) 달성&middot;미달 체크리스트 &mdash; <span style="color: #e94560;">4개 전원 미달</span></h2>
+    <p style="font-size: 7pt; color: #8b949e;">4개 액션아이템 전부 미달 &mdash; 워크플로 yml 경로 미수정이 직접 원인</p>
   </div>
 
-  <div class="cards-area">
-    <!-- 섹션 A: 어제 미달 -->
-    <div class="card red-card">
-      <div class="card-header">
-        <span class="card-icon">&#10007;</span>
-        <h3>섹션 A &mdash; 어제(05-11) 미달</h3>
-      </div>
-      <p class="card-subtitle">3개 항목 전부 미달</p>
+  <!-- 2-column layout -->
+  <div style="flex: 1; display: flex; gap: 10pt; overflow: hidden;">
 
-      <div class="check-item">
-        <div class="ci-icon fail"><span>&#10007;</span></div>
-        <div class="ci-body">
-          <p class="ci-title">P7 v5.1 포지션 분리 구현</p>
-          <p class="ci-desc">success=true이나 <strong>코드 미반영</strong><br>R&sup2;=0.586 동일 (5일 연속)</p>
-        </div>
-        <span class="ci-badge fail">허위 성공</span>
+    <!-- Left: 4 checklist items -->
+    <div style="flex: 1.05; display: flex; flex-direction: column; gap: 5pt;">
+      <div style="border-bottom: 1pt solid #30363d; padding-bottom: 3pt;">
+        <p style="font-size: 7.5pt; font-weight: 800; color: #e94560; letter-spacing: 0.08em; text-transform: uppercase;">섹션 A &mdash; 어제(05-12) 4개 전원 미달</p>
       </div>
 
-      <div class="check-item">
-        <div class="ci-icon fail"><span>&#10007;</span></div>
-        <div class="ci-body">
-          <p class="ci-title">P1 피처 추가 및 재학습</p>
-          <p class="ci-desc">success=true이나 <strong>코드 미반영</strong><br>Acc=54.79% 동일 (5일 연속)</p>
+      <!-- Item 1 -->
+      <div style="background: #16213e; border: 1pt solid rgba(233,69,96,0.35); border-left: 3pt solid #e94560; border-radius: 0 5pt 5pt 0; padding: 5pt 8pt; display: flex; align-items: flex-start; gap: 7pt;">
+        <div style="width: 18pt; height: 18pt; background: #1a0000; border: 1.5pt solid #e94560; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+          <p style="font-size: 9pt; font-weight: 900; color: #e94560; line-height: 1;">&#10007;</p>
         </div>
-        <span class="ci-badge fail">허위 성공</span>
+        <div style="flex: 1;">
+          <p style="font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 2pt;">P7 v5.1 Actions 실행</p>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;">train_v5.py 계속 호출, v5.1 미실행 <span style="color: #e94560; font-weight: 700;">(6일 연속)</span><br>파일은 05-09 완성돼 있으나 yml 경로 미수정</p>
+        </div>
+        <div style="background: #1a0000; border: 1pt solid #e94560; border-radius: 9pt; padding: 2pt 6pt; flex-shrink: 0;">
+          <p style="font-size: 6.5pt; font-weight: 700; color: #e94560;">6일 연속</p>
+        </div>
       </div>
 
-      <div class="check-item">
-        <div class="ci-icon fail"><span>&#10007;</span></div>
-        <div class="ci-body">
-          <p class="ci-title">P2 JSON encoder 오류 수정</p>
-          <p class="ci-desc">success=false &mdash; <strong>JSON encoder 오류</strong><br>파일 미생성 상태</p>
+      <!-- Item 2 -->
+      <div style="background: #16213e; border: 1pt solid rgba(233,69,96,0.35); border-left: 3pt solid #e94560; border-radius: 0 5pt 5pt 0; padding: 5pt 8pt; display: flex; align-items: flex-start; gap: 7pt;">
+        <div style="width: 18pt; height: 18pt; background: #1a0000; border: 1.5pt solid #e94560; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+          <p style="font-size: 9pt; font-weight: 900; color: #e94560; line-height: 1;">&#10007;</p>
         </div>
-        <span class="ci-badge fail">미완료</span>
+        <div style="flex: 1;">
+          <p style="font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 2pt;">P1 train_pipeline.py 코드 직접 수정</p>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;">피처 미추가, Acc 54.79% 동일 <span style="color: #e94560; font-weight: 700;">(6일 연속)</span><br>elo_trend_3, form_elo_composite, RobustScaler 미적용</p>
+        </div>
+        <div style="background: #1a0000; border: 1pt solid #e94560; border-radius: 9pt; padding: 2pt 6pt; flex-shrink: 0;">
+          <p style="font-size: 6.5pt; font-weight: 700; color: #e94560;">6일 연속</p>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div style="background: #16213e; border: 1pt solid rgba(233,69,96,0.35); border-left: 3pt solid #e94560; border-radius: 0 5pt 5pt 0; padding: 5pt 8pt; display: flex; align-items: flex-start; gap: 7pt;">
+        <div style="width: 18pt; height: 18pt; background: #1a0000; border: 1.5pt solid #e94560; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+          <p style="font-size: 9pt; font-weight: 900; color: #e94560; line-height: 1;">&#10007;</p>
+        </div>
+        <div style="flex: 1;">
+          <p style="font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 2pt;">dev_result.json 판단 로직 강화</p>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;">코드 미수정 (내일로 이월)<br>05-12 dev_result.json 미생성 &mdash; Actions 실행 여부 불명</p>
+        </div>
+        <div style="background: #1a0000; border: 1pt solid #e94560; border-radius: 9pt; padding: 2pt 6pt; flex-shrink: 0;">
+          <p style="font-size: 6.5pt; font-weight: 700; color: #e94560;">이월</p>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div style="background: #16213e; border: 1pt solid rgba(233,69,96,0.35); border-left: 3pt solid #e94560; border-radius: 0 5pt 5pt 0; padding: 5pt 8pt; display: flex; align-items: flex-start; gap: 7pt;">
+        <div style="width: 18pt; height: 18pt; background: #1a0000; border: 1.5pt solid #e94560; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+          <p style="font-size: 9pt; font-weight: 900; color: #e94560; line-height: 1;">&#10007;</p>
+        </div>
+        <div style="flex: 1;">
+          <p style="font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 2pt;">포트폴리오 시연 스크립트 초안 작성</p>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;">Marcus 약속 미이행, 초안 미작성<br>S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 루트 설계 미착수</p>
+        </div>
+        <div style="background: #1a0000; border: 1pt solid #e94560; border-radius: 9pt; padding: 2pt 6pt; flex-shrink: 0;">
+          <p style="font-size: 6.5pt; font-weight: 700; color: #e94560;">미착수</p>
+        </div>
       </div>
     </div>
 
-    <!-- 섹션 B: 오늘 아침 달성 -->
-    <div class="card green-card">
-      <div class="card-header">
-        <span class="card-icon">&#10003;</span>
-        <h3>섹션 B &mdash; 오늘 아침 완료</h3>
+    <!-- Right: cause analysis + timeline -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 6pt;">
+      <div style="border-bottom: 1pt solid #30363d; padding-bottom: 3pt;">
+        <p style="font-size: 7.5pt; font-weight: 800; color: #58a6ff; letter-spacing: 0.08em; text-transform: uppercase;">섹션 B &mdash; 핵심 원인 분석</p>
       </div>
-      <p class="card-subtitle">미팅 중 직접 처리 완료</p>
 
-      <div class="check-item">
-        <div class="ci-icon success"><span>&#10003;</span></div>
-        <div class="ci-body">
-          <p class="ci-title">P2 JSON truncation 직접 복구</p>
-          <p class="ci-desc">json.load() 파싱 성공<br><em>R&sup2;=0.8877 &middot; MAE=0.96골</em> 정상 확인<br>대시보드 P2 파싱 오류 해결</p>
+      <div style="background: #0f3460; border: 1pt solid rgba(88,166,255,0.25); border-radius: 6pt; padding: 8pt 10pt;">
+        <h4 style="font-size: 8pt; font-weight: 800; color: #e94560; margin-bottom: 4pt;">근본 원인: 워크플로 yml 경로 미수정</h4>
+        <p style="font-size: 7pt; color: #8b949e; line-height: 1.5;">train_v5_1.py는 <span style="color: #c0c8d8; font-weight: 700;">2026-05-09에 이미 완성</span>됐음<br>(FW/MID 포지션 분리 &middot; Optuna 100 trials &middot; positive=True 메타러너 포함)</p>
+        <p style="font-size: 7pt; color: #8b949e; line-height: 1.5; margin-top: 5pt;">GitHub Actions 워크플로 yml이 여전히 <span style="color: #f5a623; font-weight: 700;">train_v5.py</span> 호출 &mdash;<br>스크립트 완성 이후에도 워크플로 설정 4일간 미수정</p>
+      </div>
+
+      <div style="background: #1a1000; border: 1pt solid rgba(245,166,35,0.35); border-radius: 6pt; padding: 7pt 10pt;">
+        <h4 style="font-size: 8pt; font-weight: 800; color: #f5a623; margin-bottom: 4pt;">결론: yml 경로 한 줄로 즉시 해결 가능</h4>
+        <p style="font-size: 7pt; color: #8b949e; line-height: 1.5;">train_v5.py &rarr; <span style="color: #f5a623; font-weight: 700;">train_v5_1.py</span> 경로 한 줄 수정<br>수정 후 커밋 &rarr; 오늘 밤 Actions에서 v5.1 최초 실행</p>
+      </div>
+
+      <!-- Timeline -->
+      <div>
+        <p style="font-size: 7pt; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5pt;">섹션 C &mdash; 타임라인</p>
+        <div style="display: flex; align-items: center; gap: 5pt; margin-bottom: 4pt;">
+          <div style="width: 10pt; height: 10pt; border-radius: 50%; border: 1.5pt solid #00e676; background: #001200; flex-shrink: 0;"></div>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;"><span style="color: #e6edf3; font-weight: 700;">2026-05-09</span> <span style="color: #00e676; font-weight: 700;">train_v5_1.py 파일 생성 완료</span></p>
         </div>
-        <span class="ci-badge success">완료</span>
-      </div>
-
-      <div style="margin-top: auto; background: rgba(0,230,118,0.07); border-radius: 5pt; padding: 8pt 10pt;">
-        <p style="font-size: 8pt; font-weight: 700; color: #00e676; margin-bottom: 3pt;">영입 회의 즉시 활용 페이지</p>
-        <div style="display: flex; align-items: center; gap: 8pt; justify-content: center; margin-top: 4pt;">
-          <span style="font-size: 22pt; font-weight: 900; color: #8b949e;">8</span>
-          <span style="font-size: 18pt; color: #f5a623;">&#8594;</span>
-          <span style="font-size: 28pt; font-weight: 900; color: #00e676;">9</span>
-          <span style="font-size: 7.5pt; color: #8b949e;">개</span>
+        <div style="width: 1pt; height: 6pt; background: #30363d; margin-left: 4.5pt; margin-bottom: 4pt;"></div>
+        <div style="display: flex; align-items: center; gap: 5pt; margin-bottom: 4pt;">
+          <div style="width: 10pt; height: 10pt; border-radius: 50%; border: 1.5pt solid #f5a623; background: #1a1000; flex-shrink: 0;"></div>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;"><span style="color: #e6edf3; font-weight: 700;">05-09~05-12 (4일간)</span> <span style="color: #e94560; font-weight: 700;">Actions이 train_v5.py 계속 호출, v5.1 미실행</span></p>
         </div>
-      </div>
-    </div>
-
-    <!-- 섹션 C: 근본 원인 -->
-    <div class="card blue-card">
-      <div class="card-header">
-        <span class="card-icon">&#9873;</span>
-        <h3>섹션 C &mdash; 근본 원인</h3>
-      </div>
-      <p class="card-subtitle">5일 연속 실패 원인 분석</p>
-
-      <div class="cause-item">
-        <h4>원인 1: 구조 문제</h4>
-        <p>GitHub Actions 워크플로가 기존 스크립트를 <strong>재실행하는 구조</strong> &mdash; 코드 수정 없이 실행하면 결과 동일</p>
-      </div>
-
-      <div class="cause-item">
-        <h4>원인 2: 판단 기준 문제</h4>
-        <p>dev_result.json의 success:true 판단이 <strong>"스크립트 종료 코드 0"</strong> &mdash; 목표 지표 달성 여부와 무관</p>
-      </div>
-
-      <div class="strategy-box">
-        <p>오늘 전략: train_v5_1.py &middot; train_pipeline.py 파일에<br>코드 블록 직접 작성 (스크립트 실행 &ne; 코드 작성)</p>
+        <div style="width: 1pt; height: 6pt; background: #30363d; margin-left: 4.5pt; margin-bottom: 4pt;"></div>
+        <div style="display: flex; align-items: center; gap: 5pt;">
+          <div style="width: 10pt; height: 10pt; border-radius: 50%; border: 1.5pt solid #e94560; background: #1a0000; flex-shrink: 0;"></div>
+          <p style="font-size: 7pt; color: #8b949e; line-height: 1.4;"><span style="color: #e6edf3; font-weight: 700;">2026-05-13 오전</span> <span style="color: #e94560; font-weight: 700;">워크플로 경로 수정 예정 (오늘 커밋 후 오늘 밤 v5.1 최초 실행)</span></p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="summary-banner">
-    <p><strong>핵심:</strong> P7 val R&sup2;=0.6395 &mdash; 실제 코드 반영 시 목표 달성 가능. 오늘은 <em>코드 파일 직접 수정 + 커밋</em>으로만 마감 처리.</p>
+  <!-- Bottom summary -->
+  <div style="background: #16213e; border-top: 2pt solid #f5a623; padding: 5pt 10pt;">
+    <p style="font-size: 7.5pt; color: #c0c8d8; line-height: 1.5;"><span style="color: #f5a623; font-weight: 700;">핵심 메시지:</span> 6일 연속 P7 미달의 진짜 원인은 코드가 아니라 <span style="color: #f5a623; font-weight: 700;">워크플로 yml 경로 한 줄</span>이었다 &mdash; 오늘 오전 수정으로 즉시 해결 가능</p>
   </div>
 </body>
 </html>

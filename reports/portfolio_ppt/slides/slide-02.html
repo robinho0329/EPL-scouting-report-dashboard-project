@@ -6,277 +6,158 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    position: relative;
-  }
-  :root {
-    --epl-dark: #0d1117;
-    --epl-surface: #16213e;
-    --epl-accent: #e94560;
-    --epl-gold: #f5a623;
-    --epl-green-hi: #00e676;
-    --epl-green: #2ecc71;
-    --epl-yellow: #ffeb3b;
-    --epl-red: #e94560;
-    --epl-blue: #0f3460;
-    --epl-text: #e6edf3;
-    --epl-muted: #8b949e;
-  }
-  .slide-header {
-    padding: 18pt 30pt 10pt;
+    padding: 14pt 28pt 8pt 28pt;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-  h2.slide-title {
-    font-size: 18pt;
-    font-weight: 800;
-    color: var(--epl-text);
-    line-height: 1.2;
-  }
-  .slide-title span {
-    color: var(--epl-accent);
-  }
-  .count-badges {
-    display: flex;
-    gap: 6pt;
-    align-items: center;
-  }
-  .badge {
-    font-size: 8pt;
-    font-weight: 700;
-    padding: 3pt 7pt;
-    border-radius: 20pt;
-    white-space: nowrap;
-  }
-  .badge-green-hi { background: rgba(0,230,118,0.15); color: var(--epl-green-hi); border: 1pt solid var(--epl-green-hi); }
-  .badge-green { background: rgba(46,204,113,0.15); color: var(--epl-green); border: 1pt solid var(--epl-green); }
-  .badge-yellow { background: rgba(255,235,59,0.15); color: var(--epl-yellow); border: 1pt solid var(--epl-yellow); }
-  .badge-red { background: rgba(233,69,96,0.15); color: var(--epl-red); border: 1pt solid var(--epl-red); }
-  .table-wrap {
-    padding: 0 30pt;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 8.5pt;
-  }
-  thead tr {
-    background: var(--epl-blue);
-  }
-  thead th {
-    padding: 5pt 7pt;
-    text-align: left;
-    color: var(--epl-muted);
-    font-weight: 600;
-    font-size: 7.5pt;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  thead th.center { text-align: center; }
-  thead th.right { text-align: right; }
-  tbody tr {
-    border-bottom: 0.5pt solid rgba(48,54,61,0.6);
-  }
-  tbody tr.row-red {
-    background: rgba(233,69,96,0.08);
-  }
-  tbody tr.row-gold {
-    background: rgba(245,166,35,0.06);
-  }
-  tbody td {
-    padding: 4.5pt 7pt;
-    color: var(--epl-text);
-    font-size: 8.5pt;
-    vertical-align: middle;
-  }
-  tbody td.model-id {
-    font-weight: 700;
-    font-size: 8pt;
-    color: var(--epl-muted);
-    width: 30pt;
-  }
-  tbody td.model-name {
-    font-weight: 600;
-    width: 110pt;
-  }
-  tbody td.version {
-    color: var(--epl-muted);
-    text-align: center;
-    width: 30pt;
-  }
-  tbody td.metric {
-    font-family: 'Pretendard', monospace, system-ui;
-    font-size: 8pt;
-    text-align: right;
-  }
-  tbody td.metric.green-hi { color: var(--epl-green-hi); }
-  tbody td.metric.green { color: var(--epl-green); }
-  tbody td.metric.yellow { color: var(--epl-yellow); }
-  tbody td.metric.red { color: var(--epl-red); font-weight: 700; }
-  tbody td.signal {
-    text-align: center;
-    font-size: 10pt;
-    width: 44pt;
-  }
-  .note-bar {
-    position: absolute;
-    bottom: 12pt;
-    left: 30pt; right: 30pt;
-    background: rgba(233,69,96,0.08);
-    border: 1pt solid rgba(233,69,96,0.4);
-    border-radius: 5pt;
-    padding: 5pt 10pt;
-  }
-  .note-bar p {
-    font-size: 7.5pt;
-    color: var(--epl-muted);
-    line-height: 1.5;
-  }
-  .note-bar .note-em {
-    color: var(--epl-accent);
-    font-weight: 700;
+    flex-direction: column;
+    gap: 8pt;
   }
 </style>
 </head>
 <body>
+  <!-- Top accent bar -->
+  <div style="position: absolute; top: 0; left: 0; width: 720pt; height: 3pt; background: #e94560;"></div>
 
-  <div class="slide-header">
-    <h2 class="slide-title">12개 모델 성능 현황 <span>— P1·P7 6일 연속 미달</span></h2>
-    <div class="count-badges">
-      <div class="badge badge-green-hi">초록초록 3개</div>
-      <div class="badge badge-green">초록 4개</div>
-      <div class="badge badge-yellow">노랑 3개</div>
-      <div class="badge badge-red">빨강 2개</div>
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 4pt;">
+    <h2 style="font-size: 16pt; font-weight: 800; color: #e6edf3;">12개 모델 성능 현황 <span style="color: #e94560;">&mdash; P1&middot;P7 6일 연속 미달</span></h2>
+    <div style="display: flex; gap: 5pt; align-items: center;">
+      <div style="background: rgba(0,230,118,0.15); border: 1pt solid #00e676; border-radius: 20pt; padding: 2pt 7pt;">
+        <p style="font-size: 7.5pt; font-weight: 700; color: #00e676;">최우수 3개</p>
+      </div>
+      <div style="background: rgba(46,204,113,0.15); border: 1pt solid #2ecc71; border-radius: 20pt; padding: 2pt 7pt;">
+        <p style="font-size: 7.5pt; font-weight: 700; color: #2ecc71;">초록 4개</p>
+      </div>
+      <div style="background: rgba(255,235,59,0.12); border: 1pt solid #ffeb3b; border-radius: 20pt; padding: 2pt 7pt;">
+        <p style="font-size: 7.5pt; font-weight: 700; color: #ffeb3b;">노랑 3개</p>
+      </div>
+      <div style="background: rgba(233,69,96,0.15); border: 1pt solid #e94560; border-radius: 20pt; padding: 2pt 7pt;">
+        <p style="font-size: 7.5pt; font-weight: 700; color: #e94560;">빨강 2개</p>
+      </div>
     </div>
   </div>
 
-  <div class="table-wrap">
-    <table>
+  <!-- Table -->
+  <div style="flex: 1; overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 8pt;">
       <thead>
-        <tr>
-          <th>ID</th>
-          <th>모델명</th>
-          <th class="center">버전</th>
-          <th class="right">핵심 지표 (실측값)</th>
-          <th class="right">목표</th>
-          <th class="center">신호등</th>
+        <tr style="background: #0f3460;">
+          <th style="padding: 4pt 6pt; text-align: left; color: #8b949e; font-weight: 600; font-size: 7pt; letter-spacing: 0.05em; text-transform: uppercase;">ID</th>
+          <th style="padding: 4pt 6pt; text-align: left; color: #8b949e; font-weight: 600; font-size: 7pt; letter-spacing: 0.05em; text-transform: uppercase;">모델명</th>
+          <th style="padding: 4pt 6pt; text-align: center; color: #8b949e; font-weight: 600; font-size: 7pt; text-transform: uppercase;">버전</th>
+          <th style="padding: 4pt 6pt; text-align: right; color: #8b949e; font-weight: 600; font-size: 7pt; text-transform: uppercase;">핵심 지표 (실측값)</th>
+          <th style="padding: 4pt 6pt; text-align: right; color: #8b949e; font-weight: 600; font-size: 7pt; text-transform: uppercase;">목표</th>
+          <th style="padding: 4pt 6pt; text-align: center; color: #8b949e; font-weight: 600; font-size: 7pt; text-transform: uppercase;">상태</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="row-red">
-          <td class="model-id">P1</td>
-          <td class="model-name">경기 결과 예측 (H/D/A)</td>
-          <td class="version">—</td>
-          <td class="metric red">Acc 54.79% / F1 40.65%</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">Acc ≥ 57%</td>
-          <td class="signal">&#x1F534;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d; background: rgba(233,69,96,0.08);">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P1</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">경기 결과 예측 (H/D/A)</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">&mdash;</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #e94560; font-weight: 700;">Acc 54.79% / F1 40.65%</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">Acc &ge; 57%</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F534;</td>
         </tr>
-        <tr>
-          <td class="model-id">P2</td>
-          <td class="model-name">시즌 득점 예측</td>
-          <td class="version">v2</td>
-          <td class="metric green">R² 0.8877 / MAE 0.96골</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">R² ≥ 0.65</td>
-          <td class="signal">&#x1F7E2;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P2</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">시즌 득점 예측</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v2</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #2ecc71;">R&sup2; 0.8877 / MAE 0.96골</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">R&sup2; &ge; 0.65</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E2;</td>
         </tr>
-        <tr class="row-gold">
-          <td class="model-id">P3</td>
-          <td class="model-name">강등권 예측</td>
-          <td class="version">—</td>
-          <td class="metric green-hi">AUC 100% / Acc 97.5%</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">AUC ≥ 0.90</td>
-          <td class="signal">&#x2705;&#x2705;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d; background: rgba(245,166,35,0.06);">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P3</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">강등권 예측</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">&mdash;</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #00e676;">AUC 100% / Acc 97.5%</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">AUC &ge; 0.90</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x2705;&#x2705;</td>
         </tr>
-        <tr class="row-gold">
-          <td class="model-id">P4</td>
-          <td class="model-name">MVP 스코어링</td>
-          <td class="version">—</td>
-          <td class="metric green-hi">Spearman 0.9987 / NDCG@10 0.9993</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">Sp ≥ 0.95</td>
-          <td class="signal">&#x2705;&#x2705;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d; background: rgba(245,166,35,0.06);">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P4</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">MVP 스코어링</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">&mdash;</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #00e676;">Spearman 0.9987 / NDCG@10 0.9993</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">Sp &ge; 0.95</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x2705;&#x2705;</td>
         </tr>
-        <tr>
-          <td class="model-id">P5</td>
-          <td class="model-name">선수 클러스터링</td>
-          <td class="version">v2</td>
-          <td class="metric yellow">Silhouette 0.2851 (K=3)</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">0.25~0.35</td>
-          <td class="signal">&#x1F7E1;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P5</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">선수 클러스터링</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v2</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #ffeb3b;">Silhouette 0.2851 (K=3)</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">0.25~0.35</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E1;</td>
         </tr>
-        <tr>
-          <td class="model-id">P6</td>
-          <td class="model-name">시장가치 예측</td>
-          <td class="version">—</td>
-          <td class="metric green">R² 0.8734 / MAE £3.28M</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">R² ≥ 0.80</td>
-          <td class="signal">&#x1F7E2;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P6</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">시장가치 예측</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">&mdash;</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #2ecc71;">R&sup2; 0.8734 / MAE &pound;3.28M</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">R&sup2; &ge; 0.80</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E2;</td>
         </tr>
-        <tr class="row-red">
-          <td class="model-id">P7</td>
-          <td class="model-name">성장 곡선 예측</td>
-          <td class="version">v5</td>
-          <td class="metric red">R² 0.586 / val-test 갭 0.055</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">R² ≥ 0.62</td>
-          <td class="signal">&#x1F534;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d; background: rgba(233,69,96,0.08);">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P7</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">성장 곡선 예측</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v5</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #e94560; font-weight: 700;">R&sup2; 0.586 / val-test 갭 0.055</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">R&sup2; &ge; 0.62</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F534;</td>
         </tr>
-        <tr>
-          <td class="model-id">P8</td>
-          <td class="model-name">이적 적응 예측</td>
-          <td class="version">v2</td>
-          <td class="metric green">AUC 0.6612 / F1 88.23%</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">AUC ≥ 0.65</td>
-          <td class="signal">&#x1F7E2;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">P8</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">이적 적응 예측</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v2</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #2ecc71;">AUC 0.6612 / F1 88.23%</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">AUC &ge; 0.65</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E2;</td>
         </tr>
-        <tr class="row-gold">
-          <td class="model-id">S1</td>
-          <td class="model-name">선수 종합 레이팅</td>
-          <td class="version">v1.2</td>
-          <td class="metric green-hi">R² 0.9093 / MAE 4.66</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">R² ≥ 0.88</td>
-          <td class="signal">&#x2705;&#x2705;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d; background: rgba(245,166,35,0.06);">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">S1</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">선수 종합 레이팅</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v1.2</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #00e676;">R&sup2; 0.9093 / MAE 4.66</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">R&sup2; &ge; 0.88</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x2705;&#x2705;</td>
         </tr>
-        <tr>
-          <td class="model-id">S2</td>
-          <td class="model-name">포지션별 시장가치</td>
-          <td class="version">v4</td>
-          <td class="metric green">R² 0.8812 / MAE £3.23M</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">R² ≥ 0.80</td>
-          <td class="signal">&#x1F7E2;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">S2</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">포지션별 시장가치</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v4</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #2ecc71;">R&sup2; 0.8812 / MAE &pound;3.23M</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">R&sup2; &ge; 0.80</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E2;</td>
         </tr>
-        <tr>
-          <td class="model-id">S3</td>
-          <td class="model-name">유사선수 탐색</td>
-          <td class="version">v4</td>
-          <td class="metric yellow">GK 0.4873 / DEF 0.3637 / MID 0.2299</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">≥ 0.20</td>
-          <td class="signal">&#x1F7E1;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">S3</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">유사선수 탐색</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">v4</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #ffeb3b;">GK 0.4873 / DEF 0.3637 / MID 0.2299</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">&ge; 0.20</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E1;</td>
         </tr>
-        <tr>
-          <td class="model-id">S6</td>
-          <td class="model-name">선수 하락세 감지</td>
-          <td class="version">—</td>
-          <td class="metric yellow">AUC 0.8324 / F1 61.74% / Acc 75%</td>
-          <td class="metric" style="color:var(--epl-muted); text-align:right;">AUC ≥ 0.80</td>
-          <td class="signal">&#x1F7E1;</td>
+        <tr style="border-bottom: 0.5pt solid #30363d;">
+          <td style="padding: 3.5pt 6pt; font-weight: 700; font-size: 7.5pt; color: #8b949e;">S6</td>
+          <td style="padding: 3.5pt 6pt; font-weight: 600; color: #e6edf3;">선수 하락세 감지</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; color: #8b949e;">&mdash;</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #ffeb3b;">AUC 0.8324 / F1 61.74% / Acc 75%</td>
+          <td style="padding: 3.5pt 6pt; text-align: right; color: #8b949e;">AUC &ge; 0.80</td>
+          <td style="padding: 3.5pt 6pt; text-align: center; font-size: 9pt;">&#x1F7E1;</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="note-bar">
-    <p>
-      <span class="note-em">P7 핵심:</span> train_v5_1.py 완성(2026-05-09) — Actions 워크플로가 여전히 train_v5.py 호출 중. yml 경로 한 줄 수정으로 즉시 해결 가능
-      &nbsp;|&nbsp;
-      <span class="note-em">P1 핵심:</span> train_pipeline.py 피처 추가(elo_trend_3, form_elo_composite) 및 RobustScaler 교체 미실시
-    </p>
+  <!-- Note bar -->
+  <div style="background: #16213e; border: 1pt solid rgba(233,69,96,0.4); border-radius: 5pt; padding: 4pt 9pt;">
+    <p style="font-size: 7pt; color: #8b949e; line-height: 1.5;"><span style="color: #e94560; font-weight: 700;">P7:</span> train_v5_1.py 완성(05-09) &mdash; Actions yml이 여전히 train_v5.py 호출 &middot; 경로 한 줄 수정으로 즉시 해결 &nbsp;|&nbsp; <span style="color: #e94560; font-weight: 700;">P1:</span> elo_trend_3, form_elo_composite, RobustScaler 미적용</p>
   </div>
-
 </body>
 </html>
