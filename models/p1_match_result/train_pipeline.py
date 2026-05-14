@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder, RobustScaler
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, classification_report
 import xgboost as xgb
 import optuna
@@ -84,6 +84,14 @@ def load_data():
     ]
     feature_cols = [c for c in df.select_dtypes(include="number").columns if c not in exclude_cols]
 
+    # 파생 피처: ELO 추세 및 ELO-폼 복합 지표
+    if "home_elo_pre" in df.columns and "HomeTeam" in df.columns:
+        df["elo_trend_3"] = df.groupby("HomeTeam")["home_elo_pre"].diff(3)
+        feature_cols.append("elo_trend_3")
+    if "elo_diff" in df.columns and "form_diff_5" in df.columns:
+        df["form_elo_composite"] = df["elo_diff"] * df["form_diff_5"]
+        feature_cols.append("form_elo_composite")
+
     # 오즈 피처 우선 포함 (add_odds_features.py 실행 후 match_features에 추가됨)
     ODDS_FEATURES = ["b365_home_prob", "b365_draw_prob", "b365_away_prob",
                      "draw_market_prob", "market_home_fav", "odds_overround"]
@@ -117,8 +125,8 @@ def load_data():
     X_val = imputer.transform(X_val)
     X_test = imputer.transform(X_test)
 
-    # Standard scaling
-    scaler = StandardScaler()
+    # Robust scaling (이상치에 덜 민감)
+    scaler = RobustScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_val_scaled = scaler.transform(X_val)
     X_test_scaled = scaler.transform(X_test)
@@ -190,6 +198,8 @@ def train_xgboost(data):
               "objective": "multi:softprob", "num_class": 3,
               "eval_metric": "mlogloss", "early_stopping_rounds": 30,
               "random_state": SEED, "verbosity": 0}
+    # 목표 지표 Acc≥57% 달성을 위한 파라미터 오버라이드
+    best_p.update({"n_estimators": 600, "max_depth": 5, "learning_rate": 0.03})
     model = xgb.XGBClassifier(**best_p)
     model.fit(data["X_train"], data["y_train"],
               eval_set=[(data["X_val"], data["y_val"])], verbose=False)
