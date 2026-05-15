@@ -14,34 +14,20 @@
     overflow: hidden;
     position: relative;
   }
-  :root {
-    --epl-dark: #0d1117;
-    --epl-surface: #16213e;
-    --epl-panel: #0f3460;
-    --epl-accent: #e94560;
-    --epl-gold: #f5a623;
-    --epl-green: #00d26a;
-    --epl-blue: #58a6ff;
-    --epl-text: #e6edf3;
-    --epl-muted: #8b949e;
-  }
 
-  /* 배경 그리드 */
-  .bg-grid {
+  .left-bar {
     position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(15,52,96,0.10) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15,52,96,0.10) 1px, transparent 1px);
-    background-size: 40pt 40pt;
-    pointer-events: none;
-    z-index: 0;
+    left: 0;
+    top: 0;
+    width: 5pt;
+    height: 100%;
+    background: #e94560;
+    z-index: 1;
   }
 
-  /* WEEK FINAL 배경 워터마크 */
   .watermark {
     position: absolute;
-    top: 50%;
+    top: 36%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-22deg);
     z-index: 0;
@@ -49,25 +35,13 @@
     user-select: none;
   }
   .watermark p {
-    font-size: 88pt;
+    font-size: 76pt;
     font-weight: 900;
-    color: rgba(245, 166, 35, 0.04);
+    color: rgba(245,166,35,0.04);
     letter-spacing: 0.08em;
     white-space: nowrap;
   }
 
-  /* 좌측 강조 바 */
-  .left-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 5pt;
-    height: 100%;
-    background: linear-gradient(180deg, #e94560 0%, #f5a623 100%);
-    z-index: 1;
-  }
-
-  /* 상단 배지 행 */
   .top-badges {
     position: absolute;
     top: 18pt;
@@ -101,7 +75,7 @@
     color: #f5a623;
   }
   .badge-friday {
-    background: rgba(233,69,96,0.15);
+    background: #1a0a10;
     border: 1pt solid #e94560;
     border-radius: 4pt;
     padding: 3pt 9pt;
@@ -112,7 +86,6 @@
     color: #e94560;
   }
 
-  /* 우상단 참석자 */
   .attendees {
     position: absolute;
     top: 14pt;
@@ -124,7 +97,6 @@
   .attendees .att-name { font-size: 9pt; font-weight: 700; color: #e6edf3; line-height: 1.55; }
   .attendees .att-sub { font-size: 7pt; color: #8b949e; }
 
-  /* 중앙 타이틀 블록 */
   .center-block {
     position: absolute;
     top: 50%;
@@ -152,7 +124,7 @@
   .divider {
     width: 70pt;
     height: 3pt;
-    background: linear-gradient(90deg, #e94560, #f5a623);
+    background: #e94560;
     margin: 0 auto 10pt;
     border-radius: 2pt;
   }
@@ -168,10 +140,9 @@
     color: #e6edf3;
   }
 
-  /* 우하단 점수 배지 */
   .score-badge {
     position: absolute;
-    bottom: 38pt;
+    bottom: 52pt;
     right: 22pt;
     background: #16213e;
     border: 2pt solid #f5a623;
@@ -185,13 +156,12 @@
   .score-badge .sc-denom p { font-size: 9.5pt; color: #8b949e; }
   .score-badge .sc-delta p { font-size: 8.5pt; color: #e94560; font-weight: 700; margin-top: 4pt; }
 
-  /* 하단 슬로건 박스 */
   .slogan-box {
     position: absolute;
-    bottom: 16pt;
+    bottom: 26pt;
     left: 18pt;
     right: 200pt;
-    background: rgba(15, 52, 96, 0.90);
+    background: #0f3460;
     border: 1.5pt solid #e94560;
     border-left: 4pt solid #e94560;
     border-radius: 6pt;
@@ -213,18 +183,15 @@
 </head>
 <body>
 
-  <div class="bg-grid"></div>
   <div class="watermark"><p>WEEK FINAL</p></div>
   <div class="left-bar"></div>
 
-  <!-- 상단 배지 -->
   <div class="top-badges">
     <div class="badge-epl"><p>EPL Scout Intelligence</p></div>
     <div class="badge-meeting"><p>24번째 정기 미팅</p></div>
-    <div class="badge-friday"><p>금요일 · WEEK FINAL</p></div>
+    <div class="badge-friday"><p>금요일 &middot; WEEK FINAL</p></div>
   </div>
 
-  <!-- 우상단 참석자 -->
   <div class="attendees">
     <p class="att-label">참석자</p>
     <p class="att-name">김태현 스카우트</p>
@@ -232,16 +199,14 @@
     <p class="att-sub">Analytics Agent</p>
   </div>
 
-  <!-- 중앙 타이틀 -->
   <div class="center-block">
-    <div class="eyebrow"><p>Daily Briefing</p></div>
+    <div class="eyebrow"><p>Daily Intelligence Briefing</p></div>
     <div class="main-title"><h1>EPL 스카우트 인텔리전스</h1></div>
     <div class="divider"></div>
     <div class="sub-title"><h2>데일리 브리핑</h2></div>
-    <div class="date-line"><p>2026년 5월 15일 (금)</p></div>
+    <div class="date-line"><p>2026년 5월 15일 (금) &nbsp;|&nbsp; 09:00 KST</p></div>
   </div>
 
-  <!-- 우하단 점수 배지 -->
   <div class="score-badge">
     <div class="sc-label"><p>스카우트 종합 평가</p></div>
     <div class="sc-num"><p>4.75</p></div>
@@ -249,10 +214,9 @@
     <div class="sc-delta"><p>&#9660; 0.05 &nbsp;(전일 4.80)</p></div>
   </div>
 
-  <!-- 하단 슬로건 -->
   <div class="slogan-box">
     <div class="sl-main"><p>이번 주 마지막 기회 &mdash; 오늘이 WEEK FINAL</p></div>
-    <div class="sl-sub"><p>수동 학습 실행 + 시연 스크립트 완성 + 대시보드 최종 점검 · GitHub Actions 4일 연속 미실행</p></div>
+    <div class="sl-sub"><p>수동 학습 실행 + 시연 스크립트 완성 + 대시보드 최종 점검 &nbsp;|&nbsp; GitHub Actions 4일 연속 미실행</p></div>
   </div>
 
 </body>
