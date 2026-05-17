@@ -8,216 +8,251 @@
   body {
     width: 720pt;
     height: 405pt;
-    background: #0d1117;
+    background: #0a0e1a;
     font-family: 'Pretendard', 'Apple SD Gothic Neo', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #e8eaf0;
     overflow: hidden;
     position: relative;
   }
 
-  .left-bar {
+  /* 축구장 라인 패턴 (CSS only) */
+  .field-bg {
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 5pt;
-    height: 100%;
-    background: #e94560;
-    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.045;
+  }
+  .field-bg::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1.5pt;
+    background: #00d4aa;
+    transform: translateX(-50%);
+  }
+  .field-bg::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100pt; height: 100pt;
+    border: 1.5pt solid #00d4aa;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .field-penalty-l {
+    position: absolute;
+    top: 50%; left: 0;
+    width: 90pt; height: 160pt;
+    border: 1.5pt solid #00d4aa;
+    border-left: none;
+    transform: translateY(-50%);
+    opacity: 0.045;
+    pointer-events: none;
+  }
+  .field-penalty-r {
+    position: absolute;
+    top: 50%; right: 0;
+    width: 90pt; height: 160pt;
+    border: 1.5pt solid #00d4aa;
+    border-right: none;
+    transform: translateY(-50%);
+    opacity: 0.045;
+    pointer-events: none;
   }
 
+  /* 상단 그라데이션 바 */
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4pt;
+    background: linear-gradient(90deg, #00d4aa 0%, #ff6b35 50%, #f5a623 100%);
+  }
+
+  /* 워터마크 */
   .watermark {
     position: absolute;
-    top: 36%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-22deg);
-    z-index: 0;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    font-size: 82pt;
+    font-weight: 900;
+    color: #00d4aa;
+    opacity: 0.025;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
     pointer-events: none;
     user-select: none;
   }
-  .watermark p {
-    font-size: 76pt;
-    font-weight: 900;
-    color: rgba(245,166,35,0.04);
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
 
-  .top-badges {
+  /* EPL 로고 영역 (좌상단) */
+  .logo-area {
     position: absolute;
-    top: 18pt;
-    left: 18pt;
+    top: 16pt; left: 22pt;
     display: flex;
     align-items: center;
     gap: 8pt;
-    z-index: 2;
   }
-  .badge-epl {
-    background: #e94560;
-    border-radius: 4pt;
-    padding: 3pt 9pt;
+  .logo-icon {
+    width: 28pt; height: 28pt;
+    background: linear-gradient(135deg, #00d4aa 0%, #0f3460 100%);
+    border-radius: 6pt;
+    border: 1pt solid #00d4aa;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
   }
-  .badge-epl p {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .badge-meeting {
-    background: #0f3460;
-    border: 1pt solid #f5a623;
-    border-radius: 4pt;
-    padding: 3pt 9pt;
-  }
-  .badge-meeting p {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #f5a623;
-  }
-  .badge-friday {
-    background: #1a0a10;
-    border: 1pt solid #e94560;
-    border-radius: 4pt;
-    padding: 3pt 9pt;
-  }
-  .badge-friday p {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #e94560;
-  }
-
-  .attendees {
-    position: absolute;
-    top: 14pt;
-    right: 22pt;
-    text-align: right;
-    z-index: 2;
-  }
-  .attendees .att-label { font-size: 7pt; color: #8b949e; margin-bottom: 3pt; }
-  .attendees .att-name { font-size: 9pt; font-weight: 700; color: #e6edf3; line-height: 1.55; }
-  .attendees .att-sub { font-size: 7pt; color: #8b949e; }
-
-  .center-block {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -52%);
-    text-align: center;
-    width: 540pt;
-    z-index: 2;
-  }
-  .eyebrow p {
-    font-size: 8.5pt;
-    letter-spacing: 0.26em;
+  .logo-icon p { font-size: 13pt; line-height: 1; }
+  .logo-text p {
+    font-size: 7pt; font-weight: 700;
     color: #8b949e;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin-bottom: 10pt;
-  }
-  .main-title h1 {
-    font-size: 44pt;
-    font-weight: 900;
-    line-height: 1.0;
-    color: #e6edf3;
-    letter-spacing: -0.02em;
-    margin-bottom: 6pt;
-  }
-  .divider {
-    width: 70pt;
-    height: 3pt;
-    background: #e94560;
-    margin: 0 auto 10pt;
-    border-radius: 2pt;
-  }
-  .sub-title h2 {
-    font-size: 17pt;
-    font-weight: 700;
-    color: #e94560;
-    margin-bottom: 5pt;
-  }
-  .date-line p {
-    font-size: 13pt;
-    font-weight: 500;
-    color: #e6edf3;
   }
 
+  /* 점수 배지 (우상단) */
   .score-badge {
     position: absolute;
-    bottom: 52pt;
-    right: 22pt;
+    top: 12pt; right: 22pt;
     background: #16213e;
-    border: 2pt solid #f5a623;
-    border-radius: 10pt;
-    padding: 10pt 15pt;
+    border: 1.5pt solid #f5a623;
+    border-radius: 8pt;
+    padding: 7pt 13pt;
     text-align: center;
-    z-index: 2;
   }
-  .score-badge .sc-label p { font-size: 7pt; color: #8b949e; margin-bottom: 4pt; }
-  .score-badge .sc-num p { font-size: 28pt; font-weight: 900; color: #f5a623; line-height: 1; }
-  .score-badge .sc-denom p { font-size: 9.5pt; color: #8b949e; }
-  .score-badge .sc-delta p { font-size: 8.5pt; color: #e94560; font-weight: 700; margin-top: 4pt; }
+  .score-badge .sc-label p { font-size: 6.5pt; color: #8b949e; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2pt; }
+  .score-badge .sc-num p { font-size: 20pt; font-weight: 900; color: #f5a623; line-height: 1; }
+  .score-badge .sc-denom p { font-size: 9pt; color: #8b949e; margin-top: 1pt; }
+  .score-badge .sc-delta p { font-size: 7.5pt; color: #e94560; font-weight: 700; margin-top: 3pt; }
 
-  .slogan-box {
+  /* 메인 콘텐츠 (중앙) */
+  .main-content {
     position: absolute;
-    bottom: 26pt;
-    left: 18pt;
-    right: 200pt;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 560pt;
+  }
+  .meeting-badge {
+    display: inline-block;
     background: #0f3460;
-    border: 1.5pt solid #e94560;
-    border-left: 4pt solid #e94560;
-    border-radius: 6pt;
-    padding: 9pt 14pt;
-    z-index: 2;
+    border: 1pt solid #00d4aa;
+    border-radius: 20pt;
+    padding: 4pt 16pt;
+    margin-bottom: 14pt;
   }
-  .slogan-box .sl-main p {
-    font-size: 10.5pt;
-    font-weight: 800;
-    color: #e94560;
-    margin-bottom: 4pt;
+  .meeting-badge p {
+    font-size: 8pt; color: #00d4aa;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
   }
-  .slogan-box .sl-sub p {
-    font-size: 7.5pt;
-    color: #8b949e;
-    line-height: 1.5;
+  .main-title h1 {
+    font-size: 40pt;
+    font-weight: 900;
+    color: #e8eaf0;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 10pt;
   }
+  .main-title h1 span { color: #00d4aa; }
+  .sub-title p {
+    font-size: 11pt; color: #8b949e;
+    margin-bottom: 6pt; font-weight: 500;
+  }
+  .date-line p {
+    font-size: 17pt; font-weight: 800;
+    color: #ff6b35;
+    letter-spacing: 0.04em;
+    margin-bottom: 16pt;
+  }
+  .divider {
+    width: 70pt; height: 2pt;
+    background: linear-gradient(90deg, transparent, #00d4aa, transparent);
+    margin: 0 auto 14pt;
+  }
+  .attendees p {
+    font-size: 9pt; color: #8b949e;
+    letter-spacing: 0.06em;
+  }
+
+  /* 하단 경고 배너 */
+  .alert-banner {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(90deg, #150408, #200810, #150408);
+    border-top: 2pt solid #e94560;
+    padding: 8pt 26pt;
+    display: flex;
+    align-items: center;
+    gap: 10pt;
+  }
+  .alert-icon {
+    width: 20pt; height: 20pt;
+    background: #e94560;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .alert-icon p { font-size: 9pt; line-height: 1; }
+  .alert-text p { font-size: 9.5pt; color: #ffbaba; font-weight: 600; }
+  .alert-text span { color: #e94560; font-weight: 800; }
+  .streak-badge {
+    margin-left: auto;
+    background: #e94560;
+    border-radius: 12pt;
+    padding: 3pt 10pt;
+    flex-shrink: 0;
+  }
+  .streak-badge p { font-size: 8pt; color: #fff; font-weight: 800; white-space: nowrap; }
 </style>
 </head>
 <body>
+  <div class="field-bg"></div>
+  <div class="field-penalty-l"></div>
+  <div class="field-penalty-r"></div>
+  <div class="watermark">WEEKEND REVIEW</div>
+  <div class="top-bar"></div>
 
-  <div class="watermark"><p>WEEK FINAL</p></div>
-  <div class="left-bar"></div>
-
-  <div class="top-badges">
-    <div class="badge-epl"><p>EPL Scout Intelligence</p></div>
-    <div class="badge-meeting"><p>24번째 정기 미팅</p></div>
-    <div class="badge-friday"><p>금요일 &middot; WEEK FINAL</p></div>
+  <!-- EPL 로고 영역 -->
+  <div class="logo-area">
+    <div class="logo-icon"><p>⚽</p></div>
+    <div class="logo-text"><p>EPL Scout Intelligence</p></div>
   </div>
 
-  <div class="attendees">
-    <p class="att-label">참석자</p>
-    <p class="att-name">김태현 스카우트</p>
-    <p class="att-name">Marcus Webb</p>
-    <p class="att-sub">Analytics Agent</p>
-  </div>
-
-  <div class="center-block">
-    <div class="eyebrow"><p>Daily Intelligence Briefing</p></div>
-    <div class="main-title"><h1>EPL 스카우트 인텔리전스</h1></div>
-    <div class="divider"></div>
-    <div class="sub-title"><h2>데일리 브리핑</h2></div>
-    <div class="date-line"><p>2026년 5월 15일 (금) &nbsp;|&nbsp; 09:00 KST</p></div>
-  </div>
-
+  <!-- 점수 배지 (우상단) -->
   <div class="score-badge">
-    <div class="sc-label"><p>스카우트 종합 평가</p></div>
-    <div class="sc-num"><p>4.75</p></div>
+    <div class="sc-label"><p>실무 활용도</p></div>
+    <div class="sc-num"><p>4.65</p></div>
     <div class="sc-denom"><p>/ 5.0</p></div>
-    <div class="sc-delta"><p>&#9660; 0.05 &nbsp;(전일 4.80)</p></div>
+    <div class="sc-delta"><p>&#9660; 0.05 (전일 4.70)</p></div>
   </div>
 
-  <div class="slogan-box">
-    <div class="sl-main"><p>이번 주 마지막 기회 &mdash; 오늘이 WEEK FINAL</p></div>
-    <div class="sl-sub"><p>수동 학습 실행 + 시연 스크립트 완성 + 대시보드 최종 점검 &nbsp;|&nbsp; GitHub Actions 4일 연속 미실행</p></div>
+  <!-- 메인 콘텐츠 -->
+  <div class="main-content">
+    <div class="meeting-badge">
+      <p>26번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST &nbsp;|&nbsp; 주말 종합 점검</p>
+    </div>
+    <div class="main-title">
+      <h1>EPL 스카우트<span>팀</span> 데일리 브리핑</h1>
+    </div>
+    <div class="sub-title">
+      <p>Daily Briefing — Scout Intelligence Analytics</p>
+    </div>
+    <div class="date-line">
+      <p>2026년 05월 17일 (일)</p>
+    </div>
+    <div class="divider"></div>
+    <div class="attendees">
+      <p>김태현 스카우트 &nbsp;&times;&nbsp; Marcus Webb (Analytics Agent)</p>
+    </div>
   </div>
 
+  <!-- 하단 경고 배너 -->
+  <div class="alert-banner">
+    <div class="alert-icon"><p>🎯</p></div>
+    <div class="alert-text">
+      <p>오늘 최우선: &nbsp;<span>demo_script_draft.md 완성</span> &nbsp;— &nbsp;6일 연속 미달 오늘 오전 종결 필수 (다음 주 발표 직결)</p>
+    </div>
+    <div class="streak-badge"><p>6일 연속 미달</p></div>
+  </div>
 </body>
 </html>
