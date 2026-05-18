@@ -8,9 +8,9 @@
   body {
     width: 720pt;
     height: 405pt;
-    background: #0a0e1a;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', system-ui, sans-serif;
-    color: #e8eaf0;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
@@ -18,62 +18,57 @@
 </head>
 <body>
 
-  <!-- 상단 바 -->
-  <div style="position:absolute; top:0; left:0; width:720pt; height:4pt; background:#00d4aa;"></div>
+  <!-- 좌측 수직 강조 라인 -->
+  <div style="position:absolute; left:0; top:0; width:5pt; height:405pt; background:linear-gradient(180deg,#e94560,#f5a623,#e94560);"></div>
 
-  <!-- 하프라인 -->
-  <div style="position:absolute; top:0; left:359pt; width:2pt; height:405pt; background:#00d4aa; opacity:0.04;"></div>
-  <!-- 센터 서클 -->
-  <div style="position:absolute; top:152pt; left:305pt; width:110pt; height:110pt; border:1.5pt solid #00d4aa; border-radius:50%; opacity:0.04;"></div>
-  <!-- 페널티 박스 좌 (너비 89pt, left:0 시작) -->
-  <div style="position:absolute; top:117pt; left:0; width:89pt; height:170pt; border:1.5pt solid #00d4aa; border-left:none; opacity:0.035;"></div>
-  <!-- 페널티 박스 우 (right edge = 720pt, so left = 631pt, width=89pt) -->
-  <div style="position:absolute; top:117pt; left:631pt; width:89pt; height:170pt; border:1.5pt solid #00d4aa; border-right:none; opacity:0.035;"></div>
+  <!-- 우상단 장식 원형 -->
+  <div style="position:absolute; right:-30pt; top:-30pt; width:160pt; height:160pt; border-radius:50%; border:1pt solid rgba(233,69,96,0.18); background:radial-gradient(circle,rgba(233,69,96,0.07),transparent 70%);"></div>
+  <div style="position:absolute; right:20pt; top:20pt; width:100pt; height:100pt; border-radius:50%; border:1pt solid rgba(245,166,35,0.10); background:transparent;"></div>
 
-  <!-- WEEKEND REVIEW 워터마크 -->
-  <div style="position:absolute; top:130pt; left:80pt; width:520pt; text-align:center; opacity:0.03; pointer-events:none;">
-    <p style="font-size:56pt; font-weight:900; color:#00d4aa; letter-spacing:0.04em; white-space:nowrap;">WEEKEND REVIEW</p>
+  <!-- 좌상단 방패 아이콘 + 레이블 -->
+  <div style="position:absolute; top:18pt; left:18pt; display:flex; align-items:center; gap:9pt;">
+    <div style="width:28pt; height:32pt; background:linear-gradient(135deg,#e94560,#c0392b); clip-path:polygon(50% 0%,100% 20%,100% 68%,50% 100%,0% 68%,0% 20%);"></div>
+    <p style="font-size:7.5pt; font-weight:700; color:#8b949e; letter-spacing:0.15em; text-transform:uppercase;">EPL Scout Intelligence</p>
   </div>
 
-  <!-- EPL 로고 영역 (좌상단) -->
-  <div style="position:absolute; top:18pt; left:22pt; display:flex; align-items:center; gap:9pt;">
-    <div style="width:30pt; height:30pt; background:#0f3460; border-radius:6pt; border:1pt solid #00d4aa; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-      <p style="font-size:14pt; line-height:1;">&#9917;</p>
+  <!-- 중앙 메인 콘텐츠 -->
+  <div style="position:absolute; left:32pt; top:52pt; right:24pt; bottom:80pt; display:flex; flex-direction:column; justify-content:center; padding:0 18pt;">
+
+    <!-- 배지 행 -->
+    <div style="display:flex; gap:8pt; margin-bottom:14pt; flex-wrap:wrap;">
+      <div style="background:rgba(88,166,255,0.12); border:1pt solid rgba(88,166,255,0.4); border-radius:20pt; padding:3pt 12pt;">
+        <p style="font-size:7.5pt; font-weight:700; color:#58a6ff; letter-spacing:0.04em;">27번째 정기 미팅 | 09:00 KST</p>
+      </div>
+      <div style="background:rgba(245,166,35,0.12); border:1pt solid rgba(245,166,35,0.4); border-radius:20pt; padding:3pt 12pt;">
+        <p style="font-size:7.5pt; font-weight:700; color:#f5a623; letter-spacing:0.04em;">월요일 로컬 학습 실행일</p>
+      </div>
     </div>
-    <p style="font-size:7pt; font-weight:700; color:#8b949e; letter-spacing:0.10em; text-transform:uppercase;">EPL Scout Intelligence</p>
+
+    <!-- 메인 타이틀 -->
+    <h1 style="font-size:40pt; font-weight:900; color:#e6edf3; line-height:1.05; letter-spacing:-0.01em; margin-bottom:8pt;">EPL 스카우트<br>인텔리전스</h1>
+
+    <!-- 서브 타이틀 -->
+    <h2 style="font-size:15pt; font-weight:600; color:#e94560; margin-bottom:8pt; letter-spacing:0.01em;">데일리 브리핑 | 2026-05-18 (월)</h2>
+
+    <!-- 날짜 라인 -->
+    <p style="font-size:10pt; color:#8b949e;">2026년 5월 18일 월요일 — 제27회 정기 미팅</p>
   </div>
 
-  <!-- 점수 배지 (우상단, 절대 width 지정으로 right edge 제어) -->
-  <div style="position:absolute; top:14pt; left:580pt; width:118pt; background:#16213e; border:1.5pt solid #f5a623; border-radius:8pt; padding:8pt 12pt; text-align:center;">
-    <p style="font-size:6.5pt; color:#8b949e; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:2pt;">실무 활용도</p>
-    <p style="font-size:20pt; font-weight:900; color:#f5a623; line-height:1;">4.65</p>
-    <p style="font-size:8.5pt; color:#8b949e; margin-top:1pt;">/ 5.0</p>
-    <p style="font-size:7pt; color:#e94560; font-weight:700; margin-top:3pt;">&#9660; 0.05 (전일 4.70)</p>
-  </div>
-
-  <!-- 미팅 배지 -->
-  <div style="position:absolute; top:64pt; left:160pt; width:400pt; text-align:center;">
-    <div style="display:inline-block; background:#0f3460; border:1pt solid #00d4aa; border-radius:20pt; padding:4pt 16pt;">
-      <p style="font-size:8pt; color:#00d4aa; letter-spacing:0.08em; text-transform:uppercase; font-weight:700;">26번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST &nbsp;|&nbsp; 주말 종합 점검</p>
-    </div>
-  </div>
-
-  <!-- 메인 타이틀 -->
-  <div style="position:absolute; top:90pt; left:60pt; width:600pt; text-align:center;">
-    <h1 style="font-size:36pt; font-weight:900; color:#e8eaf0; line-height:1.05; letter-spacing:-0.01em; margin-bottom:8pt;">EPL 스카우트팀 데일리 브리핑</h1>
-    <p style="font-size:10.5pt; color:#8b949e; margin-bottom:6pt; font-weight:500;">Daily Briefing — Scout Intelligence Analytics</p>
-    <p style="font-size:16pt; font-weight:800; color:#ff6b35; letter-spacing:0.04em; margin-bottom:14pt;">2026년 05월 17일 (일)</p>
-    <div style="width:60pt; height:2pt; background:#00d4aa; margin:0 auto 12pt;"></div>
-    <p style="font-size:9pt; color:#8b949e; letter-spacing:0.06em;">김태현 스카우트 &nbsp;&times;&nbsp; Marcus Webb (Analytics Agent)</p>
-  </div>
-
-  <!-- 하단 경고 배너 (width 고정, flex 없이) -->
-  <div style="position:absolute; bottom:0; left:0; width:720pt; background:#1a0408; border-top:2pt solid #e94560; padding:9pt 22pt;">
-    <p style="font-size:9pt; color:#ffbaba; font-weight:600; line-height:1.4;">
-      &#127919; &nbsp;오늘 최우선: <span style="color:#e94560; font-weight:800;">demo_script_draft.md 완성</span>
-      &nbsp;&mdash;&nbsp; 6일 연속 미달 오늘 오전 종결 필수 (다음 주 발표 직결) &nbsp;&#128293;
+  <!-- 하단 슬로건 배너 -->
+  <div style="position:absolute; left:0; bottom:0; width:720pt; height:70pt; background:#161b22; border-top:2pt solid #e94560; display:flex; align-items:center; padding:0 32pt; gap:20pt;">
+    <p style="font-size:8.5pt; color:#e6edf3; font-weight:600; letter-spacing:0.02em; line-height:1.6; flex:1;">
+      오늘이 바로 그 월요일 — P7 train_v5_1.py 실행 / demo_script_draft.md 7일 연속 미달 종결 / P1 재학습
     </p>
+    <!-- 우하단 평점 배지 -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:2pt; flex-shrink:0;">
+      <p style="font-size:22pt; font-weight:900; color:#f5a623; line-height:1;">4.60</p>
+      <p style="font-size:8.5pt; color:#8b949e; line-height:1;">/ 5.0</p>
+      <p style="font-size:8pt; color:#e94560; font-weight:700; line-height:1;">&#9660; 0.05 (전일 4.65)</p>
+    </div>
   </div>
+
+  <!-- 생성 주체 -->
+  <p style="position:absolute; left:36pt; bottom:6pt; font-size:7pt; color:#8b949e;">EPL Scout Bot | 09:00 KST</p>
 
 </body>
 </html>
