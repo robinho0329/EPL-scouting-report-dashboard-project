@@ -18,57 +18,65 @@
 </head>
 <body>
 
-  <!-- 좌측 수직 강조 라인 -->
-  <div style="position:absolute; left:0; top:0; width:5pt; height:405pt; background:linear-gradient(180deg,#e94560,#f5a623,#e94560);"></div>
+  <!-- 좌측 수직 강조 라인 (solid border, no clip-path) -->
+  <div style="position:absolute; left:0; top:0; width:5pt; height:405pt; background:#e94560;"></div>
 
-  <!-- 우상단 장식 원형 -->
-  <div style="position:absolute; right:-30pt; top:-30pt; width:160pt; height:160pt; border-radius:50%; border:1pt solid rgba(233,69,96,0.18); background:radial-gradient(circle,rgba(233,69,96,0.07),transparent 70%);"></div>
-  <div style="position:absolute; right:20pt; top:20pt; width:100pt; height:100pt; border-radius:50%; border:1pt solid rgba(245,166,35,0.10); background:transparent;"></div>
+  <!-- 좌상단 방패 대체: 텍스트 레이블 -->
+  <div style="position:absolute; top:18pt; left:16pt;">
+    <p style="font-size:7.5pt; font-weight:700; color:#8b949e; letter-spacing:0.18em; text-transform:uppercase;">EPL Scout Intelligence</p>
+  </div>
 
-  <!-- 좌상단 방패 아이콘 + 레이블 -->
-  <div style="position:absolute; top:18pt; left:18pt; display:flex; align-items:center; gap:9pt;">
-    <div style="width:28pt; height:32pt; background:linear-gradient(135deg,#e94560,#c0392b); clip-path:polygon(50% 0%,100% 20%,100% 68%,50% 100%,0% 68%,0% 20%);"></div>
-    <p style="font-size:7.5pt; font-weight:700; color:#8b949e; letter-spacing:0.15em; text-transform:uppercase;">EPL Scout Intelligence</p>
+  <!-- 우상단: 생성 주체 -->
+  <div style="position:absolute; top:18pt; right:24pt;">
+    <p style="font-size:7pt; color:#8b949e; text-align:right;">EPL Scout Bot | 09:00 KST</p>
   </div>
 
   <!-- 중앙 메인 콘텐츠 -->
-  <div style="position:absolute; left:32pt; top:52pt; right:24pt; bottom:80pt; display:flex; flex-direction:column; justify-content:center; padding:0 18pt;">
+  <div style="position:absolute; left:20pt; top:38pt; right:20pt; bottom:94pt; display:flex; flex-direction:column; justify-content:center; padding-left:14pt;">
 
     <!-- 배지 행 -->
     <div style="display:flex; gap:8pt; margin-bottom:14pt; flex-wrap:wrap;">
-      <div style="background:rgba(88,166,255,0.12); border:1pt solid rgba(88,166,255,0.4); border-radius:20pt; padding:3pt 12pt;">
+      <div style="background:rgba(88,166,255,0.12); border:1pt solid rgba(88,166,255,0.4); border-radius:20pt; padding:3pt 13pt;">
         <p style="font-size:7.5pt; font-weight:700; color:#58a6ff; letter-spacing:0.04em;">27번째 정기 미팅 | 09:00 KST</p>
       </div>
-      <div style="background:rgba(245,166,35,0.12); border:1pt solid rgba(245,166,35,0.4); border-radius:20pt; padding:3pt 12pt;">
+      <div style="background:rgba(245,166,35,0.12); border:1pt solid rgba(245,166,35,0.4); border-radius:20pt; padding:3pt 13pt;">
         <p style="font-size:7.5pt; font-weight:700; color:#f5a623; letter-spacing:0.04em;">월요일 로컬 학습 실행일</p>
       </div>
     </div>
 
     <!-- 메인 타이틀 -->
-    <h1 style="font-size:40pt; font-weight:900; color:#e6edf3; line-height:1.05; letter-spacing:-0.01em; margin-bottom:8pt;">EPL 스카우트<br>인텔리전스</h1>
+    <h1 style="font-size:38pt; font-weight:900; color:#e6edf3; line-height:1.05; letter-spacing:-0.01em; margin-bottom:8pt;">EPL 스카우트<br>인텔리전스</h1>
 
     <!-- 서브 타이틀 -->
-    <h2 style="font-size:15pt; font-weight:600; color:#e94560; margin-bottom:8pt; letter-spacing:0.01em;">데일리 브리핑 | 2026-05-18 (월)</h2>
+    <h2 style="font-size:14pt; font-weight:600; color:#e94560; margin-bottom:8pt; letter-spacing:0.01em;">데일리 브리핑 | 2026-05-18 (월)</h2>
 
-    <!-- 날짜 라인 -->
-    <p style="font-size:10pt; color:#8b949e;">2026년 5월 18일 월요일 — 제27회 정기 미팅</p>
+    <!-- 날짜 및 스카우트 정보 -->
+    <p style="font-size:9pt; color:#8b949e;">2026년 5월 18일 월요일 &mdash; 제27회 정기 미팅</p>
+    <p style="font-size:9pt; color:#8b949e; margin-top:3pt;">김태현 스카우트 &middot; Marcus Webb Analytics</p>
   </div>
 
   <!-- 하단 슬로건 배너 -->
-  <div style="position:absolute; left:0; bottom:0; width:720pt; height:70pt; background:#161b22; border-top:2pt solid #e94560; display:flex; align-items:center; padding:0 32pt; gap:20pt;">
-    <p style="font-size:8.5pt; color:#e6edf3; font-weight:600; letter-spacing:0.02em; line-height:1.6; flex:1;">
-      오늘이 바로 그 월요일 — P7 train_v5_1.py 실행 / demo_script_draft.md 7일 연속 미달 종결 / P1 재학습
-    </p>
-    <!-- 우하단 평점 배지 -->
-    <div style="display:flex; flex-direction:column; align-items:center; gap:2pt; flex-shrink:0;">
-      <p style="font-size:22pt; font-weight:900; color:#f5a623; line-height:1;">4.60</p>
-      <p style="font-size:8.5pt; color:#8b949e; line-height:1;">/ 5.0</p>
-      <p style="font-size:8pt; color:#e94560; font-weight:700; line-height:1;">&#9660; 0.05 (전일 4.65)</p>
+  <div style="position:absolute; left:0; bottom:0; width:720pt; height:82pt; background:#161b22; border-top:2pt solid #e94560;">
+
+    <!-- 슬로건 텍스트 영역 -->
+    <div style="position:absolute; left:24pt; top:0; right:130pt; bottom:0; display:flex; flex-direction:column; justify-content:center; gap:4pt;">
+      <p style="font-size:6.5pt; color:#8b949e; text-transform:uppercase; letter-spacing:0.08em;">오늘의 슬로건</p>
+      <p style="font-size:8.5pt; color:#e6edf3; font-weight:600; line-height:1.55;">
+        오늘이 바로 그 월요일 &mdash;
+        <span style="color:#f5a623; font-weight:700;">P7 train_v5_1.py 실행</span> /
+        <span style="color:#e94560; font-weight:700;">demo_script_draft.md 7일 연속 미달 종결</span> /
+        <span style="color:#00d26a; font-weight:700;">P1 재학습</span>
+      </p>
+    </div>
+
+    <!-- 평점 배지 (하단 배너 내 우측) -->
+    <div style="position:absolute; right:20pt; top:0; bottom:12pt; width:110pt; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1pt; border-left:1pt solid #30363d;">
+      <p style="font-size:6.5pt; color:#8b949e; letter-spacing:0.06em; text-transform:uppercase;">종합 평점</p>
+      <p style="font-size:26pt; font-weight:900; color:#f5a623; line-height:1;">4.60</p>
+      <p style="font-size:7.5pt; color:#8b949e;">/ 5.0</p>
+      <p style="font-size:7pt; color:#e94560; font-weight:700;">&#9660; -0.05 (전일 4.65)</p>
     </div>
   </div>
-
-  <!-- 생성 주체 -->
-  <p style="position:absolute; left:36pt; bottom:6pt; font-size:7pt; color:#8b949e;">EPL Scout Bot | 09:00 KST</p>
 
 </body>
 </html>

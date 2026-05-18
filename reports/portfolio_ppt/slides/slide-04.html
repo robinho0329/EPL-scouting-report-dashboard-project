@@ -8,11 +8,11 @@
   body {
     width: 720pt;
     height: 405pt;
-    background: #0a0e1a;
-    font-family: 'Pretendard', 'Apple SD Gothic Neo', system-ui, sans-serif;
-    color: #e8eaf0;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    color: #e6edf3;
     overflow: hidden;
-    padding: 14pt 22pt 8pt 22pt;
+    padding: 14pt 18pt 10pt 18pt;
     display: flex;
     flex-direction: column;
     gap: 8pt;
@@ -22,154 +22,135 @@
 </head>
 <body>
 
-  <!-- 상단 강조 바 (금/은/동) -->
+  <!-- 상단 강조 바 (금/은/동 - solid colors) -->
   <div style="position:absolute; top:0; left:0; width:240pt; height:3pt; background:#f5a623; z-index:10;"></div>
-  <div style="position:absolute; top:0; left:240pt; width:240pt; height:3pt; background:#c0c0c0; z-index:10;"></div>
-  <div style="position:absolute; top:0; left:480pt; width:240pt; height:3pt; background:#cd7f32; z-index:10;"></div>
+  <div style="position:absolute; top:0; left:240pt; width:240pt; height:3pt; background:#e94560; z-index:10;"></div>
+  <div style="position:absolute; top:0; left:480pt; width:240pt; height:3pt; background:#00d26a; z-index:10;"></div>
+
+  <!-- 좌측 타임라인 수직 라인 (solid color) -->
+  <div style="position:absolute; left:18pt; top:50pt; bottom:52pt; width:2pt; background:#f5a623; border-radius:1pt; z-index:5;"></div>
 
   <!-- 헤더 -->
-  <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top:4pt;">
-    <h2 style="font-size:14pt; font-weight:800; color:#e8eaf0;">
-      오늘 액션아이템 Top 3 &mdash;
-      <span style="color:#e94560;">주말 종결 + 월요일 학습 준비</span>
+  <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top:4pt; padding-left:10pt;">
+    <h2 style="font-size:13.5pt; font-weight:800; color:#e6edf3;">
+      오늘 액션아이템 Top 3
+      <span style="color:#f5a623; font-size:11pt;"> &mdash; 완료 시 4.60 &rarr; 4.82</span>
     </h2>
-    <p style="font-size:7pt; color:#8b949e;">오전 CRITICAL &middot; 오후 체크리스트 &middot; 오후 P8 코드</p>
+    <p style="font-size:7pt; color:#8b949e;">로컬 PC 준비 완료 / 코드 수정 완료 / 실행만 남음</p>
   </div>
 
-  <!-- 3열 카드 -->
-  <div style="flex:1; display:flex; gap:9pt; overflow:hidden;">
+  <!-- 3개 카드 수직 스택 -->
+  <div style="flex:1; display:flex; flex-direction:column; gap:7pt; padding-left:14pt; overflow:hidden;">
 
-    <!-- 카드 1: 금메달 CRITICAL -->
-    <div style="flex:1; background:#16213e; border:1.5pt solid #f5a623; border-top:3pt solid #f5a623; border-radius:8pt; padding:10pt 11pt 9pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
-      <!-- CRITICAL 배지 -->
-      <div style="position:absolute; top:8pt; right:8pt; background:#e94560; border-radius:9pt; padding:2pt 7pt;">
-        <p style="font-size:6.5pt; font-weight:800; color:#fff;">&#128293; 오전 즉시</p>
+    <!-- 카드 1: 금메달 P7 v5.1 로컬 학습 -->
+    <div style="background:#161b22; border:1.5pt solid #f5a623; border-left:4pt solid #f5a623; border-radius:0 7pt 7pt 0; padding:8pt 11pt; display:flex; gap:10pt; align-items:flex-start; flex:1; position:relative;">
+      <!-- 오전 타임 배지 -->
+      <div style="position:absolute; top:8pt; right:10pt; background:rgba(245,166,35,0.15); border:1pt solid #f5a623; border-radius:4pt; padding:2pt 7pt;">
+        <p style="font-size:6.5pt; font-weight:700; color:#f5a623;">오전 우선</p>
       </div>
-      <!-- 6일 연속 미달 경고 배지 -->
-      <div style="position:absolute; top:22pt; right:8pt; background:#1a0000; border:1pt solid #e94560; border-radius:4pt; padding:1pt 6pt;">
-        <p style="font-size:6pt; font-weight:700; color:#e94560;">6일 연속 미달</p>
+      <!-- 메달 레이블 -->
+      <div style="width:32pt; height:32pt; background:rgba(245,166,35,0.15); border:2pt solid #f5a623; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <p style="font-size:9pt; font-weight:900; color:#f5a623;">1</p>
       </div>
-
-      <div style="background:#1e1600; border:1pt solid #f5a623; border-radius:9pt; display:inline-block; padding:2pt 9pt; align-self:flex-start;">
-        <p style="font-size:7pt; font-weight:800; color:#f5a623; letter-spacing:0.04em;">&#127947; 1순위 &mdash; CRITICAL</p>
-      </div>
-      <p style="font-size:7pt; color:#58a6ff; font-weight:600;">Marcus Webb</p>
-      <h3 style="font-size:10.5pt; font-weight:800; color:#e8eaf0; line-height:1.25;">
-        포트폴리오 시연 스크립트 완성<br>
-        <span style="font-size:8.5pt; color:#f5a623;">(demo_script_draft.md)</span>
-      </h3>
-      <div style="background:#0a0e1a; border-radius:4pt; padding:5pt 7pt; flex:1;">
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.6;">
-          <span style="color:#f5a623; font-weight:700;">경로:</span> reports/portfolio_ppt/demo_script_draft.md<br>
-          <span style="color:#00d26a; font-weight:700;">내용:</span> S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 5분 시연 흐름 5장<br>
-          <span style="color:#8b949e;">노팅엄&middot;브렌트포드 30-50M&pound; 가상 영입 시나리오</span>
-        </p>
-      </div>
-      <div style="background:#0a1420; border:1pt solid #1a4a80; border-radius:4pt; padding:4pt 7pt;">
-        <p style="font-size:7.5pt; color:#58a6ff; font-weight:700;">목표: 5장 초안 오늘 오전 완성</p>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="background:#1a0000; border:1pt solid #e94560; border-radius:3pt; padding:2pt 6pt;">
-          <p style="font-size:7pt; font-weight:700; color:#e94560;">2026-05-17 오전 마감</p>
+      <div style="flex:1; min-width:0;">
+        <div style="display:flex; align-items:center; gap:6pt; margin-bottom:3pt;">
+          <p style="font-size:7pt; color:#f5a623; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">1순위 &mdash; Marcus Webb</p>
         </div>
-        <p style="font-size:8pt; color:#00d26a; font-weight:800;">+0.08 &rarr; 4.73</p>
+        <h3 style="font-size:10.5pt; font-weight:800; color:#e6edf3; margin-bottom:4pt;">P7 v5.1 로컬 학습 실행</h3>
+        <div style="display:flex; gap:10pt; align-items:flex-start;">
+          <div style="flex:1;">
+            <div style="background:#0d1117; border-radius:4pt; padding:4pt 7pt; margin-bottom:3pt;">
+              <p style="font-size:7pt; color:#58a6ff; font-family:monospace;">python models/p7_growth_curve/train_v5_1.py</p>
+            </div>
+            <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">lag4 피처 10개 추가, 총 50피처 LGBM 모델. val-test 갭 0.055 개선 목표.</p>
+          </div>
+          <div style="text-align:right; flex-shrink:0;">
+            <div style="background:#1a1200; border:1pt solid #f5a623; border-radius:4pt; padding:4pt 8pt; margin-bottom:3pt;">
+              <p style="font-size:7pt; color:#8b949e; margin-bottom:1pt;">현재 R&sup2; 0.586</p>
+              <p style="font-size:8.5pt; color:#f5a623; font-weight:800;">목표 R&sup2; &ge; 0.62</p>
+            </div>
+            <p style="font-size:8pt; color:#00d26a; font-weight:800;">+0.08 &rarr; 4.68</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 카드 2: 은메달 -->
-    <div style="flex:1; background:#16213e; border:1.5pt solid #c0c0c0; border-top:3pt solid #c0c0c0; border-radius:8pt; padding:10pt 11pt 9pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
-      <div style="position:absolute; top:8pt; right:8pt; background:#f5a623; border-radius:9pt; padding:2pt 7pt;">
-        <p style="font-size:6.5pt; font-weight:800; color:#000;">오후</p>
+    <!-- 카드 2: 은메달 demo_script (7일 연속 최후통첩) -->
+    <div style="background:#161b22; border:1.5pt solid #e94560; border-left:4pt solid #e94560; border-radius:0 7pt 7pt 0; padding:8pt 11pt; display:flex; gap:10pt; align-items:flex-start; flex:1; position:relative;">
+      <!-- 7일 경고 배지 -->
+      <div style="position:absolute; top:8pt; right:10pt; background:#e94560; border-radius:4pt; padding:2pt 8pt;">
+        <p style="font-size:6.5pt; font-weight:800; color:#fff;">7일 연속 미달 최후통첩</p>
       </div>
-
-      <div style="background:#141414; border:1pt solid #c0c0c0; border-radius:9pt; display:inline-block; padding:2pt 9pt; align-self:flex-start;">
-        <p style="font-size:7pt; font-weight:800; color:#c0c0c0; letter-spacing:0.04em;">&#129352; 2순위 &mdash; 로컬 학습 준비</p>
+      <!-- 메달 레이블 -->
+      <div style="width:32pt; height:32pt; background:rgba(233,69,96,0.15); border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <p style="font-size:9pt; font-weight:900; color:#e94560;">2</p>
       </div>
-      <p style="font-size:7pt; color:#58a6ff; font-weight:600;">Marcus Webb</p>
-      <h3 style="font-size:10.5pt; font-weight:800; color:#e8eaf0; line-height:1.25;">
-        로컬 학습 체크리스트 작성<br>
-        <span style="font-size:8.5pt; color:#c0c0c0;">(local_training_checklist.md)</span>
-      </h3>
-      <div style="background:#0a0e1a; border-radius:4pt; padding:5pt 7pt; flex:1;">
-        <ul style="list-style:none; padding:0;">
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.7; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#c0c0c0; font-size:9pt; top:-1pt;">&#8250;</p>
-            <p>P7 v5.1 (train_v5_1.py) 실행 순서 명시</p>
-          </li>
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.7; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#c0c0c0; font-size:9pt; top:-1pt;">&#8250;</p>
-            <p>P1 (train_pipeline.py) 실행 순서 명시</p>
-          </li>
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.7; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#c0c0c0; font-size:9pt; top:-1pt;">&#8250;</p>
-            <p>월요일 아침 PC 켜자마자 30분 내 실행</p>
-          </li>
-        </ul>
-      </div>
-      <div style="background:#0a1420; border:1pt solid #1a4a80; border-radius:4pt; padding:4pt 7pt;">
-        <p style="font-size:7.5pt; color:#58a6ff; font-weight:700;">목표: 체크리스트 파일 생성 완료</p>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="background:#1a1000; border:1pt solid #f5a623; border-radius:3pt; padding:2pt 6pt;">
-          <p style="font-size:7pt; font-weight:700; color:#f5a623;">2026-05-17 오후</p>
+      <div style="flex:1; min-width:0;">
+        <div style="display:flex; align-items:center; gap:6pt; margin-bottom:3pt;">
+          <p style="font-size:7pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">2순위 &mdash; Marcus Webb</p>
         </div>
-        <p style="font-size:8pt; color:#00d26a; font-weight:800;">+0.05 &rarr; 4.78</p>
+        <h3 style="font-size:10.5pt; font-weight:800; color:#e6edf3; margin-bottom:4pt;">포트폴리오 시연 스크립트 완성</h3>
+        <div style="display:flex; gap:10pt; align-items:flex-start;">
+          <div style="flex:1;">
+            <div style="background:#0d1117; border-radius:4pt; padding:4pt 7pt; margin-bottom:3pt;">
+              <p style="font-size:7pt; color:#58a6ff; font-family:monospace;">reports/portfolio_ppt/demo_script_draft.md</p>
+            </div>
+            <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 5분 시연 흐름 5장. 노팅엄 포레스트 / 브렌트포드 30~50M&pound; 가상 영입 시나리오. 데이터 불필요.</p>
+          </div>
+          <div style="text-align:right; flex-shrink:0;">
+            <div style="background:#1a0000; border:1pt solid #e94560; border-radius:4pt; padding:4pt 8pt; margin-bottom:3pt;">
+              <p style="font-size:7pt; color:#8b949e; margin-bottom:1pt;">목표: 5장 초안</p>
+              <p style="font-size:8.5pt; color:#e94560; font-weight:800;">오전 완성</p>
+            </div>
+            <p style="font-size:8pt; color:#00d26a; font-weight:800;">+0.08 &rarr; 4.76</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 카드 3: 동메달 -->
-    <div style="flex:1; background:#16213e; border:1.5pt solid #cd7f32; border-top:3pt solid #cd7f32; border-radius:8pt; padding:10pt 11pt 9pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
-      <div style="position:absolute; top:8pt; right:8pt; background:#1a1000; border:1pt solid #f5a623; border-radius:9pt; padding:2pt 7pt;">
-        <p style="font-size:6.5pt; font-weight:800; color:#f5a623;">오후</p>
+    <!-- 카드 3: 동메달 P1 로컬 재학습 + 체크리스트 -->
+    <div style="background:#161b22; border:1.5pt solid #00d26a; border-left:4pt solid #00d26a; border-radius:0 7pt 7pt 0; padding:8pt 11pt; display:flex; gap:10pt; align-items:flex-start; flex:1; position:relative;">
+      <!-- 오후 타임 배지 -->
+      <div style="position:absolute; top:8pt; right:10pt; background:rgba(0,210,106,0.15); border:1pt solid #00d26a; border-radius:4pt; padding:2pt 7pt;">
+        <p style="font-size:6.5pt; font-weight:700; color:#00d26a;">오후</p>
       </div>
-
-      <div style="background:#140e08; border:1pt solid #cd7f32; border-radius:9pt; display:inline-block; padding:2pt 9pt; align-self:flex-start;">
-        <p style="font-size:7pt; font-weight:800; color:#cd7f32; letter-spacing:0.04em;">&#129353; 3순위 &mdash; P8 분석 코드</p>
+      <!-- 메달 레이블 -->
+      <div style="width:32pt; height:32pt; background:rgba(0,210,106,0.12); border:2pt solid #00d26a; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <p style="font-size:9pt; font-weight:900; color:#00d26a;">3</p>
       </div>
-      <p style="font-size:7pt; color:#58a6ff; font-weight:600;">Marcus Webb</p>
-      <h3 style="font-size:10.5pt; font-weight:800; color:#e8eaf0; line-height:1.25;">
-        P8 클래스 불균형 분석 코드<br>
-        <span style="font-size:8.5pt; color:#cd7f32;">(evaluate_precision_recall.py)</span>
-      </h3>
-      <div style="background:#0a0e1a; border-radius:4pt; padding:5pt 7pt; flex:1;">
-        <ul style="list-style:none; padding:0;">
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.7; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#cd7f32; font-size:9pt; top:-1pt;">&#8250;</p>
-            <p>양성 클래스(adapted=1) 비율 74.98% 검증</p>
-          </li>
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.7; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#cd7f32; font-size:9pt; top:-1pt;">&#8250;</p>
-            <p>F1=88.23% 의미 confusion matrix 분석</p>
-          </li>
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.7; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#cd7f32; font-size:9pt; top:-1pt;">&#8250;</p>
-            <p>다음 주 로컬 실행용 코드 초안</p>
-          </li>
-        </ul>
-      </div>
-      <div style="background:#0a1420; border:1pt solid #1a4a80; border-radius:4pt; padding:4pt 7pt;">
-        <p style="font-size:7.5pt; color:#58a6ff; font-weight:700;">목표: 코드 초안 파일 생성 완료</p>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="background:#140e08; border:1pt solid #cd7f32; border-radius:3pt; padding:2pt 6pt;">
-          <p style="font-size:7pt; font-weight:700; color:#cd7f32;">2026-05-17 오후</p>
+      <div style="flex:1; min-width:0;">
+        <div style="display:flex; align-items:center; gap:6pt; margin-bottom:3pt;">
+          <p style="font-size:7pt; color:#00d26a; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">3순위 &mdash; Marcus Webb</p>
         </div>
-        <p style="font-size:7pt; color:#8b949e;">PR 재검증 &rarr; +0.05</p>
+        <h3 style="font-size:10.5pt; font-weight:800; color:#e6edf3; margin-bottom:4pt;">P1 로컬 재학습 + 체크리스트 생성</h3>
+        <div style="display:flex; gap:10pt; align-items:flex-start;">
+          <div style="flex:1;">
+            <div style="background:#0d1117; border-radius:4pt; padding:4pt 7pt; margin-bottom:3pt;">
+              <p style="font-size:7pt; color:#58a6ff; font-family:monospace;">python models/p1_match_result/train_pipeline.py</p>
+            </div>
+            <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">elo_trend_3, form_elo_composite, RobustScaler 적용. 학습 후 local_training_checklist.md 함께 생성.</p>
+          </div>
+          <div style="text-align:right; flex-shrink:0;">
+            <div style="background:#001500; border:1pt solid #00d26a; border-radius:4pt; padding:4pt 8pt; margin-bottom:3pt;">
+              <p style="font-size:7pt; color:#8b949e; margin-bottom:1pt;">현재 Acc 54.79%</p>
+              <p style="font-size:8.5pt; color:#00d26a; font-weight:800;">목표 Acc &ge; 57%</p>
+            </div>
+            <p style="font-size:8pt; color:#00d26a; font-weight:800;">+0.06 &rarr; 4.82</p>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 
-  <!-- 하단 경로 안내 -->
-  <div style="background:#16213e; border-top:1pt solid #1e2530; padding:5pt 10pt; display:flex; align-items:center; gap:10pt;">
-    <p style="font-size:7pt; color:#e94560; font-weight:800; flex-shrink:0;">오늘 시연 루트</p>
-    <p style="font-size:7pt; color:#8b949e;">
-      <span style="color:#f5a623; font-weight:700;">S1</span> 선수 레이팅 &rarr;
-      <span style="color:#f5a623; font-weight:700;">S2</span> 시장가치 &rarr;
-      <span style="color:#f5a623; font-weight:700;">P8</span> 이적 적응 &rarr;
-      <span style="color:#f5a623; font-weight:700;">P6</span> 미래 가치 &rarr;
-      <span style="color:#f5a623; font-weight:700;">S6</span> 하락세 감지
-      &nbsp;&mdash;&nbsp; <span style="color:#8b949e;">노팅엄&middot;브렌트포드 예산 30-50M&pound;</span>
+  <!-- 하단 강조 배너 -->
+  <div style="background:#161b22; border:1pt solid #f5a623; border-radius:5pt; padding:5pt 12pt; display:flex; align-items:center; gap:10pt;">
+    <p style="font-size:7.5pt; color:#f5a623; font-weight:800; flex-shrink:0;">합의한 그 월요일</p>
+    <p style="font-size:7.5pt; color:#e6edf3; line-height:1;">로컬 PC에 데이터 있음 / 코드 준비 완료 /
+      <span style="color:#f5a623; font-weight:700;">P7 &rarr; demo &rarr; P1</span> 순서로 실행 /
+      세 가지 완료 시 <span style="color:#00d26a; font-weight:700;">4.60 &rarr; 4.82</span>
     </p>
   </div>
+
 </body>
 </html>
