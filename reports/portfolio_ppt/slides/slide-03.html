@@ -12,10 +12,10 @@
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    padding: 14pt 22pt 10pt 22pt;
+    padding: 0 22pt 10pt 22pt;
     display: flex;
     flex-direction: column;
-    gap: 10pt;
+    gap: 8pt;
     position: relative;
   }
 </style>
@@ -25,117 +25,103 @@
   <!-- 상단 강조 바 전체 빨강 -->
   <div style="position:absolute; top:0; left:0; width:720pt; height:3pt; background:#e94560; z-index:10;"></div>
 
-  <!-- 헤더 -->
-  <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top:4pt;">
-    <h2 style="font-size:13.5pt; font-weight:800; color:#e6edf3;">
-      어제(05-17) 달성&middot;미달 현황
-      <span style="color:#e94560; font-size:11pt;"> &mdash; 3개 항목 전부 미달</span>
-    </h2>
-    <div style="display:flex; align-items:center; gap:8pt;">
-      <div style="background:#1a0000; border:1pt solid #e94560; border-radius:9pt; padding:2pt 9pt;">
-        <p style="font-size:7pt; font-weight:700; color:#e94560;">달성률 0 / 3 (0%)</p>
+  <!-- 상단 경고 배너 -->
+  <div style="background:#e94560; padding:5pt 14pt; margin:0 -22pt; display:flex; align-items:center; justify-content:space-between; margin-top:3pt;">
+    <p style="font-size:9pt; font-weight:800; color:#fff; letter-spacing:0.03em;">8일 연속 미달 &mdash; 오늘(05-19) 반드시 종결</p>
+    <div style="display:flex; align-items:center; gap:10pt;">
+      <p style="font-size:7pt; color:rgba(255,255,255,0.8);">어제(05-18) 달성&middot;미달 현황</p>
+      <div style="background:rgba(0,0,0,0.25); border-radius:9pt; padding:2pt 9pt;">
+        <p style="font-size:7pt; font-weight:700; color:#fff;">달성률 0 / 4 (0%)</p>
       </div>
-      <p style="font-size:7pt; color:#8b949e;">전일 평점 4.65 &rarr; 4.60 <span style="color:#e94560;">&#9660; -0.05</span></p>
     </div>
   </div>
 
-  <!-- 3개 X 카드 수평 배열 -->
-  <div style="flex:1; display:flex; gap:12pt; overflow:hidden;">
+  <!-- 헤더 -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top:2pt;">
+    <h2 style="font-size:13pt; font-weight:800; color:#e6edf3;">
+      어제(05-18) 달성&middot;미달 현황
+      <span style="color:#e94560; font-size:10.5pt;"> &mdash; 4개 항목 전부 미달</span>
+    </h2>
+    <p style="font-size:7pt; color:#8b949e;">전일 평점 4.60 &rarr; 4.55 <span style="color:#e94560;">&#9660; -0.05</span></p>
+  </div>
 
-    <!-- 카드 1: demo_script (CRITICAL - 7일 연속) -->
-    <div style="flex:1; background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:12pt 12pt 10pt; display:flex; flex-direction:column; gap:6pt; position:relative;">
-      <!-- 7일 연속 경고 배지 -->
-      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:2pt 8pt;">
-        <p style="font-size:6.5pt; font-weight:800; color:#fff;">7일 연속 미생성</p>
+  <!-- 4개 X 카드 2x2 그리드 -->
+  <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8pt; overflow:hidden;">
+
+    <!-- 카드 1: demo_script (8일 연속 최우선) -->
+    <div style="background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
+      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
+        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 미생성</p>
       </div>
-      <!-- X 아이콘 -->
-      <div style="display:flex; align-items:center; gap:8pt;">
-        <div style="width:28pt; height:28pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:14pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
+      <div style="display:flex; align-items:center; gap:7pt;">
+        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <p style="font-size:12pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
         </div>
         <div>
-          <p style="font-size:7pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:1pt;">미달 &mdash; 최후통첩</p>
-          <h3 style="font-size:10pt; font-weight:800; color:#e6edf3; line-height:1.25;">포트폴리오 시연 스크립트</h3>
+          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달</p>
+          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">포트폴리오 시연 스크립트</h3>
         </div>
       </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:7pt 9pt; flex:1;">
-        <p style="font-size:7pt; color:#8b949e; font-weight:600; margin-bottom:4pt; text-transform:uppercase; letter-spacing:0.04em;">목표 파일</p>
-        <p style="font-size:7.5pt; color:#58a6ff; font-family:monospace; margin-bottom:5pt;">reports/portfolio_ppt/demo_script_draft.md</p>
-        <p style="font-size:7pt; color:#8b949e; line-height:1.5;">S1 &rarr; S2 &rarr; P8 &rarr; P6 &rarr; S6 5분 흐름 5장<br>데이터 불필요 &mdash; results_summary.json 수치만으로 작성 가능</p>
-      </div>
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <p style="font-size:7pt; color:#e94560; font-weight:700;">(-0.03) 평점 하락</p>
-        <div style="background:#1a0000; border:1pt solid #e94560; border-radius:4pt; padding:2pt 8pt;">
-          <p style="font-size:7pt; color:#e94560; font-weight:700;">오늘 오전 최후통첩</p>
-        </div>
+      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
+        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">reports/portfolio_ppt/demo_script_draft.md</p>
+        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 5분 흐름 5장 / 데이터 불필요<br>오늘 이 세션에서 즉시 실행 가능</p>
       </div>
     </div>
 
-    <!-- 카드 2: local_training_checklist -->
-    <div style="flex:1; background:rgba(233,69,96,0.07); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:12pt 12pt 10pt; display:flex; flex-direction:column; gap:6pt;">
-      <!-- X 아이콘 -->
-      <div style="display:flex; align-items:center; gap:8pt;">
-        <div style="width:28pt; height:28pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:14pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
+    <!-- 카드 2: P7 v5.1 로컬 학습 -->
+    <div style="background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
+      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
+        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 미달</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:7pt;">
+        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <p style="font-size:12pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
         </div>
         <div>
-          <p style="font-size:7pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:1pt;">미달 &mdash; 미생성</p>
-          <h3 style="font-size:10pt; font-weight:800; color:#e6edf3; line-height:1.25;">로컬 학습 체크리스트</h3>
+          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달</p>
+          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">P7 v5.1 로컬 학습</h3>
         </div>
       </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:7pt 9pt; flex:1;">
-        <p style="font-size:7pt; color:#8b949e; font-weight:600; margin-bottom:4pt; text-transform:uppercase; letter-spacing:0.04em;">목표 파일</p>
-        <p style="font-size:7.5pt; color:#58a6ff; font-family:monospace; margin-bottom:5pt;">reports/local_training_checklist.md</p>
-        <ul style="list-style:none; padding:0;">
-          <li style="font-size:7pt; color:#8b949e; line-height:1.6; padding-left:8pt; position:relative;">
-            <p style="position:absolute; left:0; color:#e94560; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>P7+P1 실행 순서 명시</p>
-          </li>
-          <li style="font-size:7pt; color:#8b949e; line-height:1.6; padding-left:8pt; position:relative;">
-            <p style="position:absolute; left:0; color:#e94560; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>데이터 경로 및 커밋 방법 포함</p>
-          </li>
-        </ul>
-      </div>
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <p style="font-size:7pt; color:#e94560; font-weight:700;">(-0.01) 평점 하락</p>
-        <div style="background:#1a0000; border:1pt solid #e94560; border-radius:4pt; padding:2pt 8pt;">
-          <p style="font-size:7pt; color:#e94560; font-weight:700;">오늘 오후 필수 생성</p>
-        </div>
+      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
+        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">python models/p7_growth_curve/train_v5_1.py</p>
+        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">현재 R&sup2; 0.586 (목표 대비 -0.034)<br>오늘 저녁 로컬 PC 실행 예정</p>
       </div>
     </div>
 
-    <!-- 카드 3: evaluate_precision_recall -->
-    <div style="flex:1; background:rgba(233,69,96,0.05); border:1.5pt solid rgba(233,69,96,0.5); border-top:3pt solid rgba(233,69,96,0.5); border-radius:8pt; padding:12pt 12pt 10pt; display:flex; flex-direction:column; gap:6pt;">
-      <!-- X 아이콘 -->
-      <div style="display:flex; align-items:center; gap:8pt;">
-        <div style="width:28pt; height:28pt; background:#1a0000; border:2pt solid rgba(233,69,96,0.6); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:14pt; font-weight:900; color:rgba(233,69,96,0.7); line-height:1;">&#10007;</p>
+    <!-- 카드 3: P1 로컬 재학습 -->
+    <div style="background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
+      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
+        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 미달</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:7pt;">
+        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <p style="font-size:12pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
         </div>
         <div>
-          <p style="font-size:7pt; color:rgba(233,69,96,0.8); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:1pt;">미달 &mdash; 이번 주 내</p>
-          <h3 style="font-size:10pt; font-weight:800; color:#e6edf3; line-height:1.25;">P8 정밀도-재현율 분석</h3>
+          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달</p>
+          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">P1 로컬 재학습</h3>
         </div>
       </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:7pt 9pt; flex:1;">
-        <p style="font-size:7pt; color:#8b949e; font-weight:600; margin-bottom:4pt; text-transform:uppercase; letter-spacing:0.04em;">목표 파일</p>
-        <p style="font-size:7pt; color:#58a6ff; font-family:monospace; margin-bottom:5pt;">models/p8_transfer_adapt/<br>evaluate_precision_recall.py</p>
-        <ul style="list-style:none; padding:0;">
-          <li style="font-size:7pt; color:#8b949e; line-height:1.6; padding-left:8pt; position:relative;">
-            <p style="position:absolute; left:0; color:#8b949e; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>F1 88.23% confusion matrix 분석</p>
-          </li>
-          <li style="font-size:7pt; color:#8b949e; line-height:1.6; padding-left:8pt; position:relative;">
-            <p style="position:absolute; left:0; color:#8b949e; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>양성 클래스 74.98% 비율 재검증</p>
-          </li>
-        </ul>
+      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
+        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">python models/p1_match_result/train_pipeline.py</p>
+        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">현재 Acc 54.79% (목표 대비 -2.21%p)<br>P7 완료 후 오늘 저녁 순서대로 실행</p>
       </div>
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <p style="font-size:7pt; color:#e94560; font-weight:700;">(-0.01) 평점 하락</p>
-        <div style="background:#161b22; border:1pt solid #8b949e; border-radius:4pt; padding:2pt 8pt;">
-          <p style="font-size:7pt; color:#8b949e; font-weight:700;">이번 주 내 생성</p>
+    </div>
+
+    <!-- 카드 4: local_training_checklist.md -->
+    <div style="background:rgba(233,69,96,0.06); border:1.5pt solid rgba(233,69,96,0.5); border-top:3pt solid rgba(233,69,96,0.5); border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt;">
+      <div style="display:flex; align-items:center; gap:7pt;">
+        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid rgba(233,69,96,0.6); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <p style="font-size:12pt; font-weight:900; color:rgba(233,69,96,0.7); line-height:1;">&#10007;</p>
         </div>
+        <div>
+          <p style="font-size:6.5pt; color:rgba(233,69,96,0.8); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달 &mdash; 계속 미생성</p>
+          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">로컬 학습 체크리스트 생성</h3>
+        </div>
+      </div>
+      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
+        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">reports/local_training_checklist.md</p>
+        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">P7+P1 실행 순서, 데이터 경로, 커밋 방법 포함<br>오늘 액션아이템 3번 &mdash; 오늘 오후 완성</p>
       </div>
     </div>
 
@@ -146,7 +132,7 @@
     <div style="flex:1;">
       <div style="display:flex; justify-content:space-between; margin-bottom:3pt;">
         <p style="font-size:7pt; color:#8b949e;">달성률</p>
-        <p style="font-size:7pt; color:#e94560; font-weight:700;">0 / 3 (0%)</p>
+        <p style="font-size:7pt; color:#e94560; font-weight:700;">0 / 4 (0%)</p>
       </div>
       <div style="width:100%; height:7pt; background:#161b22; border-radius:4pt; overflow:hidden; border:1pt solid #30363d;">
         <div style="width:0%; height:100%; background:#e94560; border-radius:4pt;"></div>
@@ -154,12 +140,7 @@
     </div>
     <div style="background:#1a0000; border:1pt solid #e94560; border-radius:5pt; padding:4pt 12pt; flex-shrink:0; text-align:center;">
       <p style="font-size:7pt; color:#8b949e; margin-bottom:1pt;">전일 평점 변화</p>
-      <p style="font-size:10pt; color:#e94560; font-weight:800;">4.65 &rarr; 4.60 <span style="font-size:8pt;">&#9660; -0.05</span></p>
-    </div>
-    <div style="background:#1a0500; border:1pt solid rgba(233,69,96,0.5); border-radius:5pt; padding:4pt 12pt; flex-shrink:0; text-align:center;">
-      <p style="font-size:7pt; color:#8b949e; margin-bottom:1pt;">dev_result.json</p>
-      <p style="font-size:8pt; color:#e94560; font-weight:700;">7일 연속 미생성</p>
-      <p style="font-size:6pt; color:#8b949e;">GitHub Actions runner data/ 없음</p>
+      <p style="font-size:10pt; color:#e94560; font-weight:800;">4.60 &rarr; 4.55 <span style="font-size:8pt;">&#9660; -0.05</span></p>
     </div>
   </div>
 

@@ -31,138 +31,135 @@
   <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top:4pt;">
     <h2 style="font-size:13.5pt; font-weight:800; color:#e6edf3;">
       김태현 스카우트 종합 평가 &mdash;
-      <span style="color:#f5a623;">4.60 / 5.0</span>
-      <span style="color:#e94560; font-size:11pt;"> &#9660; 전일 4.65</span>
+      <span style="color:#f5a623;">4.55 / 5.0</span>
+      <span style="color:#e94560; font-size:11pt;"> &#9660; 전일 4.60</span>
     </h2>
-    <p style="font-size:7pt; color:#8b949e;">오늘 세 가지 완료 시 4.82 예상 &mdash; 목요일 발표 준비</p>
+    <p style="font-size:7pt; color:#8b949e;">오늘 세 가지 완료 시 4.83 예상 &mdash; 내일 리허설 준비</p>
   </div>
 
   <!-- 2단 메인 레이아웃 -->
   <div style="flex:1; display:flex; gap:14pt; overflow:hidden;">
 
-    <!-- 좌측: 원형 게이지 -->
+    <!-- 좌측: 원형 게이지 + 하락 원인 -->
     <div style="width:155pt; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:8pt; padding-top:4pt; flex-shrink:0;">
 
-      <!-- 원형 게이지 (solid border, no gradient) -->
+      <!-- 원형 게이지 -->
       <div style="width:120pt; height:120pt; border-radius:50%; border:10pt solid #e94560; background:#161b22; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <p style="font-size:32pt; font-weight:900; color:#f5a623; line-height:1;">4.60</p>
+        <p style="font-size:32pt; font-weight:900; color:#f5a623; line-height:1;">4.55</p>
         <p style="font-size:9pt; color:#8b949e; line-height:1; margin-top:2pt;">/ 5.0</p>
       </div>
 
       <!-- 하락 배지 -->
       <div style="background:#1a0000; border:1pt solid #e94560; border-radius:9pt; padding:3pt 11pt;">
-        <p style="font-size:7.5pt; color:#e94560; font-weight:700; text-align:center;">&#9660; 0.05 (전일 4.65)</p>
+        <p style="font-size:7.5pt; color:#e94560; font-weight:700; text-align:center;">&#9660; 0.05 (전일 4.60)</p>
       </div>
 
-      <!-- 달성률 바 (solid color, no gradient) -->
+      <!-- 달성률 바 -->
       <div style="width:100%;">
         <div style="display:flex; justify-content:space-between; margin-bottom:3pt;">
           <p style="font-size:6.5pt; color:#8b949e;">현재 달성률</p>
-          <p style="font-size:6.5pt; color:#f5a623; font-weight:700;">92%</p>
+          <p style="font-size:6.5pt; color:#f5a623; font-weight:700;">91%</p>
         </div>
         <div style="width:100%; height:6pt; background:#161b22; border-radius:3pt; overflow:hidden;">
-          <div style="width:92%; height:100%; background:#e94560; border-radius:3pt;"></div>
+          <div style="width:91%; height:100%; background:#e94560; border-radius:3pt;"></div>
         </div>
       </div>
 
       <!-- 하락 원인 -->
       <div style="background:#161b22; border-radius:4pt; padding:5pt 7pt; width:100%;">
-        <p style="font-size:6.5pt; color:#8b949e; font-weight:600; margin-bottom:3pt; text-transform:uppercase; letter-spacing:0.04em;">하락 원인 (05-17)</p>
+        <p style="font-size:6.5pt; color:#8b949e; font-weight:600; margin-bottom:3pt; text-transform:uppercase; letter-spacing:0.04em;">하락 원인 (05-18)</p>
         <ul style="list-style:none; padding:0;">
-          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">demo_script_draft.md: -0.03</li>
-          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">local_training_checklist.md: -0.01</li>
-          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">evaluate_precision_recall.py: -0.01</li>
+          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">demo_script_draft.md: 미달</li>
+          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">P7 v5.1 로컬 학습: 미달</li>
+          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">P1 로컬 재학습: 미달</li>
+          <li style="font-size:6.5pt; color:#e94560; line-height:1.7;">local_training_checklist.md: 미달</li>
         </ul>
       </div>
     </div>
 
-    <!-- 우측: 로드맵 + 인용 -->
+    <!-- 우측: 점수 시뮬레이션 + 로드맵 + 인용 -->
     <div style="flex:1; display:flex; flex-direction:column; gap:6pt; overflow:hidden;">
-      <p style="font-size:8.5pt; font-weight:700; color:#58a6ff; letter-spacing:0.06em; text-transform:uppercase;">5.0 달성 로드맵</p>
+      <p style="font-size:8.5pt; font-weight:700; color:#58a6ff; letter-spacing:0.06em; text-transform:uppercase;">오늘 달성 시 점수 시뮬레이션</p>
 
-      <!-- 수평 스텝 다이어그램 행 1: 현재 ~> 오늘 목표 -->
+      <!-- 수평 스텝 다이어그램 행 1: 현재 ~ 오늘 목표 -->
       <div style="display:flex; align-items:center; gap:3pt; flex-shrink:0;">
-        <div style="background:#1a0000; border:1.5pt solid #e94560; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:13pt; font-weight:900; color:#e94560; line-height:1;">4.60</p>
+        <div style="background:#1a0000; border:1.5pt solid #e94560; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:13pt; font-weight:900; color:#e94560; line-height:1;">4.55</p>
           <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">현재</p>
         </div>
         <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#f5a623;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.08</p>
-          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">P7 R&sup2;&ge;0.62<br>오전 로컬</p>
+          <p style="font-size:9pt; color:#f5a623;">&rarr;</p>
+          <p style="font-size:6.5pt; color:#00d26a; font-weight:800;">+0.10</p>
+          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">demo_script<br>세션 중</p>
         </div>
-        <div style="background:#161b22; border:1.5pt solid #f5a623; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
+        <div style="background:#161b22; border:1.5pt solid #f5a623; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:13pt; font-weight:900; color:#f5a623; line-height:1;">4.65</p>
+          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">세션 완료</p>
+        </div>
+        <div style="flex:1; text-align:center;">
+          <p style="font-size:9pt; color:#f5a623;">&rarr;</p>
+          <p style="font-size:6.5pt; color:#00d26a; font-weight:800;">+0.03</p>
+          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">P8 코드<br>오전</p>
+        </div>
+        <div style="background:#161b22; border:1.5pt solid #f5a623; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
           <p style="font-size:13pt; font-weight:900; color:#f5a623; line-height:1;">4.68</p>
-          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">오전1</p>
+          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">오전 완료</p>
         </div>
         <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#f5a623;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.08</p>
-          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">demo_script<br>5장 완성</p>
+          <p style="font-size:9pt; color:#f5a623;">&rarr;</p>
+          <p style="font-size:6.5pt; color:#00d26a; font-weight:800;">+0.15</p>
+          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">P7+P1<br>저녁</p>
         </div>
-        <div style="background:#161b22; border:1.5pt solid #f5a623; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:13pt; font-weight:900; color:#f5a623; line-height:1;">4.76</p>
-          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">오전2</p>
-        </div>
-        <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#f5a623;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.06</p>
-          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">P1 Acc&ge;57%<br>+체크리스트</p>
-        </div>
-        <div style="background:#001a10; border:1.5pt solid #00d26a; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:13pt; font-weight:900; color:#00d26a; line-height:1;">4.82</p>
+        <div style="background:#001a10; border:1.5pt solid #00d26a; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:13pt; font-weight:900; color:#00d26a; line-height:1;">4.83</p>
           <p style="font-size:5pt; color:#00d26a; margin-top:1pt;">오늘 목표</p>
         </div>
       </div>
 
-      <!-- 행 2: 이번 주 내 -->
-      <div style="display:flex; align-items:center; gap:3pt; flex-shrink:0; padding-left:16pt;">
-        <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#8b949e;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.04</p>
-          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">P8 PR<br>재검증</p>
-        </div>
-        <div style="background:#161b22; border:1.5pt solid #8b949e; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:13pt; font-weight:900; color:#8b949e; line-height:1;">4.86</p>
-          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">05-19~</p>
+      <!-- 5.0 로드맵 라벨 -->
+      <p style="font-size:8pt; font-weight:700; color:#58a6ff; letter-spacing:0.05em; text-transform:uppercase; margin-top:2pt;">5.0 달성 로드맵</p>
+
+      <!-- 행 2: 이후 단계 -->
+      <div style="display:flex; align-items:center; gap:3pt; flex-shrink:0;">
+        <div style="background:#001a10; border:1.5pt solid #00d26a; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:11pt; font-weight:900; color:#00d26a; line-height:1;">4.83</p>
+          <p style="font-size:5pt; color:#00d26a; margin-top:1pt;">오늘 저녁</p>
         </div>
         <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#8b949e;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.04</p>
-          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">S3 Sil<br>&ge;0.30</p>
-        </div>
-        <div style="background:#161b22; border:1.5pt solid #8b949e; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:13pt; font-weight:900; color:#8b949e; line-height:1;">4.90</p>
-          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">이번 주</p>
-        </div>
-        <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#8b949e;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.05</p>
+          <p style="font-size:9pt; color:#8b949e;">&rarr;</p>
+          <p style="font-size:6.5pt; color:#00d26a; font-weight:800;">+0.07</p>
           <p style="font-size:5pt; color:#8b949e; line-height:1.3;">리허설<br>성공</p>
         </div>
-        <div style="background:#161b22; border:1.5pt solid #8b949e; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:13pt; font-weight:900; color:#8b949e; line-height:1;">4.95</p>
+        <div style="background:#161b22; border:1.5pt solid #8b949e; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:11pt; font-weight:900; color:#8b949e; line-height:1;">4.90</p>
           <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">05-20~21</p>
         </div>
         <div style="flex:1; text-align:center;">
-          <p style="font-size:10pt; color:#8b949e;">&rarr;</p>
-          <p style="font-size:7pt; color:#00d26a; font-weight:800;">+0.05</p>
+          <p style="font-size:9pt; color:#8b949e;">&rarr;</p>
+          <p style="font-size:6.5pt; color:#00d26a; font-weight:800;">+0.04</p>
+          <p style="font-size:5pt; color:#8b949e; line-height:1.3;">S3 Sil<br>&ge;0.30</p>
+        </div>
+        <div style="background:#161b22; border:1.5pt solid #8b949e; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:11pt; font-weight:900; color:#8b949e; line-height:1;">4.94</p>
+          <p style="font-size:5pt; color:#8b949e; margin-top:1pt;">이후</p>
+        </div>
+        <div style="flex:1; text-align:center;">
+          <p style="font-size:9pt; color:#8b949e;">&rarr;</p>
+          <p style="font-size:6.5pt; color:#00d26a; font-weight:800;">+0.06</p>
           <p style="font-size:5pt; color:#8b949e; line-height:1.3;">영입 회의<br>시연 성공</p>
         </div>
-        <div style="background:#001500; border:2pt solid #00d26a; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:50pt; flex-shrink:0;">
-          <p style="font-size:16pt; font-weight:900; color:#00d26a; line-height:1;">5.0</p>
-          <p style="font-size:5pt; color:#00d26a; margin-top:1pt;">달성!</p>
+        <div style="background:#001500; border:2pt solid #00d26a; border-radius:5pt; padding:5pt 6pt; text-align:center; min-width:48pt; flex-shrink:0;">
+          <p style="font-size:15pt; font-weight:900; color:#00d26a; line-height:1;">5.0</p>
+          <p style="font-size:5pt; color:#00d26a; margin-top:1pt;">최종 달성</p>
         </div>
       </div>
 
       <!-- 인용 박스 -->
       <div style="background:#161b22; border-left:3pt solid #f5a623; border-radius:0 5pt 5pt 0; padding:8pt 10pt; flex:1; display:flex; align-items:center;">
         <p style="font-size:7.5pt; color:#8b949e; line-height:1.65; font-style:italic;">
-          &ldquo;오늘이 바로 그 월요일입니다. 지난 7일간 '다음 주 월요일에 로컬에서 학습한다'는 계획을 매일 세웠습니다.
-          오늘이 그날입니다.
-          <span style="color:#f5a623; font-weight:700; font-style:normal;">P7 train_v5_1.py를 실행하십시오.</span>
-          오늘 세 가지가 전부 됩니다.
-          <span style="color:#00d26a; font-weight:700; font-style:normal;">4.60에서 4.82 이상으로 올라갑니다.</span>&rdquo;
+          &ldquo;8일입니다. demo_script_draft.md를 8일째 못 쓰고 있습니다. 이건 데이터도 필요 없고, 코드도 필요 없습니다.
+          지금 이 세션에서 바로 작성합니다.
+          <span style="color:#f5a623; font-weight:700; font-style:normal;">내일(05-20) 포트폴리오 리허설 첫날입니다. 스크립트 없이 리허설은 없습니다.</span>&rdquo;
           <span style="color:#f5a623; font-weight:700; font-style:normal;">&mdash; 김태현 스카우트</span>
         </p>
       </div>

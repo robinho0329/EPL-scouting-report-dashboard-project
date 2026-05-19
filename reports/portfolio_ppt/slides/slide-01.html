@@ -6,42 +6,30 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 720pt;
+    height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
+    display: flex;
+    flex-direction: row;
   }
   .left-bar {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
     width: 5pt;
-    background: linear-gradient(180deg, #e94560 0%, #f5a623 50%, #e94560 100%);
+    min-width: 5pt;
+    height: 405pt;
+    background: #e94560;
+    flex-shrink: 0;
   }
-  .bg-glow {
-    position: absolute;
-    top: -80pt; right: -60pt;
-    width: 300pt; height: 300pt;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(233,69,96,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .bg-glow2 {
-    position: absolute;
-    bottom: -60pt; left: 80pt;
-    width: 220pt; height: 220pt;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(245,166,35,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .main {
-    position: absolute;
-    left: 16pt; top: 0; right: 0; bottom: 72pt;
+  .content-area {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 18pt 28pt 18pt 24pt;
+    padding: 24pt 100pt 24pt 20pt;
+    position: relative;
   }
   .badge {
     display: inline-block;
@@ -53,29 +41,22 @@
   }
   .badge-muted {
     background: rgba(139,148,158,0.12);
-    color: #8b949e;
     border: 0.75pt solid rgba(139,148,158,0.22);
   }
   .badge-accent {
     background: rgba(233,69,96,0.14);
-    color: #e94560;
     border: 0.75pt solid rgba(233,69,96,0.38);
-  }
-  .badge-gold {
-    background: rgba(245,166,35,0.14);
-    color: #f5a623;
-    border: 0.75pt solid rgba(245,166,35,0.38);
   }
   .top-row {
     display: flex;
     align-items: center;
-    gap: 7pt;
-    margin-bottom: 14pt;
+    gap: 6pt;
+    margin-bottom: 12pt;
+    flex-wrap: nowrap;
   }
-  .title-block { margin-bottom: 8pt; }
   .divider {
     width: 50pt; height: 3pt;
-    background: linear-gradient(90deg, #e94560, #f5a623);
+    background: #e94560;
     border-radius: 2pt;
     margin-bottom: 10pt;
   }
@@ -98,76 +79,73 @@
     align-items: center;
     gap: 7pt;
   }
-  .rating-badge {
+  .rating-panel {
     position: absolute;
-    right: 26pt;
+    right: 10pt;
     bottom: 18pt;
     background: #1a1a2e;
     border: 1.5pt solid #e94560;
     border-radius: 9pt;
     padding: 7pt 13pt;
     text-align: center;
-    min-width: 70pt;
+    min-width: 68pt;
   }
-  .shield-wrap {
+  .shield-panel {
     position: absolute;
-    top: 16pt;
-    right: 26pt;
+    top: 18pt;
+    right: 10pt;
+    background: #1a1a2e;
+    border: 1.5pt solid #e94560;
+    border-radius: 4pt 4pt 22pt 22pt;
+    width: 46pt;
+    height: 50pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
 </head>
 <body>
   <div class="left-bar"></div>
-  <div class="bg-glow"></div>
-  <div class="bg-glow2"></div>
 
-  <!-- 방패 아이콘 -->
-  <div class="shield-wrap">
-    <svg width="46pt" height="54pt" viewBox="0 0 46 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M23 2L3 11V27C3 39.1 11.8 50.2 23 53C34.2 50.2 43 39.1 43 27V11L23 2Z"
-            fill="#1a1a2e" stroke="#e94560" stroke-width="1.5"/>
-      <path d="M23 9L10 16V27C10 35.6 15.8 43.5 23 45.8C30.2 43.5 36 35.6 36 27V16L23 9Z"
-            fill="none" stroke="#f5a623" stroke-width="0.8"/>
-      <text x="23" y="32" text-anchor="middle" fill="#e94560" font-size="12" font-weight="800"
-            font-family="Arial,sans-serif">EPL</text>
-    </svg>
-  </div>
+  <div class="content-area">
+    <!-- 방패 아이콘 -->
+    <div class="shield-panel">
+      <p style="font-size:10pt; font-weight:900; color:#e94560; letter-spacing:0.04em;">EPL</p>
+    </div>
 
-  <div class="main">
     <!-- 상단 배지 행 -->
     <div class="top-row">
       <span class="badge badge-muted">
-        <p style="font-size:7pt; font-weight:700; color:#8b949e; white-space:nowrap;">EPL SCOUT INTELLIGENCE</p>
+        <p style="font-size:6.5pt; font-weight:700; color:#8b949e; white-space:nowrap;">EPL SCOUT INTELLIGENCE</p>
       </span>
       <span class="badge badge-muted">
-        <p style="font-size:7pt; font-weight:700; color:#8b949e; white-space:nowrap;">28번째 정기 미팅 | 09:00 KST</p>
+        <p style="font-size:6.5pt; font-weight:700; color:#8b949e; white-space:nowrap;">28번째 정기 미팅 | 09:00 KST</p>
       </span>
       <span class="badge badge-accent">
-        <p style="font-size:7pt; font-weight:700; color:#e94560; white-space:nowrap;">포트폴리오 리허설 D-1</p>
+        <p style="font-size:6.5pt; font-weight:700; color:#e94560; white-space:nowrap;">포트폴리오 리허설 D-1</p>
       </span>
     </div>
 
     <!-- 메인 타이틀 -->
-    <div class="title-block">
-      <h1 style="font-size:40pt; font-weight:800; color:#e6edf3; line-height:1.06; letter-spacing:-0.02em;">
-        EPL 스카우트<br>
-        <span style="color:#e94560;">인텔리전스</span>
-      </h1>
-    </div>
+    <h1 style="font-size:38pt; font-weight:800; color:#e6edf3; line-height:1.06; letter-spacing:-0.02em; margin-bottom:8pt;">
+      EPL 스카우트<br>
+      <span style="color:#e94560;">인텔리전스</span>
+    </h1>
 
     <!-- 구분선 -->
     <div class="divider"></div>
 
     <!-- 서브타이틀 -->
     <div class="subtitle-row">
-      <h2 style="font-size:12pt; font-weight:600; color:#8b949e;">데일리 브리핑</h2>
-      <span style="color:#30363d; font-size:14pt; line-height:1;">|</span>
-      <h2 style="font-size:12pt; font-weight:700; color:#58a6ff;">2026-05-19 (화)</h2>
+      <h2 style="font-size:11pt; font-weight:600; color:#8b949e;">데일리 브리핑</h2>
+      <span style="color:#30363d; font-size:13pt; line-height:1;">|</span>
+      <h2 style="font-size:11pt; font-weight:700; color:#58a6ff;">2026-05-19 (화)</h2>
     </div>
 
     <!-- 슬로건 배너 -->
     <div class="slogan-banner">
-      <p style="font-size:8.5pt; font-weight:700; color:#e94560; letter-spacing:0.02em;">
+      <p style="font-size:8pt; font-weight:700; color:#e94560; letter-spacing:0.02em;">
         8일입니다 — demo_script_draft.md 즉시 완성 / P8 코드 오전 / 로컬 학습 저녁
       </p>
     </div>
@@ -181,14 +159,14 @@
         <p style="font-size:6.5pt; color:#8b949e;">김태현 스카우트 · Marcus Webb Analytics</p>
       </span>
     </div>
-  </div>
 
-  <!-- 우하단 평점 배지 -->
-  <div class="rating-badge">
-    <p style="font-size:6.5pt; color:#8b949e; margin-bottom:2pt; letter-spacing:0.06em; text-transform:uppercase;">현재 평점</p>
-    <p style="font-size:24pt; font-weight:800; color:#e94560; line-height:1.05;">4.55</p>
-    <p style="font-size:8pt; color:#8b949e;">/ 5.0</p>
-    <p style="font-size:7pt; font-weight:700; color:#e94560; margin-top:3pt;">&#9660; 4.60 하락</p>
+    <!-- 우하단 평점 배지 -->
+    <div class="rating-panel">
+      <p style="font-size:6.5pt; color:#8b949e; margin-bottom:2pt; letter-spacing:0.06em; text-transform:uppercase;">현재 평점</p>
+      <p style="font-size:22pt; font-weight:800; color:#e94560; line-height:1.05;">4.55</p>
+      <p style="font-size:8pt; color:#8b949e;">/ 5.0</p>
+      <p style="font-size:7pt; font-weight:700; color:#e94560; margin-top:3pt;">&#9660; 4.60 하락</p>
+    </div>
   </div>
 </body>
 </html>

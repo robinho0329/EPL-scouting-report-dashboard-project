@@ -31,15 +31,15 @@
   <div style="display:flex; justify-content:space-between; align-items:center; padding-top:4pt;">
     <h2 style="font-size:13.5pt; font-weight:800; color:#e6edf3;">
       12개 모델 성능 현황
-      <span style="color:#e94560; font-size:11pt;"> &mdash; P1&middot;P7 오늘 로컬 학습으로 7일 연속 미달 종결 예정</span>
+      <span style="color:#e94560; font-size:11pt;"> &mdash; P1&middot;P7 8일 연속 미달 / 오늘 저녁 로컬 학습 종결 예정</span>
     </h2>
     <!-- 요약 배지 4개 -->
     <div style="display:flex; gap:5pt; flex-shrink:0;">
       <div style="background:#001a10; border:1pt solid #00d26a; border-radius:16pt; padding:2pt 8pt;">
-        <p style="font-size:6.5pt; font-weight:700; color:#00d26a;">&#10003;&#10003; 최우수 2개</p>
+        <p style="font-size:6.5pt; font-weight:700; color:#00d26a;">&#10003;&#10003; 최우수 3개</p>
       </div>
       <div style="background:#001200; border:1pt solid #2ecc71; border-radius:16pt; padding:2pt 8pt;">
-        <p style="font-size:6.5pt; font-weight:700; color:#2ecc71;">&#10003; 우수 5개</p>
+        <p style="font-size:6.5pt; font-weight:700; color:#2ecc71;">&#10003; 우수 4개</p>
       </div>
       <div style="background:#1a1000; border:1pt solid #f5a623; border-radius:16pt; padding:2pt 8pt;">
         <p style="font-size:6.5pt; font-weight:700; color:#f5a623;">양호 3개</p>
@@ -59,7 +59,7 @@
           <th style="padding:4pt 7pt; text-align:left; color:#8b949e; font-size:6.5pt; text-transform:uppercase; font-weight:600;">모델명</th>
           <th style="padding:4pt 7pt; text-align:right; color:#8b949e; font-size:6.5pt; text-transform:uppercase; font-weight:600;">핵심 지표 (실측값)</th>
           <th style="padding:4pt 7pt; text-align:right; color:#8b949e; font-size:6.5pt; text-transform:uppercase; font-weight:600; width:70pt;">목표</th>
-          <th style="padding:4pt 7pt; text-align:center; color:#8b949e; font-size:6.5pt; text-transform:uppercase; font-weight:600; width:52pt;">상태</th>
+          <th style="padding:4pt 7pt; text-align:center; color:#8b949e; font-size:6.5pt; text-transform:uppercase; font-weight:600; width:60pt;">상태</th>
         </tr>
       </thead>
       <tbody>
@@ -70,8 +70,7 @@
           <td style="padding:3pt 7pt; text-align:right; color:#e94560; font-weight:700;">Acc 54.79% / F1 40.65%</td>
           <td style="padding:3pt 7pt; text-align:right; color:#8b949e;">Acc &ge; 57%</td>
           <td style="padding:3pt 7pt; text-align:center; background:rgba(233,69,96,0.15);">
-            <p style="font-size:7pt; color:#e94560; font-weight:800;">미달</p>
-            <p style="font-size:5.5pt; color:#e94560; margin-top:1pt;">오늘 오후</p>
+            <p style="font-size:7pt; color:#e94560; font-weight:800;">미달 (8일)</p>
           </td>
         </tr>
         <!-- P2 우수 -->
@@ -103,7 +102,7 @@
           <td style="padding:3pt 7pt; font-weight:700; color:#8b949e;">P5</td>
           <td style="padding:3pt 7pt; font-weight:600; color:#e6edf3;">선수 클러스터링</td>
           <td style="padding:3pt 7pt; text-align:right; color:#f5a623;">Silhouette 0.2851 (K=3)</td>
-          <td style="padding:3pt 7pt; text-align:right; color:#8b949e;">0.25~0.35</td>
+          <td style="padding:3pt 7pt; text-align:right; color:#8b949e;">&ge; 0.30</td>
           <td style="padding:3pt 7pt; text-align:center;"><p style="font-size:7pt; color:#f5a623; font-weight:700;">양호</p></td>
         </tr>
         <!-- P6 우수 -->
@@ -121,8 +120,7 @@
           <td style="padding:3pt 7pt; text-align:right; color:#e94560; font-weight:700;">R&sup2; 0.586 / MAE 1.16 / 갭 0.055</td>
           <td style="padding:3pt 7pt; text-align:right; color:#8b949e;">R&sup2; &ge; 0.62</td>
           <td style="padding:3pt 7pt; text-align:center; background:rgba(233,69,96,0.15);">
-            <p style="font-size:7pt; color:#e94560; font-weight:800;">미달</p>
-            <p style="font-size:5.5pt; color:#e94560; margin-top:1pt;">오늘 오전</p>
+            <p style="font-size:7pt; color:#e94560; font-weight:800;">미달 (8일)</p>
           </td>
         </tr>
         <!-- P8 우수 -->
@@ -133,13 +131,13 @@
           <td style="padding:3pt 7pt; text-align:right; color:#8b949e;">AUC &ge; 0.65</td>
           <td style="padding:3pt 7pt; text-align:center;"><p style="font-size:7pt; color:#2ecc71; font-weight:700;">&#10003; 우수</p></td>
         </tr>
-        <!-- S1 우수 -->
-        <tr style="border-bottom:0.5pt solid #30363d;">
+        <!-- S1 최우수 -->
+        <tr style="border-bottom:0.5pt solid #30363d; background:rgba(245,166,35,0.05);">
           <td style="padding:3pt 7pt; font-weight:700; color:#8b949e;">S1</td>
           <td style="padding:3pt 7pt; font-weight:600; color:#e6edf3;">선수 종합 레이팅</td>
-          <td style="padding:3pt 7pt; text-align:right; color:#2ecc71;">R&sup2; 0.9093 / MAE 4.66</td>
+          <td style="padding:3pt 7pt; text-align:right; color:#00d26a; font-weight:700;">R&sup2; 0.9093 / MAE 4.66</td>
           <td style="padding:3pt 7pt; text-align:right; color:#8b949e;">R&sup2; &ge; 0.88</td>
-          <td style="padding:3pt 7pt; text-align:center;"><p style="font-size:7pt; color:#2ecc71; font-weight:700;">&#10003; 우수</p></td>
+          <td style="padding:3pt 7pt; text-align:center;"><p style="font-size:7pt; color:#00d26a; font-weight:700;">&#10003;&#10003; 최우수</p></td>
         </tr>
         <!-- S2 우수 -->
         <tr style="border-bottom:0.5pt solid #30363d;">
@@ -174,7 +172,7 @@
     <p style="font-size:6.5pt; color:#e94560; font-weight:700; flex-shrink:0;">미달 2개</p>
     <p style="font-size:6.5pt; color:#8b949e; flex:1;">
       <span style="color:#e94560; font-weight:700;">P1</span> Acc 54.79% (목표 57%) /
-      <span style="color:#e94560; font-weight:700;">P7</span> R&sup2; 0.586 (목표 0.62) &mdash; 코드 수정 완료, 오늘 로컬 PC 직접 실행만 남음
+      <span style="color:#e94560; font-weight:700;">P7</span> R&sup2; 0.586 (목표 0.62) &mdash; 코드 준비 완료, 오늘 저녁 로컬 PC 실행만 남음
     </p>
     <div style="background:#001a10; border:1pt solid #00d26a; border-radius:9pt; padding:2pt 9pt; flex-shrink:0;">
       <p style="font-size:6.5pt; font-weight:700; color:#00d26a;">즉시 활용 9개: S1&middot;P4&middot;P6&middot;S2&middot;P8&middot;P3&middot;P2&middot;S3&middot;S6</p>
