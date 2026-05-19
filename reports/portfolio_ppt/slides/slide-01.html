@@ -6,77 +6,189 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
+  .left-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5pt;
+    background: linear-gradient(180deg, #e94560 0%, #f5a623 50%, #e94560 100%);
+  }
+  .bg-glow {
+    position: absolute;
+    top: -80pt; right: -60pt;
+    width: 300pt; height: 300pt;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(233,69,96,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .bg-glow2 {
+    position: absolute;
+    bottom: -60pt; left: 80pt;
+    width: 220pt; height: 220pt;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .main {
+    position: absolute;
+    left: 16pt; top: 0; right: 0; bottom: 72pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 18pt 28pt 18pt 24pt;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2.5pt 7pt;
+    border-radius: 3pt;
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .badge-muted {
+    background: rgba(139,148,158,0.12);
+    color: #8b949e;
+    border: 0.75pt solid rgba(139,148,158,0.22);
+  }
+  .badge-accent {
+    background: rgba(233,69,96,0.14);
+    color: #e94560;
+    border: 0.75pt solid rgba(233,69,96,0.38);
+  }
+  .badge-gold {
+    background: rgba(245,166,35,0.14);
+    color: #f5a623;
+    border: 0.75pt solid rgba(245,166,35,0.38);
+  }
+  .top-row {
+    display: flex;
+    align-items: center;
+    gap: 7pt;
+    margin-bottom: 14pt;
+  }
+  .title-block { margin-bottom: 8pt; }
+  .divider {
+    width: 50pt; height: 3pt;
+    background: linear-gradient(90deg, #e94560, #f5a623);
+    border-radius: 2pt;
+    margin-bottom: 10pt;
+  }
+  .subtitle-row {
+    display: flex;
+    align-items: center;
+    gap: 9pt;
+    margin-bottom: 14pt;
+  }
+  .slogan-banner {
+    background: rgba(233,69,96,0.07);
+    border: 0.75pt solid rgba(233,69,96,0.3);
+    border-left: 3pt solid #e94560;
+    border-radius: 4pt;
+    padding: 6pt 11pt;
+    margin-bottom: 14pt;
+  }
+  .footer-row {
+    display: flex;
+    align-items: center;
+    gap: 7pt;
+  }
+  .rating-badge {
+    position: absolute;
+    right: 26pt;
+    bottom: 18pt;
+    background: #1a1a2e;
+    border: 1.5pt solid #e94560;
+    border-radius: 9pt;
+    padding: 7pt 13pt;
+    text-align: center;
+    min-width: 70pt;
+  }
+  .shield-wrap {
+    position: absolute;
+    top: 16pt;
+    right: 26pt;
+  }
 </style>
 </head>
 <body>
+  <div class="left-bar"></div>
+  <div class="bg-glow"></div>
+  <div class="bg-glow2"></div>
 
-  <!-- 좌측 수직 강조 라인 (solid border, no clip-path) -->
-  <div style="position:absolute; left:0; top:0; width:5pt; height:405pt; background:#e94560;"></div>
-
-  <!-- 좌상단 방패 대체: 텍스트 레이블 -->
-  <div style="position:absolute; top:18pt; left:16pt;">
-    <p style="font-size:7.5pt; font-weight:700; color:#8b949e; letter-spacing:0.18em; text-transform:uppercase;">EPL Scout Intelligence</p>
+  <!-- 방패 아이콘 -->
+  <div class="shield-wrap">
+    <svg width="46pt" height="54pt" viewBox="0 0 46 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M23 2L3 11V27C3 39.1 11.8 50.2 23 53C34.2 50.2 43 39.1 43 27V11L23 2Z"
+            fill="#1a1a2e" stroke="#e94560" stroke-width="1.5"/>
+      <path d="M23 9L10 16V27C10 35.6 15.8 43.5 23 45.8C30.2 43.5 36 35.6 36 27V16L23 9Z"
+            fill="none" stroke="#f5a623" stroke-width="0.8"/>
+      <text x="23" y="32" text-anchor="middle" fill="#e94560" font-size="12" font-weight="800"
+            font-family="Arial,sans-serif">EPL</text>
+    </svg>
   </div>
 
-  <!-- 우상단: 생성 주체 -->
-  <div style="position:absolute; top:18pt; right:24pt;">
-    <p style="font-size:7pt; color:#8b949e; text-align:right;">EPL Scout Bot | 09:00 KST</p>
-  </div>
-
-  <!-- 중앙 메인 콘텐츠 -->
-  <div style="position:absolute; left:20pt; top:38pt; right:20pt; bottom:94pt; display:flex; flex-direction:column; justify-content:center; padding-left:14pt;">
-
-    <!-- 배지 행 -->
-    <div style="display:flex; gap:8pt; margin-bottom:14pt; flex-wrap:wrap;">
-      <div style="background:rgba(88,166,255,0.12); border:1pt solid rgba(88,166,255,0.4); border-radius:20pt; padding:3pt 13pt;">
-        <p style="font-size:7.5pt; font-weight:700; color:#58a6ff; letter-spacing:0.04em;">27번째 정기 미팅 | 09:00 KST</p>
-      </div>
-      <div style="background:rgba(245,166,35,0.12); border:1pt solid rgba(245,166,35,0.4); border-radius:20pt; padding:3pt 13pt;">
-        <p style="font-size:7.5pt; font-weight:700; color:#f5a623; letter-spacing:0.04em;">월요일 로컬 학습 실행일</p>
-      </div>
+  <div class="main">
+    <!-- 상단 배지 행 -->
+    <div class="top-row">
+      <span class="badge badge-muted">
+        <p style="font-size:7pt; font-weight:700; color:#8b949e; white-space:nowrap;">EPL SCOUT INTELLIGENCE</p>
+      </span>
+      <span class="badge badge-muted">
+        <p style="font-size:7pt; font-weight:700; color:#8b949e; white-space:nowrap;">28번째 정기 미팅 | 09:00 KST</p>
+      </span>
+      <span class="badge badge-accent">
+        <p style="font-size:7pt; font-weight:700; color:#e94560; white-space:nowrap;">포트폴리오 리허설 D-1</p>
+      </span>
     </div>
 
     <!-- 메인 타이틀 -->
-    <h1 style="font-size:38pt; font-weight:900; color:#e6edf3; line-height:1.05; letter-spacing:-0.01em; margin-bottom:8pt;">EPL 스카우트<br>인텔리전스</h1>
+    <div class="title-block">
+      <h1 style="font-size:40pt; font-weight:800; color:#e6edf3; line-height:1.06; letter-spacing:-0.02em;">
+        EPL 스카우트<br>
+        <span style="color:#e94560;">인텔리전스</span>
+      </h1>
+    </div>
 
-    <!-- 서브 타이틀 -->
-    <h2 style="font-size:14pt; font-weight:600; color:#e94560; margin-bottom:8pt; letter-spacing:0.01em;">데일리 브리핑 | 2026-05-18 (월)</h2>
+    <!-- 구분선 -->
+    <div class="divider"></div>
 
-    <!-- 날짜 및 스카우트 정보 -->
-    <p style="font-size:9pt; color:#8b949e;">2026년 5월 18일 월요일 &mdash; 제27회 정기 미팅</p>
-    <p style="font-size:9pt; color:#8b949e; margin-top:3pt;">김태현 스카우트 &middot; Marcus Webb Analytics</p>
-  </div>
+    <!-- 서브타이틀 -->
+    <div class="subtitle-row">
+      <h2 style="font-size:12pt; font-weight:600; color:#8b949e;">데일리 브리핑</h2>
+      <span style="color:#30363d; font-size:14pt; line-height:1;">|</span>
+      <h2 style="font-size:12pt; font-weight:700; color:#58a6ff;">2026-05-19 (화)</h2>
+    </div>
 
-  <!-- 하단 슬로건 배너 -->
-  <div style="position:absolute; left:0; bottom:0; width:720pt; height:82pt; background:#161b22; border-top:2pt solid #e94560;">
-
-    <!-- 슬로건 텍스트 영역 -->
-    <div style="position:absolute; left:24pt; top:0; right:130pt; bottom:0; display:flex; flex-direction:column; justify-content:center; gap:4pt;">
-      <p style="font-size:6.5pt; color:#8b949e; text-transform:uppercase; letter-spacing:0.08em;">오늘의 슬로건</p>
-      <p style="font-size:8.5pt; color:#e6edf3; font-weight:600; line-height:1.55;">
-        오늘이 바로 그 월요일 &mdash;
-        <span style="color:#f5a623; font-weight:700;">P7 train_v5_1.py 실행</span> /
-        <span style="color:#e94560; font-weight:700;">demo_script_draft.md 7일 연속 미달 종결</span> /
-        <span style="color:#00d26a; font-weight:700;">P1 재학습</span>
+    <!-- 슬로건 배너 -->
+    <div class="slogan-banner">
+      <p style="font-size:8.5pt; font-weight:700; color:#e94560; letter-spacing:0.02em;">
+        8일입니다 — demo_script_draft.md 즉시 완성 / P8 코드 오전 / 로컬 학습 저녁
       </p>
     </div>
 
-    <!-- 평점 배지 (하단 배너 내 우측) -->
-    <div style="position:absolute; right:20pt; top:0; bottom:12pt; width:110pt; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1pt; border-left:1pt solid #30363d;">
-      <p style="font-size:6.5pt; color:#8b949e; letter-spacing:0.06em; text-transform:uppercase;">종합 평점</p>
-      <p style="font-size:26pt; font-weight:900; color:#f5a623; line-height:1;">4.60</p>
-      <p style="font-size:7.5pt; color:#8b949e;">/ 5.0</p>
-      <p style="font-size:7pt; color:#e94560; font-weight:700;">&#9660; -0.05 (전일 4.65)</p>
+    <!-- 하단 생성자 -->
+    <div class="footer-row">
+      <span class="badge badge-muted">
+        <p style="font-size:6.5pt; color:#8b949e;">EPL Scout Bot | 09:00 KST</p>
+      </span>
+      <span class="badge badge-muted">
+        <p style="font-size:6.5pt; color:#8b949e;">김태현 스카우트 · Marcus Webb Analytics</p>
+      </span>
     </div>
   </div>
 
+  <!-- 우하단 평점 배지 -->
+  <div class="rating-badge">
+    <p style="font-size:6.5pt; color:#8b949e; margin-bottom:2pt; letter-spacing:0.06em; text-transform:uppercase;">현재 평점</p>
+    <p style="font-size:24pt; font-weight:800; color:#e94560; line-height:1.05;">4.55</p>
+    <p style="font-size:8pt; color:#8b949e;">/ 5.0</p>
+    <p style="font-size:7pt; font-weight:700; color:#e94560; margin-top:3pt;">&#9660; 4.60 하락</p>
+  </div>
 </body>
 </html>
