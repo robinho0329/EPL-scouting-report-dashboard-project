@@ -11,6 +11,6 @@
     "playwright-core": "^1.60.0",
     "pptxgenjs": "^3.12.0",
     "puppeteer": "^24.42.0",
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.5"
   }
 }
