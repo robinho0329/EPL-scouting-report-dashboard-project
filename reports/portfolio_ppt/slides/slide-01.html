@@ -13,160 +13,216 @@
     color: #e6edf3;
     overflow: hidden;
     position: relative;
-    display: flex;
-    flex-direction: row;
   }
+
+  /* 좌측 강조 바 — solid color only */
   .left-bar {
-    width: 5pt;
-    min-width: 5pt;
-    height: 405pt;
-    background: #e94560;
-    flex-shrink: 0;
+    position: absolute;
+    left: 0; top: 0;
+    width: 5pt; height: 100%;
+    background-color: #e94560;
   }
-  .content-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 24pt 100pt 24pt 20pt;
-    position: relative;
-  }
-  .badge {
-    display: inline-block;
-    padding: 2.5pt 7pt;
-    border-radius: 3pt;
-    font-size: 7pt;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-  .badge-muted {
-    background: rgba(139,148,158,0.12);
-    border: 0.75pt solid rgba(139,148,158,0.22);
-  }
-  .badge-accent {
-    background: rgba(233,69,96,0.14);
-    border: 0.75pt solid rgba(233,69,96,0.38);
-  }
-  .top-row {
+
+  /* 상단 영역 */
+  .top-area {
+    position: absolute;
+    top: 20pt; left: 20pt; right: 20pt;
     display: flex;
     align-items: center;
-    gap: 6pt;
-    margin-bottom: 12pt;
-    flex-wrap: nowrap;
+    justify-content: space-between;
   }
-  .divider {
-    width: 50pt; height: 3pt;
-    background: #e94560;
-    border-radius: 2pt;
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 8pt;
+  }
+
+  .shield-box {
+    width: 32pt; height: 32pt;
+    background-color: #1a1a2e;
+    border: 1.4pt solid #e94560;
+    border-radius: 4pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shield-label {
+    font-size: 7pt;
+    font-weight: 800;
+    color: #f5a623;
+    letter-spacing: 0.04em;
+  }
+
+  .brand-text {
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #8b949e;
+    text-transform: uppercase;
+  }
+
+  .meeting-box {
+    background-color: #1a1a2e;
+    border: 1pt solid #30363d;
+    border-radius: 20pt;
+    padding: 3pt 10pt;
+  }
+
+  .meeting-text {
+    font-size: 8pt;
+    color: #8b949e;
+  }
+
+  /* 메인 콘텐츠 */
+  .main-block {
+    position: absolute;
+    top: 70pt; left: 20pt;
+    right: 115pt;
+  }
+
+  .dday-wrap {
+    display: inline-block;
+    background-color: #e94560;
+    border-radius: 4pt;
+    padding: 3pt 10pt;
     margin-bottom: 10pt;
   }
-  .subtitle-row {
-    display: flex;
-    align-items: center;
-    gap: 9pt;
+
+  .dday-text {
+    font-size: 8.5pt;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+  }
+
+  .main-title {
+    font-size: 34pt;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #e6edf3;
+    margin-bottom: 6pt;
+  }
+
+  .sub-title {
+    font-size: 13pt;
+    font-weight: 500;
+    color: #8b949e;
+    margin-bottom: 14pt;
+    letter-spacing: 0.03em;
+  }
+
+  .accent-bar {
+    width: 44pt; height: 3pt;
+    background-color: #e94560;
+    border-radius: 2pt;
     margin-bottom: 14pt;
   }
-  .slogan-banner {
-    background: rgba(233,69,96,0.07);
-    border: 0.75pt solid rgba(233,69,96,0.3);
-    border-left: 3pt solid #e94560;
+
+  .slogan-wrap {
+    background-color: #16213e;
+    border-left: 4pt solid #e94560;
     border-radius: 4pt;
-    padding: 6pt 11pt;
-    margin-bottom: 14pt;
+    padding: 8pt 12pt;
+    max-width: 400pt;
   }
-  .footer-row {
-    display: flex;
-    align-items: center;
-    gap: 7pt;
+
+  .slogan-text {
+    font-size: 8.5pt;
+    color: #e6edf3;
+    line-height: 1.7;
   }
-  .rating-panel {
+
+  /* 우하단 평점 배지 */
+  .rating-wrap {
     position: absolute;
-    right: 10pt;
-    bottom: 18pt;
-    background: #1a1a2e;
-    border: 1.5pt solid #e94560;
-    border-radius: 9pt;
-    padding: 7pt 13pt;
-    text-align: center;
-    min-width: 68pt;
-  }
-  .shield-panel {
-    position: absolute;
-    top: 18pt;
-    right: 10pt;
-    background: #1a1a2e;
-    border: 1.5pt solid #e94560;
-    border-radius: 4pt 4pt 22pt 22pt;
-    width: 46pt;
-    height: 50pt;
+    right: 20pt; bottom: 50pt;
+    width: 88pt; height: 88pt;
+    background-color: #1a1a2e;
+    border: 2pt solid #f5a623;
+    border-radius: 50%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  .rating-num {
+    font-size: 21pt;
+    font-weight: 800;
+    color: #f5a623;
+    line-height: 1;
+  }
+
+  .rating-den {
+    font-size: 7.5pt;
+    color: #8b949e;
+    margin-top: 2pt;
+  }
+
+  .rating-up {
+    font-size: 8pt;
+    font-weight: 700;
+    color: #00d26a;
+    margin-top: 3pt;
+  }
+
+  /* 푸터 */
+  .footer-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 26pt;
+    background-color: #1a1a2e;
+    border-top: 1pt solid #30363d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20pt;
+  }
+
+  .footer-text {
+    font-size: 7.5pt;
+    color: #8b949e;
   }
 </style>
 </head>
 <body>
   <div class="left-bar"></div>
 
-  <div class="content-area">
-    <!-- 방패 아이콘 -->
-    <div class="shield-panel">
-      <p style="font-size:10pt; font-weight:900; color:#e94560; letter-spacing:0.04em;">EPL</p>
+  <div class="top-area">
+    <div class="brand-row">
+      <div class="shield-box">
+        <p class="shield-label">EPL</p>
+      </div>
+      <p class="brand-text">EPL Scout Intelligence</p>
     </div>
-
-    <!-- 상단 배지 행 -->
-    <div class="top-row">
-      <span class="badge badge-muted">
-        <p style="font-size:6.5pt; font-weight:700; color:#8b949e; white-space:nowrap;">EPL SCOUT INTELLIGENCE</p>
-      </span>
-      <span class="badge badge-muted">
-        <p style="font-size:6.5pt; font-weight:700; color:#8b949e; white-space:nowrap;">28번째 정기 미팅 | 09:00 KST</p>
-      </span>
-      <span class="badge badge-accent">
-        <p style="font-size:6.5pt; font-weight:700; color:#e94560; white-space:nowrap;">포트폴리오 리허설 D-1</p>
-      </span>
+    <div class="meeting-box">
+      <p class="meeting-text">29번째 정기 미팅 | 09:00 KST</p>
     </div>
+  </div>
 
-    <!-- 메인 타이틀 -->
-    <h1 style="font-size:38pt; font-weight:800; color:#e6edf3; line-height:1.06; letter-spacing:-0.02em; margin-bottom:8pt;">
-      EPL 스카우트<br>
-      <span style="color:#e94560;">인텔리전스</span>
-    </h1>
-
-    <!-- 구분선 -->
-    <div class="divider"></div>
-
-    <!-- 서브타이틀 -->
-    <div class="subtitle-row">
-      <h2 style="font-size:11pt; font-weight:600; color:#8b949e;">데일리 브리핑</h2>
-      <span style="color:#30363d; font-size:13pt; line-height:1;">|</span>
-      <h2 style="font-size:11pt; font-weight:700; color:#58a6ff;">2026-05-19 (화)</h2>
+  <div class="main-block">
+    <div class="dday-wrap">
+      <p class="dday-text">포트폴리오 리허설 D-Day</p>
     </div>
-
-    <!-- 슬로건 배너 -->
-    <div class="slogan-banner">
-      <p style="font-size:8pt; font-weight:700; color:#e94560; letter-spacing:0.02em;">
-        8일입니다 — demo_script_draft.md 즉시 완성 / P8 코드 오전 / 로컬 학습 저녁
-      </p>
+    <h1 class="main-title">EPL 스카우트<br>인텔리전스</h1>
+    <p class="sub-title">데일리 브리핑 &nbsp;|&nbsp; 2026-05-20 (수)</p>
+    <div class="accent-bar"></div>
+    <div class="slogan-wrap">
+      <p class="slogan-text">리허설 D-Day — 5단계 발표 흐름 실전 검증<br>P7+P1 오늘 저녁 로컬 학습으로 9일 연속 미달 종결 예정</p>
     </div>
+  </div>
 
-    <!-- 하단 생성자 -->
-    <div class="footer-row">
-      <span class="badge badge-muted">
-        <p style="font-size:6.5pt; color:#8b949e;">EPL Scout Bot | 09:00 KST</p>
-      </span>
-      <span class="badge badge-muted">
-        <p style="font-size:6.5pt; color:#8b949e;">김태현 스카우트 · Marcus Webb Analytics</p>
-      </span>
-    </div>
+  <div class="rating-wrap">
+    <p class="rating-num">4.70</p>
+    <p class="rating-den">/ 5.0</p>
+    <p class="rating-up">&#8679; +0.15</p>
+  </div>
 
-    <!-- 우하단 평점 배지 -->
-    <div class="rating-panel">
-      <p style="font-size:6.5pt; color:#8b949e; margin-bottom:2pt; letter-spacing:0.06em; text-transform:uppercase;">현재 평점</p>
-      <p style="font-size:22pt; font-weight:800; color:#e94560; line-height:1.05;">4.55</p>
-      <p style="font-size:8pt; color:#8b949e;">/ 5.0</p>
-      <p style="font-size:7pt; font-weight:700; color:#e94560; margin-top:3pt;">&#9660; 4.60 하락</p>
-    </div>
+  <div class="footer-bar">
+    <p class="footer-text">김태현 스카우트 · Marcus Webb Analytics</p>
+    <p class="footer-text">EPL Scout Bot | 2026-05-20 09:00 KST</p>
   </div>
 </body>
 </html>

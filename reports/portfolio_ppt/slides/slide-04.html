@@ -12,162 +12,272 @@
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    padding: 0 18pt 10pt 18pt;
-    display: flex;
-    flex-direction: column;
-    gap: 8pt;
     position: relative;
   }
+
+  .left-bar {
+    position: absolute;
+    left: 0; top: 0;
+    width: 4pt; height: 100%;
+    background-color: #e94560;
+  }
+
+  .slide-wrapper {
+    position: absolute;
+    top: 12pt; left: 14pt; right: 14pt; bottom: 10pt;
+    display: flex;
+    flex-direction: column;
+    gap: 7pt;
+  }
+
+  /* 상단 긴급 배너 */
+  .urgent-banner {
+    background-color: #2a0e14;
+    border: 1pt solid #e94560;
+    border-left: 4pt solid #e94560;
+    border-radius: 4pt;
+    padding: 5pt 12pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .banner-text { font-size: 9pt; font-weight: 700; color: #e6edf3; }
+  .banner-score { font-size: 8.5pt; font-weight: 700; color: #00d26a; }
+
+  .slide-title { font-size: 14pt; font-weight: 800; color: #e6edf3; }
+
+  /* 3단 카드 */
+  .cards-row {
+    display: flex;
+    gap: 9pt;
+    flex: 1;
+  }
+
+  .action-card {
+    flex: 1;
+    background-color: #1a1a2e;
+    border-radius: 6pt;
+    padding: 10pt 10pt 8pt;
+    display: flex;
+    flex-direction: column;
+    gap: 5pt;
+    position: relative;
+  }
+
+  .card-1 {
+    border-top: 3pt solid #e94560;
+    border-right: 1pt solid #3a1a20;
+    border-bottom: 1pt solid #3a1a20;
+    border-left: 1pt solid #3a1a20;
+  }
+
+  .card-2 {
+    border-top: 3pt solid #f5a623;
+    border-right: 1pt solid #3a2e10;
+    border-bottom: 1pt solid #3a2e10;
+    border-left: 1pt solid #3a2e10;
+  }
+
+  .card-3 {
+    border-top: 3pt solid #58a6ff;
+    border-right: 1pt solid #1a2a3a;
+    border-bottom: 1pt solid #1a2a3a;
+    border-left: 1pt solid #1a2a3a;
+  }
+
+  .medal-row {
+    display: flex;
+    align-items: center;
+    gap: 5pt;
+    margin-bottom: 2pt;
+  }
+
+  .medal-icon { font-size: 14pt; line-height: 1; }
+  .priority-1 { font-size: 7.5pt; font-weight: 800; color: #e94560; }
+  .priority-2 { font-size: 7.5pt; font-weight: 800; color: #f5a623; }
+  .priority-3 { font-size: 7.5pt; font-weight: 800; color: #58a6ff; }
+
+  .card-title { font-size: 9pt; font-weight: 800; color: #e6edf3; line-height: 1.35; }
+  .card-owner { font-size: 7.5pt; color: #8b949e; }
+
+  .divider-line {
+    height: 1pt;
+    background-color: #2a2a3e;
+  }
+
+  .target-box {
+    background-color: #221c10;
+    border: 1pt solid #3a2e10;
+    border-radius: 3pt;
+    padding: 4pt 7pt;
+  }
+
+  .target-label { font-size: 7pt; color: #f5a623; font-weight: 700; margin-bottom: 2pt; }
+  .target-text  { font-size: 7.5pt; color: #e6edf3; line-height: 1.4; }
+
+  .deadline-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .deadline-text { font-size: 7pt; color: #8b949e; }
+
+  .score-badge {
+    background-color: #0d2818;
+    border: 1pt solid #00d26a;
+    border-radius: 3pt;
+    padding: 2pt 5pt;
+  }
+
+  .score-badge-text { font-size: 7.5pt; font-weight: 700; color: #00d26a; }
+
+  .nine-day-badge {
+    position: absolute;
+    top: 6pt; right: 6pt;
+    background-color: #e94560;
+    border-radius: 3pt;
+    padding: 2pt 5pt;
+  }
+
+  .nine-day-text { font-size: 6pt; font-weight: 800; color: #ffffff; }
+
+  /* 하단 타임라인 */
+  .timeline-bar {
+    background-color: #1a1a2e;
+    border: 1pt solid #30363d;
+    border-radius: 4pt;
+    padding: 6pt 12pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tl-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3pt;
+  }
+
+  .tl-dot {
+    width: 8pt; height: 8pt;
+    border-radius: 50%;
+  }
+
+  .dot-red  { background-color: #e94560; }
+  .dot-gold { background-color: #f5a623; }
+  .dot-blue { background-color: #58a6ff; }
+  .dot-grn  { background-color: #00d26a; }
+
+  .tl-time  { font-size: 6.5pt; font-weight: 700; color: #e6edf3; text-align: center; }
+  .tl-label { font-size: 6.5pt; color: #8b949e; text-align: center; }
+  .tl-arrow { font-size: 10pt; color: #30363d; }
 </style>
 </head>
 <body>
+  <div class="left-bar"></div>
 
-  <!-- 상단 강조 바 (금/레드/초록) -->
-  <div style="position:absolute; top:0; left:0; width:240pt; height:3pt; background:#e94560; z-index:10;"></div>
-  <div style="position:absolute; top:0; left:240pt; width:240pt; height:3pt; background:#f5a623; z-index:10;"></div>
-  <div style="position:absolute; top:0; left:480pt; width:240pt; height:3pt; background:#00d26a; z-index:10;"></div>
+  <div class="slide-wrapper">
+    <div class="urgent-banner">
+      <p class="banner-text">포트폴리오 리허설 D-Day — 오늘 3가지 완결 시</p>
+      <p class="banner-score">4.70 &rarr; 4.92 예상 &nbsp;&#8679;</p>
+    </div>
 
-  <!-- 긴급 배너 -->
-  <div style="background:rgba(245,166,35,0.1); border:1pt solid #f5a623; border-radius:5pt; padding:5pt 12pt; margin-top:5pt; display:flex; align-items:center; justify-content:space-between;">
-    <p style="font-size:8.5pt; font-weight:800; color:#f5a623;">포트폴리오 리허설 D-1 &mdash; 내일(05-20) 리허설 시작 / 오늘 세 가지 완결</p>
-    <p style="font-size:7pt; color:#8b949e;">완료 시 4.55 &rarr; <span style="color:#00d26a; font-weight:700;">4.83</span></p>
-  </div>
+    <h2 class="slide-title">오늘(05-20) 액션아이템 Top 3 &nbsp;&mdash;&nbsp; 리허설 D-Day 3대 과제</h2>
 
-  <!-- 헤더 -->
-  <div style="display:flex; justify-content:space-between; align-items:baseline;">
-    <h2 style="font-size:13.5pt; font-weight:800; color:#e6edf3;">
-      오늘 액션아이템 Top 3
-      <span style="color:#f5a623; font-size:11pt;"> &mdash; demo 즉시 / P8 코드 오전 / 로컬 학습 저녁</span>
-    </h2>
-  </div>
-
-  <!-- 3개 카드 가로 나열 -->
-  <div style="flex:1; display:flex; gap:10pt; overflow:hidden;">
-
-    <!-- 카드 1: 1순위 demo_script (세션 즉시) -->
-    <div style="flex:1; background:#161b22; border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 11pt; display:flex; flex-direction:column; gap:6pt; position:relative;">
-      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
-        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 종결</p>
-      </div>
-      <!-- 1순위 메달 -->
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:28pt; height:28pt; background:rgba(233,69,96,0.15); border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:8.5pt; font-weight:900; color:#e94560;">1</p>
+    <div class="cards-row">
+      <!-- 카드 1 -->
+      <div class="action-card card-1">
+        <div class="nine-day-badge">
+          <p class="nine-day-text">9일 연속 종결</p>
         </div>
-        <div>
-          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">1순위 &mdash; Marcus Webb | 세션 즉시</p>
-          <h3 style="font-size:10pt; font-weight:800; color:#e6edf3; line-height:1.25;">포트폴리오 시연 스크립트 완성</h3>
+        <div class="medal-row">
+          <p class="medal-icon">&#127751;</p>
+          <p class="priority-1">1순위 &mdash; 오늘 저녁</p>
+        </div>
+        <p class="card-title">P7 v5.1 + P1 v2<br>로컬 학습 즉시 실행</p>
+        <p class="card-owner">담당: Marcus Webb (로컬 PC)</p>
+        <div class="divider-line"></div>
+        <div class="target-box">
+          <p class="target-label">목표 지표</p>
+          <p class="target-text">P7 R&sup2; &ge; 0.62 (현재 0.586, 갭 0.034)<br>P1 Acc &ge; 57% (현재 54.79%, 갭 2.21%p)</p>
+        </div>
+        <p class="card-owner" style="font-size:7pt;">p7_growth_curve/train_v5_1.py &rarr; p1_match_result/train_pipeline.py</p>
+        <div class="deadline-row">
+          <p class="deadline-text">기한: 오늘 저녁 (내일 09:00 전 push)</p>
+          <div class="score-badge"><p class="score-badge-text">+0.13 max</p></div>
         </div>
       </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:6pt 8pt; flex:1; display:flex; flex-direction:column; gap:4pt;">
-        <p style="font-size:7pt; color:#58a6ff; font-family:monospace; word-break:break-all; line-height:1.4;">reports/portfolio_ppt/<br>demo_script_draft.md</p>
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">노팅엄 포레스트 30~40M&pound; 타깃<br>S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 5분 흐름<br>데이터 불필요 &mdash; 즉시 작성 가능</p>
-      </div>
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div style="background:#1a0000; border:1pt solid #e94560; border-radius:4pt; padding:3pt 8pt;">
-          <p style="font-size:7pt; color:#e94560; font-weight:700;">목표: 5장 초안 완성</p>
+
+      <!-- 카드 2 -->
+      <div class="action-card card-2">
+        <div class="medal-row">
+          <p class="medal-icon">&#127752;</p>
+          <p class="priority-2">2순위 &mdash; 오늘 오전</p>
         </div>
-        <p style="font-size:8.5pt; color:#00d26a; font-weight:800;">+0.10 &rarr; 4.65</p>
+        <p class="card-title">포트폴리오 리허설<br>D-Day 실전 검증</p>
+        <p class="card-owner">담당: Marcus Webb</p>
+        <div class="divider-line"></div>
+        <div class="target-box">
+          <p class="target-label">5단계 발표 흐름</p>
+          <p class="target-text">S1(레이팅) &rarr; S2(저평가) &rarr; P8(이적) &rarr; P6(가치) &rarr; S6(하락세)</p>
+        </div>
+        <p class="card-owner" style="font-size:7pt;">시나리오: 노팅엄 포레스트 가상 타깃 25-28세 공격형 MF, £25-35M</p>
+        <div class="deadline-row">
+          <p class="deadline-text">기한: 2026-05-20 오전</p>
+          <div class="score-badge"><p class="score-badge-text">+0.07</p></div>
+        </div>
+      </div>
+
+      <!-- 카드 3 -->
+      <div class="action-card card-3">
+        <div class="medal-row">
+          <p class="medal-icon">&#127753;</p>
+          <p class="priority-3">3순위 &mdash; 오늘 오전</p>
+        </div>
+        <p class="card-title">S3 FW 클러스터<br>개선 방향 설계</p>
+        <p class="card-owner">담당: Marcus Webb</p>
+        <div class="divider-line"></div>
+        <div class="target-box">
+          <p class="target-label">목표 지표</p>
+          <p class="target-text">FW Silhouette 0.2085 &rarr; 0.25<br>추가 피처: dribbles_completed_pct / pressures_att_3rd / shots_on_target_pct</p>
+        </div>
+        <p class="card-owner" style="font-size:7pt;">산출물: reports/s3_fw_improvement_plan.md</p>
+        <div class="deadline-row">
+          <p class="deadline-text">기한: 2026-05-20 오전</p>
+          <div class="score-badge"><p class="score-badge-text">+0.02</p></div>
+        </div>
       </div>
     </div>
 
-    <!-- 카드 2: 2순위 P8 precision-recall (오전) -->
-    <div style="flex:1; background:#161b22; border:1.5pt solid #f5a623; border-top:3pt solid #f5a623; border-radius:8pt; padding:10pt 11pt; display:flex; flex-direction:column; gap:6pt; position:relative;">
-      <div style="position:absolute; top:-1pt; right:10pt; background:rgba(245,166,35,0.15); border:1pt solid #f5a623; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
-        <p style="font-size:6pt; font-weight:700; color:#f5a623;">오전</p>
+    <div class="timeline-bar">
+      <div class="tl-step">
+        <div class="tl-dot dot-gold"></div>
+        <p class="tl-time">오늘 오전</p>
+        <p class="tl-label">리허설 실전 검증</p>
       </div>
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:28pt; height:28pt; background:rgba(245,166,35,0.15); border:2pt solid #f5a623; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:8.5pt; font-weight:900; color:#f5a623;">2</p>
-        </div>
-        <div>
-          <p style="font-size:6.5pt; color:#f5a623; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">2순위 &mdash; Marcus Webb | 오전</p>
-          <h3 style="font-size:10pt; font-weight:800; color:#e6edf3; line-height:1.25;">P8 정밀도-재현율 분석 코드</h3>
-        </div>
+      <p class="tl-arrow">&rarr;</p>
+      <div class="tl-step">
+        <div class="tl-dot dot-blue"></div>
+        <p class="tl-time">오늘 오전</p>
+        <p class="tl-label">S3 FW 개선 설계</p>
       </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:6pt 8pt; flex:1; display:flex; flex-direction:column; gap:4pt;">
-        <p style="font-size:7pt; color:#58a6ff; font-family:monospace; word-break:break-all; line-height:1.4;">models/p8_transfer_adapt/<br>evaluate_precision_recall.py</p>
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">AUC 0.6612 기반 임계값별<br>precision/recall 계산 + confusion matrix<br>sklearn 기반, 실행 가능 상태로 작성</p>
+      <p class="tl-arrow">&rarr;</p>
+      <div class="tl-step">
+        <div class="tl-dot dot-red"></div>
+        <p class="tl-time">오늘 저녁</p>
+        <p class="tl-label">P7+P1 로컬 학습</p>
       </div>
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div style="background:#1a1200; border:1pt solid #f5a623; border-radius:4pt; padding:3pt 8pt;">
-          <p style="font-size:7pt; color:#f5a623; font-weight:700;">파일 생성 완료</p>
-        </div>
-        <p style="font-size:8.5pt; color:#00d26a; font-weight:800;">+0.03 &rarr; 4.68</p>
-      </div>
-    </div>
-
-    <!-- 카드 3: 3순위 P7+P1 로컬 학습 (저녁) -->
-    <div style="flex:1; background:#161b22; border:1.5pt solid #00d26a; border-top:3pt solid #00d26a; border-radius:8pt; padding:10pt 11pt; display:flex; flex-direction:column; gap:6pt; position:relative;">
-      <div style="position:absolute; top:-1pt; right:10pt; background:rgba(0,210,106,0.15); border:1pt solid #00d26a; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
-        <p style="font-size:6pt; font-weight:700; color:#00d26a;">저녁</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:28pt; height:28pt; background:rgba(0,210,106,0.12); border:2pt solid #00d26a; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:8.5pt; font-weight:900; color:#00d26a;">3</p>
-        </div>
-        <div>
-          <p style="font-size:6.5pt; color:#00d26a; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">3순위 &mdash; Marcus Webb (로컬 PC) | 저녁</p>
-          <h3 style="font-size:10pt; font-weight:800; color:#e6edf3; line-height:1.25;">P7 v5.1 &rarr; P1 로컬 학습 실행</h3>
-        </div>
-      </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:6pt 8pt; flex:1; display:flex; flex-direction:column; gap:4pt;">
-        <ul style="list-style:none; padding:0;">
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.6; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#00d26a; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>P7 R&sup2; &ge; 0.62 (train_v5_1.py)</p>
-          </li>
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.6; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#00d26a; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>P1 Acc &ge; 57% (train_pipeline.py)</p>
-          </li>
-          <li style="font-size:6.5pt; color:#8b949e; line-height:1.6; padding-left:9pt; position:relative;">
-            <p style="position:absolute; left:0; color:#00d26a; font-size:8pt; top:-1pt;">&#183;</p>
-            <p>local_training_checklist.md 생성</p>
-          </li>
-        </ul>
-        <p style="font-size:6pt; color:#8b949e;">내일 09:00 전 결과 push</p>
-      </div>
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div style="background:#001500; border:1pt solid #00d26a; border-radius:4pt; padding:3pt 8pt;">
-          <p style="font-size:7pt; color:#00d26a; font-weight:700;">파일 2개 + 학습 결과</p>
-        </div>
-        <p style="font-size:8.5pt; color:#00d26a; font-weight:800;">+0.15 &rarr; 4.83</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- 하단 타임라인 인디케이터 -->
-  <div style="background:#161b22; border:1pt solid #30363d; border-radius:5pt; padding:5pt 12pt; display:flex; align-items:center; gap:0pt;">
-    <div style="display:flex; align-items:center; gap:5pt; flex:1; justify-content:center;">
-      <div style="background:rgba(233,69,96,0.15); border:1pt solid #e94560; border-radius:4pt; padding:3pt 9pt;">
-        <p style="font-size:7pt; color:#e94560; font-weight:700;">이 세션</p>
-        <p style="font-size:6pt; color:#8b949e; margin-top:1pt;">demo_script 완성</p>
-      </div>
-    </div>
-    <p style="font-size:9pt; color:#30363d;">&rarr;</p>
-    <div style="display:flex; align-items:center; gap:5pt; flex:1; justify-content:center;">
-      <div style="background:rgba(245,166,35,0.12); border:1pt solid #f5a623; border-radius:4pt; padding:3pt 9pt;">
-        <p style="font-size:7pt; color:#f5a623; font-weight:700;">오전</p>
-        <p style="font-size:6pt; color:#8b949e; margin-top:1pt;">P8 코드 작성</p>
-      </div>
-    </div>
-    <p style="font-size:9pt; color:#30363d;">&rarr;</p>
-    <div style="display:flex; align-items:center; gap:5pt; flex:1; justify-content:center;">
-      <div style="background:rgba(0,210,106,0.12); border:1pt solid #00d26a; border-radius:4pt; padding:3pt 9pt;">
-        <p style="font-size:7pt; color:#00d26a; font-weight:700;">저녁</p>
-        <p style="font-size:6pt; color:#8b949e; margin-top:1pt;">P7+P1 로컬 학습</p>
-      </div>
-    </div>
-    <p style="font-size:9pt; color:#30363d;">&rarr;</p>
-    <div style="display:flex; align-items:center; gap:5pt; flex:1; justify-content:center;">
-      <div style="background:#001a10; border:1pt solid #00d26a; border-radius:4pt; padding:3pt 9pt;">
-        <p style="font-size:7.5pt; color:#00d26a; font-weight:800;">4.55 &rarr; 4.83</p>
-        <p style="font-size:6pt; color:#8b949e; margin-top:1pt;">오늘 세 가지 완결</p>
+      <p class="tl-arrow">&rarr;</p>
+      <div class="tl-step">
+        <div class="tl-dot dot-grn"></div>
+        <p class="tl-time">내일 09:00 전</p>
+        <p class="tl-label">결과 push + 확인</p>
       </div>
     </div>
   </div>
-
 </body>
 </html>

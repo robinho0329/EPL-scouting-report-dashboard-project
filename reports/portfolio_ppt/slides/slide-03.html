@@ -12,137 +12,355 @@
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    padding: 0 22pt 10pt 22pt;
+    position: relative;
+  }
+
+  .left-bar {
+    position: absolute;
+    left: 0; top: 0;
+    width: 4pt; height: 100%;
+    background-color: #00d26a;
+  }
+
+  .slide-wrapper {
+    position: absolute;
+    top: 14pt; left: 14pt; right: 14pt; bottom: 10pt;
     display: flex;
     flex-direction: column;
     gap: 8pt;
-    position: relative;
+  }
+
+  /* 헤더 */
+  .header-section {
+    display: flex;
+    align-items: center;
+    gap: 10pt;
+  }
+
+  .slide-title {
+    font-size: 15pt;
+    font-weight: 800;
+    color: #e6edf3;
+  }
+
+  .green-badge {
+    background-color: #0d2818;
+    border: 1pt solid #00d26a;
+    border-radius: 4pt;
+    padding: 3pt 10pt;
+  }
+
+  .green-badge-text {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #00d26a;
+  }
+
+  .rating-badge {
+    margin-left: auto;
+    background-color: #1a1a2e;
+    border: 1pt solid #00d26a;
+    border-radius: 4pt;
+    padding: 3pt 10pt;
+  }
+
+  .rating-badge-text {
+    font-size: 8pt;
+    color: #00d26a;
+    font-weight: 700;
+  }
+
+  /* 메인 레이아웃 */
+  .main-layout {
+    display: flex;
+    gap: 10pt;
+    flex: 1;
+  }
+
+  .cards-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6pt;
+  }
+
+  /* 달성 카드 */
+  .check-card {
+    border-radius: 5pt;
+    padding: 6pt 10pt;
+    display: flex;
+    align-items: flex-start;
+    gap: 8pt;
+  }
+
+  .card-achieved {
+    background-color: #0d2818;
+    border-left: 3pt solid #00d26a;
+    border-top: 1pt solid #1a4a2a;
+    border-right: 1pt solid #1a4a2a;
+    border-bottom: 1pt solid #1a4a2a;
+  }
+
+  .card-failed {
+    background-color: #2a0e14;
+    border-left: 3pt solid #e94560;
+    border-top: 1pt solid #4a1e28;
+    border-right: 1pt solid #4a1e28;
+    border-bottom: 1pt solid #4a1e28;
+  }
+
+  .check-icon-wrap {
+    flex-shrink: 0;
+    margin-top: 1pt;
+  }
+
+  .icon-ok   { font-size: 13pt; color: #00d26a; }
+  .icon-fail { font-size: 13pt; color: #e94560; }
+
+  .card-body { flex: 1; }
+
+  .card-title {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 2pt;
+  }
+
+  .card-note {
+    font-size: 7.5pt;
+    color: #8b949e;
+    line-height: 1.4;
+  }
+
+  .contrib-wrap {
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .contrib-pos { font-size: 8pt; font-weight: 700; color: #00d26a; }
+  .contrib-neg { font-size: 8pt; font-weight: 700; color: #e94560; }
+
+  /* 우측 패널 */
+  .right-panel {
+    width: 110pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+  }
+
+  .rate-box {
+    background-color: #1a1a2e;
+    border: 1pt solid #30363d;
+    border-radius: 6pt;
+    padding: 10pt 8pt;
+    text-align: center;
+  }
+
+  .rate-number {
+    font-size: 28pt;
+    font-weight: 800;
+    color: #f5a623;
+    line-height: 1;
+  }
+
+  .rate-label {
+    font-size: 8pt;
+    color: #8b949e;
+    margin-top: 3pt;
+  }
+
+  .progress-box {
+    background-color: #1a1a2e;
+    border: 1pt solid #30363d;
+    border-radius: 6pt;
+    padding: 8pt;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5pt;
+  }
+
+  .progress-label {
+    font-size: 7.5pt;
+    color: #8b949e;
+  }
+
+  .bar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4pt;
+    width: 100%;
+  }
+
+  .bar-item {
+    display: flex;
+    align-items: center;
+    gap: 5pt;
+  }
+
+  .bar-name {
+    font-size: 7pt;
+    color: #8b949e;
+    width: 26pt;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 8pt;
+    background-color: #0d1117;
+    border-radius: 4pt;
+    overflow: hidden;
+  }
+
+  .bar-fill-green {
+    height: 100%;
+    background-color: #00d26a;
+    border-radius: 4pt;
+  }
+
+  .bar-fill-red {
+    height: 100%;
+    background-color: #e94560;
+    border-radius: 4pt;
+  }
+
+  .bar-fill-gold {
+    height: 100%;
+    background-color: #f5a623;
+    border-radius: 4pt;
+  }
+
+  .bar-val-green { font-size: 7pt; font-weight: 700; color: #00d26a; width: 20pt; }
+  .bar-val-red   { font-size: 7pt; font-weight: 700; color: #e94560; width: 20pt; }
+  .bar-val-gold  { font-size: 7pt; font-weight: 700; color: #f5a623; width: 20pt; }
+
+  /* 하단 인용 박스 */
+  .quote-box {
+    background-color: #16213e;
+    border-left: 4pt solid #f5a623;
+    border-radius: 4pt;
+    padding: 7pt 12pt;
+  }
+
+  .quote-text {
+    font-size: 8pt;
+    color: #e6edf3;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .quote-author {
+    font-size: 7pt;
+    color: #f5a623;
+    margin-top: 3pt;
+    font-weight: 700;
   }
 </style>
 </head>
 <body>
+  <div class="left-bar"></div>
 
-  <!-- 상단 강조 바 전체 빨강 -->
-  <div style="position:absolute; top:0; left:0; width:720pt; height:3pt; background:#e94560; z-index:10;"></div>
-
-  <!-- 상단 경고 배너 -->
-  <div style="background:#e94560; padding:5pt 14pt; margin:0 -22pt; display:flex; align-items:center; justify-content:space-between; margin-top:3pt;">
-    <p style="font-size:9pt; font-weight:800; color:#fff; letter-spacing:0.03em;">8일 연속 미달 &mdash; 오늘(05-19) 반드시 종결</p>
-    <div style="display:flex; align-items:center; gap:10pt;">
-      <p style="font-size:7pt; color:rgba(255,255,255,0.8);">어제(05-18) 달성&middot;미달 현황</p>
-      <div style="background:rgba(0,0,0,0.25); border-radius:9pt; padding:2pt 9pt;">
-        <p style="font-size:7pt; font-weight:700; color:#fff;">달성률 0 / 4 (0%)</p>
+  <div class="slide-wrapper">
+    <div class="header-section">
+      <h2 class="slide-title">어제(05-19) 달성/미달 체크리스트</h2>
+      <div class="green-badge">
+        <p class="green-badge-text">달성 3건 / 미달 2건</p>
       </div>
+      <div class="rating-badge">
+        <p class="rating-badge-text">4.55 &rarr; 4.70 &nbsp;&#8679; +0.15</p>
+      </div>
+    </div>
+
+    <div class="main-layout">
+      <div class="cards-section">
+        <div class="check-card card-achieved">
+          <div class="check-icon-wrap"><p class="icon-ok">&#10003;</p></div>
+          <div class="card-body">
+            <p class="card-title">demo_script_draft.md 생성 완료</p>
+            <p class="card-note">8일 연속 미달 종결 — 타임스탬프 2026-05-20 00:01</p>
+          </div>
+          <div class="contrib-wrap"><p class="contrib-pos">+0.10</p></div>
+        </div>
+
+        <div class="check-card card-achieved">
+          <div class="check-icon-wrap"><p class="icon-ok">&#10003;</p></div>
+          <div class="card-body">
+            <p class="card-title">evaluate_precision_recall.py 생성 완료</p>
+            <p class="card-note">2026-05-20 00:01 완성</p>
+          </div>
+          <div class="contrib-wrap"><p class="contrib-pos">+0.03</p></div>
+        </div>
+
+        <div class="check-card card-achieved">
+          <div class="check-icon-wrap"><p class="icon-ok">&#10003;</p></div>
+          <div class="card-body">
+            <p class="card-title">local_training_checklist.md 생성 완료</p>
+            <p class="card-note">2026-05-20 00:01 완성</p>
+          </div>
+          <div class="contrib-wrap"><p class="contrib-pos">+0.02</p></div>
+        </div>
+
+        <div class="check-card card-failed">
+          <div class="check-icon-wrap"><p class="icon-fail">&#10007;</p></div>
+          <div class="card-body">
+            <p class="card-title">P7 R&sup2; &ge; 0.62 미달</p>
+            <p class="card-note">현재 R&sup2; 0.586 (목표 대비 -0.034) — 9일 연속 미달, 오늘 저녁 v5.1 로컬 학습</p>
+          </div>
+          <div class="contrib-wrap"><p class="contrib-neg">미달</p></div>
+        </div>
+
+        <div class="check-card card-failed">
+          <div class="check-icon-wrap"><p class="icon-fail">&#10007;</p></div>
+          <div class="card-body">
+            <p class="card-title">P1 Acc &ge; 57% 미달</p>
+            <p class="card-note">현재 Acc 54.79% (목표 대비 -2.21%p) — 9일 연속 미달, 오늘 저녁 train_pipeline.py</p>
+          </div>
+          <div class="contrib-wrap"><p class="contrib-neg">미달</p></div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="rate-box">
+          <p class="rate-number">60%</p>
+          <p class="rate-label">달성률 (3/5)</p>
+        </div>
+        <div class="progress-box">
+          <p class="progress-label">항목별 현황</p>
+          <div class="bar-row">
+            <div class="bar-item">
+              <p class="bar-name">달성</p>
+              <div class="bar-track">
+                <div class="bar-fill-green" style="width:60%;"></div>
+              </div>
+              <p class="bar-val-green">3건</p>
+            </div>
+            <div class="bar-item">
+              <p class="bar-name">미달</p>
+              <div class="bar-track">
+                <div class="bar-fill-red" style="width:40%;"></div>
+              </div>
+              <p class="bar-val-red">2건</p>
+            </div>
+            <div class="bar-item">
+              <p class="bar-name">평점</p>
+              <div class="bar-track">
+                <div class="bar-fill-gold" style="width:94%;"></div>
+              </div>
+              <p class="bar-val-gold">4.70</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-box">
+      <p class="quote-text">"마감 직전 일괄 처리는 리허설에서 통하지 않습니다. 오늘은 리허설 D-Day입니다. 오늘 저녁 로컬 PC를 반드시 켜십시오. 9일째입니다."</p>
+      <p class="quote-author">— 김태현 스카우트</p>
     </div>
   </div>
-
-  <!-- 헤더 -->
-  <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top:2pt;">
-    <h2 style="font-size:13pt; font-weight:800; color:#e6edf3;">
-      어제(05-18) 달성&middot;미달 현황
-      <span style="color:#e94560; font-size:10.5pt;"> &mdash; 4개 항목 전부 미달</span>
-    </h2>
-    <p style="font-size:7pt; color:#8b949e;">전일 평점 4.60 &rarr; 4.55 <span style="color:#e94560;">&#9660; -0.05</span></p>
-  </div>
-
-  <!-- 4개 X 카드 2x2 그리드 -->
-  <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8pt; overflow:hidden;">
-
-    <!-- 카드 1: demo_script (8일 연속 최우선) -->
-    <div style="background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
-      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
-        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 미생성</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:12pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
-        </div>
-        <div>
-          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달</p>
-          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">포트폴리오 시연 스크립트</h3>
-        </div>
-      </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
-        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">reports/portfolio_ppt/demo_script_draft.md</p>
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 5분 흐름 5장 / 데이터 불필요<br>오늘 이 세션에서 즉시 실행 가능</p>
-      </div>
-    </div>
-
-    <!-- 카드 2: P7 v5.1 로컬 학습 -->
-    <div style="background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
-      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
-        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 미달</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:12pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
-        </div>
-        <div>
-          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달</p>
-          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">P7 v5.1 로컬 학습</h3>
-        </div>
-      </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
-        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">python models/p7_growth_curve/train_v5_1.py</p>
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">현재 R&sup2; 0.586 (목표 대비 -0.034)<br>오늘 저녁 로컬 PC 실행 예정</p>
-      </div>
-    </div>
-
-    <!-- 카드 3: P1 로컬 재학습 -->
-    <div style="background:rgba(233,69,96,0.08); border:1.5pt solid #e94560; border-top:3pt solid #e94560; border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt; position:relative;">
-      <div style="position:absolute; top:-1pt; right:10pt; background:#e94560; border-radius:0 0 6pt 6pt; padding:1.5pt 7pt;">
-        <p style="font-size:6pt; font-weight:800; color:#fff;">8일 연속 미달</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid #e94560; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:12pt; font-weight:900; color:#e94560; line-height:1;">&#10007;</p>
-        </div>
-        <div>
-          <p style="font-size:6.5pt; color:#e94560; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달</p>
-          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">P1 로컬 재학습</h3>
-        </div>
-      </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
-        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">python models/p1_match_result/train_pipeline.py</p>
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">현재 Acc 54.79% (목표 대비 -2.21%p)<br>P7 완료 후 오늘 저녁 순서대로 실행</p>
-      </div>
-    </div>
-
-    <!-- 카드 4: local_training_checklist.md -->
-    <div style="background:rgba(233,69,96,0.06); border:1.5pt solid rgba(233,69,96,0.5); border-top:3pt solid rgba(233,69,96,0.5); border-radius:8pt; padding:10pt 12pt; display:flex; flex-direction:column; gap:5pt;">
-      <div style="display:flex; align-items:center; gap:7pt;">
-        <div style="width:24pt; height:24pt; background:#1a0000; border:2pt solid rgba(233,69,96,0.6); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-          <p style="font-size:12pt; font-weight:900; color:rgba(233,69,96,0.7); line-height:1;">&#10007;</p>
-        </div>
-        <div>
-          <p style="font-size:6.5pt; color:rgba(233,69,96,0.8); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1pt;">미달 &mdash; 계속 미생성</p>
-          <h3 style="font-size:9.5pt; font-weight:800; color:#e6edf3; line-height:1.2;">로컬 학습 체크리스트 생성</h3>
-        </div>
-      </div>
-      <div style="background:#0d1117; border-radius:4pt; padding:5pt 8pt; flex:1;">
-        <p style="font-size:6.5pt; color:#58a6ff; font-family:monospace; margin-bottom:3pt;">reports/local_training_checklist.md</p>
-        <p style="font-size:6.5pt; color:#8b949e; line-height:1.5;">P7+P1 실행 순서, 데이터 경로, 커밋 방법 포함<br>오늘 액션아이템 3번 &mdash; 오늘 오후 완성</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- 하단 달성률 진행 바 + 평점 변화 -->
-  <div style="display:flex; align-items:center; gap:14pt;">
-    <div style="flex:1;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:3pt;">
-        <p style="font-size:7pt; color:#8b949e;">달성률</p>
-        <p style="font-size:7pt; color:#e94560; font-weight:700;">0 / 4 (0%)</p>
-      </div>
-      <div style="width:100%; height:7pt; background:#161b22; border-radius:4pt; overflow:hidden; border:1pt solid #30363d;">
-        <div style="width:0%; height:100%; background:#e94560; border-radius:4pt;"></div>
-      </div>
-    </div>
-    <div style="background:#1a0000; border:1pt solid #e94560; border-radius:5pt; padding:4pt 12pt; flex-shrink:0; text-align:center;">
-      <p style="font-size:7pt; color:#8b949e; margin-bottom:1pt;">전일 평점 변화</p>
-      <p style="font-size:10pt; color:#e94560; font-weight:800;">4.60 &rarr; 4.55 <span style="font-size:8pt;">&#9660; -0.05</span></p>
-    </div>
-  </div>
-
 </body>
 </html>
