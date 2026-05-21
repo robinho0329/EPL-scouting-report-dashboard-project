@@ -6,7 +6,8 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 720pt;
+    height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
@@ -14,269 +15,174 @@
     position: relative;
   }
   :root {
-    --accent: #e94560;
-    --gold: #f5a623;
-    --blue: #58a6ff;
-    --green: #00d26a;
-    --surface: #16213e;
-    --panel: #0f3460;
-    --text: #e6edf3;
-    --muted: #8b949e;
+    --epl-accent: #e94560;
+    --epl-gold: #f5a623;
+    --epl-blue: #58a6ff;
+    --epl-text: #e6edf3;
+    --epl-muted: #8b949e;
+    --epl-surface: #16213e;
   }
-
   .left-bar {
     position: absolute;
     left: 0; top: 0;
     width: 5pt; height: 100%;
-    background: var(--accent);
+    background: var(--epl-accent);
   }
-
-  .content {
-    position: absolute;
-    left: 30pt; top: 0; right: 140pt; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 10pt;
-  }
-
   .top-badges {
+    position: absolute;
+    top: 18pt; left: 20pt; right: 145pt;
     display: flex;
     align-items: center;
     gap: 8pt;
-    margin-bottom: 16pt;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
-
   .badge {
     display: inline-block;
     padding: 3pt 9pt;
-    border-radius: 10pt;
-    font-size: 7.5pt;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    border-radius: 4pt;
     white-space: nowrap;
-    line-height: 1.4;
   }
   .badge-muted {
     background: rgba(139,148,158,0.12);
-    color: var(--muted);
-    border: 1pt solid rgba(139,148,158,0.3);
+    border: 1pt solid #30363d;
   }
   .badge-gold {
-    background: rgba(245,166,35,0.14);
-    color: var(--gold);
-    border: 1pt solid rgba(245,166,35,0.5);
+    background: rgba(245,166,35,0.15);
+    border: 1pt solid #f5a623;
   }
-  .badge-alert {
-    background: rgba(233,69,96,0.16);
-    color: var(--accent);
-    border: 2pt solid var(--accent);
-    letter-spacing: 0.02em;
+  .badge-danger {
+    background: rgba(233,69,96,0.15);
+    border: 2pt solid #e94560;
+    box-shadow: 0 0 6pt rgba(233,69,96,0.35);
   }
-
+  .center-content {
+    position: absolute;
+    top: 52pt; left: 20pt; right: 148pt;
+  }
   .label-top {
-    font-size: 9pt;
+    font-size: 8.5pt;
     letter-spacing: 0.22em;
-    color: var(--muted);
+    color: var(--epl-muted);
     text-transform: uppercase;
     margin-bottom: 8pt;
   }
-
   .main-title {
-    font-size: 36pt;
+    font-size: 38pt;
     font-weight: 800;
-    line-height: 1.1;
-    color: var(--text);
-    margin-bottom: 8pt;
+    color: var(--epl-text);
+    line-height: 1.05;
+    margin-bottom: 6pt;
   }
-
   .sub-title {
     font-size: 14pt;
-    font-weight: 500;
-    color: var(--blue);
-    margin-bottom: 20pt;
-  }
-
-  .rating-row {
-    display: flex;
-    align-items: center;
-    gap: 14pt;
+    font-weight: 600;
+    color: var(--epl-blue);
     margin-bottom: 16pt;
   }
-
+  .divider {
+    width: 48pt; height: 3pt;
+    background: var(--epl-accent);
+    margin-bottom: 14pt;
+  }
+  .meta-line {
+    font-size: 8.5pt;
+    color: var(--epl-muted);
+  }
   .rating-badge {
-    background: rgba(245,166,35,0.10);
-    border: 2pt solid var(--gold);
-    border-radius: 8pt;
-    padding: 7pt 14pt;
+    position: absolute;
+    right: 18pt; top: 48pt;
+    width: 120pt;
+    background: #16213e;
+    border: 2pt solid #f5a623;
+    border-radius: 10pt;
+    padding: 12pt 10pt;
     text-align: center;
   }
-
-  .rating-value {
-    font-size: 24pt;
-    font-weight: 800;
-    color: var(--gold);
-    line-height: 1;
-    display: block;
-  }
-
   .rating-label {
-    font-size: 7.5pt;
-    color: var(--muted);
-    display: block;
-    margin-top: 2pt;
+    font-size: 8pt;
+    color: var(--epl-muted);
+    letter-spacing: 0.04em;
+    margin-bottom: 3pt;
   }
-
-  .rating-change {
-    display: flex;
-    flex-direction: column;
-    gap: 3pt;
-  }
-
-  .down-indicator {
-    display: flex;
-    align-items: center;
-    gap: 4pt;
-  }
-
-  .arrow-down {
-    font-size: 12pt;
-    color: var(--accent);
+  .rating-value {
+    font-size: 30pt;
+    font-weight: 800;
+    color: #f5a623;
     line-height: 1;
+    margin-bottom: 2pt;
   }
-
-  .down-value {
-    font-size: 11pt;
-    color: var(--accent);
-    font-weight: 700;
+  .rating-denom {
+    font-size: 10pt;
+    color: var(--epl-muted);
+    margin-bottom: 7pt;
   }
-
-  .prev-val {
-    font-size: 8.5pt;
-    color: var(--muted);
+  .rating-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 3pt;
+    background: rgba(233,69,96,0.14);
+    border: 1pt solid #e94560;
+    border-radius: 3pt;
+    padding: 2pt 6pt;
   }
-
   .slogan-banner {
-    border: 1.5pt solid var(--accent);
-    background: rgba(233,69,96,0.07);
-    border-radius: 5pt;
-    padding: 8pt 14pt;
-  }
-
-  .slogan-text {
-    font-size: 9pt;
-    color: var(--text);
-    font-weight: 600;
-    line-height: 1.5;
-  }
-
-  /* 우측 방패 영역 */
-  .right-panel {
     position: absolute;
-    right: 20pt; top: 50%;
-    transform: translateY(-50%);
+    bottom: 0; left: 0; right: 0;
+    background: rgba(233,69,96,0.10);
+    border-top: 2pt solid #e94560;
+    padding: 9pt 20pt;
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 10pt;
-    width: 100pt;
   }
-
-  .shield-wrap {
-    position: relative;
-    width: 70pt;
-    height: 80pt;
+  .slogan-text {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #e94560;
+    flex: 1;
   }
-
-  .shield-bg {
-    width: 70pt;
-    height: 80pt;
-    background: linear-gradient(160deg, #16213e 0%, #0f3460 100%);
-    border: 2pt solid var(--accent);
-    clip-path: polygon(50% 0%, 100% 15%, 100% 62%, 50% 100%, 0% 62%, 0% 15%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .shield-letter {
-    font-size: 22pt;
-    font-weight: 900;
-    color: var(--accent);
-  }
-
-  .meeting-num-big {
-    font-size: 26pt;
-    font-weight: 900;
-    color: var(--gold);
-    line-height: 1;
-  }
-
-  .meeting-label {
+  .slogan-meta {
     font-size: 8pt;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  /* 하단 푸터 */
-  .footer {
-    position: absolute;
-    bottom: 10pt;
-    right: 16pt;
-  }
-
-  .footer-text {
-    font-size: 7pt;
-    color: var(--muted);
+    color: var(--epl-muted);
+    flex-shrink: 0;
   }
 </style>
 </head>
 <body>
   <div class="left-bar"></div>
 
-  <div class="content">
-    <div class="top-badges">
-      <span class="badge badge-muted">30번째 정기 미팅 | 09:00 KST</span>
-      <span class="badge badge-gold">포트폴리오 리허설 2일차</span>
-      <span class="badge badge-alert">P7 + P1 10일 연속 미달</span>
-    </div>
+  <div class="top-badges">
+    <span class="badge badge-muted">
+      <p style="font-size:8pt; font-weight:700; color:#8b949e;">30번째 정기 미팅 | 09:00 KST</p>
+    </span>
+    <span class="badge badge-gold">
+      <p style="font-size:8pt; font-weight:700; color:#f5a623;">포트폴리오 리허설 2일차</p>
+    </span>
+    <span class="badge badge-danger">
+      <p style="font-size:8pt; font-weight:700; color:#e94560;">P7 + P1 10일 연속 미달</p>
+    </span>
+  </div>
 
-    <p class="label-top">EPL Scout Intelligence — Daily Briefing</p>
-    <h1 class="main-title">EPL 스카우트 인텔리전스</h1>
-    <p class="sub-title">데일리 브리핑 | 2026-05-21 (목)</p>
+  <div class="center-content">
+    <p class="label-top">EPL Scout Intelligence</p>
+    <h1 class="main-title">데일리 브리핑</h1>
+    <p class="sub-title">2026-05-21 (목) | 아침 스카우트팀 미팅</p>
+    <div class="divider"></div>
+    <p class="meta-line">EPL Scout Bot &nbsp;|&nbsp; 2026-05-21 09:00 KST</p>
+  </div>
 
-    <div class="rating-row">
-      <div class="rating-badge">
-        <span class="rating-value">4.68</span>
-        <span class="rating-label">/ 5.0 현재 평가</span>
-      </div>
-      <div class="rating-change">
-        <div class="down-indicator">
-          <span class="arrow-down">▼</span>
-          <span class="down-value">-0.02 하락</span>
-        </div>
-        <p class="prev-val">전일: 4.70</p>
-      </div>
-    </div>
-
-    <div class="slogan-banner">
-      <p class="slogan-text">어제 합의 3건 중 0건 달성 — 오늘 저녁 로컬 PC 켜십시오. 10일째입니다.</p>
+  <div class="rating-badge">
+    <p class="rating-label">현재 평가</p>
+    <p class="rating-value">4.68</p>
+    <p class="rating-denom">/ 5.0</p>
+    <div class="rating-change">
+      <p style="font-size:9pt; font-weight:700; color:#e94560;">&#9660; -0.02 (4.70)</p>
     </div>
   </div>
 
-  <div class="right-panel">
-    <div class="shield-wrap">
-      <div class="shield-bg">
-        <span class="shield-letter">E</span>
-      </div>
-    </div>
-    <span class="meeting-num-big">30</span>
-    <p class="meeting-label">번째 정기 미팅</p>
-  </div>
-
-  <div class="footer">
-    <p class="footer-text">EPL Scout Bot | 09:00 KST</p>
+  <div class="slogan-banner">
+    <p class="slogan-text">어제 합의 3건 중 0건 달성 — 오늘 저녁 로컬 PC를 켜십시오. 10일째입니다.</p>
+    <p class="slogan-meta">EPL Scout Bot | 09:00 KST</p>
   </div>
 </body>
 </html>
