@@ -6,223 +6,277 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
+  :root {
+    --accent: #e94560;
+    --gold: #f5a623;
+    --blue: #58a6ff;
+    --green: #00d26a;
+    --surface: #16213e;
+    --panel: #0f3460;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
 
-  /* 좌측 강조 바 — solid color only */
   .left-bar {
     position: absolute;
     left: 0; top: 0;
     width: 5pt; height: 100%;
-    background-color: #e94560;
+    background: var(--accent);
   }
 
-  /* 상단 영역 */
-  .top-area {
+  .content {
     position: absolute;
-    top: 20pt; left: 20pt; right: 20pt;
+    left: 30pt; top: 0; right: 140pt; bottom: 0;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10pt;
   }
 
-  .brand-row {
+  .top-badges {
     display: flex;
     align-items: center;
     gap: 8pt;
+    margin-bottom: 16pt;
+    flex-wrap: wrap;
   }
 
-  .shield-box {
-    width: 32pt; height: 32pt;
-    background-color: #1a1a2e;
-    border: 1.4pt solid #e94560;
-    border-radius: 4pt;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .shield-label {
-    font-size: 7pt;
-    font-weight: 800;
-    color: #f5a623;
-    letter-spacing: 0.04em;
-  }
-
-  .brand-text {
-    font-size: 8.5pt;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    color: #8b949e;
-    text-transform: uppercase;
-  }
-
-  .meeting-box {
-    background-color: #1a1a2e;
-    border: 1pt solid #30363d;
-    border-radius: 20pt;
-    padding: 3pt 10pt;
-  }
-
-  .meeting-text {
-    font-size: 8pt;
-    color: #8b949e;
-  }
-
-  /* 메인 콘텐츠 */
-  .main-block {
-    position: absolute;
-    top: 70pt; left: 20pt;
-    right: 115pt;
-  }
-
-  .dday-wrap {
+  .badge {
     display: inline-block;
-    background-color: #e94560;
-    border-radius: 4pt;
-    padding: 3pt 10pt;
-    margin-bottom: 10pt;
+    padding: 3pt 9pt;
+    border-radius: 10pt;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+  .badge-muted {
+    background: rgba(139,148,158,0.12);
+    color: var(--muted);
+    border: 1pt solid rgba(139,148,158,0.3);
+  }
+  .badge-gold {
+    background: rgba(245,166,35,0.14);
+    color: var(--gold);
+    border: 1pt solid rgba(245,166,35,0.5);
+  }
+  .badge-alert {
+    background: rgba(233,69,96,0.16);
+    color: var(--accent);
+    border: 2pt solid var(--accent);
+    letter-spacing: 0.02em;
   }
 
-  .dday-text {
-    font-size: 8.5pt;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    color: #ffffff;
+  .label-top {
+    font-size: 9pt;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8pt;
   }
 
   .main-title {
-    font-size: 34pt;
+    font-size: 36pt;
     font-weight: 800;
-    line-height: 1.12;
-    color: #e6edf3;
-    margin-bottom: 6pt;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 8pt;
   }
 
   .sub-title {
-    font-size: 13pt;
+    font-size: 14pt;
     font-weight: 500;
-    color: #8b949e;
-    margin-bottom: 14pt;
-    letter-spacing: 0.03em;
+    color: var(--blue);
+    margin-bottom: 20pt;
   }
 
-  .accent-bar {
-    width: 44pt; height: 3pt;
-    background-color: #e94560;
-    border-radius: 2pt;
-    margin-bottom: 14pt;
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 14pt;
+    margin-bottom: 16pt;
   }
 
-  .slogan-wrap {
-    background-color: #16213e;
-    border-left: 4pt solid #e94560;
-    border-radius: 4pt;
-    padding: 8pt 12pt;
-    max-width: 400pt;
+  .rating-badge {
+    background: rgba(245,166,35,0.10);
+    border: 2pt solid var(--gold);
+    border-radius: 8pt;
+    padding: 7pt 14pt;
+    text-align: center;
+  }
+
+  .rating-value {
+    font-size: 24pt;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .rating-label {
+    font-size: 7.5pt;
+    color: var(--muted);
+    display: block;
+    margin-top: 2pt;
+  }
+
+  .rating-change {
+    display: flex;
+    flex-direction: column;
+    gap: 3pt;
+  }
+
+  .down-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+  }
+
+  .arrow-down {
+    font-size: 12pt;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .down-value {
+    font-size: 11pt;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .prev-val {
+    font-size: 8.5pt;
+    color: var(--muted);
+  }
+
+  .slogan-banner {
+    border: 1.5pt solid var(--accent);
+    background: rgba(233,69,96,0.07);
+    border-radius: 5pt;
+    padding: 8pt 14pt;
   }
 
   .slogan-text {
-    font-size: 8.5pt;
-    color: #e6edf3;
-    line-height: 1.7;
+    font-size: 9pt;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.5;
   }
 
-  /* 우하단 평점 배지 */
-  .rating-wrap {
+  /* 우측 방패 영역 */
+  .right-panel {
     position: absolute;
-    right: 20pt; bottom: 50pt;
-    width: 88pt; height: 88pt;
-    background-color: #1a1a2e;
-    border: 2pt solid #f5a623;
-    border-radius: 50%;
+    right: 20pt; top: 50%;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 10pt;
+    width: 100pt;
+  }
+
+  .shield-wrap {
+    position: relative;
+    width: 70pt;
+    height: 80pt;
+  }
+
+  .shield-bg {
+    width: 70pt;
+    height: 80pt;
+    background: linear-gradient(160deg, #16213e 0%, #0f3460 100%);
+    border: 2pt solid var(--accent);
+    clip-path: polygon(50% 0%, 100% 15%, 100% 62%, 50% 100%, 0% 62%, 0% 15%);
+    display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .rating-num {
-    font-size: 21pt;
-    font-weight: 800;
-    color: #f5a623;
+  .shield-letter {
+    font-size: 22pt;
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  .meeting-num-big {
+    font-size: 26pt;
+    font-weight: 900;
+    color: var(--gold);
     line-height: 1;
   }
 
-  .rating-den {
-    font-size: 7.5pt;
-    color: #8b949e;
-    margin-top: 2pt;
-  }
-
-  .rating-up {
+  .meeting-label {
     font-size: 8pt;
-    font-weight: 700;
-    color: #00d26a;
-    margin-top: 3pt;
+    color: var(--muted);
+    text-align: center;
   }
 
-  /* 푸터 */
-  .footer-bar {
+  /* 하단 푸터 */
+  .footer {
     position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 26pt;
-    background-color: #1a1a2e;
-    border-top: 1pt solid #30363d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20pt;
+    bottom: 10pt;
+    right: 16pt;
   }
 
   .footer-text {
-    font-size: 7.5pt;
-    color: #8b949e;
+    font-size: 7pt;
+    color: var(--muted);
   }
 </style>
 </head>
 <body>
   <div class="left-bar"></div>
 
-  <div class="top-area">
-    <div class="brand-row">
-      <div class="shield-box">
-        <p class="shield-label">EPL</p>
+  <div class="content">
+    <div class="top-badges">
+      <span class="badge badge-muted">30번째 정기 미팅 | 09:00 KST</span>
+      <span class="badge badge-gold">포트폴리오 리허설 2일차</span>
+      <span class="badge badge-alert">P7 + P1 10일 연속 미달</span>
+    </div>
+
+    <p class="label-top">EPL Scout Intelligence — Daily Briefing</p>
+    <h1 class="main-title">EPL 스카우트 인텔리전스</h1>
+    <p class="sub-title">데일리 브리핑 | 2026-05-21 (목)</p>
+
+    <div class="rating-row">
+      <div class="rating-badge">
+        <span class="rating-value">4.68</span>
+        <span class="rating-label">/ 5.0 현재 평가</span>
       </div>
-      <p class="brand-text">EPL Scout Intelligence</p>
+      <div class="rating-change">
+        <div class="down-indicator">
+          <span class="arrow-down">▼</span>
+          <span class="down-value">-0.02 하락</span>
+        </div>
+        <p class="prev-val">전일: 4.70</p>
+      </div>
     </div>
-    <div class="meeting-box">
-      <p class="meeting-text">29번째 정기 미팅 | 09:00 KST</p>
+
+    <div class="slogan-banner">
+      <p class="slogan-text">어제 합의 3건 중 0건 달성 — 오늘 저녁 로컬 PC 켜십시오. 10일째입니다.</p>
     </div>
   </div>
 
-  <div class="main-block">
-    <div class="dday-wrap">
-      <p class="dday-text">포트폴리오 리허설 D-Day</p>
+  <div class="right-panel">
+    <div class="shield-wrap">
+      <div class="shield-bg">
+        <span class="shield-letter">E</span>
+      </div>
     </div>
-    <h1 class="main-title">EPL 스카우트<br>인텔리전스</h1>
-    <p class="sub-title">데일리 브리핑 &nbsp;|&nbsp; 2026-05-20 (수)</p>
-    <div class="accent-bar"></div>
-    <div class="slogan-wrap">
-      <p class="slogan-text">리허설 D-Day — 5단계 발표 흐름 실전 검증<br>P7+P1 오늘 저녁 로컬 학습으로 9일 연속 미달 종결 예정</p>
-    </div>
+    <span class="meeting-num-big">30</span>
+    <p class="meeting-label">번째 정기 미팅</p>
   </div>
 
-  <div class="rating-wrap">
-    <p class="rating-num">4.70</p>
-    <p class="rating-den">/ 5.0</p>
-    <p class="rating-up">&#8679; +0.15</p>
-  </div>
-
-  <div class="footer-bar">
-    <p class="footer-text">김태현 스카우트 · Marcus Webb Analytics</p>
-    <p class="footer-text">EPL Scout Bot | 2026-05-20 09:00 KST</p>
+  <div class="footer">
+    <p class="footer-text">EPL Scout Bot | 09:00 KST</p>
   </div>
 </body>
 </html>
