@@ -55,21 +55,33 @@ git push origin HEAD:master
 
 미팅 노트 push 직후 PPT Team Agent를 순서대로 실행:
 
+**5-0. 웹 리서치 에이전트 호출 (신규 — 매일 실행)**
+- 오늘 미팅 주요 주제(모델 성능 현황, 스카우트 인텔리전스, 스포츠 애널리틱스 브리핑 등)를 키워드로 추출
+- general-purpose 에이전트가 WebSearch로 유사한 PPT/프레젠테이션 레퍼런스를 구글링
+  - 검색 예시: "sports analytics daily briefing presentation template", "football scouting report PPT", "data science sprint review slide deck"
+  - 최소 3개 레퍼런스 수집 목표
+- 각 레퍼런스에서 다음을 파악:
+  - 슬라이드 총 페이지 수
+  - 페이지별 콘텐츠 구성 패턴 (표지 → 요약 → 상세 → 액션아이템 등)
+  - 시각화 유형 (테이블/게이지/카드/타임라인 등)
+- 수집 결과를 `reports/portfolio_ppt/ppt_references.md`에 저장
+
 **5-1. ppt-organizer 에이전트 호출**
 - 오늘 meeting.md + 12개 모델 results_summary.json 읽기
-- 데일리 브리핑 6슬라이드 구조 설계
-- `reports/portfolio_ppt/slide-outline.md` 생성
+- `reports/portfolio_ppt/ppt_references.md` 읽기 — 레퍼런스 구조를 반드시 참고
+- 레퍼런스 기반으로 최적 슬라이드 수(통상 6~10장) 및 페이지별 구성 결정
+- `reports/portfolio_ppt/slide-outline.md` 생성 (레퍼런스 출처 명시 포함)
 
 **5-2. ppt-designer 에이전트 호출**
 - slide-outline.md 읽어 EPL 다크테마 HTML 슬라이드 생성
-- `reports/portfolio_ppt/slides/slide-01.html` ~ `slide-06.html` 생성
-- 슬라이드 구성:
-  - 01: 표지 (날짜, 제목)
-  - 02: 모델 성능 현황표 (신호등 테이블)
-  - 03: 어제 달성/미달 체크리스트
-  - 04: 오늘 액션아이템 Top 3 (카드 레이아웃)
-  - 05: 김태현 종합 평가 (X.X/5.0 게이지 + 5.0 로드맵)
-  - 06: Streamlit 대시보드 현황 (페이지 수 + URL)
+- 슬라이드 수는 outline에서 결정된 수에 따름 (고정 6장 아님)
+- 기본 포함 항목 (레퍼런스에 따라 순서/분량 조정 가능):
+  - 표지 (날짜, 제목, 미팅 회차)
+  - 모델 성능 현황표 (신호등 테이블)
+  - 어제 달성/미달 체크리스트
+  - 오늘 액션아이템 Top 3 (카드 레이아웃)
+  - 김태현 종합 평가 (X.X/5.0 게이지 + 5.0 로드맵)
+  - Streamlit 대시보드 현황 (페이지 수 + URL)
 
 **5-3. PPTX 빌드**
 ```bash
@@ -79,7 +91,7 @@ node reports/portfolio_ppt/build_ppt.js
 
 **5-4. 결과 push**
 ```bash
-git add reports/portfolio_ppt/output/
+git add -f reports/portfolio_ppt/output/ reports/portfolio_ppt/slides/ reports/portfolio_ppt/ppt_references.md
 git commit -m "ppt: YYYY-MM-DD 데일리 브리핑 PPT 생성"
 git push origin HEAD:master
 ```
@@ -142,7 +154,13 @@ base64 인코딩 파일은 디코딩해서 읽을 것.
 ```
 미팅 노트 + results_summary.json
     ↓
-ppt-organizer 에이전트   → reports/portfolio_ppt/slide-outline.md
+general-purpose 에이전트 (WebSearch)
+  → 유사 PPT 레퍼런스 3개 이상 수집
+  → reports/portfolio_ppt/ppt_references.md 저장
+    ↓
+ppt-organizer 에이전트
+  → ppt_references.md 참고하여 최적 슬라이드 수·구조 결정
+  → reports/portfolio_ppt/slide-outline.md 생성
     ↓
 ppt-designer 에이전트    → reports/portfolio_ppt/slides/slide-NN.html
     ↓
@@ -154,11 +172,17 @@ reports/portfolio_ppt/output/EPL_Scout_Briefing_YYYY-MM-DD.pptx
 ### 에이전트 파일
 | 파일 | 역할 |
 |------|------|
-| `.claude/agents/ppt-organizer.md` | 데이터 읽기 → slide-outline.md 생성 |
+| `general-purpose` | WebSearch로 유사 PPT 레퍼런스 수집 |
+| `.claude/agents/ppt-organizer.md` | 레퍼런스 참고 + 데이터 읽기 → slide-outline.md 생성 |
 | `.claude/agents/ppt-designer.md` | outline → slide-NN.html 생성 |
 | `.claude/skills/design-skill/SKILL.md` | HTML 디자인 시스템 |
 | `.claude/skills/pptx-skill/scripts/html2pptx.cjs` | Playwright 렌더링 → PPTX 변환 |
 | `reports/portfolio_ppt/build_ppt.js` | 빌드 진입점 |
+
+### 레퍼런스 수집 기준
+- 검색 키워드: 오늘 미팅 주제에서 추출 (예: "sports analytics briefing", "scouting report deck", "ML model performance review presentation")
+- 레퍼런스당 수집 항목: 슬라이드 총 수, 페이지별 섹션명, 주요 시각화 유형
+- 저장 경로: `reports/portfolio_ppt/ppt_references.md` (날짜별로 덮어쓰기)
 
 ### HTML 슬라이드 작성 규칙 (ppt-designer 필수 준수)
 - **텍스트는 반드시 `<p>`, `<h1>`~`<h6>`, `<ul>`, `<ol>` 태그로 감쌀 것** — `<div>` 안에 직접 텍스트 금지
@@ -167,7 +191,7 @@ reports/portfolio_ppt/output/EPL_Scout_Briefing_YYYY-MM-DD.pptx
 - JS 없이 정적 HTML만 사용
 
 ### 데일리 PPT 생성 수동 호출
-"PPT 만들어줘" 또는 "데일리 브리핑 PPT" → ppt-organizer → ppt-designer → build_ppt.js 순으로 자동 실행
+"PPT 만들어줘" 또는 "데일리 브리핑 PPT" → general-purpose(웹 리서치) → ppt-organizer → ppt-designer → build_ppt.js 순으로 자동 실행
 
 ## Streamlit Cloud
 
