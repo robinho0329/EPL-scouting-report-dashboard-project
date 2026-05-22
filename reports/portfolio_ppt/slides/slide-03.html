@@ -14,275 +14,245 @@
     overflow: hidden;
     position: relative;
   }
-  .slide-wrap {
-    padding: 14pt 20pt 0pt;
+  :root {
+    --accent: #e94560;
+    --gold: #f5a623;
+    --green: #00d26a;
+    --muted: #8b949e;
+    --surface: #16213e;
+    --panel: #0f3460;
+  }
+  .slide-inner {
+    padding: 14pt 22pt 10pt 22pt;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 9pt;
   }
-  /* 헤더 */
-  .hdr { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .hdr-title { font-size: 15pt; font-weight: 800; color: #e6edf3; }
-  .stat-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8pt;
-  }
-  .sb-item {
-    background: rgba(233,69,96,0.14);
-    border: 1pt solid #e94560;
-    border-radius: 4pt;
-    padding: 3pt 10pt;
-    text-align: center;
-  }
-  /* 상단 긴급 배너 */
-  .urgent-banner {
-    background: rgba(233,69,96,0.14);
-    border: 1pt solid #e94560;
-    border-radius: 5pt;
+  .alert-banner {
+    background: rgba(233,69,96,0.15);
+    border: 1.5pt solid var(--accent);
+    border-radius: 6pt;
     padding: 7pt 14pt;
     display: flex;
     align-items: center;
     gap: 10pt;
+    margin-bottom: 10pt;
+  }
+  .alert-dot {
+    width: 8pt;
+    height: 8pt;
+    background: var(--accent);
+    border-radius: 50%;
     flex-shrink: 0;
   }
-  .urgent-mark {
-    font-size: 12pt;
-    flex-shrink: 0;
+  .alert-text-wrap { flex: 1; }
+  .alert-text-wrap p { font-size: 9pt; font-weight: 800; color: var(--accent); }
+  .drop-badge {
+    background: var(--accent);
+    border-radius: 20pt;
+    padding: 3pt 10pt;
+    white-space: nowrap;
   }
-  .urgent-text {
-    font-size: 9pt;
-    font-weight: 700;
-    color: #e94560;
-  }
-  .urgent-right {
-    margin-left: auto;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  /* 체크리스트 카드 행 */
-  .cards-row {
+  .drop-badge p { font-size: 8pt; font-weight: 800; color: #fff; }
+
+  .content-row {
+    flex: 1;
     display: flex;
-    gap: 8pt;
-    flex: 1;
+    gap: 10pt;
+    min-height: 0;
   }
-  /* 카드 */
-  .check-card {
+  .cards-col {
     flex: 1;
-    border-radius: 7pt;
-    padding: 10pt 11pt;
     display: flex;
     flex-direction: column;
-    gap: 6pt;
-    overflow: hidden;
+    gap: 7pt;
   }
-  .card-fail {
-    background: rgba(233,69,96,0.08);
-    border: 1.5pt solid #e94560;
-  }
-  .card-partial {
-    background: rgba(245,166,35,0.07);
-    border: 1.5pt solid #f5a623;
-  }
-  .card-top {
+  .miss-card {
+    background: rgba(233,69,96,0.07);
+    border: 1pt solid var(--accent);
+    border-radius: 6pt;
+    padding: 7pt 10pt;
     display: flex;
-    align-items: center;
     gap: 8pt;
+    align-items: flex-start;
   }
-  .card-icon-fail {
-    font-size: 14pt;
-    color: #e94560;
-    font-weight: 800;
-    line-height: 1;
-  }
-  .card-icon-warn {
-    font-size: 14pt;
-    color: #f5a623;
-    font-weight: 800;
-    line-height: 1;
-  }
-  .card-result-fail {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #e94560;
-    background: rgba(233,69,96,0.15);
-    border-radius: 3pt;
-    padding: 2pt 6pt;
-  }
-  .card-result-warn {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #f5a623;
-    background: rgba(245,166,35,0.14);
-    border-radius: 3pt;
-    padding: 2pt 6pt;
-  }
-  .card-title {
-    font-size: 9pt;
-    font-weight: 700;
-    color: #e6edf3;
-    line-height: 1.35;
-  }
-  .card-goal {
-    font-size: 7.5pt;
-    color: #8b949e;
-    line-height: 1.35;
-  }
-  .card-current {
-    font-size: 7.5pt;
-    color: #e94560;
-    line-height: 1.35;
-  }
-  .card-current-warn {
-    font-size: 7.5pt;
-    color: #f5a623;
-    line-height: 1.35;
-  }
-  .card-note {
-    font-size: 7pt;
-    color: #8b949e;
-    line-height: 1.3;
-    margin-top: auto;
-  }
-  /* 우측 요약 박스 */
-  .summary-box {
-    width: 100pt;
-    flex-shrink: 0;
-    background: #16213e;
-    border: 1pt solid #30363d;
-    border-radius: 7pt;
-    padding: 12pt 10pt;
+  .x-mark {
+    width: 18pt;
+    height: 18pt;
+    background: rgba(233,69,96,0.2);
+    border: 1.5pt solid var(--accent);
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8pt;
-  }
-  .sum-big {
-    font-size: 26pt;
-    font-weight: 800;
-    color: #e94560;
-    line-height: 1;
-    text-align: center;
-  }
-  .sum-sub {
-    font-size: 8pt;
-    color: #8b949e;
-    text-align: center;
-    line-height: 1.4;
-  }
-  .rate-change {
-    background: rgba(233,69,96,0.15);
-    border: 1pt solid #e94560;
-    border-radius: 4pt;
-    padding: 4pt 8pt;
-    text-align: center;
-  }
-  /* 하단 인용 박스 */
-  .quote-box {
-    background: #16213e;
-    border-left: 3pt solid #e94560;
-    border-radius: 0 5pt 5pt 0;
-    padding: 8pt 12pt;
     flex-shrink: 0;
   }
-  .quote-text {
-    font-size: 7.5pt;
-    color: #8b949e;
-    line-height: 1.5;
+  .x-mark p { font-size: 10pt; font-weight: 900; color: var(--accent); }
+  .miss-body { flex: 1; }
+  .miss-body h4 { font-size: 8.5pt; font-weight: 800; color: #e6edf3; margin-bottom: 2pt; }
+  .mb-goal p { font-size: 7.5pt; color: var(--muted); margin-bottom: 1pt; }
+  .mb-curr p { font-size: 7.5pt; color: var(--accent); }
+  .mb-note p { font-size: 7pt; color: var(--muted); margin-top: 2pt; font-style: italic; }
+  .impact-badge {
+    background: rgba(233,69,96,0.15);
+    border-radius: 10pt;
+    padding: 1.5pt 6pt;
+    white-space: nowrap;
+    align-self: flex-start;
+    flex-shrink: 0;
   }
-  .quote-author {
-    font-size: 7pt;
-    color: #e94560;
-    font-weight: 700;
-    margin-top: 3pt;
+  .impact-badge p { font-size: 7pt; font-weight: 700; color: var(--accent); }
+
+  .summary-col {
+    width: 148pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
   }
+  .rate-box {
+    background: var(--surface);
+    border-radius: 8pt;
+    padding: 12pt;
+    text-align: center;
+    border: 2pt solid var(--accent);
+  }
+  .rb-lbl { margin-bottom: 4pt; }
+  .rb-lbl p { font-size: 7.5pt; color: var(--muted); }
+  .rate-fraction {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2pt;
+    margin-bottom: 4pt;
+  }
+  .rf-num p { font-size: 36pt; font-weight: 900; color: var(--accent); line-height: 1; }
+  .rf-den p { font-size: 14pt; font-weight: 600; color: var(--muted); padding-bottom: 4pt; }
+  .rb-pct p { font-size: 10pt; font-weight: 700; color: var(--accent); }
+
+  .change-box {
+    background: var(--surface);
+    border-radius: 6pt;
+    padding: 9pt 10pt;
+  }
+  .chb-lbl p { font-size: 7pt; color: var(--muted); margin-bottom: 5pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .change-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4pt;
+  }
+  .cr-item p { font-size: 7.5pt; color: var(--muted); }
+  .cr-val  p { font-size: 8pt; font-weight: 700; color: var(--accent); }
+  .score-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6pt;
+    background: rgba(233,69,96,0.08);
+    border-radius: 5pt;
+    padding: 5pt;
+    margin-top: 4pt;
+  }
+  .st-prev p { font-size: 12pt; font-weight: 700; color: var(--muted); }
+  .st-arr  p { font-size: 9pt; color: var(--accent); }
+  .st-now  p { font-size: 14pt; font-weight: 900; color: var(--accent); }
+
+  .quote-box {
+    background: var(--surface);
+    border-left: 3pt solid var(--accent);
+    border-radius: 0 5pt 5pt 0;
+    padding: 7pt 12pt;
+    margin-top: 8pt;
+  }
+  .qb-text p { font-size: 7.5pt; color: #a0aec0; line-height: 1.5; font-style: italic; }
+  .qb-attr p { font-size: 7pt; color: var(--muted); margin-top: 3pt; text-align: right; }
 </style>
 </head>
 <body>
-<div class="slide-wrap">
-  <!-- 헤더 -->
-  <div class="hdr">
-    <h2 class="hdr-title">어제(05-20) 달성 / 미달 체크리스트</h2>
-    <div class="stat-badge">
-      <div class="sb-item">
-        <p style="font-size:9pt; font-weight:700; color:#e94560;">달성 0 / 미달 3건</p>
-        <p style="font-size:7.5pt; color:#8b949e; margin-top:1pt;">달성률 0%</p>
+<div class="slide-inner">
+
+  <div class="alert-banner">
+    <div class="alert-dot"></div>
+    <div class="alert-text-wrap"><p>어제(05-21) 달성 0건 / 미달 4건 — 달성률 0% / 경고 발동 적용</p></div>
+    <div class="drop-badge"><p>▼ -0.18 급락</p></div>
+  </div>
+
+  <div class="content-row">
+    <div class="cards-col">
+
+      <div class="miss-card">
+        <div class="x-mark"><p>X</p></div>
+        <div class="miss-body">
+          <h4>P7 v5.1 + P1 v2 로컬 학습 미실행</h4>
+          <div class="mb-goal"><p>목표: P7 R² &ge; 0.62 / P1 Acc &ge; 57%</p></div>
+          <div class="mb-curr"><p>현재: P7 R² 0.586 / P1 Acc 54.79% — 로컬 PC 미가동 / dev_result 없음</p></div>
+          <div class="mb-note"><p>11일 연속 미달 — 오늘 저녁 절대 기한</p></div>
+        </div>
+        <div class="impact-badge"><p>경고 -0.15</p></div>
+      </div>
+
+      <div class="miss-card">
+        <div class="x-mark"><p>X</p></div>
+        <div class="miss-body">
+          <h4>s3_fw_improvement_plan.md 파일 미생성</h4>
+          <div class="mb-goal"><p>목표: 오전 파일 생성 완료 / FW Silhouette 0.25 달성 방안 명시</p></div>
+          <div class="mb-curr"><p>현재: 파일 없음 — 3일 연속 미달</p></div>
+          <div class="mb-note"><p>오늘 오전 완료 필수</p></div>
+        </div>
+        <div class="impact-badge"><p>-0.03</p></div>
+      </div>
+
+      <div class="miss-card">
+        <div class="x-mark"><p>X</p></div>
+        <div class="miss-body">
+          <h4>포트폴리오 리허설 2일차 산출물 없음</h4>
+          <div class="mb-goal"><p>목표: S1→S2→P8→P6→S6 발표 완결 / Q&amp;A 3개 대응</p></div>
+          <div class="mb-curr"><p>현재: 별도 산출물 없음 — demo_script_draft.md 기존 파일만 존재</p></div>
+          <div class="mb-note"><p>오늘 오후 최종 완결로 전환</p></div>
+        </div>
+        <div class="impact-badge"><p>+/-0 이월</p></div>
+      </div>
+
+    </div>
+
+    <div class="summary-col">
+      <div class="rate-box">
+        <div class="rb-lbl"><p>어제 달성률</p></div>
+        <div class="rate-fraction">
+          <div class="rf-num"><p>0</p></div>
+          <div class="rf-den"><p>/ 4</p></div>
+        </div>
+        <div class="rb-pct"><p>0% 달성</p></div>
+      </div>
+
+      <div class="change-box">
+        <div class="chb-lbl"><p>경고 발동 내역</p></div>
+        <div class="change-row">
+          <div class="cr-item"><p>P7/P1 11일 연속</p></div>
+          <div class="cr-val"><p>-0.15</p></div>
+        </div>
+        <div class="change-row">
+          <div class="cr-item"><p>S3 파일 3일 미달</p></div>
+          <div class="cr-val"><p>-0.03</p></div>
+        </div>
+        <div class="change-row">
+          <div class="cr-item"><p>합계</p></div>
+          <div class="cr-val"><p>-0.18</p></div>
+        </div>
+        <div class="score-track">
+          <div class="st-prev"><p>4.68</p></div>
+          <div class="st-arr"><p>&#9654;</p></div>
+          <div class="st-now"><p>4.50</p></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- 상단 긴급 배너 -->
-  <div class="urgent-banner">
-    <p class="urgent-text">어제(05-20) 합의 3건 + 부분 1건 중 완전 달성 0건 — 평가 4.70 → 4.68 (-0.02) 하락</p>
-    <div class="urgent-right">
-      <p style="font-size:8pt; font-weight:700; color:#e94560;">4.70 &#8594; 4.68</p>
-      <p style="font-size:7pt; color:#8b949e;">-0.02 하락</p>
-    </div>
-  </div>
-
-  <!-- 체크 카드 + 우측 요약 -->
-  <div class="cards-row">
-    <!-- 카드 1: P7/P1 로컬 학습 미실행 -->
-    <div class="check-card card-fail">
-      <div class="card-top">
-        <p class="card-icon-fail">&#10007;</p>
-        <span class="card-result-fail">
-          <p style="font-size:7.5pt; font-weight:700; color:#e94560;">미달</p>
-        </span>
-      </div>
-      <p class="card-title">P7 v5.1 + P1 v2 로컬 학습 미실행</p>
-      <p class="card-goal">목표: P7 R² &#8805; 0.62 / P1 Acc &#8805; 57%</p>
-      <p class="card-current">현재: P7 R² 0.586 / P1 Acc 54.79%</p>
-      <p class="card-note">10일 연속 미달 — 오늘 저녁 반드시 실행<br>로컬 PC 미가동 원인</p>
-    </div>
-
-    <!-- 카드 2: S3 FW 파일 미생성 -->
-    <div class="check-card card-fail">
-      <div class="card-top">
-        <p class="card-icon-fail">&#10007;</p>
-        <span class="card-result-fail">
-          <p style="font-size:7.5pt; font-weight:700; color:#e94560;">미달</p>
-        </span>
-      </div>
-      <p class="card-title">s3_fw_improvement_plan.md 파일 미생성</p>
-      <p class="card-goal">목표: 어제 오전 파일 생성 완료</p>
-      <p class="card-current">현재: 파일 없음 — 오늘 오전으로 이월</p>
-      <p class="card-note">어제 오전 합의 사항 미이행<br>오늘 오전 완료 필수</p>
-    </div>
-
-    <!-- 카드 3: 포트폴리오 리허설 D-Day (부분 달성) -->
-    <div class="check-card card-partial">
-      <div class="card-top">
-        <p class="card-icon-warn">&#9651;</p>
-        <span class="card-result-warn">
-          <p style="font-size:7.5pt; font-weight:700; color:#f5a623;">부분 달성</p>
-        </span>
-      </div>
-      <p class="card-title">포트폴리오 리허설 D-Day 검증</p>
-      <p class="card-goal">목표: 5단계 발표 흐름 실전 검증 + Q&A 2개</p>
-      <p class="card-current-warn">현재: demo_script 존재, 검증 산출물 없음</p>
-      <p class="card-note">흐름 검토 진행됨<br>오늘 2일차 완결 예정</p>
-    </div>
-
-    <!-- 우측 요약 박스 -->
-    <div class="summary-box">
-      <p style="font-size:8pt; color:#8b949e; text-align:center;">달성률</p>
-      <p class="sum-big">0%</p>
-      <p class="sum-sub">0 / 3건<br>(부분 0.25 포함)</p>
-      <div class="rate-change">
-        <p style="font-size:8.5pt; font-weight:700; color:#e94560;">&#9660; -0.02</p>
-        <p style="font-size:7pt; color:#8b949e;">4.70 &#8594; 4.68</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 하단 인용 박스 -->
   <div class="quote-box">
-    <p class="quote-text">"달성은 0입니다. 어제 합의한 3개 중 0개. 기록합니다. 10일입니다. P7과 P1 — 10일 연속 미달입니다. 오늘 오전에 S3 파일을 만들고, 오후에 리허설 2일차를 돌리고, 저녁에 반드시 로컬 PC를 켜십시오. 11일째는 없습니다."</p>
-    <p class="quote-author">— 김태현 스카우트</p>
+    <div class="qb-text"><p>"11일입니다. 어제 경고를 발동했고 오늘 반영합니다. 4.50. 오늘 저녁 결과 파일이 없으면 평가는 4.40 이하입니다. 주말이 시작됩니다. 오늘이 마지막입니다."</p></div>
+    <div class="qb-attr"><p>— 김태현 스카우트</p></div>
   </div>
+
 </div>
 </body>
 </html>

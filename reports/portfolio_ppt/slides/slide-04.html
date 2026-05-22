@@ -14,41 +14,47 @@
     overflow: hidden;
     position: relative;
   }
-  .slide-wrap {
-    padding: 13pt 20pt 0pt;
+  :root {
+    --accent: #e94560;
+    --gold: #f5a623;
+    --green: #00d26a;
+    --muted: #8b949e;
+    --surface: #16213e;
+    --panel: #0f3460;
+  }
+  .slide-inner {
+    padding: 13pt 20pt 0 20pt;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8pt;
   }
-  /* 헤더 */
-  .hdr { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .hdr-title { font-size: 15pt; font-weight: 800; color: #e6edf3; }
-  /* 상단 긴급 배너 */
-  .urgent-banner {
+  .top-banner {
     background: rgba(233,69,96,0.12);
-    border: 1pt solid #e94560;
+    border: 1.5pt solid var(--accent);
     border-radius: 5pt;
     padding: 6pt 14pt;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+    gap: 8pt;
+    margin-bottom: 10pt;
   }
-  .urgent-text {
-    font-size: 8.5pt;
-    font-weight: 700;
-    color: #e94560;
+  .tb-text-wrap { flex: 1; }
+  .tb-text-wrap p { font-size: 8pt; font-weight: 800; color: var(--accent); }
+  .tb-warn {
+    background: var(--accent);
+    padding: 2pt 8pt;
+    border-radius: 10pt;
+    white-space: nowrap;
   }
-  .urgent-right-lbl {
-    font-size: 8pt;
-    color: #8b949e;
-  }
-  /* 카드 행 */
+  .tb-warn p { font-size: 7.5pt; font-weight: 700; color: #fff; }
+
+  h2.slide-title { font-size: 14pt; font-weight: 800; color: #e6edf3; margin-bottom: 9pt; }
+
   .cards-row {
-    display: flex;
-    gap: 9pt;
     flex: 1;
+    display: flex;
+    gap: 8pt;
+    min-height: 0;
   }
   .action-card {
     flex: 1;
@@ -56,300 +62,176 @@
     padding: 10pt 11pt;
     display: flex;
     flex-direction: column;
-    gap: 6pt;
+    gap: 4pt;
     overflow: hidden;
   }
-  .card-1 {
-    background: rgba(233,69,96,0.08);
-    border: 1.5pt solid #e94560;
-    border-top: 3pt solid #e94560;
-  }
-  .card-2 {
-    background: rgba(245,166,35,0.07);
-    border: 1.5pt solid #f5a623;
-    border-top: 3pt solid #f5a623;
-  }
-  .card-3 {
-    background: rgba(15,52,96,0.4);
-    border: 1.5pt solid #0f3460;
-    border-top: 3pt solid #58a6ff;
-  }
-  .card-medal {
-    font-size: 11pt;
-    font-weight: 800;
-    line-height: 1;
-  }
-  .card-rank-1 { color: #f5a623; }
-  .card-rank-2 { color: #8b949e; }
-  .card-rank-3 { color: #cd7f32; }
-  .card-top-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 6pt;
-  }
-  .card-title {
-    font-size: 9.5pt;
+  .card-1 { background: rgba(233,69,96,0.08); border: 2pt solid var(--accent); }
+  .card-2 { background: rgba(245,166,35,0.06); border: 1.5pt solid var(--gold); }
+  .card-3 { background: rgba(15,52,96,0.6); border: 1.5pt solid #0f3460; }
+
+  .card-header { display: flex; align-items: center; gap: 6pt; margin-bottom: 2pt; }
+  /* medal-icon: p 태그 — background 없음 */
+  p.medal-icon { font-size: 14pt; line-height: 1; }
+  /* span은 textTags 아님 → background/border 허용 */
+  .priority-label {
+    font-size: 7pt;
     font-weight: 700;
-    color: #e6edf3;
-    line-height: 1.35;
-    flex: 1;
+    padding: 1.5pt 6pt;
+    border-radius: 10pt;
   }
-  .urgent-mini {
+  .pl-red  { background: rgba(233,69,96,0.2); color: var(--accent); }
+  .pl-gold { background: rgba(245,166,35,0.2); color: var(--gold); }
+  .pl-blue { background: rgba(15,52,96,0.8);  color: #58a6ff; }
+
+  h4.card-title { font-size: 8.5pt; font-weight: 800; color: #e6edf3; line-height: 1.35; }
+
+  .urgent-tag {
     display: inline-block;
-    background: rgba(233,69,96,0.18);
-    border: 1pt solid #e94560;
-    border-radius: 3pt;
+    background: rgba(233,69,96,0.12);
+    border: 0.8pt solid var(--accent);
+    border-radius: 8pt;
     padding: 1pt 5pt;
-    font-size: 6.5pt;
-    font-weight: 700;
-    color: #e94560;
-    white-space: nowrap;
-    flex-shrink: 0;
   }
-  .card-assignee {
-    font-size: 7.5pt;
-    color: #58a6ff;
-    font-weight: 600;
+  .urgent-tag p { font-size: 6.5pt; font-weight: 700; color: var(--accent); }
+
+  .card-owner p  { font-size: 7pt; color: var(--muted); }
+  .card-detail p { font-size: 7.5pt; color: #a0aec0; line-height: 1.4; }
+
+  .goal-box {
+    background: rgba(245,166,35,0.1);
+    border: 0.8pt solid rgba(245,166,35,0.4);
+    border-radius: 4pt;
+    padding: 4pt 7pt;
+    margin-top: 2pt;
   }
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    gap: 4pt;
-    flex: 1;
-  }
-  .card-row {
-    display: flex;
-    gap: 5pt;
-    align-items: flex-start;
-  }
-  .row-label {
-    font-size: 7pt;
-    color: #8b949e;
-    white-space: nowrap;
-    min-width: 30pt;
-    flex-shrink: 0;
-  }
-  .row-val {
-    font-size: 7pt;
-    color: #e6edf3;
-    line-height: 1.35;
-  }
-  .row-val-accent { color: #e94560; }
-  .row-val-gold { color: #f5a623; }
-  .row-val-green { color: #00d26a; }
-  .deadline-box {
-    background: rgba(15,52,96,0.5);
-    border-radius: 3pt;
-    padding: 3pt 6pt;
-    margin-top: auto;
-  }
-  .deadline-lbl {
-    font-size: 6.5pt;
-    color: #8b949e;
-  }
-  .deadline-val {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: #f5a623;
-  }
+  .goal-box p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
+
   .effect-badge {
     display: inline-block;
-    background: rgba(0,210,106,0.15);
-    border: 1pt solid #00d26a;
-    border-radius: 3pt;
+    background: rgba(0,210,106,0.12);
+    border: 0.8pt solid rgba(0,210,106,0.4);
+    border-radius: 10pt;
     padding: 1.5pt 6pt;
-    font-size: 7pt;
-    font-weight: 700;
-    color: #00d26a;
   }
-  /* 타임라인 */
+  .effect-badge p { font-size: 7pt; font-weight: 700; color: var(--green); }
+
+  .deadline p      { font-size: 7.5pt; font-weight: 700; color: var(--accent); }
+  .deadline-gold p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
+  .deadline-gray p { font-size: 7.5pt; font-weight: 600; color: var(--muted); }
+
   .timeline {
-    background: #16213e;
+    background: var(--surface);
     border-top: 1pt solid #30363d;
-    padding: 7pt 10pt;
+    padding: 8pt 14pt;
     display: flex;
     align-items: center;
-    gap: 0;
-    flex-shrink: 0;
+    justify-content: space-between;
   }
-  .tl-step {
+  .tl-step { display: flex; flex-direction: column; align-items: center; gap: 3pt; }
+  .tl-dot { width: 10pt; height: 10pt; border-radius: 50%; border: 2pt solid var(--accent); background: rgba(233,69,96,0.2); }
+  .tl-dot-gold { background: var(--gold);  border-color: var(--gold); }
+  .tl-dot-grn  { background: var(--green); border-color: var(--green); }
+  .tl-time p { font-size: 7pt; font-weight: 700; }
+  .tl-time-red  p { color: var(--accent); }
+  .tl-time-gold p { color: var(--gold); }
+  .tl-time-grn  p { color: var(--green); }
+  .tl-desc p { font-size: 6.5pt; color: var(--muted); text-align: center; max-width: 80pt; line-height: 1.3; }
+  .tl-line {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3pt;
-    position: relative;
+    height: 1.5pt;
+    background: rgba(233,69,96,0.3);
+    margin: 0 4pt;
+    margin-top: -11pt;
   }
-  .tl-step:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 8pt;
-    width: 50%;
-    height: 2pt;
-    background: #30363d;
-  }
-  .tl-step:not(:first-child)::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8pt;
-    width: 50%;
-    height: 2pt;
-    background: #30363d;
-  }
-  .tl-dot {
-    width: 16pt;
-    height: 16pt;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 7pt;
-    font-weight: 700;
-    position: relative;
-    z-index: 1;
-  }
-  .tl-dot-1 { background: rgba(245,166,35,0.25); border: 1.5pt solid #f5a623; color: #f5a623; }
-  .tl-dot-2 { background: rgba(88,166,255,0.2); border: 1.5pt solid #58a6ff; color: #58a6ff; }
-  .tl-dot-3 { background: rgba(233,69,96,0.2); border: 2pt solid #e94560; color: #e94560; }
-  .tl-dot-4 { background: rgba(0,210,106,0.2); border: 1.5pt solid #00d26a; color: #00d26a; }
-  .tl-lbl { font-size: 7pt; color: #8b949e; text-align: center; line-height: 1.3; }
 </style>
 </head>
 <body>
-<div class="slide-wrap">
-  <!-- 헤더 -->
-  <div class="hdr">
-    <h2 class="hdr-title">오늘(05-21) 액션아이템 Top 3</h2>
-    <p style="font-size:8pt; color:#8b949e;">10일 연속 미달 종결 + 리허설 2일차 완결</p>
+<div class="slide-inner">
+
+  <div class="top-banner">
+    <div class="tb-text-wrap"><p>오늘 3가지 완결 시 4.50 → 4.78 예상 | 오전 S3 파일 → 오후 리허설 → 저녁 P7+P1 로컬 학습</p></div>
+    <div class="tb-warn"><p>저녁 결과 없으면 4.40 이하</p></div>
   </div>
 
-  <!-- 긴급 배너 -->
-  <div class="urgent-banner">
-    <p class="urgent-text">오늘 3가지 완결 시 4.68 &#8594; 4.88 예상 — 내일 아침 P7 0.62 / P1 57% 없으면 평가 4.5 이하</p>
-    <p class="urgent-right-lbl">Marcus Webb 담당</p>
-  </div>
+  <h2 class="slide-title">오늘(05-22) 액션아이템 Top 3 — 금요일 주말 전 마지막 기회</h2>
 
-  <!-- 카드 3개 -->
   <div class="cards-row">
-    <!-- 카드 1 -->
+
     <div class="action-card card-1">
-      <div class="card-top-row">
-        <p class="card-medal card-rank-1">1순위</p>
-        <span class="urgent-mini">10일 연속 — 최후 기한</span>
+      <div class="card-header">
+        <p class="medal-icon">&#x1F947;</p>
+        <span class="priority-label pl-red">1순위 — 저녁 필수</span>
       </div>
-      <p class="card-title">P7 v5.1 + P1 v2 로컬 학습 실행 — 10일 미달 종결</p>
-      <p class="card-assignee">Marcus Webb (로컬 PC 필수 가동)</p>
-      <div class="card-body">
-        <div class="card-row">
-          <p class="row-label">P7 목표:</p>
-          <p class="row-val row-val-gold">R² &#8805; 0.62 (현재 0.586, 갭 0.034)</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">P1 목표:</p>
-          <p class="row-val row-val-gold">Acc &#8805; 57% (현재 54.79%, 갭 2.21%p)</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">실행:</p>
-          <p class="row-val" style="font-size:6.5pt;">train_v5_1.py &#8594; train_pipeline.py</p>
-        </div>
-      </div>
-      <div class="deadline-box">
-        <p class="deadline-lbl">기한</p>
-        <p class="deadline-val">오늘 저녁 — 05-22 09:00 전 push</p>
-      </div>
-      <span class="effect-badge">+0.13 (P7+P1 달성 시)</span>
+      <h4 class="card-title">P7 v5.1 + P1 v2 로컬 학습 즉시 실행</h4>
+      <div class="urgent-tag"><p>11일 연속 미달 — 오늘 저녁 절대 기한</p></div>
+      <div class="card-owner"><p>담당: Marcus Webb (로컬 PC 반드시 가동)</p></div>
+      <div class="card-detail"><p>순서: train_v5_1.py → train_pipeline.py</p></div>
+      <div class="card-detail"><p>P7 추가 피처: lag3_rating, delta_lag1_2, delta_lag2_3</p></div>
+      <div class="card-detail"><p>P1 개선: D클래스 가중치 + H2H 무승부 비율</p></div>
+      <div class="goal-box"><p>P7 R² &ge; 0.62 (현 0.586) / P1 Acc &ge; 57% (현 54.79%)</p></div>
+      <div class="deadline"><p>기한: 2026-05-22 저녁 — 주말 전 push</p></div>
+      <div class="effect-badge"><p>+0.18 (P7 +0.10 / P1 +0.08)</p></div>
     </div>
 
-    <!-- 카드 2 -->
     <div class="action-card card-2">
-      <div class="card-top-row">
-        <p class="card-medal card-rank-2">2순위</p>
+      <div class="card-header">
+        <p class="medal-icon">&#x1F948;</p>
+        <span class="priority-label pl-gold">2순위 — 오늘 오전</span>
       </div>
-      <p class="card-title">S3 FW 클러스터 개선 계획 파일 생성 — 어제 미달 오늘 완료</p>
-      <p class="card-assignee">Marcus Webb</p>
-      <div class="card-body">
-        <div class="card-row">
-          <p class="row-label">파일:</p>
-          <p class="row-val" style="font-size:6.5pt;">reports/s3_fw_improvement_plan.md</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">현재:</p>
-          <p class="row-val row-val-accent">FW Silhouette 0.2085 (목표 0.25)</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">추가 피처:</p>
-          <p class="row-val" style="font-size:6.5pt;">dribbles / pressures_att_3rd / shots_on_target_pct</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">대안:</p>
-          <p class="row-val" style="font-size:6.5pt;">K=7 유지 기준 + K=5 대안 포함</p>
-        </div>
-      </div>
-      <div class="deadline-box">
-        <p class="deadline-lbl">기한</p>
-        <p class="deadline-val">오늘 오전 세션 중</p>
-      </div>
-      <span class="effect-badge">+0.02 (4.70)</span>
+      <h4 class="card-title">S3 FW 클러스터 개선 방향 파일 생성</h4>
+      <div class="card-owner"><p>담당: Marcus Webb</p></div>
+      <div class="card-detail"><p>생성: reports/s3_fw_improvement_plan.md</p></div>
+      <div class="card-detail"><p>현재 FW Silhouette 0.2085 (목표 0.25)</p></div>
+      <div class="card-detail"><p>추가 피처: dribbles_completed_pct / pressures_att_3rd / shots_on_target_pct</p></div>
+      <div class="card-detail"><p>K=7 유지 기준 및 K=5 대안 포함</p></div>
+      <div class="goal-box"><p>파일 생성 + GitHub Actions 실행 가능</p></div>
+      <div class="deadline-gold"><p>기한: 2026-05-22 오전 세션 중</p></div>
+      <div class="effect-badge"><p>+0.03 → 4.53</p></div>
     </div>
 
-    <!-- 카드 3 -->
     <div class="action-card card-3">
-      <div class="card-top-row">
-        <p class="card-medal card-rank-3">3순위</p>
+      <div class="card-header">
+        <p class="medal-icon">&#x1F949;</p>
+        <span class="priority-label pl-blue">3순위 — 오늘 오후</span>
       </div>
-      <p class="card-title">포트폴리오 리허설 2일차 — P8 약점 대응 논리 확립</p>
-      <p class="card-assignee">Marcus Webb</p>
-      <div class="card-body">
-        <div class="card-row">
-          <p class="row-label">핵심:</p>
-          <p class="row-val" style="font-size:6.5pt;">AUC 0.6612 설명 — "30세+ + style_distance &gt; 0.02 &#8594; 실패 3배"</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">발표:</p>
-          <p class="row-val" style="font-size:6.5pt;">S1&#8594;S2&#8594;P8&#8594;P6&#8594;S6 5분 재검증</p>
-        </div>
-        <div class="card-row">
-          <p class="row-label">목표:</p>
-          <p class="row-val row-val-green" style="font-size:6.5pt;">P8 논리 문서화 + Q&A 2개 대응 가능</p>
-        </div>
-      </div>
-      <div class="deadline-box">
-        <p class="deadline-lbl">기한</p>
-        <p class="deadline-val">오늘 오후 세션 중</p>
-      </div>
-      <span class="effect-badge">+0.05 (4.75)</span>
+      <h4 class="card-title">포트폴리오 최종 리허설 완결 — 금요일 최종본</h4>
+      <div class="card-owner"><p>담당: Marcus Webb</p></div>
+      <div class="card-detail"><p>흐름: S1 → S2 → P8 → P6 → S6 (5분)</p></div>
+      <div class="card-detail"><p>P8 대응: "위험 플래그 도구. AUC 0.66은 랜덤 대비 유의미."</p></div>
+      <div class="card-detail"><p>Q&amp;A: (1) P1 낮은 이유 (2) P7 R² 미달 시 대안 (3) AUC 0.66 영입 결정 여부</p></div>
+      <div class="goal-box"><p>최종 demo_script 완성 / Q&amp;A 3개 대응</p></div>
+      <div class="deadline-gray"><p>기한: 2026-05-22 오후 세션 중</p></div>
+      <div class="effect-badge"><p>+0.07 → 4.60</p></div>
     </div>
+
   </div>
 
-  <!-- 타임라인 -->
   <div class="timeline">
     <div class="tl-step">
-      <div class="tl-dot tl-dot-1">
-        <p style="font-size:6pt; font-weight:700; color:#f5a623;">오전</p>
-      </div>
-      <p class="tl-lbl">S3 FW<br>개선 파일 생성</p>
+      <div class="tl-dot tl-dot-gold"></div>
+      <div class="tl-time tl-time-gold"><p>오전</p></div>
+      <div class="tl-desc"><p>S3 FW 개선 파일 생성</p></div>
     </div>
+    <div class="tl-line"></div>
     <div class="tl-step">
-      <div class="tl-dot tl-dot-2">
-        <p style="font-size:6pt; font-weight:700; color:#58a6ff;">오후</p>
-      </div>
-      <p class="tl-lbl">리허설 2일차<br>P8 논리 완결</p>
+      <div class="tl-dot tl-dot-gold"></div>
+      <div class="tl-time tl-time-gold"><p>오후</p></div>
+      <div class="tl-desc"><p>포트폴리오 최종 리허설 완결</p></div>
     </div>
+    <div class="tl-line"></div>
     <div class="tl-step">
-      <div class="tl-dot tl-dot-3">
-        <p style="font-size:6pt; font-weight:700; color:#e94560;">저녁</p>
-      </div>
-      <p class="tl-lbl">P7 + P1<br>로컬 학습</p>
+      <div class="tl-dot"></div>
+      <div class="tl-time tl-time-red"><p>저녁</p></div>
+      <div class="tl-desc"><p>P7+P1 로컬 학습</p></div>
     </div>
+    <div class="tl-line"></div>
     <div class="tl-step">
-      <div class="tl-dot tl-dot-4">
-        <p style="font-size:6pt; font-weight:700; color:#00d26a;">내일</p>
-      </div>
-      <p class="tl-lbl">09:00 전<br>결과 push</p>
+      <div class="tl-dot tl-dot-grn"></div>
+      <div class="tl-time tl-time-grn"><p>주말 전</p></div>
+      <div class="tl-desc"><p>결과 push → 4.78 예상</p></div>
     </div>
   </div>
+
 </div>
 </body>
 </html>

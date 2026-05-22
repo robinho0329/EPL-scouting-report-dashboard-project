@@ -14,333 +14,258 @@
     overflow: hidden;
     position: relative;
   }
-  .slide-wrap {
-    padding: 13pt 20pt 0pt;
+  :root {
+    --accent: #e94560;
+    --gold: #f5a623;
+    --green: #00d26a;
+    --muted: #8b949e;
+    --surface: #16213e;
+    --panel: #0f3460;
+  }
+  .slide-inner {
+    padding: 14pt 20pt 10pt 20pt;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8pt;
   }
-  /* 헤더 */
-  .hdr { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .hdr-title { font-size: 15pt; font-weight: 800; color: #e6edf3; }
-  /* 상단 3-스탯 카운터 */
-  .stats-row {
-    display: flex;
-    gap: 10pt;
-    flex-shrink: 0;
-  }
-  .stat-box {
+  h2.slide-title { font-size: 13.5pt; font-weight: 800; color: #e6edf3; margin-bottom: 9pt; }
+
+  .stat-cards { display: flex; gap: 8pt; margin-bottom: 9pt; }
+  .stat-card {
     flex: 1;
+    background: var(--surface);
     border-radius: 7pt;
-    padding: 9pt 12pt;
+    padding: 8pt 12pt;
     text-align: center;
-    border: 1pt solid transparent;
+    border-top: 3pt solid transparent;
   }
-  .stat-total { background: rgba(88,166,255,0.1); border-color: #58a6ff; }
-  .stat-ok { background: rgba(0,210,106,0.1); border-color: #00d26a; }
-  .stat-ng { background: rgba(233,69,96,0.1); border-color: #e94560; }
-  .stat-num { font-size: 22pt; font-weight: 800; line-height: 1; margin-bottom: 2pt; }
-  .stat-lbl { font-size: 7.5pt; color: #8b949e; line-height: 1.3; }
-  /* 중앙 2분할 */
-  .mid-section {
-    display: flex;
-    gap: 10pt;
-    flex: 1;
-  }
-  /* 좌측: 리허설 5단계 흐름 */
-  .flow-section {
-    flex: 1;
-    background: #16213e;
-    border-radius: 7pt;
-    padding: 10pt 12pt;
-    display: flex;
-    flex-direction: column;
-    gap: 5pt;
-  }
-  .flow-title {
-    font-size: 9pt;
-    font-weight: 700;
-    color: #e6edf3;
-    margin-bottom: 3pt;
-    flex-shrink: 0;
-  }
-  .flow-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8pt;
-    padding: 5pt 8pt;
-    border-radius: 5pt;
-    border: 1pt solid rgba(48,54,61,0.5);
-    background: rgba(13,17,23,0.5);
-  }
-  .flow-step-num {
-    width: 16pt;
-    height: 16pt;
+  .sc-pages   { border-top-color: var(--gold); }
+  .sc-active  { border-top-color: var(--green); }
+  .sc-update  { border-top-color: var(--accent); }
+  .stat-card .sc-num { font-size: 28pt; font-weight: 900; line-height: 1; margin-bottom: 2pt; }
+  .sc-pages  .sc-num { color: var(--gold); }
+  .sc-active .sc-num { color: var(--green); }
+  .sc-update .sc-num { color: var(--accent); }
+  .stat-card .sc-lbl { font-size: 7.5pt; color: var(--muted); }
+
+  .mid-row { flex: 1; display: flex; gap: 9pt; min-height: 0; margin-bottom: 8pt; }
+
+  .rehearsal-col { flex: 1; background: var(--surface); border-radius: 7pt; padding: 9pt 12pt; overflow: hidden; }
+  .rc-title p { font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 6pt; }
+  .rehearsal-steps { display: flex; flex-direction: column; gap: 4pt; }
+  .rh-step { display: flex; align-items: flex-start; gap: 7pt; }
+  .rh-num {
+    width: 16pt; height: 16pt;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 7.5pt;
-    font-weight: 700;
-    flex-shrink: 0;
-    background: rgba(0,210,106,0.2);
-    border: 1pt solid #00d26a;
-    color: #00d26a;
-  }
-  .flow-body { flex: 1; }
-  .flow-name {
-    font-size: 8.5pt;
-    font-weight: 700;
-    color: #e6edf3;
-    line-height: 1;
-  }
-  .flow-metric {
-    font-size: 7pt;
-    color: #8b949e;
-    margin-top: 1pt;
-  }
-  .flow-badge {
-    display: inline-block;
-    background: rgba(233,69,96,0.15);
-    border: 1pt solid #e94560;
-    border-radius: 3pt;
-    padding: 1pt 5pt;
-    font-size: 6pt;
-    font-weight: 700;
-    color: #e94560;
-  }
-  .flow-arrow {
-    font-size: 8pt;
-    color: #8b949e;
-    padding: 0 2pt;
-    display: flex;
-    align-items: center;
-    align-self: center;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  /* 우측: URL + 임팩트 + 타임라인 */
-  .right-section {
-    width: 210pt;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8pt;
-  }
-  .url-box {
-    background: #0f3460;
-    border: 1.5pt solid #00d26a;
-    border-radius: 7pt;
-    padding: 10pt 12pt;
-  }
-  .url-label {
-    font-size: 7.5pt;
-    color: #8b949e;
-    margin-bottom: 4pt;
-  }
-  .url-val {
+  .rh-num p { font-size: 7.5pt; font-weight: 800; color: #fff; }
+  .rh-content { flex: 1; }
+  .rh-model  p { font-size: 7.8pt; font-weight: 700; color: #e6edf3; }
+  .rh-metric p { font-size: 7pt; color: var(--muted); }
+  /* span → background 허용 */
+  .rh-badge {
     font-size: 6.5pt;
     font-weight: 700;
-    color: #e94560;
-    word-break: break-all;
-    line-height: 1.4;
+    color: var(--accent);
+    background: rgba(233,69,96,0.12);
+    border: 0.8pt solid var(--accent);
+    border-radius: 8pt;
+    padding: 1pt 5pt;
+    flex-shrink: 0;
+    align-self: flex-start;
   }
-  .github-val {
-    font-size: 7pt;
-    color: #58a6ff;
-    margin-top: 4pt;
+
+  .impact-row { display: flex; gap: 6pt; margin-top: 6pt; }
+  .impact-card {
+    flex: 1;
+    background: rgba(245,166,35,0.07);
+    border: 0.8pt solid rgba(245,166,35,0.4);
+    border-radius: 5pt;
+    padding: 4pt 7pt;
   }
-  /* 임팩트 배지 */
-  .impact-section {
-    background: #16213e;
-    border-radius: 6pt;
-    padding: 8pt 10pt;
-    display: flex;
-    flex-direction: column;
-    gap: 5pt;
+  .ic-name p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
+  .ic-met  p { font-size: 7pt; color: var(--muted); }
+
+  .url-col { width: 190pt; display: flex; flex-direction: column; gap: 8pt; }
+  .url-box {
+    background: var(--panel);
+    border: 2pt solid var(--green);
+    border-radius: 8pt;
+    padding: 10pt 12pt;
+    flex: 1;
   }
-  .impact-title {
-    font-size: 8pt;
-    font-weight: 700;
-    color: #f5a623;
-    margin-bottom: 2pt;
-  }
-  .impact-item {
-    display: flex;
-    align-items: center;
-    gap: 6pt;
-    padding: 4pt 6pt;
-    background: rgba(245,166,35,0.08);
-    border: 1pt solid #f5a623;
+  .ub-lbl  p { font-size: 7.5pt; font-weight: 700; color: var(--green); margin-bottom: 4pt; text-transform: uppercase; letter-spacing: 0.05em; }
+  .ub-url  p { font-size: 7pt; color: var(--accent); font-weight: 700; word-break: break-all; line-height: 1.4; margin-bottom: 6pt; }
+  .ub-repo p { font-size: 7pt; color: var(--muted); margin-bottom: 4pt; }
+  .qr-placeholder {
+    width: 50pt; height: 50pt;
+    background: #1a1a2e;
+    border: 1pt solid var(--green);
     border-radius: 4pt;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
   }
-  .impact-id {
-    font-size: 8pt;
-    font-weight: 800;
-    color: #f5a623;
-    min-width: 14pt;
+  .qr-placeholder p { font-size: 6pt; color: var(--muted); text-align: center; }
+
+  .update-box {
+    background: rgba(233,69,96,0.07);
+    border: 1.5pt solid var(--accent);
+    border-radius: 7pt;
+    padding: 8pt 10pt;
   }
-  .impact-body { flex: 1; }
-  .impact-name { font-size: 7.5pt; font-weight: 700; color: #e6edf3; }
-  .impact-metric { font-size: 6.5pt; color: #8b949e; }
-  /* 하단 타임라인 바 */
-  .timeline-bar {
-    background: #16213e;
-    border-top: 1pt solid #30363d;
-    padding: 6pt 10pt;
+  .ub-title p { font-size: 7.5pt; font-weight: 800; color: var(--accent); margin-bottom: 4pt; }
+  .ub-item p  { font-size: 7pt; color: #a0aec0; line-height: 1.4; }
+
+  .timeline {
+    background: var(--surface);
+    border-radius: 6pt;
+    padding: 7pt 14pt;
     display: flex;
     align-items: center;
-    gap: 0;
+    justify-content: space-between;
     flex-shrink: 0;
   }
-  .tl-day {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3pt;
-    position: relative;
-  }
-  .tl-day:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 10pt;
-    width: 50%;
-    height: 2pt;
-    background: #30363d;
-    z-index: 0;
-  }
-  .tl-day:not(:first-child)::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 10pt;
-    width: 50%;
-    height: 2pt;
-    background: #30363d;
-    z-index: 0;
-  }
-  .tl-marker {
-    width: 20pt;
-    height: 20pt;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 7pt;
-    font-weight: 700;
-    position: relative;
-    z-index: 1;
-  }
-  .tl-today { background: rgba(233,69,96,0.25); border: 2pt solid #e94560; color: #e94560; }
-  .tl-next { background: rgba(0,210,106,0.15); border: 1.5pt solid #00d26a; color: #00d26a; }
-  .tl-day-lbl { font-size: 7pt; color: #8b949e; text-align: center; line-height: 1.3; }
+  .tl-item { display: flex; align-items: center; gap: 5pt; }
+  .tl-dot  { width: 8pt; height: 8pt; border-radius: 50%; flex-shrink: 0; }
+  .tl-dot-am { background: var(--gold); }
+  .tl-dot-pm { background: #58a6ff; }
+  .tl-dot-ev { background: var(--accent); }
+  .tl-dot-wk { background: var(--green); }
+  .tl-time-am p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
+  .tl-time-pm p { font-size: 7.5pt; font-weight: 700; color: #58a6ff; }
+  .tl-time-ev p { font-size: 7.5pt; font-weight: 700; color: var(--accent); }
+  .tl-time-wk p { font-size: 7.5pt; font-weight: 700; color: var(--green); }
+  .tl-desc p { font-size: 7pt; color: var(--muted); }
+  .tl-arrow p { color: var(--muted); font-size: 9pt; }
 </style>
 </head>
 <body>
-<div class="slide-wrap">
-  <!-- 헤더 -->
-  <div class="hdr">
-    <h2 class="hdr-title">Streamlit 대시보드 현황</h2>
-    <p style="font-size:8pt; color:#8b949e;">16페이지 운영 중 | 리허설 5단계 즉시 활용 가능</p>
-  </div>
+<div class="slide-inner">
 
-  <!-- 3-스탯 카운터 -->
-  <div class="stats-row">
-    <div class="stat-box stat-total">
-      <p class="stat-num" style="color:#58a6ff;">16</p>
-      <p class="stat-lbl">전체 페이지</p>
+  <h2 class="slide-title">Streamlit 대시보드 현황 — 16페이지 운영 중</h2>
+
+  <div class="stat-cards">
+    <div class="stat-card sc-pages">
+      <p class="sc-num">16</p>
+      <p class="sc-lbl">전체 페이지</p>
     </div>
-    <div class="stat-box stat-ok">
-      <p class="stat-num" style="color:#00d26a;">9</p>
-      <p class="stat-lbl">즉시 활용 가능<br>S1, P4, P6, S2, P8, P3, P2, S3, S6</p>
+    <div class="stat-card sc-active">
+      <p class="sc-num">9</p>
+      <p class="sc-lbl">즉시 활용 가능 (S1, P4, P6, S2, P8, P3, P2, S3, S6)</p>
     </div>
-    <div class="stat-box stat-ng">
-      <p class="stat-num" style="color:#e94560;">2</p>
-      <p class="stat-lbl">미달 — 오늘 저녁 업데이트 예정<br>P1, P7</p>
+    <div class="stat-card sc-update">
+      <p class="sc-num">2</p>
+      <p class="sc-lbl">오늘 저녁 업데이트 예정 (P1, P7)</p>
     </div>
   </div>
 
-  <!-- 중앙 2분할 -->
-  <div class="mid-section">
-    <!-- 리허설 5단계 흐름 -->
-    <div class="flow-section">
-      <p class="flow-title">리허설 5단계 핵심 흐름 (오늘 2일차)</p>
-      <div class="flow-item">
-        <div class="flow-step-num"><p style="font-size:7.5pt; font-weight:700; color:#00d26a;">1</p></div>
-        <div class="flow-body">
-          <p class="flow-name">S1 선수 종합 레이팅</p>
-          <p class="flow-metric">R² 0.9093 / MAE 4.66 — 영입 후보 전체 랭킹 확인</p>
+  <div class="mid-row">
+
+    <div class="rehearsal-col">
+      <div class="rc-title"><p>포트폴리오 리허설 5단계 핵심 페이지 — 오늘 오후 최종 완결</p></div>
+      <div class="rehearsal-steps">
+        <div class="rh-step">
+          <div class="rh-num"><p>1</p></div>
+          <div class="rh-content">
+            <div class="rh-model"><p>S1 선수 종합 레이팅</p></div>
+            <div class="rh-metric"><p>R² 0.9093 / MAE 4.66 — 영입 후보 전체 랭킹</p></div>
+          </div>
         </div>
-        <div class="flow-arrow"><p style="font-size:9pt; color:#8b949e;">&#8594;</p></div>
-        <div class="flow-step-num" style="background:rgba(0,210,106,0.15); border-color:#2ecc71; color:#2ecc71;"><p style="font-size:7.5pt; font-weight:700; color:#2ecc71;">2</p></div>
-        <div class="flow-body">
-          <p class="flow-name">S2 포지션별 시장가치</p>
-          <p class="flow-metric">R² 0.8812 / MAE £3.23M — 저평가 선수 탐색</p>
+        <div class="rh-step">
+          <div class="rh-num"><p>2</p></div>
+          <div class="rh-content">
+            <div class="rh-model"><p>S2 포지션별 시장가치</p></div>
+            <div class="rh-metric"><p>R² 0.8812 / MAE £3.23M — 저평가 선수 탐색 (S1+S2: 30초 정량화)</p></div>
+          </div>
+        </div>
+        <div class="rh-step">
+          <div class="rh-num"><p>3</p></div>
+          <div class="rh-content">
+            <div class="rh-model"><p>P8 이적 적응 예측</p></div>
+            <div class="rh-metric"><p>AUC 0.6612 / F1 88.23% — 이적 후 적응 리스크 평가</p></div>
+          </div>
+          <span class="rh-badge">위험 플래그 도구</span>
+        </div>
+        <div class="rh-step">
+          <div class="rh-num"><p>4</p></div>
+          <div class="rh-content">
+            <div class="rh-model"><p>P6 시장가치 예측</p></div>
+            <div class="rh-metric"><p>R² 0.8734 / MAE £3.28M — 가치 검증</p></div>
+          </div>
+        </div>
+        <div class="rh-step">
+          <div class="rh-num"><p>5</p></div>
+          <div class="rh-content">
+            <div class="rh-model"><p>S6 선수 하락세 감지</p></div>
+            <div class="rh-metric"><p>AUC 0.8324 / F1 61.74% — 타깃 선수 컨디션 추세</p></div>
+          </div>
         </div>
       </div>
-      <div class="flow-item" style="border-color:#e94560; background:rgba(233,69,96,0.05);">
-        <div class="flow-step-num" style="background:rgba(233,69,96,0.2); border-color:#e94560; color:#e94560;"><p style="font-size:7.5pt; font-weight:700; color:#e94560;">3</p></div>
-        <div class="flow-body">
-          <p class="flow-name">P8 이적 적응 예측</p>
-          <p class="flow-metric">AUC 0.6612 / F1 88.23% — 이적 후 적응 리스크 평가</p>
+      <div class="impact-row">
+        <div class="impact-card">
+          <div class="ic-name"><p>P3 강등권 예측</p></div>
+          <div class="ic-met"><p>AUC 100% / Acc 100%</p></div>
         </div>
-        <span class="flow-badge">AUC 대응 논리 오늘 확립</span>
-      </div>
-      <div class="flow-item">
-        <div class="flow-step-num"><p style="font-size:7.5pt; font-weight:700; color:#00d26a;">4</p></div>
-        <div class="flow-body">
-          <p class="flow-name">P6 시장가치 예측</p>
-          <p class="flow-metric">R² 0.8734 / MAE £3.28M — 가치 검증</p>
-        </div>
-        <div class="flow-arrow"><p style="font-size:9pt; color:#8b949e;">&#8594;</p></div>
-        <div class="flow-step-num"><p style="font-size:7.5pt; font-weight:700; color:#00d26a;">5</p></div>
-        <div class="flow-body">
-          <p class="flow-name">S6 하락세 감지</p>
-          <p class="flow-metric">AUC 0.8324 / F1 61.74% — 타깃 컨디션 추세</p>
+        <div class="impact-card">
+          <div class="ic-name"><p>P4 MVP 스코어링</p></div>
+          <div class="ic-met"><p>Spearman 0.9987 / NDCG@10 0.9993</p></div>
         </div>
       </div>
     </div>
 
-    <!-- 우측: URL + 임팩트 -->
-    <div class="right-section">
+    <div class="url-col">
       <div class="url-box">
-        <p class="url-label">Streamlit 대시보드</p>
-        <p class="url-val">epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
-        <p class="github-val">robinho0329/EPL-scouting-report-dashboard-project</p>
+        <div class="ub-lbl"><p>Streamlit 앱</p></div>
+        <div class="ub-url"><p>epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p></div>
+        <div class="ub-repo"><p>GitHub: robinho0329/EPL-scouting-report-dashboard-project</p></div>
+        <div class="qr-placeholder"><p>QR 플레이스홀더</p></div>
       </div>
-      <div class="impact-section">
-        <p class="impact-title">임팩트용 추가 페이지</p>
-        <div class="impact-item">
-          <p class="impact-id">P3</p>
-          <div class="impact-body">
-            <p class="impact-name">강등권 예측</p>
-            <p class="impact-metric">AUC 100% / Acc 100%</p>
-          </div>
-        </div>
-        <div class="impact-item">
-          <p class="impact-id">P4</p>
-          <div class="impact-body">
-            <p class="impact-name">MVP 스코어링</p>
-            <p class="impact-metric">Spearman 0.9987 / NDCG 0.9993</p>
-          </div>
-        </div>
+      <div class="update-box">
+        <div class="ub-title"><p>오늘 저녁 업데이트 예정</p></div>
+        <div class="ub-item"><p>P7 v5.1 학습 → R² 0.62 달성 시 "성장 곡선 + P8 이적" 연계 스토리 완성</p></div>
+        <div class="ub-item"><p>P1 v2 학습 → Acc 57% 달성 시 영입 회의 완전한 시스템 (16개 완전체)</p></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot tl-dot-am"></div>
+      <div>
+        <div class="tl-time-am"><p>오전 (세션 중)</p></div>
+        <div class="tl-desc"><p>S3 FW 개선 파일 생성</p></div>
+      </div>
+    </div>
+    <div class="tl-arrow"><p>&#10132;</p></div>
+    <div class="tl-item">
+      <div class="tl-dot tl-dot-pm"></div>
+      <div>
+        <div class="tl-time-pm"><p>오후 (세션 중)</p></div>
+        <div class="tl-desc"><p>포트폴리오 최종 리허설 완결</p></div>
+      </div>
+    </div>
+    <div class="tl-arrow"><p>&#10132;</p></div>
+    <div class="tl-item">
+      <div class="tl-dot tl-dot-ev"></div>
+      <div>
+        <div class="tl-time-ev"><p>저녁 (로컬 PC)</p></div>
+        <div class="tl-desc"><p>P7 v5.1 + P1 v2 학습 실행</p></div>
+      </div>
+    </div>
+    <div class="tl-arrow"><p>&#10132;</p></div>
+    <div class="tl-item">
+      <div class="tl-dot tl-dot-wk"></div>
+      <div>
+        <div class="tl-time-wk"><p>주말 전</p></div>
+        <div class="tl-desc"><p>16페이지 완전체 (4.78 예상)</p></div>
       </div>
     </div>
   </div>
 
-  <!-- 하단 타임라인 바 -->
-  <div class="timeline-bar">
-    <div class="tl-day">
-      <div class="tl-marker tl-today"><p style="font-size:6.5pt; font-weight:700; color:#e94560;">목</p></div>
-      <p class="tl-day-lbl">05-21 오늘<br>리허설 2일차<br>P8 논리 확립</p>
-    </div>
-    <div class="tl-day">
-      <div class="tl-marker tl-next"><p style="font-size:6.5pt; font-weight:700; color:#00d26a;">금</p></div>
-      <p class="tl-day-lbl">05-22 내일<br>P7/P1 업데이트<br>최종 리허설</p>
-    </div>
-  </div>
 </div>
 </body>
 </html>

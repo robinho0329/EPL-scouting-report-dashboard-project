@@ -14,353 +14,259 @@
     overflow: hidden;
     position: relative;
   }
-  .slide-wrap {
-    padding: 14pt 20pt 0pt;
+  :root {
+    --accent: #e94560;
+    --gold: #f5a623;
+    --green: #00d26a;
+    --muted: #8b949e;
+    --surface: #16213e;
+    --panel: #0f3460;
+  }
+  .slide-inner {
+    padding: 14pt 20pt 10pt 20pt;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 9pt;
   }
-  .hdr { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .hdr-title { font-size: 15pt; font-weight: 800; color: #e6edf3; }
-  /* 상단 2분할 */
-  .top-section {
+  h2.slide-title {
+    font-size: 13.5pt;
+    font-weight: 800;
+    color: #e6edf3;
+    margin-bottom: 9pt;
     display: flex;
-    gap: 12pt;
-    flex-shrink: 0;
+    align-items: center;
+    gap: 8pt;
   }
-  /* 좌측: 게이지 섹션 */
+  .warn-badge {
+    font-size: 7pt;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 10pt;
+    padding: 2pt 8pt;
+  }
+
+  .top-row { display: flex; gap: 10pt; margin-bottom: 9pt; }
+
   .gauge-section {
-    flex: 1;
-    background: #16213e;
-    border-radius: 7pt;
+    width: 200pt;
+    background: var(--surface);
+    border-radius: 8pt;
     padding: 12pt 14pt;
     display: flex;
     flex-direction: column;
-    gap: 7pt;
-  }
-  .gauge-header {
-    display: flex;
     align-items: center;
-    gap: 10pt;
+    border: 2pt solid var(--accent);
   }
-  .gauge-score {
-    font-size: 36pt;
-    font-weight: 800;
-    color: #f5a623;
-    line-height: 1;
-  }
-  .gauge-denom {
-    font-size: 12pt;
-    color: #8b949e;
-  }
-  .gauge-change {
-    background: rgba(233,69,96,0.14);
-    border: 1pt solid #e94560;
-    border-radius: 4pt;
-    padding: 4pt 8pt;
-    margin-left: auto;
-    text-align: center;
-  }
-  .gauge-bar-wrap {
-    background: rgba(255,255,255,0.08);
+  .gs-lbl p { font-size: 7.5pt; color: var(--muted); margin-bottom: 4pt; }
+  .score-display { display: flex; align-items: flex-end; gap: 2pt; margin-bottom: 6pt; }
+  .sd-num p { font-size: 42pt; font-weight: 900; color: var(--accent); line-height: 1; }
+  .sd-den p { font-size: 16pt; font-weight: 600; color: var(--muted); padding-bottom: 5pt; }
+  .gauge-track {
+    width: 100%;
+    height: 10pt;
+    background: #0d1117;
     border-radius: 5pt;
-    height: 11pt;
     overflow: hidden;
+    margin-bottom: 5pt;
+    border: 0.8pt solid rgba(233,69,96,0.3);
   }
-  .gauge-bar-fill {
-    width: 93.6%;
+  .gauge-fill {
     height: 100%;
-    background: #f5a623;
+    width: 90%;
+    background: #e94560;
     border-radius: 5pt;
   }
-  .gauge-pct {
-    font-size: 7.5pt;
-    color: #8b949e;
-    text-align: right;
+  .drop-info {
+    background: rgba(233,69,96,0.1);
+    border: 1pt solid var(--accent);
+    border-radius: 5pt;
+    padding: 5pt 8pt;
+    width: 100%;
+    text-align: center;
+    margin-top: 4pt;
   }
-  .cause-list {
-    display: flex;
-    flex-direction: column;
-    gap: 3pt;
-  }
-  .cause-item {
-    display: flex;
-    align-items: center;
-    gap: 6pt;
-  }
-  .cause-label { font-size: 7.5pt; color: #8b949e; flex: 1; }
-  .cause-val { font-size: 7.5pt; font-weight: 700; color: #e94560; }
-  /* 우측: 시뮬레이션 표 */
-  .sim-section {
-    width: 210pt;
-    flex-shrink: 0;
-    background: #16213e;
-    border-radius: 7pt;
-    padding: 12pt 12pt;
-    display: flex;
-    flex-direction: column;
-    gap: 6pt;
-  }
-  .sim-title {
-    font-size: 9pt;
-    font-weight: 700;
-    color: #e6edf3;
-    margin-bottom: 4pt;
-  }
-  .sim-table { width: 100%; border-collapse: collapse; }
-  .sim-table th {
+  .di-val p { font-size: 12pt; font-weight: 900; color: var(--accent); }
+  .di-lbl p { font-size: 7pt; color: var(--muted); }
+  .warn-items { margin-top: 6pt; width: 100%; }
+  .wi-item p     { font-size: 7pt; color: var(--muted); line-height: 1.5; }
+  .wi-item-red p { font-size: 7pt; color: var(--accent); font-weight: 700; line-height: 1.5; margin-top: 3pt; }
+
+  .sim-section { flex: 1; background: var(--surface); border-radius: 8pt; padding: 10pt 12pt; }
+  .ss-title p { font-size: 8.5pt; font-weight: 700; color: #e6edf3; margin-bottom: 7pt; }
+  table.sim-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+  table.sim-table thead th {
+    padding: 4pt 6pt;
+    background: var(--panel);
     font-size: 7pt;
-    color: #8b949e;
+    color: var(--muted);
     font-weight: 600;
-    padding: 2pt 4pt;
     text-align: left;
-    border-bottom: 1pt solid #30363d;
   }
-  .sim-table th:last-child { text-align: right; }
-  .sim-table td {
-    font-size: 7pt;
-    padding: 3pt 4pt;
-    border-bottom: 1pt solid rgba(48,54,61,0.4);
-    color: #e6edf3;
-  }
-  .sim-table td:last-child { text-align: right; }
-  .inc-plus { color: #00d26a; font-weight: 700; }
-  .score-bold { color: #f5a623; font-weight: 700; }
-  .score-current { color: #e94560; font-weight: 700; }
-  /* 하단 로드맵 */
-  .roadmap-section {
-    flex: 1;
-    background: #16213e;
-    border-radius: 7pt;
-    padding: 8pt 14pt;
-    display: flex;
-    flex-direction: column;
-    gap: 6pt;
-  }
-  .rm-title {
-    font-size: 9pt;
-    font-weight: 700;
-    color: #e6edf3;
-    flex-shrink: 0;
-  }
-  .rm-steps {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    flex: 1;
-  }
-  .rm-step {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3pt;
-    position: relative;
-  }
-  .rm-step:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 9pt;
-    width: 50%;
-    height: 2pt;
-    background: #30363d;
-    z-index: 0;
-  }
-  .rm-step:not(:first-child)::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 9pt;
-    width: 50%;
-    height: 2pt;
-    background: #30363d;
-    z-index: 0;
-  }
-  .rm-dot {
-    width: 18pt;
-    height: 18pt;
+  table.sim-table thead th:nth-child(2),
+  table.sim-table thead th:nth-child(3) { text-align: right; }
+  table.sim-table tbody tr { border-bottom: 0.8pt solid rgba(48,54,61,0.6); }
+  table.sim-table tbody td { padding: 4.5pt 6pt; font-size: 7.8pt; }
+  table.sim-table tbody td:nth-child(2) { text-align: right; font-weight: 700; color: var(--green); }
+  table.sim-table tbody td:nth-child(3) { text-align: right; font-weight: 800; }
+  .td-accent td:nth-child(3) { color: var(--accent) !important; }
+  .td-gold   td:nth-child(3) { color: var(--gold)   !important; }
+
+  .roadmap-section { background: var(--surface); border-radius: 8pt; padding: 9pt 12pt; margin-bottom: 8pt; }
+  .rm-title p { font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 7pt; }
+  .roadmap-steps { display: flex; align-items: flex-start; }
+  .rm-step { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .rm-node {
+    width: 20pt; height: 20pt;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 7.5pt;
-    font-weight: 800;
-    position: relative;
-    z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 3pt;
   }
-  .rm-dot-current { background: rgba(233,69,96,0.25); border: 2pt solid #e94560; color: #e94560; }
-  .rm-dot-today { background: rgba(245,166,35,0.2); border: 1.5pt solid #f5a623; color: #f5a623; }
-  .rm-dot-future { background: rgba(139,148,158,0.1); border: 1pt solid #8b949e; color: #8b949e; }
-  .rm-score { font-size: 9pt; font-weight: 700; text-align: center; }
-  .rm-time { font-size: 6.5pt; color: #8b949e; text-align: center; }
-  .rm-desc { font-size: 6.5pt; color: #8b949e; text-align: center; line-height: 1.3; max-width: 80pt; }
-  /* 인용 박스 */
-  .quote-box {
-    background: #16213e;
-    border-left: 3pt solid #e94560;
-    border-radius: 0 4pt 4pt 0;
-    padding: 6pt 12pt;
-    flex-shrink: 0;
-  }
-  .quote-text {
-    font-size: 6.5pt;
-    color: #8b949e;
-    line-height: 1.5;
-  }
-  .quote-author {
-    font-size: 6.5pt;
-    color: #e94560;
-    font-weight: 700;
-    margin-top: 2pt;
-  }
+  .rm-node p { font-size: 7.5pt; font-weight: 800; }
+  .rm-node-curr { background: var(--accent); }
+  .rm-node-curr p { color: #fff; }
+  .rm-node-todo { background: rgba(139,148,158,0.2); border: 1.5pt solid var(--muted); }
+  .rm-node-todo p { color: var(--muted); }
+  .rs-score p { font-size: 7.5pt; font-weight: 700; color: var(--gold); text-align: center; }
+  .rs-when  p { font-size: 6.5pt; color: var(--muted); text-align: center; }
+  .rs-cond  p { font-size: 6pt; color: var(--muted); text-align: center; line-height: 1.3; max-width: 60pt; }
+  .rm-connector { flex-shrink: 0; width: 8pt; height: 1.5pt; background: rgba(139,148,158,0.3); margin-top: 9pt; }
+  .rm-conn-hot { background: rgba(233,69,96,0.5); }
+
+  .quote-box { background: var(--surface); border-left: 3pt solid var(--accent); border-radius: 0 5pt 5pt 0; padding: 7pt 12pt; flex-shrink: 0; }
+  .qb-text p { font-size: 7.5pt; color: #a0aec0; line-height: 1.5; font-style: italic; }
+  .qb-attr p { font-size: 7pt; color: var(--muted); margin-top: 3pt; text-align: right; }
 </style>
 </head>
 <body>
-<div class="slide-wrap">
-  <!-- 헤더 -->
-  <div class="hdr">
-    <h2 class="hdr-title">김태현 스카우트 종합 평가</h2>
-    <p style="font-size:8pt; color:#8b949e;">어제 0건 달성 -0.02 하락 | 오늘 3건 달성 시 최대 4.88</p>
-  </div>
+<div class="slide-inner">
 
-  <!-- 상단 2분할 -->
-  <div class="top-section">
-    <!-- 좌측 게이지 -->
+  <h2 class="slide-title">
+    김태현 스카우트 종합 평가
+    <span class="warn-badge">경고 발동 ▼ -0.18 급락</span>
+  </h2>
+
+  <div class="top-row">
+
     <div class="gauge-section">
-      <div class="gauge-header">
-        <div>
-          <p style="font-size:7.5pt; color:#8b949e; margin-bottom:2pt;">현재 평가</p>
-          <p class="gauge-score">4.68</p>
-          <p class="gauge-denom">/ 5.0</p>
-        </div>
-        <div class="gauge-change" style="margin-left:auto;">
-          <p style="font-size:9pt; font-weight:700; color:#e94560;">&#9660; -0.02</p>
-          <p style="font-size:7pt; color:#8b949e;">4.70 &#8594; 4.68</p>
-        </div>
+      <div class="gs-lbl"><p>현재 종합 평가</p></div>
+      <div class="score-display">
+        <div class="sd-num"><p>4.50</p></div>
+        <div class="sd-den"><p>/ 5.0</p></div>
       </div>
-      <div class="gauge-bar-wrap">
-        <div class="gauge-bar-fill"></div>
+      <div class="gauge-track"><div class="gauge-fill"></div></div>
+      <div class="drop-info">
+        <div class="di-val"><p>▼ -0.18</p></div>
+        <div class="di-lbl"><p>전일 4.68 → 경고 발동</p></div>
       </div>
-      <p class="gauge-pct">93.6% (4.68 / 5.0)</p>
-      <div class="cause-list">
-        <p style="font-size:7.5pt; color:#8b949e; font-weight:600;">어제(05-20) 하락 원인:</p>
-        <div class="cause-item">
-          <p class="cause-label">P7+P1 로컬 미실행 (10일 연속)</p>
-          <p class="cause-val">&#177;0</p>
-        </div>
-        <div class="cause-item">
-          <p class="cause-label">S3 FW 개선 파일 미생성</p>
-          <p class="cause-val">-0.01</p>
-        </div>
-        <div class="cause-item">
-          <p class="cause-label">리허설 D-Day 산출물 없음</p>
-          <p class="cause-val">-0.01</p>
-        </div>
-        <div class="cause-item" style="border-top:1pt solid #30363d; padding-top:3pt;">
-          <p class="cause-label" style="font-weight:700; color:#e6edf3;">합계 변화</p>
-          <p class="cause-val">-0.02</p>
-        </div>
+      <div class="warn-items">
+        <div class="wi-item"><p>-0.15 : P7/P1 11일 연속 미달</p></div>
+        <div class="wi-item"><p>-0.03 : S3 파일 3일 연속 미달</p></div>
+        <div class="wi-item-red"><p>저녁 결과 없으면 4.40 이하</p></div>
       </div>
     </div>
 
-    <!-- 우측 시뮬레이션 표 -->
     <div class="sim-section">
-      <p class="sim-title">오늘 달성 시 점수 시뮬레이션</p>
+      <div class="ss-title"><p>오늘 달성 시 점수 시뮬레이션</p></div>
       <table class="sim-table">
         <thead>
           <tr>
             <th>달성 항목</th>
-            <th>+증분</th>
-            <th>누적</th>
+            <th>증분</th>
+            <th>누적 점수</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><p style="font-size:7pt; color:#e94560;">현재 (오늘 기준)</p></td>
-            <td><p style="font-size:7pt;">—</p></td>
-            <td><p class="score-current">4.68</p></td>
+          <tr class="td-accent">
+            <td><p>현재 (오늘 기준)</p></td>
+            <td><p>—</p></td>
+            <td><p>4.50</p></td>
           </tr>
           <tr>
-            <td><p style="font-size:7pt;">S3 FW 개선 파일 (오전)</p></td>
-            <td><p class="inc-plus">+0.02</p></td>
-            <td><p class="score-bold">4.70</p></td>
+            <td><p>S3 FW 개선 계획 파일 생성 (오전)</p></td>
+            <td><p>+0.03</p></td>
+            <td><p style="color:#a0aec0;">4.53</p></td>
           </tr>
           <tr>
-            <td><p style="font-size:7pt;">리허설 2일차 완결 (오후)</p></td>
-            <td><p class="inc-plus">+0.05</p></td>
-            <td><p class="score-bold">4.75</p></td>
+            <td><p>포트폴리오 최종 리허설 완결 (오후)</p></td>
+            <td><p>+0.07</p></td>
+            <td><p style="color:#a0aec0;">4.60</p></td>
           </tr>
           <tr>
-            <td><p style="font-size:7pt;">P7 R² &#8805; 0.62 (저녁)</p></td>
-            <td><p class="inc-plus">+0.08</p></td>
-            <td><p class="score-bold">4.83</p></td>
+            <td><p>P7 v5.1 R² &ge; 0.62 달성 (저녁)</p></td>
+            <td><p>+0.10</p></td>
+            <td><p style="color:#a0aec0;">4.70</p></td>
           </tr>
-          <tr>
-            <td><p style="font-size:7pt;">P1 Acc &#8805; 57% (저녁)</p></td>
-            <td><p class="inc-plus">+0.05</p></td>
-            <td><p style="font-size:7pt; font-weight:800; color:#f5a623;">4.88</p></td>
+          <tr class="td-gold">
+            <td><p>P1 Acc &ge; 57% 달성 (저녁)</p></td>
+            <td><p>+0.08</p></td>
+            <td><p>4.78</p></td>
           </tr>
         </tbody>
       </table>
     </div>
+
   </div>
 
-  <!-- 하단 로드맵 -->
   <div class="roadmap-section">
-    <p class="rm-title">5.0 달성 로드맵 — 6단계</p>
-    <div class="rm-steps">
+    <div class="rm-title"><p>5.0 달성 로드맵 — 7단계</p></div>
+    <div class="roadmap-steps">
       <div class="rm-step">
-        <div class="rm-dot rm-dot-current"><p style="font-size:7.5pt; font-weight:800; color:#e94560;">NOW</p></div>
-        <p class="rm-score" style="color:#e94560;">4.68</p>
-        <p class="rm-time">현재</p>
-        <p class="rm-desc">오늘 기준</p>
+        <div class="rm-node rm-node-curr"><p>1</p></div>
+        <div class="rs-score"><p>4.53</p></div>
+        <div class="rs-when"><p>05-22 오전</p></div>
+        <div class="rs-cond"><p>S3 FW 개선 파일</p></div>
       </div>
+      <div class="rm-connector rm-conn-hot"></div>
       <div class="rm-step">
-        <div class="rm-dot rm-dot-today"><p style="font-size:7pt; font-weight:800; color:#f5a623;">1</p></div>
-        <p class="rm-score" style="color:#f5a623;">4.70</p>
-        <p class="rm-time">05-21 오전</p>
-        <p class="rm-desc">S3 FW<br>파일 생성</p>
+        <div class="rm-node rm-node-curr"><p>2</p></div>
+        <div class="rs-score"><p>4.60</p></div>
+        <div class="rs-when"><p>05-22 오후</p></div>
+        <div class="rs-cond"><p>리허설 최종 완결</p></div>
       </div>
+      <div class="rm-connector rm-conn-hot"></div>
       <div class="rm-step">
-        <div class="rm-dot rm-dot-today"><p style="font-size:7pt; font-weight:800; color:#f5a623;">2</p></div>
-        <p class="rm-score" style="color:#f5a623;">4.75</p>
-        <p class="rm-time">05-21 오후</p>
-        <p class="rm-desc">리허설 2일차<br>완결</p>
+        <div class="rm-node rm-node-curr"><p>3</p></div>
+        <div class="rs-score"><p>4.70</p></div>
+        <div class="rs-when"><p>05-22 저녁</p></div>
+        <div class="rs-cond"><p>P7 R² &ge; 0.62</p></div>
       </div>
+      <div class="rm-connector rm-conn-hot"></div>
       <div class="rm-step">
-        <div class="rm-dot rm-dot-today"><p style="font-size:7pt; font-weight:800; color:#f5a623;">3</p></div>
-        <p class="rm-score" style="color:#f5a623;">4.83</p>
-        <p class="rm-time">05-21 저녁</p>
-        <p class="rm-desc">P7 R² &#8805; 0.62<br>달성</p>
+        <div class="rm-node rm-node-curr"><p>4</p></div>
+        <div class="rs-score"><p>4.78</p></div>
+        <div class="rs-when"><p>05-22 저녁</p></div>
+        <div class="rs-cond"><p>P1 Acc &ge; 57%</p></div>
       </div>
+      <div class="rm-connector"></div>
       <div class="rm-step">
-        <div class="rm-dot rm-dot-today"><p style="font-size:7pt; font-weight:800; color:#f5a623;">4</p></div>
-        <p class="rm-score" style="color:#f5a623;">4.88</p>
-        <p class="rm-time">05-21 저녁</p>
-        <p class="rm-desc">P1 Acc &#8805; 57%<br>달성</p>
+        <div class="rm-node rm-node-todo"><p>5</p></div>
+        <div class="rs-score"><p>4.84</p></div>
+        <div class="rs-when"><p>내주</p></div>
+        <div class="rs-cond"><p>S3 FW Sil &ge; 0.25</p></div>
       </div>
+      <div class="rm-connector"></div>
       <div class="rm-step">
-        <div class="rm-dot rm-dot-future"><p style="font-size:7pt; font-weight:800; color:#8b949e;">5</p></div>
-        <p class="rm-score" style="color:#8b949e;">4.92</p>
-        <p class="rm-time">05-22</p>
-        <p class="rm-desc">S3 FW Sil<br>&#8805; 0.25</p>
+        <div class="rm-node rm-node-todo"><p>6</p></div>
+        <div class="rs-score"><p>4.92</p></div>
+        <div class="rs-when"><p>미정</p></div>
+        <div class="rs-cond"><p>포트폴리오 발표 성공</p></div>
       </div>
+      <div class="rm-connector"></div>
       <div class="rm-step">
-        <div class="rm-dot rm-dot-future"><p style="font-size:7pt; font-weight:800; color:#8b949e;">6</p></div>
-        <p class="rm-score" style="color:#8b949e;">5.00</p>
-        <p class="rm-time">미정</p>
-        <p class="rm-desc">실제 영입<br>회의 시연</p>
+        <div class="rm-node rm-node-todo"><p>7</p></div>
+        <div class="rs-score"><p>5.00</p></div>
+        <div class="rs-when"><p>미정</p></div>
+        <div class="rs-cond"><p>영입 회의 시연 성공</p></div>
       </div>
     </div>
   </div>
 
-  <!-- 인용 박스 -->
   <div class="quote-box">
-    <p class="quote-text">"10일입니다. P7과 P1 — 10일 연속 미달입니다. 오늘 오전에 S3 파일을 만들고, 오후에 리허설 2일차를 돌리고, 저녁에 반드시 로컬 PC를 켜십시오. 내일 아침 미팅에서 P7 R² 0.62, P1 Acc 57% 두 숫자가 없으면 평가 4.5 이하로 내려갑니다. 11일째는 없습니다."</p>
-    <p class="quote-author">— 김태현 스카우트</p>
+    <div class="qb-text"><p>"11일입니다. 지난 3주 동안 쌓아온 16개 페이지, 12개 모델 — P7과 P1 두 개 미달로 포트폴리오 완성도를 떨어뜨리고 있습니다. S3 파일은 오전에, 리허설은 오후에, 저녁에 반드시 로컬 PC를 켜십시오. 오늘 저녁 결과가 없으면 평가는 4.40 이하입니다."</p></div>
+    <div class="qb-attr"><p>— 김태현 스카우트</p></div>
   </div>
+
 </div>
 </body>
 </html>
