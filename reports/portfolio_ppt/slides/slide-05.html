@@ -2,269 +2,278 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 720pt;
     height: 405pt;
     background: #0d1117;
-    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
   :root {
-    --accent: #e94560;
-    --gold: #f5a623;
-    --green: #00d26a;
-    --muted: #8b949e;
+    --accent: #ff6b6b;
+    --gold: #ffd43b;
+    --success: #38d9a9;
     --surface: #16213e;
     --panel: #0f3460;
+    --muted: #8b949e;
   }
   .slide-inner {
-    padding: 14pt 20pt 10pt 20pt;
+    padding: 13pt 20pt 0 20pt;
     height: 100%;
     display: flex;
     flex-direction: column;
   }
-  h2.slide-title {
-    font-size: 13.5pt;
-    font-weight: 800;
-    color: #e6edf3;
-    margin-bottom: 9pt;
+  .slide-header {
     display: flex;
     align-items: center;
-    gap: 8pt;
+    justify-content: space-between;
+    margin-bottom: 10pt;
   }
-  .warn-badge {
-    font-size: 7pt;
-    font-weight: 700;
-    color: #fff;
-    background: var(--accent);
-    border-radius: 10pt;
-    padding: 2pt 8pt;
+  h2.slide-title { font-size: 13pt; font-weight: 800; color: #e6edf3; }
+
+  /* 2열 진단 카드 */
+  .diag-row {
+    flex: 1;
+    display: flex;
+    gap: 10pt;
+    min-height: 0;
+    margin-bottom: 8pt;
   }
-
-  .top-row { display: flex; gap: 10pt; margin-bottom: 9pt; }
-
-  .gauge-section {
-    width: 200pt;
-    background: var(--surface);
-    border-radius: 8pt;
-    padding: 12pt 14pt;
+  .diag-card {
+    flex: 1;
+    background: rgba(255,107,107,0.06);
+    border: 1.5pt solid var(--accent);
+    border-radius: 7pt;
+    padding: 10pt 12pt;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border: 2pt solid var(--accent);
-  }
-  .gs-lbl p { font-size: 7.5pt; color: var(--muted); margin-bottom: 4pt; }
-  .score-display { display: flex; align-items: flex-end; gap: 2pt; margin-bottom: 6pt; }
-  .sd-num p { font-size: 42pt; font-weight: 900; color: var(--accent); line-height: 1; }
-  .sd-den p { font-size: 16pt; font-weight: 600; color: var(--muted); padding-bottom: 5pt; }
-  .gauge-track {
-    width: 100%;
-    height: 10pt;
-    background: #0d1117;
-    border-radius: 5pt;
+    gap: 6pt;
     overflow: hidden;
-    margin-bottom: 5pt;
-    border: 0.8pt solid rgba(233,69,96,0.3);
   }
-  .gauge-fill {
-    height: 100%;
-    width: 90%;
-    background: #e94560;
-    border-radius: 5pt;
-  }
-  .drop-info {
-    background: rgba(233,69,96,0.1);
-    border: 1pt solid var(--accent);
+  .dc-header { display: flex; align-items: center; justify-content: space-between; }
+  h3.dc-model { font-size: 10pt; font-weight: 800; color: #e6edf3; }
+  .dc-current {
+    display: flex;
+    align-items: center;
+    gap: 6pt;
+    background: rgba(255,107,107,0.1);
     border-radius: 5pt;
     padding: 5pt 8pt;
-    width: 100%;
-    text-align: center;
-    margin-top: 4pt;
   }
-  .di-val p { font-size: 12pt; font-weight: 900; color: var(--accent); }
-  .di-lbl p { font-size: 7pt; color: var(--muted); }
-  .warn-items { margin-top: 6pt; width: 100%; }
-  .wi-item p     { font-size: 7pt; color: var(--muted); line-height: 1.5; }
-  .wi-item-red p { font-size: 7pt; color: var(--accent); font-weight: 700; line-height: 1.5; margin-top: 3pt; }
+  .dc-num { flex: 1; }
+  .dc-num p { font-size: 7.5pt; color: var(--muted); line-height: 1.5; }
+  .dc-num .val { font-size: 14pt; font-weight: 900; color: var(--accent); line-height: 1; }
+  .dc-gap {
+    text-align: right;
+  }
+  .dc-gap p { font-size: 7pt; color: var(--muted); }
+  .dc-gap .gap-val { font-size: 10pt; font-weight: 800; color: var(--accent); }
 
-  .sim-section { flex: 1; background: var(--surface); border-radius: 8pt; padding: 10pt 12pt; }
-  .ss-title p { font-size: 8.5pt; font-weight: 700; color: #e6edf3; margin-bottom: 7pt; }
-  table.sim-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
-  table.sim-table thead th {
-    padding: 4pt 6pt;
-    background: var(--panel);
+  .section-label {
     font-size: 7pt;
-    color: var(--muted);
-    font-weight: 600;
-    text-align: left;
-  }
-  table.sim-table thead th:nth-child(2),
-  table.sim-table thead th:nth-child(3) { text-align: right; }
-  table.sim-table tbody tr { border-bottom: 0.8pt solid rgba(48,54,61,0.6); }
-  table.sim-table tbody td { padding: 4.5pt 6pt; font-size: 7.8pt; }
-  table.sim-table tbody td:nth-child(2) { text-align: right; font-weight: 700; color: var(--green); }
-  table.sim-table tbody td:nth-child(3) { text-align: right; font-weight: 800; }
-  .td-accent td:nth-child(3) { color: var(--accent) !important; }
-  .td-gold   td:nth-child(3) { color: var(--gold)   !important; }
-
-  .roadmap-section { background: var(--surface); border-radius: 8pt; padding: 9pt 12pt; margin-bottom: 8pt; }
-  .rm-title p { font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 7pt; }
-  .roadmap-steps { display: flex; align-items: flex-start; }
-  .rm-step { flex: 1; display: flex; flex-direction: column; align-items: center; }
-  .rm-node {
-    width: 20pt; height: 20pt;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     margin-bottom: 3pt;
+    padding: 2pt 6pt;
+    border-radius: 3pt;
+    display: inline-block;
   }
-  .rm-node p { font-size: 7.5pt; font-weight: 800; }
-  .rm-node-curr { background: var(--accent); }
-  .rm-node-curr p { color: #fff; }
-  .rm-node-todo { background: rgba(139,148,158,0.2); border: 1.5pt solid var(--muted); }
-  .rm-node-todo p { color: var(--muted); }
-  .rs-score p { font-size: 7.5pt; font-weight: 700; color: var(--gold); text-align: center; }
-  .rs-when  p { font-size: 6.5pt; color: var(--muted); text-align: center; }
-  .rs-cond  p { font-size: 6pt; color: var(--muted); text-align: center; line-height: 1.3; max-width: 60pt; }
-  .rm-connector { flex-shrink: 0; width: 8pt; height: 1.5pt; background: rgba(139,148,158,0.3); margin-top: 9pt; }
-  .rm-conn-hot { background: rgba(233,69,96,0.5); }
+  .sl-cause {
+    background: rgba(255,107,107,0.12);
+    color: var(--accent);
+  }
+  .sl-fix {
+    background: rgba(56,217,169,0.12);
+    color: var(--success);
+  }
+  .sl-effect {
+    background: rgba(255,212,59,0.12);
+    color: var(--gold);
+  }
 
-  .quote-box { background: var(--surface); border-left: 3pt solid var(--accent); border-radius: 0 5pt 5pt 0; padding: 7pt 12pt; flex-shrink: 0; }
-  .qb-text p { font-size: 7.5pt; color: #a0aec0; line-height: 1.5; font-style: italic; }
-  .qb-attr p { font-size: 7pt; color: var(--muted); margin-top: 3pt; text-align: right; }
+  .cause-list { padding-left: 0; list-style: none; }
+  .cause-list li { font-size: 7.5pt; color: #a0aec0; line-height: 1.5; padding-left: 10pt; position: relative; }
+  .cause-list li::before { content: "·"; position: absolute; left: 2pt; color: var(--accent); font-weight: 700; }
+
+  .fix-box {
+    background: rgba(56,217,169,0.07);
+    border: 0.8pt solid rgba(56,217,169,0.4);
+    border-radius: 5pt;
+    padding: 5pt 8pt;
+  }
+  .fix-box p { font-size: 7.5pt; color: var(--success); line-height: 1.5; }
+  .fix-box .fix-code { font-size: 7pt; color: var(--muted); font-family: monospace; }
+
+  .effect-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4pt;
+    background: rgba(255,212,59,0.1);
+    border: 0.8pt solid rgba(255,212,59,0.4);
+    border-radius: 5pt;
+    padding: 3pt 8pt;
+  }
+  .effect-badge p { font-size: 7pt; color: var(--gold); }
+
+  /* 하단 타임라인 */
+  .timeline {
+    background: var(--surface);
+    border-radius: 6pt;
+    padding: 7pt 14pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .tl-step { display: flex; flex-direction: column; align-items: center; gap: 3pt; }
+  .tl-dot {
+    width: 10pt; height: 10pt;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .td-am   { background: var(--gold); }
+  .td-pm   { background: var(--accent); }
+  .td-ev   { background: var(--accent); }
+  .td-push { background: var(--success); }
+  .tl-time p { font-size: 7pt; font-weight: 700; }
+  .tt-am   p { color: var(--gold); }
+  .tt-pm   p { color: var(--accent); }
+  .tt-ev   p { color: var(--accent); }
+  .tt-push p { color: var(--success); }
+  .tl-desc p { font-size: 6.5pt; color: var(--muted); text-align: center; max-width: 90pt; line-height: 1.3; }
+  .tl-line {
+    flex: 1;
+    height: 1.5pt;
+    background: rgba(255,107,107,0.25);
+    margin: 0 4pt;
+    margin-top: -10pt;
+  }
 </style>
 </head>
 <body>
 <div class="slide-inner">
 
-  <h2 class="slide-title">
-    김태현 스카우트 종합 평가
-    <span class="warn-badge">경고 발동 ▼ -0.18 급락</span>
-  </h2>
+  <div class="slide-header">
+    <h2 class="slide-title">약한 모델 원인 진단 — P7 R²=0.586 / P1 Acc=54.79% 12일 연속</h2>
+    <p style="font-size:7.5pt; color:var(--muted);">기술 준비 완료 — 로컬 PC 미실행이 유일한 원인</p>
+  </div>
 
-  <div class="top-row">
+  <div class="diag-row">
 
-    <div class="gauge-section">
-      <div class="gs-lbl"><p>현재 종합 평가</p></div>
-      <div class="score-display">
-        <div class="sd-num"><p>4.50</p></div>
-        <div class="sd-den"><p>/ 5.0</p></div>
+    <!-- P7 카드 -->
+    <div class="diag-card">
+      <div class="dc-header">
+        <h3 class="dc-model">P7 성장 곡선 예측 (v5 → v5.1)</h3>
       </div>
-      <div class="gauge-track"><div class="gauge-fill"></div></div>
-      <div class="drop-info">
-        <div class="di-val"><p>▼ -0.18</p></div>
-        <div class="di-lbl"><p>전일 4.68 → 경고 발동</p></div>
+
+      <div class="dc-current">
+        <div class="dc-num">
+          <p>Test R²</p>
+          <p class="val">0.586</p>
+          <p>val R²: 0.6302 (이미 목표 초과)</p>
+        </div>
+        <div class="dc-gap">
+          <p>목표</p>
+          <p class="gap-val">−0.034</p>
+          <p>갭</p>
+        </div>
       </div>
-      <div class="warn-items">
-        <div class="wi-item"><p>-0.15 : P7/P1 11일 연속 미달</p></div>
-        <div class="wi-item"><p>-0.03 : S3 파일 3일 연속 미달</p></div>
-        <div class="wi-item-red"><p>저녁 결과 없으면 4.40 이하</p></div>
+
+      <div>
+        <span class="section-label sl-cause">원인</span>
+        <ul class="cause-list">
+          <li>val-test 일반화 갭 0.055 — lag 피처 미추가</li>
+          <li>lag3_rating / delta_lag1_2 / delta_lag2_3 미사용</li>
+        </ul>
+      </div>
+
+      <div>
+        <span class="section-label sl-fix">해결책</span>
+        <div class="fix-box">
+          <p>models/p7_growth_curve/train_v5_1.py</p>
+          <p class="fix-code">Optuna 35 trials, 2~3시간 예상 (오후 13~18시)</p>
+        </div>
+      </div>
+
+      <div class="effect-badge">
+        <p>달성 시: P8 이적 적응과 연결 → "현재가치→성장→이적적응" 가치 사슬 완성</p>
       </div>
     </div>
 
-    <div class="sim-section">
-      <div class="ss-title"><p>오늘 달성 시 점수 시뮬레이션</p></div>
-      <table class="sim-table">
-        <thead>
-          <tr>
-            <th>달성 항목</th>
-            <th>증분</th>
-            <th>누적 점수</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="td-accent">
-            <td><p>현재 (오늘 기준)</p></td>
-            <td><p>—</p></td>
-            <td><p>4.50</p></td>
-          </tr>
-          <tr>
-            <td><p>S3 FW 개선 계획 파일 생성 (오전)</p></td>
-            <td><p>+0.03</p></td>
-            <td><p style="color:#a0aec0;">4.53</p></td>
-          </tr>
-          <tr>
-            <td><p>포트폴리오 최종 리허설 완결 (오후)</p></td>
-            <td><p>+0.07</p></td>
-            <td><p style="color:#a0aec0;">4.60</p></td>
-          </tr>
-          <tr>
-            <td><p>P7 v5.1 R² &ge; 0.62 달성 (저녁)</p></td>
-            <td><p>+0.10</p></td>
-            <td><p style="color:#a0aec0;">4.70</p></td>
-          </tr>
-          <tr class="td-gold">
-            <td><p>P1 Acc &ge; 57% 달성 (저녁)</p></td>
-            <td><p>+0.08</p></td>
-            <td><p>4.78</p></td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- P1 카드 -->
+    <div class="diag-card">
+      <div class="dc-header">
+        <h3 class="dc-model">P1 경기 결과 예측 (v2)</h3>
+      </div>
+
+      <div class="dc-current">
+        <div class="dc-num">
+          <p>Test Acc</p>
+          <p class="val">54.79%</p>
+          <p>F1: 40.65% (D 무승부 극단 미달)</p>
+        </div>
+        <div class="dc-gap">
+          <p>목표</p>
+          <p class="gap-val">−2.21%p</p>
+          <p>갭</p>
+        </div>
+      </div>
+
+      <div>
+        <span class="section-label sl-cause">원인</span>
+        <ul class="cause-list">
+          <li>D클래스(무승부) 클래스 불균형 미보정</li>
+          <li>H2H 무승부 비율 피처 미추가 (D클래스 41/760개)</li>
+        </ul>
+      </div>
+
+      <div>
+        <span class="section-label sl-fix">해결책</span>
+        <div class="fix-box">
+          <p>models/p1_match_result/train_pipeline.py</p>
+          <p class="fix-code">class_weight={0:1, 1:2.5, 2:1} + H2H 무승부 비율 피처</p>
+          <p class="fix-code">오늘 저녁 18~22시 실행</p>
+        </div>
+      </div>
+
+      <div class="effect-badge">
+        <p>달성 시: 영입 회의 경기 결과 예측 완전한 시스템 (16개 완전체)</p>
+      </div>
     </div>
 
   </div>
 
-  <div class="roadmap-section">
-    <div class="rm-title"><p>5.0 달성 로드맵 — 7단계</p></div>
-    <div class="roadmap-steps">
-      <div class="rm-step">
-        <div class="rm-node rm-node-curr"><p>1</p></div>
-        <div class="rs-score"><p>4.53</p></div>
-        <div class="rs-when"><p>05-22 오전</p></div>
-        <div class="rs-cond"><p>S3 FW 개선 파일</p></div>
-      </div>
-      <div class="rm-connector rm-conn-hot"></div>
-      <div class="rm-step">
-        <div class="rm-node rm-node-curr"><p>2</p></div>
-        <div class="rs-score"><p>4.60</p></div>
-        <div class="rs-when"><p>05-22 오후</p></div>
-        <div class="rs-cond"><p>리허설 최종 완결</p></div>
-      </div>
-      <div class="rm-connector rm-conn-hot"></div>
-      <div class="rm-step">
-        <div class="rm-node rm-node-curr"><p>3</p></div>
-        <div class="rs-score"><p>4.70</p></div>
-        <div class="rs-when"><p>05-22 저녁</p></div>
-        <div class="rs-cond"><p>P7 R² &ge; 0.62</p></div>
-      </div>
-      <div class="rm-connector rm-conn-hot"></div>
-      <div class="rm-step">
-        <div class="rm-node rm-node-curr"><p>4</p></div>
-        <div class="rs-score"><p>4.78</p></div>
-        <div class="rs-when"><p>05-22 저녁</p></div>
-        <div class="rs-cond"><p>P1 Acc &ge; 57%</p></div>
-      </div>
-      <div class="rm-connector"></div>
-      <div class="rm-step">
-        <div class="rm-node rm-node-todo"><p>5</p></div>
-        <div class="rs-score"><p>4.84</p></div>
-        <div class="rs-when"><p>내주</p></div>
-        <div class="rs-cond"><p>S3 FW Sil &ge; 0.25</p></div>
-      </div>
-      <div class="rm-connector"></div>
-      <div class="rm-step">
-        <div class="rm-node rm-node-todo"><p>6</p></div>
-        <div class="rs-score"><p>4.92</p></div>
-        <div class="rs-when"><p>미정</p></div>
-        <div class="rs-cond"><p>포트폴리오 발표 성공</p></div>
-      </div>
-      <div class="rm-connector"></div>
-      <div class="rm-step">
-        <div class="rm-node rm-node-todo"><p>7</p></div>
-        <div class="rs-score"><p>5.00</p></div>
-        <div class="rs-when"><p>미정</p></div>
-        <div class="rs-cond"><p>영입 회의 시연 성공</p></div>
-      </div>
+  <!-- 하단 타임라인 -->
+  <div class="timeline">
+    <div class="tl-step">
+      <div class="tl-dot td-am"></div>
+      <div class="tl-time tt-am"><p>오전</p></div>
+      <div class="tl-desc"><p>S3 FW 개선 파일 생성 (reports/s3_fw_improvement_plan.md)</p></div>
     </div>
-  </div>
-
-  <div class="quote-box">
-    <div class="qb-text"><p>"11일입니다. 지난 3주 동안 쌓아온 16개 페이지, 12개 모델 — P7과 P1 두 개 미달로 포트폴리오 완성도를 떨어뜨리고 있습니다. S3 파일은 오전에, 리허설은 오후에, 저녁에 반드시 로컬 PC를 켜십시오. 오늘 저녁 결과가 없으면 평가는 4.40 이하입니다."</p></div>
-    <div class="qb-attr"><p>— 김태현 스카우트</p></div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-pm"></div>
+      <div class="tl-time tt-pm"><p>오후 13~18시</p></div>
+      <div class="tl-desc"><p>P7 v5.1 로컬 실행 (Optuna 35 trials)</p></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-ev"></div>
+      <div class="tl-time tt-ev"><p>저녁 18~22시</p></div>
+      <div class="tl-desc"><p>P1 v2 로컬 실행 (클래스 가중치 + H2H 피처)</p></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-push"></div>
+      <div class="tl-time tt-push"><p>저녁 22시 이후</p></div>
+      <div class="tl-desc"><p>결과 git push → 4.58 예상</p></div>
+    </div>
   </div>
 
 </div>

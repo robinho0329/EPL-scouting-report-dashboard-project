@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 720pt;
+    height: 405pt;
+    background: #0d1117;
+    font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
+    color: #e6edf3;
+    overflow: hidden;
+    position: relative;
+  }
+  :root {
+    --accent: #ff6b6b;
+    --gold: #ffd43b;
+    --success: #38d9a9;
+    --surface: #16213e;
+    --panel: #0f3460;
+    --muted: #8b949e;
+  }
+  .slide-inner {
+    padding: 13pt 20pt 0 20pt;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  h2.slide-title { font-size: 13pt; font-weight: 800; color: #e6edf3; margin-bottom: 9pt; }
+
+  /* 상단 3-스탯 카드 */
+  .stat-row {
+    display: flex;
+    gap: 8pt;
+    margin-bottom: 9pt;
+    flex-shrink: 0;
+  }
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border-radius: 6pt;
+    padding: 7pt 12pt;
+    text-align: center;
+    border-top: 3pt solid transparent;
+  }
+  .sc-all    { border-top-color: var(--gold); }
+  .sc-ready  { border-top-color: var(--success); }
+  .sc-update { border-top-color: var(--accent); }
+  .stat-card .sc-num { font-size: 24pt; font-weight: 900; line-height: 1; margin-bottom: 2pt; }
+  .sc-all    .sc-num { color: var(--gold); }
+  .sc-ready  .sc-num { color: var(--success); }
+  .sc-update .sc-num { color: var(--accent); }
+  .stat-card .sc-lbl { font-size: 7pt; color: var(--muted); }
+
+  /* 중간 영역 */
+  .mid-row {
+    flex: 1;
+    display: flex;
+    gap: 9pt;
+    min-height: 0;
+    margin-bottom: 8pt;
+  }
+
+  /* 좌: 9개 페이지 목록 */
+  .pages-col {
+    flex: 1;
+    background: var(--surface);
+    border-radius: 7pt;
+    padding: 8pt 10pt;
+    overflow: hidden;
+  }
+  .pc-title p { font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 5pt; }
+  .pages-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4pt;
+  }
+  .page-item {
+    display: flex;
+    align-items: center;
+    gap: 5pt;
+    background: rgba(56,217,169,0.07);
+    border: 0.8pt solid rgba(56,217,169,0.3);
+    border-radius: 4pt;
+    padding: 3.5pt 7pt;
+  }
+  .pi-dot {
+    width: 5pt; height: 5pt;
+    border-radius: 50%;
+    background: var(--success);
+    flex-shrink: 0;
+  }
+  .pi-text { flex: 1; }
+  .pi-text .pi-name { font-size: 7.5pt; font-weight: 700; color: #e6edf3; }
+  .pi-text .pi-metric { font-size: 6.5pt; color: var(--muted); }
+
+  /* 우: 가치사슬 + URL */
+  .right-col {
+    width: 200pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+  }
+
+  .value-chain {
+    background: rgba(255,212,59,0.06);
+    border: 1pt solid rgba(255,212,59,0.3);
+    border-radius: 7pt;
+    padding: 8pt 10pt;
+  }
+  .vc-title p { font-size: 7.5pt; font-weight: 700; color: var(--gold); margin-bottom: 5pt; }
+  .vc-flow {
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+    margin-bottom: 5pt;
+  }
+  .vc-node {
+    flex: 1;
+    text-align: center;
+    background: var(--panel);
+    border-radius: 4pt;
+    padding: 4pt 3pt;
+  }
+  .vc-node .vn-id { font-size: 9pt; font-weight: 900; }
+  .vc-node .vn-name { font-size: 6pt; color: var(--muted); line-height: 1.2; }
+  .vn-green .vn-id { color: var(--success); }
+  .vn-red   .vn-id { color: var(--accent); }
+  .vn-red   { border: 1pt solid var(--accent); }
+  .vc-arrow { color: var(--gold); font-size: 8pt; flex-shrink: 0; }
+  .vc-badge {
+    background: rgba(255,107,107,0.12);
+    border: 0.8pt solid var(--accent);
+    border-radius: 4pt;
+    padding: 3pt 6pt;
+  }
+  .vc-badge p { font-size: 6.5pt; color: var(--accent); font-weight: 700; line-height: 1.4; }
+  .vc-desc p  { font-size: 7pt; color: #a0aec0; line-height: 1.4; }
+
+  .url-box {
+    flex: 1;
+    background: var(--panel);
+    border: 2pt solid var(--success);
+    border-radius: 7pt;
+    padding: 8pt 10pt;
+    display: flex;
+    flex-direction: column;
+    gap: 4pt;
+  }
+  .ub-lbl p { font-size: 7pt; font-weight: 700; color: var(--success); text-transform: uppercase; letter-spacing: 0.05em; }
+  .ub-url p { font-size: 6.5pt; color: var(--success); font-weight: 600; word-break: break-all; line-height: 1.4; }
+  .ub-repo p { font-size: 6.5pt; color: var(--muted); }
+
+  /* 하단 타임라인 */
+  .timeline {
+    background: var(--surface);
+    border-radius: 5pt;
+    padding: 6pt 14pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .tl-item { display: flex; align-items: center; gap: 5pt; }
+  .tl-dot { width: 7pt; height: 7pt; border-radius: 50%; flex-shrink: 0; }
+  .td-am { background: var(--gold); }
+  .td-pm { background: var(--accent); }
+  .td-ev { background: var(--accent); }
+  .td-done { background: var(--success); }
+  .tl-time-am p { font-size: 7pt; font-weight: 700; color: var(--gold); }
+  .tl-time-pm p { font-size: 7pt; font-weight: 700; color: var(--accent); }
+  .tl-time-ev p { font-size: 7pt; font-weight: 700; color: var(--accent); }
+  .tl-time-done p { font-size: 7pt; font-weight: 700; color: var(--success); }
+  .tl-desc p { font-size: 6.5pt; color: var(--muted); }
+  .tl-sep { color: #30363d; font-size: 10pt; }
+</style>
+</head>
+<body>
+<div class="slide-inner">
+
+  <h2 class="slide-title">Streamlit 대시보드 현황 — 16페이지, 즉시 활용 9개 + 가치 사슬 전략</h2>
+
+  <!-- 상단 3-스탯 -->
+  <div class="stat-row">
+    <div class="stat-card sc-all">
+      <p class="sc-num">16</p>
+      <p class="sc-lbl">전체 페이지</p>
+    </div>
+    <div class="stat-card sc-ready">
+      <p class="sc-num">9</p>
+      <p class="sc-lbl">즉시 활용 가능 (S1, P4, P6, S2, P8, P3, P2, S3, S6)</p>
+    </div>
+    <div class="stat-card sc-update">
+      <p class="sc-num">2</p>
+      <p class="sc-lbl">오늘 저녁 업데이트 예정 (P1, P7)</p>
+    </div>
+  </div>
+
+  <div class="mid-row">
+
+    <!-- 좌: 9개 페이지 목록 -->
+    <div class="pages-col">
+      <div class="pc-title"><p>즉시 활용 가능 9개 페이지 (초록 상태)</p></div>
+      <div class="pages-grid">
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">S1 선수 종합 레이팅</p>
+            <p class="pi-metric">R² 0.9093 / MAE 4.66</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">P4 MVP 스코어링</p>
+            <p class="pi-metric">Spearman 0.9987</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">P6 시장가치 예측</p>
+            <p class="pi-metric">R² 0.8734 / MAE £3.28M</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">S2 포지션별 시장가치</p>
+            <p class="pi-metric">R² 0.8812 / MAE £3.23M</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">P8 이적 적응 예측</p>
+            <p class="pi-metric">AUC 0.6612 (위험 플래그 도구)</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">P3 강등권 예측</p>
+            <p class="pi-metric">AUC 100% / Acc 100%</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">P2 득점 예측</p>
+            <p class="pi-metric">R² 0.8877 / MAE 0.96골</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">S3 유사선수 탐색</p>
+            <p class="pi-metric">MID 0.23 / DEF 0.36 / GK 0.49</p>
+          </div>
+        </div>
+        <div class="page-item">
+          <div class="pi-dot"></div>
+          <div class="pi-text">
+            <p class="pi-name">S6 하락세 감지</p>
+            <p class="pi-metric">AUC 0.8324 / F1 61.74%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 우: 가치사슬 + URL -->
+    <div class="right-col">
+
+      <div class="value-chain">
+        <div class="vc-title"><p>P7 달성 시 영입 가치 사슬 완성</p></div>
+        <div class="vc-flow">
+          <div class="vc-node vn-green">
+            <p class="vn-id">P6/S2</p>
+            <p class="vn-name">현재<br>가치</p>
+          </div>
+          <p class="vc-arrow">&#x2192;</p>
+          <div class="vc-node vn-red">
+            <p class="vn-id">P7</p>
+            <p class="vn-name">성장<br>예측</p>
+          </div>
+          <p class="vc-arrow">&#x2192;</p>
+          <div class="vc-node vn-green">
+            <p class="vn-id">P8</p>
+            <p class="vn-name">이적<br>적응</p>
+          </div>
+        </div>
+        <div class="vc-badge">
+          <p>P7 오늘 저녁 달성 목표 — R² &ge; 0.62</p>
+        </div>
+        <div class="vc-desc">
+          <p>S1+S2: 이 선수의 포지션 기준 WAR과 적정 시장가치 대비 현재 가격 — 30초 분석</p>
+        </div>
+      </div>
+
+      <div class="url-box">
+        <div class="ub-lbl"><p>Streamlit 앱</p></div>
+        <div class="ub-url"><p>epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p></div>
+        <div class="ub-repo"><p>GitHub: robinho0329/EPL-scouting-report-dashboard-project</p></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- 하단 타임라인 -->
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot td-am"></div>
+      <div>
+        <div class="tl-time-am"><p>오전</p></div>
+        <div class="tl-desc"><p>S3 FW 개선 파일</p></div>
+      </div>
+    </div>
+    <p class="tl-sep">&#10132;</p>
+    <div class="tl-item">
+      <div class="tl-dot td-pm"></div>
+      <div>
+        <div class="tl-time-pm"><p>오후</p></div>
+        <div class="tl-desc"><p>P7 v5.1 실행</p></div>
+      </div>
+    </div>
+    <p class="tl-sep">&#10132;</p>
+    <div class="tl-item">
+      <div class="tl-dot td-ev"></div>
+      <div>
+        <div class="tl-time-ev"><p>저녁</p></div>
+        <div class="tl-desc"><p>P1 v2 실행</p></div>
+      </div>
+    </div>
+    <p class="tl-sep">&#10132;</p>
+    <div class="tl-item">
+      <div class="tl-dot td-done"></div>
+      <div>
+        <div class="tl-time-done"><p>완료 후</p></div>
+        <div class="tl-desc"><p>16개 완전체 달성 (4.58 예상)</p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -2,267 +2,254 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 720pt;
     height: 405pt;
     background: #0d1117;
-    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
   :root {
-    --accent: #e94560;
-    --gold: #f5a623;
-    --green: #00d26a;
-    --muted: #8b949e;
+    --accent: #ff6b6b;
+    --gold: #ffd43b;
+    --success: #38d9a9;
+    --blue: #58a6ff;
     --surface: #16213e;
     --panel: #0f3460;
+    --muted: #8b949e;
   }
   .slide-inner {
-    padding: 14pt 20pt 10pt 20pt;
+    padding: 12pt 18pt 0 18pt;
     height: 100%;
     display: flex;
     flex-direction: column;
   }
-  h2.slide-title { font-size: 13.5pt; font-weight: 800; color: #e6edf3; margin-bottom: 9pt; }
 
-  .stat-cards { display: flex; gap: 8pt; margin-bottom: 9pt; }
-  .stat-card {
-    flex: 1;
-    background: var(--surface);
-    border-radius: 7pt;
-    padding: 8pt 12pt;
-    text-align: center;
-    border-top: 3pt solid transparent;
-  }
-  .sc-pages   { border-top-color: var(--gold); }
-  .sc-active  { border-top-color: var(--green); }
-  .sc-update  { border-top-color: var(--accent); }
-  .stat-card .sc-num { font-size: 28pt; font-weight: 900; line-height: 1; margin-bottom: 2pt; }
-  .sc-pages  .sc-num { color: var(--gold); }
-  .sc-active .sc-num { color: var(--green); }
-  .sc-update .sc-num { color: var(--accent); }
-  .stat-card .sc-lbl { font-size: 7.5pt; color: var(--muted); }
-
-  .mid-row { flex: 1; display: flex; gap: 9pt; min-height: 0; margin-bottom: 8pt; }
-
-  .rehearsal-col { flex: 1; background: var(--surface); border-radius: 7pt; padding: 9pt 12pt; overflow: hidden; }
-  .rc-title p { font-size: 8pt; font-weight: 700; color: #e6edf3; margin-bottom: 6pt; }
-  .rehearsal-steps { display: flex; flex-direction: column; gap: 4pt; }
-  .rh-step { display: flex; align-items: flex-start; gap: 7pt; }
-  .rh-num {
-    width: 16pt; height: 16pt;
-    border-radius: 50%;
-    background: var(--green);
-    display: flex; align-items: center; justify-content: center;
+  /* 상단 긴급 배너 */
+  .top-banner {
+    background: rgba(255,107,107,0.10);
+    border: 1.5pt solid var(--accent);
+    border-radius: 5pt;
+    padding: 5pt 12pt;
+    display: flex;
+    align-items: center;
+    gap: 8pt;
+    margin-bottom: 8pt;
     flex-shrink: 0;
   }
-  .rh-num p { font-size: 7.5pt; font-weight: 800; color: #fff; }
-  .rh-content { flex: 1; }
-  .rh-model  p { font-size: 7.8pt; font-weight: 700; color: #e6edf3; }
-  .rh-metric p { font-size: 7pt; color: var(--muted); }
-  /* span → background 허용 */
-  .rh-badge {
+  .tb-text { flex: 1; }
+  .tb-text p { font-size: 8pt; font-weight: 700; color: var(--accent); }
+  .tb-warn {
+    background: var(--accent);
+    border-radius: 10pt;
+    padding: 2pt 8pt;
+    white-space: nowrap;
+  }
+  .tb-warn p { font-size: 7pt; font-weight: 800; color: #fff; }
+
+  h2.slide-title { font-size: 12.5pt; font-weight: 800; color: #e6edf3; margin-bottom: 7pt; }
+
+  /* 3개 카드 */
+  .cards-row {
+    flex: 1;
+    display: flex;
+    gap: 8pt;
+    min-height: 0;
+  }
+  .action-card {
+    flex: 1;
+    border-radius: 7pt;
+    padding: 9pt 10pt;
+    display: flex;
+    flex-direction: column;
+    gap: 4pt;
+    overflow: hidden;
+  }
+  .card-1 { background: rgba(255,107,107,0.08); border: 2pt solid var(--accent); }
+  .card-2 { background: rgba(255,212,59,0.06); border: 1.5pt solid var(--gold); }
+  .card-3 { background: rgba(56,217,169,0.05); border: 1.5pt solid var(--success); }
+
+  .card-header { display: flex; align-items: center; gap: 5pt; margin-bottom: 2pt; }
+  p.medal-icon { font-size: 13pt; line-height: 1; }
+  .priority-label {
     font-size: 6.5pt;
     font-weight: 700;
-    color: var(--accent);
-    background: rgba(233,69,96,0.12);
+    padding: 1.5pt 6pt;
+    border-radius: 10pt;
+  }
+  .pl-red    { background: rgba(255,107,107,0.2); color: var(--accent); }
+  .pl-gold   { background: rgba(255,212,59,0.2);  color: var(--gold); }
+  .pl-green  { background: rgba(56,217,169,0.15); color: var(--success); }
+
+  h4.card-title { font-size: 8pt; font-weight: 800; color: #e6edf3; line-height: 1.35; }
+
+  .urgent-tag {
+    display: inline-block;
+    background: rgba(255,107,107,0.12);
     border: 0.8pt solid var(--accent);
     border-radius: 8pt;
     padding: 1pt 5pt;
-    flex-shrink: 0;
-    align-self: flex-start;
   }
+  .urgent-tag p { font-size: 6pt; font-weight: 700; color: var(--accent); }
 
-  .impact-row { display: flex; gap: 6pt; margin-top: 6pt; }
-  .impact-card {
-    flex: 1;
-    background: rgba(245,166,35,0.07);
-    border: 0.8pt solid rgba(245,166,35,0.4);
-    border-radius: 5pt;
-    padding: 4pt 7pt;
-  }
-  .ic-name p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
-  .ic-met  p { font-size: 7pt; color: var(--muted); }
+  .card-owner p  { font-size: 6.5pt; color: var(--muted); }
+  .card-detail p { font-size: 7pt; color: #a0aec0; line-height: 1.4; }
 
-  .url-col { width: 190pt; display: flex; flex-direction: column; gap: 8pt; }
-  .url-box {
-    background: var(--panel);
-    border: 2pt solid var(--green);
-    border-radius: 8pt;
-    padding: 10pt 12pt;
-    flex: 1;
-  }
-  .ub-lbl  p { font-size: 7.5pt; font-weight: 700; color: var(--green); margin-bottom: 4pt; text-transform: uppercase; letter-spacing: 0.05em; }
-  .ub-url  p { font-size: 7pt; color: var(--accent); font-weight: 700; word-break: break-all; line-height: 1.4; margin-bottom: 6pt; }
-  .ub-repo p { font-size: 7pt; color: var(--muted); margin-bottom: 4pt; }
-  .qr-placeholder {
-    width: 50pt; height: 50pt;
-    background: #1a1a2e;
-    border: 1pt solid var(--green);
+  .goal-box {
+    background: rgba(255,212,59,0.1);
+    border: 0.8pt solid rgba(255,212,59,0.4);
     border-radius: 4pt;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto;
+    padding: 3.5pt 6pt;
+    margin-top: 2pt;
   }
-  .qr-placeholder p { font-size: 6pt; color: var(--muted); text-align: center; }
+  .goal-box p { font-size: 7pt; font-weight: 700; color: var(--gold); }
 
-  .update-box {
-    background: rgba(233,69,96,0.07);
-    border: 1.5pt solid var(--accent);
-    border-radius: 7pt;
-    padding: 8pt 10pt;
+  .effect-badge {
+    display: inline-block;
+    background: rgba(56,217,169,0.12);
+    border: 0.8pt solid rgba(56,217,169,0.4);
+    border-radius: 10pt;
+    padding: 1.5pt 6pt;
   }
-  .ub-title p { font-size: 7.5pt; font-weight: 800; color: var(--accent); margin-bottom: 4pt; }
-  .ub-item p  { font-size: 7pt; color: #a0aec0; line-height: 1.4; }
+  .effect-badge p { font-size: 6.5pt; font-weight: 700; color: var(--success); }
 
+  .deadline-red  p { font-size: 7pt; font-weight: 700; color: var(--accent); }
+  .deadline-gold p { font-size: 7pt; font-weight: 700; color: var(--gold); }
+  .deadline-grn  p { font-size: 7pt; font-weight: 600; color: var(--success); }
+
+  /* 하단 타임라인 인디케이터 */
   .timeline {
     background: var(--surface);
-    border-radius: 6pt;
-    padding: 7pt 14pt;
+    border-top: 1pt solid #30363d;
+    padding: 7pt 12pt;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
   }
-  .tl-item { display: flex; align-items: center; gap: 5pt; }
-  .tl-dot  { width: 8pt; height: 8pt; border-radius: 50%; flex-shrink: 0; }
-  .tl-dot-am { background: var(--gold); }
-  .tl-dot-pm { background: #58a6ff; }
-  .tl-dot-ev { background: var(--accent); }
-  .tl-dot-wk { background: var(--green); }
-  .tl-time-am p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
-  .tl-time-pm p { font-size: 7.5pt; font-weight: 700; color: #58a6ff; }
-  .tl-time-ev p { font-size: 7.5pt; font-weight: 700; color: var(--accent); }
-  .tl-time-wk p { font-size: 7.5pt; font-weight: 700; color: var(--green); }
-  .tl-desc p { font-size: 7pt; color: var(--muted); }
-  .tl-arrow p { color: var(--muted); font-size: 9pt; }
+  .tl-step { display: flex; flex-direction: column; align-items: center; gap: 2pt; }
+  .tl-dot {
+    width: 9pt; height: 9pt;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .td-am   { background: var(--gold); }
+  .td-pm   { background: var(--accent); }
+  .td-ev   { background: var(--accent); }
+  .td-push { background: var(--blue); }
+  .td-sun  { background: var(--success); }
+  .tl-time p { font-size: 6.5pt; font-weight: 700; }
+  .tt-am   p { color: var(--gold); }
+  .tt-pm   p { color: var(--accent); }
+  .tt-ev   p { color: var(--accent); }
+  .tt-push p { color: var(--blue); }
+  .tt-sun  p { color: var(--success); }
+  .tl-desc p { font-size: 6pt; color: var(--muted); text-align: center; max-width: 80pt; line-height: 1.3; }
+  .tl-line { flex: 1; height: 1.5pt; background: rgba(255,107,107,0.25); margin: 0 3pt; margin-top: -8pt; }
 </style>
 </head>
 <body>
 <div class="slide-inner">
 
-  <h2 class="slide-title">Streamlit 대시보드 현황 — 16페이지 운영 중</h2>
-
-  <div class="stat-cards">
-    <div class="stat-card sc-pages">
-      <p class="sc-num">16</p>
-      <p class="sc-lbl">전체 페이지</p>
+  <div class="top-banner">
+    <div class="tb-text">
+      <p>오늘 3가지 완결 시 4.38 → 4.58 예상 — 저녁 결과 없으면 월요일 4.20 이하</p>
     </div>
-    <div class="stat-card sc-active">
-      <p class="sc-num">9</p>
-      <p class="sc-lbl">즉시 활용 가능 (S1, P4, P6, S2, P8, P3, P2, S3, S6)</p>
-    </div>
-    <div class="stat-card sc-update">
-      <p class="sc-num">2</p>
-      <p class="sc-lbl">오늘 저녁 업데이트 예정 (P1, P7)</p>
-    </div>
+    <div class="tb-warn"><p>오후 S3 → 오후 P7 → 저녁 P1 → 일요일 리허설</p></div>
   </div>
 
-  <div class="mid-row">
+  <h2 class="slide-title">오늘 액션아이템 Top 3 — 주말 긴급 처리 계획</h2>
 
-    <div class="rehearsal-col">
-      <div class="rc-title"><p>포트폴리오 리허설 5단계 핵심 페이지 — 오늘 오후 최종 완결</p></div>
-      <div class="rehearsal-steps">
-        <div class="rh-step">
-          <div class="rh-num"><p>1</p></div>
-          <div class="rh-content">
-            <div class="rh-model"><p>S1 선수 종합 레이팅</p></div>
-            <div class="rh-metric"><p>R² 0.9093 / MAE 4.66 — 영입 후보 전체 랭킹</p></div>
-          </div>
-        </div>
-        <div class="rh-step">
-          <div class="rh-num"><p>2</p></div>
-          <div class="rh-content">
-            <div class="rh-model"><p>S2 포지션별 시장가치</p></div>
-            <div class="rh-metric"><p>R² 0.8812 / MAE £3.23M — 저평가 선수 탐색 (S1+S2: 30초 정량화)</p></div>
-          </div>
-        </div>
-        <div class="rh-step">
-          <div class="rh-num"><p>3</p></div>
-          <div class="rh-content">
-            <div class="rh-model"><p>P8 이적 적응 예측</p></div>
-            <div class="rh-metric"><p>AUC 0.6612 / F1 88.23% — 이적 후 적응 리스크 평가</p></div>
-          </div>
-          <span class="rh-badge">위험 플래그 도구</span>
-        </div>
-        <div class="rh-step">
-          <div class="rh-num"><p>4</p></div>
-          <div class="rh-content">
-            <div class="rh-model"><p>P6 시장가치 예측</p></div>
-            <div class="rh-metric"><p>R² 0.8734 / MAE £3.28M — 가치 검증</p></div>
-          </div>
-        </div>
-        <div class="rh-step">
-          <div class="rh-num"><p>5</p></div>
-          <div class="rh-content">
-            <div class="rh-model"><p>S6 선수 하락세 감지</p></div>
-            <div class="rh-metric"><p>AUC 0.8324 / F1 61.74% — 타깃 선수 컨디션 추세</p></div>
-          </div>
-        </div>
+  <div class="cards-row">
+
+    <!-- 카드 1: 1순위 P7+P1 -->
+    <div class="action-card card-1">
+      <div class="card-header">
+        <p class="medal-icon">&#x1F947;</p>
+        <span class="priority-label pl-red">1순위 — 저녁 필수</span>
       </div>
-      <div class="impact-row">
-        <div class="impact-card">
-          <div class="ic-name"><p>P3 강등권 예측</p></div>
-          <div class="ic-met"><p>AUC 100% / Acc 100%</p></div>
-        </div>
-        <div class="impact-card">
-          <div class="ic-name"><p>P4 MVP 스코어링</p></div>
-          <div class="ic-met"><p>Spearman 0.9987 / NDCG@10 0.9993</p></div>
-        </div>
-      </div>
+      <h4 class="card-title">P7 v5.1 + P1 v2 로컬 학습 즉시 실행</h4>
+      <div class="urgent-tag"><p>12일 연속 미달 — 오늘 저녁 종결</p></div>
+      <div class="card-owner"><p>담당: Marcus Webb (로컬 PC 반드시 가동)</p></div>
+      <div class="card-detail"><p>P7: train_v5_1.py (오후 13~18시, Optuna 35 trials)</p></div>
+      <div class="card-detail"><p>P7 추가 피처: lag3_rating, delta_lag1_2, delta_lag2_3</p></div>
+      <div class="card-detail"><p>P1: train_pipeline.py (저녁 18~22시)</p></div>
+      <div class="card-detail"><p>P1 개선: class_weight={0:1,1:2.5,2:1} + H2H 무승부 비율</p></div>
+      <div class="goal-box"><p>P7 R² &ge; 0.62 (현 0.586, 갭 0.034) / P1 Acc &ge; 57% (현 54.79%, 갭 2.21%p)</p></div>
+      <div class="deadline-red"><p>기한: 2026-05-23 저녁 — push 없으면 월요일 4.20 이하</p></div>
+      <div class="effect-badge"><p>+0.18 (P7 +0.10 / P1 +0.08)</p></div>
     </div>
 
-    <div class="url-col">
-      <div class="url-box">
-        <div class="ub-lbl"><p>Streamlit 앱</p></div>
-        <div class="ub-url"><p>epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p></div>
-        <div class="ub-repo"><p>GitHub: robinho0329/EPL-scouting-report-dashboard-project</p></div>
-        <div class="qr-placeholder"><p>QR 플레이스홀더</p></div>
+    <!-- 카드 2: 2순위 S3 -->
+    <div class="action-card card-2">
+      <div class="card-header">
+        <p class="medal-icon">&#x1F948;</p>
+        <span class="priority-label pl-gold">2순위 — 오늘 오전</span>
       </div>
-      <div class="update-box">
-        <div class="ub-title"><p>오늘 저녁 업데이트 예정</p></div>
-        <div class="ub-item"><p>P7 v5.1 학습 → R² 0.62 달성 시 "성장 곡선 + P8 이적" 연계 스토리 완성</p></div>
-        <div class="ub-item"><p>P1 v2 학습 → Acc 57% 달성 시 영입 회의 완전한 시스템 (16개 완전체)</p></div>
+      <h4 class="card-title">S3 FW 클러스터 개선 방향 파일 생성</h4>
+      <div class="card-owner"><p>담당: Marcus Webb</p></div>
+      <div class="card-detail"><p>생성 파일: reports/s3_fw_improvement_plan.md</p></div>
+      <div class="card-detail"><p>현재: FW Silhouette 0.2085 (목표 0.25, 4일 연속 미달)</p></div>
+      <div class="card-detail"><p>추가 피처: dribbles_completed_pct / pressures_att_3rd</p></div>
+      <div class="card-detail"><p>K=7 유지 기준 및 K=5 대안 비교 포함</p></div>
+      <div class="goal-box"><p>파일 생성 완료 / FW Silhouette 개선 방안 명시</p></div>
+      <div class="deadline-gold"><p>기한: 2026-05-23 오전 세션 중</p></div>
+      <div class="effect-badge"><p>+0.02 → 4.40</p></div>
+    </div>
+
+    <!-- 카드 3: 3순위 리허설 -->
+    <div class="action-card card-3">
+      <div class="card-header">
+        <p class="medal-icon">&#x1F949;</p>
+        <span class="priority-label pl-green">3순위 — 일요일 오전</span>
       </div>
+      <h4 class="card-title">포트폴리오 최종 리허설 완결</h4>
+      <div class="card-owner"><p>담당: Marcus Webb</p></div>
+      <div class="card-detail"><p>흐름: S1 → S2 → P8 → P6 → S6 (5분 최종)</p></div>
+      <div class="card-detail"><p>P8 대응: "결정 도구 아닌 위험 플래그 / AUC 0.66 랜덤 대비 유의미"</p></div>
+      <div class="card-detail"><p>Q&amp;A 3개: (1) P1 낮은 이유 (2) P7 미달 시 대안 (3) AUC 0.66 활용법</p></div>
+      <div class="goal-box"><p>최종 demo_script 완성 / Q&amp;A 3개 대응 가능</p></div>
+      <div class="deadline-grn"><p>기한: 2026-05-24 일요일 오전</p></div>
+      <div class="effect-badge"><p>+0.07 → 4.65 (일요일 달성 시)</p></div>
     </div>
 
   </div>
 
+  <!-- 하단 타임라인 -->
   <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot tl-dot-am"></div>
-      <div>
-        <div class="tl-time-am"><p>오전 (세션 중)</p></div>
-        <div class="tl-desc"><p>S3 FW 개선 파일 생성</p></div>
-      </div>
+    <div class="tl-step">
+      <div class="tl-dot td-am"></div>
+      <div class="tl-time tt-am"><p>오전</p></div>
+      <div class="tl-desc"><p>S3 FW 개선 파일 생성</p></div>
     </div>
-    <div class="tl-arrow"><p>&#10132;</p></div>
-    <div class="tl-item">
-      <div class="tl-dot tl-dot-pm"></div>
-      <div>
-        <div class="tl-time-pm"><p>오후 (세션 중)</p></div>
-        <div class="tl-desc"><p>포트폴리오 최종 리허설 완결</p></div>
-      </div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-pm"></div>
+      <div class="tl-time tt-pm"><p>오후 13~18시</p></div>
+      <div class="tl-desc"><p>P7 v5.1 실행</p></div>
     </div>
-    <div class="tl-arrow"><p>&#10132;</p></div>
-    <div class="tl-item">
-      <div class="tl-dot tl-dot-ev"></div>
-      <div>
-        <div class="tl-time-ev"><p>저녁 (로컬 PC)</p></div>
-        <div class="tl-desc"><p>P7 v5.1 + P1 v2 학습 실행</p></div>
-      </div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-ev"></div>
+      <div class="tl-time tt-ev"><p>저녁 18~22시</p></div>
+      <div class="tl-desc"><p>P1 v2 실행</p></div>
     </div>
-    <div class="tl-arrow"><p>&#10132;</p></div>
-    <div class="tl-item">
-      <div class="tl-dot tl-dot-wk"></div>
-      <div>
-        <div class="tl-time-wk"><p>주말 전</p></div>
-        <div class="tl-desc"><p>16페이지 완전체 (4.78 예상)</p></div>
-      </div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-push"></div>
+      <div class="tl-time tt-push"><p>저녁</p></div>
+      <div class="tl-desc"><p>결과 git push</p></div>
+    </div>
+    <div class="tl-line"></div>
+    <div class="tl-step">
+      <div class="tl-dot td-sun"></div>
+      <div class="tl-time tt-sun"><p>일요일</p></div>
+      <div class="tl-desc"><p>포트폴리오 리허설 완결</p></div>
     </div>
   </div>
 

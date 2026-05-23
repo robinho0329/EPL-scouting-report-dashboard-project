@@ -2,25 +2,25 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     width: 720pt;
     height: 405pt;
     background: #0d1117;
-    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+    font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
   :root {
-    --accent: #e94560;
-    --gold: #f5a623;
-    --green: #00d26a;
-    --muted: #8b949e;
+    --accent: #ff6b6b;
+    --gold: #ffd43b;
+    --success: #38d9a9;
     --surface: #16213e;
     --panel: #0f3460;
+    --muted: #8b949e;
   }
   .slide-inner {
     padding: 13pt 20pt 0 20pt;
@@ -28,208 +28,234 @@
     display: flex;
     flex-direction: column;
   }
-  .top-banner {
-    background: rgba(233,69,96,0.12);
+
+  /* 상단 긴급 배너 */
+  .alert-banner {
+    background: rgba(255,107,107,0.15);
     border: 1.5pt solid var(--accent);
     border-radius: 5pt;
     padding: 6pt 14pt;
     display: flex;
     align-items: center;
-    gap: 8pt;
+    gap: 10pt;
     margin-bottom: 10pt;
+    flex-shrink: 0;
   }
-  .tb-text-wrap { flex: 1; }
-  .tb-text-wrap p { font-size: 8pt; font-weight: 800; color: var(--accent); }
-  .tb-warn {
+  .ab-dot {
+    width: 9pt; height: 9pt;
+    border-radius: 50%;
     background: var(--accent);
-    padding: 2pt 8pt;
-    border-radius: 10pt;
+    flex-shrink: 0;
+  }
+  .ab-text { flex: 1; }
+  .ab-text p { font-size: 8.5pt; font-weight: 800; color: var(--accent); }
+  .ab-badge {
+    background: var(--accent);
+    border-radius: 20pt;
+    padding: 2.5pt 10pt;
     white-space: nowrap;
   }
-  .tb-warn p { font-size: 7.5pt; font-weight: 700; color: #fff; }
+  .ab-badge p { font-size: 8pt; font-weight: 800; color: #fff; }
 
-  h2.slide-title { font-size: 14pt; font-weight: 800; color: #e6edf3; margin-bottom: 9pt; }
+  h2.slide-title { font-size: 13pt; font-weight: 800; color: #e6edf3; margin-bottom: 9pt; }
 
-  .cards-row {
+  /* 카드 + 우측 요약 */
+  .content-row {
     flex: 1;
     display: flex;
-    gap: 8pt;
+    gap: 10pt;
     min-height: 0;
   }
-  .action-card {
+  .cards-col {
     flex: 1;
-    border-radius: 7pt;
-    padding: 10pt 11pt;
     display: flex;
     flex-direction: column;
-    gap: 4pt;
-    overflow: hidden;
+    gap: 7pt;
   }
-  .card-1 { background: rgba(233,69,96,0.08); border: 2pt solid var(--accent); }
-  .card-2 { background: rgba(245,166,35,0.06); border: 1.5pt solid var(--gold); }
-  .card-3 { background: rgba(15,52,96,0.6); border: 1.5pt solid #0f3460; }
-
-  .card-header { display: flex; align-items: center; gap: 6pt; margin-bottom: 2pt; }
-  /* medal-icon: p 태그 — background 없음 */
-  p.medal-icon { font-size: 14pt; line-height: 1; }
-  /* span은 textTags 아님 → background/border 허용 */
-  .priority-label {
-    font-size: 7pt;
-    font-weight: 700;
-    padding: 1.5pt 6pt;
-    border-radius: 10pt;
+  .miss-card {
+    background: rgba(255,107,107,0.07);
+    border: 1pt solid var(--accent);
+    border-radius: 6pt;
+    padding: 7pt 10pt;
+    display: flex;
+    gap: 8pt;
+    align-items: flex-start;
   }
-  .pl-red  { background: rgba(233,69,96,0.2); color: var(--accent); }
-  .pl-gold { background: rgba(245,166,35,0.2); color: var(--gold); }
-  .pl-blue { background: rgba(15,52,96,0.8);  color: #58a6ff; }
-
-  h4.card-title { font-size: 8.5pt; font-weight: 800; color: #e6edf3; line-height: 1.35; }
-
-  .urgent-tag {
-    display: inline-block;
-    background: rgba(233,69,96,0.12);
-    border: 0.8pt solid var(--accent);
-    border-radius: 8pt;
-    padding: 1pt 5pt;
+  .x-mark {
+    width: 18pt; height: 18pt;
+    background: rgba(255,107,107,0.2);
+    border: 1.5pt solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
   }
-  .urgent-tag p { font-size: 6.5pt; font-weight: 700; color: var(--accent); }
-
-  .card-owner p  { font-size: 7pt; color: var(--muted); }
-  .card-detail p { font-size: 7.5pt; color: #a0aec0; line-height: 1.4; }
-
-  .goal-box {
-    background: rgba(245,166,35,0.1);
-    border: 0.8pt solid rgba(245,166,35,0.4);
-    border-radius: 4pt;
-    padding: 4pt 7pt;
-    margin-top: 2pt;
-  }
-  .goal-box p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
-
-  .effect-badge {
-    display: inline-block;
-    background: rgba(0,210,106,0.12);
-    border: 0.8pt solid rgba(0,210,106,0.4);
+  .x-mark p { font-size: 10pt; font-weight: 900; color: var(--accent); }
+  .miss-body { flex: 1; }
+  .miss-body h4 { font-size: 8.5pt; font-weight: 800; color: #e6edf3; margin-bottom: 2pt; }
+  .mb-goal p { font-size: 7.5pt; color: var(--muted); margin-bottom: 1pt; }
+  .mb-curr p { font-size: 7.5pt; color: var(--accent); }
+  .mb-note p { font-size: 7pt; color: var(--muted); margin-top: 2pt; font-style: italic; }
+  .impact-badge {
+    background: rgba(255,107,107,0.15);
     border-radius: 10pt;
     padding: 1.5pt 6pt;
+    white-space: nowrap;
+    align-self: flex-start;
+    flex-shrink: 0;
   }
-  .effect-badge p { font-size: 7pt; font-weight: 700; color: var(--green); }
+  .impact-badge p { font-size: 7pt; font-weight: 700; color: var(--accent); }
 
-  .deadline p      { font-size: 7.5pt; font-weight: 700; color: var(--accent); }
-  .deadline-gold p { font-size: 7.5pt; font-weight: 700; color: var(--gold); }
-  .deadline-gray p { font-size: 7.5pt; font-weight: 600; color: var(--muted); }
-
-  .timeline {
+  /* 우측 요약 */
+  .summary-col {
+    width: 148pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+  }
+  .rate-box {
     background: var(--surface);
-    border-top: 1pt solid #30363d;
-    padding: 8pt 14pt;
+    border: 2pt solid var(--accent);
+    border-radius: 8pt;
+    padding: 10pt 12pt;
+    text-align: center;
+  }
+  .rb-lbl p { font-size: 7.5pt; color: var(--muted); margin-bottom: 4pt; }
+  .rate-frac {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3pt;
+    margin-bottom: 4pt;
+  }
+  .rf-num p { font-size: 34pt; font-weight: 900; color: var(--accent); line-height: 1; }
+  .rf-den p { font-size: 13pt; font-weight: 600; color: var(--muted); padding-bottom: 3pt; }
+  .rb-pct p { font-size: 9pt; font-weight: 700; color: var(--accent); }
+
+  .change-box {
+    background: var(--surface);
+    border-radius: 6pt;
+    padding: 9pt 10pt;
+    flex: 1;
+  }
+  .chb-lbl p { font-size: 7pt; color: var(--muted); margin-bottom: 5pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .change-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4pt;
+  }
+  .cr-item p { font-size: 7pt; color: var(--muted); }
+  .cr-val  p { font-size: 8pt; font-weight: 700; color: var(--accent); }
+  .score-track {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 6pt;
+    background: rgba(255,107,107,0.08);
+    border-radius: 5pt;
+    padding: 5pt;
+    margin-top: 6pt;
   }
-  .tl-step { display: flex; flex-direction: column; align-items: center; gap: 3pt; }
-  .tl-dot { width: 10pt; height: 10pt; border-radius: 50%; border: 2pt solid var(--accent); background: rgba(233,69,96,0.2); }
-  .tl-dot-gold { background: var(--gold);  border-color: var(--gold); }
-  .tl-dot-grn  { background: var(--green); border-color: var(--green); }
-  .tl-time p { font-size: 7pt; font-weight: 700; }
-  .tl-time-red  p { color: var(--accent); }
-  .tl-time-gold p { color: var(--gold); }
-  .tl-time-grn  p { color: var(--green); }
-  .tl-desc p { font-size: 6.5pt; color: var(--muted); text-align: center; max-width: 80pt; line-height: 1.3; }
-  .tl-line {
-    flex: 1;
-    height: 1.5pt;
-    background: rgba(233,69,96,0.3);
-    margin: 0 4pt;
-    margin-top: -11pt;
+  .st-prev p { font-size: 12pt; font-weight: 700; color: var(--muted); }
+  .st-arr  p { font-size: 9pt; color: var(--accent); }
+  .st-now  p { font-size: 14pt; font-weight: 900; color: var(--accent); }
+
+  /* 하단 인용 박스 */
+  .quote-box {
+    background: var(--surface);
+    border-left: 3pt solid var(--accent);
+    border-radius: 0 5pt 5pt 0;
+    padding: 7pt 12pt;
+    margin-top: 8pt;
+    flex-shrink: 0;
   }
+  .qb-text p { font-size: 7.5pt; color: #a0aec0; line-height: 1.5; font-style: italic; }
+  .qb-attr p { font-size: 7pt; color: var(--muted); margin-top: 3pt; text-align: right; }
 </style>
 </head>
 <body>
 <div class="slide-inner">
 
-  <div class="top-banner">
-    <div class="tb-text-wrap"><p>오늘 3가지 완결 시 4.50 → 4.78 예상 | 오전 S3 파일 → 오후 리허설 → 저녁 P7+P1 로컬 학습</p></div>
-    <div class="tb-warn"><p>저녁 결과 없으면 4.40 이하</p></div>
+  <div class="alert-banner">
+    <div class="ab-dot"></div>
+    <div class="ab-text"><p>어제(05-22 금요일) 달성 0건 / 미달 3건 — 달성률 0% / 경고 발동: −0.12 하락</p></div>
+    <div class="ab-badge"><p>▼ −0.12 경고 발동</p></div>
   </div>
 
-  <h2 class="slide-title">오늘(05-22) 액션아이템 Top 3 — 금요일 주말 전 마지막 기회</h2>
+  <div class="content-row">
+    <div class="cards-col">
 
-  <div class="cards-row">
-
-    <div class="action-card card-1">
-      <div class="card-header">
-        <p class="medal-icon">&#x1F947;</p>
-        <span class="priority-label pl-red">1순위 — 저녁 필수</span>
+      <div class="miss-card">
+        <div class="x-mark"><p>X</p></div>
+        <div class="miss-body">
+          <h4>P7 v5.1 + P1 v2 로컬 학습 미실행</h4>
+          <div class="mb-goal"><p>목표: P7 R² &ge; 0.62 / P1 Acc &ge; 57%</p></div>
+          <div class="mb-curr"><p>현재: P7 R² 0.586 / P1 Acc 54.79% — 로컬 PC 미가동 / dev_result 파일 없음</p></div>
+          <div class="mb-note"><p>12일 연속 미달 — 오늘 저녁 필수 (내일 아침 없으면 월요일 4.20 이하)</p></div>
+        </div>
+        <div class="impact-badge"><p>−0.10 (12일 연속 경고)</p></div>
       </div>
-      <h4 class="card-title">P7 v5.1 + P1 v2 로컬 학습 즉시 실행</h4>
-      <div class="urgent-tag"><p>11일 연속 미달 — 오늘 저녁 절대 기한</p></div>
-      <div class="card-owner"><p>담당: Marcus Webb (로컬 PC 반드시 가동)</p></div>
-      <div class="card-detail"><p>순서: train_v5_1.py → train_pipeline.py</p></div>
-      <div class="card-detail"><p>P7 추가 피처: lag3_rating, delta_lag1_2, delta_lag2_3</p></div>
-      <div class="card-detail"><p>P1 개선: D클래스 가중치 + H2H 무승부 비율</p></div>
-      <div class="goal-box"><p>P7 R² &ge; 0.62 (현 0.586) / P1 Acc &ge; 57% (현 54.79%)</p></div>
-      <div class="deadline"><p>기한: 2026-05-22 저녁 — 주말 전 push</p></div>
-      <div class="effect-badge"><p>+0.18 (P7 +0.10 / P1 +0.08)</p></div>
+
+      <div class="miss-card">
+        <div class="x-mark"><p>X</p></div>
+        <div class="miss-body">
+          <h4>s3_fw_improvement_plan.md 파일 미생성</h4>
+          <div class="mb-goal"><p>목표: 오전 파일 생성 완료 / FW Silhouette 0.25 달성 방안 명시</p></div>
+          <div class="mb-curr"><p>현재: 파일 없음 — 4일 연속 미달</p></div>
+          <div class="mb-note"><p>오늘 오전 완료 필수</p></div>
+        </div>
+        <div class="impact-badge"><p>−0.02</p></div>
+      </div>
+
+      <div class="miss-card">
+        <div class="x-mark"><p>X</p></div>
+        <div class="miss-body">
+          <h4>포트폴리오 최종 리허설 완결 미달</h4>
+          <div class="mb-goal"><p>목표: demo_script 최종본 확정 / Q&amp;A 3개 대응 가능 / 금요일 오후 완결</p></div>
+          <div class="mb-curr"><p>현재: demo_script_draft.md 기존 파일 있으나 최종 완결 증빙 없음</p></div>
+          <div class="mb-note"><p>일요일 오전으로 기한 이동</p></div>
+        </div>
+        <div class="impact-badge"><p>&#177;0 (이월)</p></div>
+      </div>
+
     </div>
 
-    <div class="action-card card-2">
-      <div class="card-header">
-        <p class="medal-icon">&#x1F948;</p>
-        <span class="priority-label pl-gold">2순위 — 오늘 오전</span>
+    <div class="summary-col">
+      <div class="rate-box">
+        <div class="rb-lbl"><p>어제 달성률</p></div>
+        <div class="rate-frac">
+          <div class="rf-num"><p>0</p></div>
+          <div class="rf-den"><p>/ 3</p></div>
+        </div>
+        <div class="rb-pct"><p>0% 달성</p></div>
       </div>
-      <h4 class="card-title">S3 FW 클러스터 개선 방향 파일 생성</h4>
-      <div class="card-owner"><p>담당: Marcus Webb</p></div>
-      <div class="card-detail"><p>생성: reports/s3_fw_improvement_plan.md</p></div>
-      <div class="card-detail"><p>현재 FW Silhouette 0.2085 (목표 0.25)</p></div>
-      <div class="card-detail"><p>추가 피처: dribbles_completed_pct / pressures_att_3rd / shots_on_target_pct</p></div>
-      <div class="card-detail"><p>K=7 유지 기준 및 K=5 대안 포함</p></div>
-      <div class="goal-box"><p>파일 생성 + GitHub Actions 실행 가능</p></div>
-      <div class="deadline-gold"><p>기한: 2026-05-22 오전 세션 중</p></div>
-      <div class="effect-badge"><p>+0.03 → 4.53</p></div>
-    </div>
 
-    <div class="action-card card-3">
-      <div class="card-header">
-        <p class="medal-icon">&#x1F949;</p>
-        <span class="priority-label pl-blue">3순위 — 오늘 오후</span>
+      <div class="change-box">
+        <div class="chb-lbl"><p>경고 발동 내역</p></div>
+        <div class="change-row">
+          <div class="cr-item"><p>P7/P1 12일 연속</p></div>
+          <div class="cr-val"><p>−0.10</p></div>
+        </div>
+        <div class="change-row">
+          <div class="cr-item"><p>S3 파일 4일 미달</p></div>
+          <div class="cr-val"><p>−0.02</p></div>
+        </div>
+        <div class="change-row">
+          <div class="cr-item"><p>합계</p></div>
+          <div class="cr-val"><p>−0.12</p></div>
+        </div>
+        <div class="score-track">
+          <div class="st-prev"><p>4.50</p></div>
+          <div class="st-arr"><p>&#9654;</p></div>
+          <div class="st-now"><p>4.38</p></div>
+        </div>
       </div>
-      <h4 class="card-title">포트폴리오 최종 리허설 완결 — 금요일 최종본</h4>
-      <div class="card-owner"><p>담당: Marcus Webb</p></div>
-      <div class="card-detail"><p>흐름: S1 → S2 → P8 → P6 → S6 (5분)</p></div>
-      <div class="card-detail"><p>P8 대응: "위험 플래그 도구. AUC 0.66은 랜덤 대비 유의미."</p></div>
-      <div class="card-detail"><p>Q&amp;A: (1) P1 낮은 이유 (2) P7 R² 미달 시 대안 (3) AUC 0.66 영입 결정 여부</p></div>
-      <div class="goal-box"><p>최종 demo_script 완성 / Q&amp;A 3개 대응</p></div>
-      <div class="deadline-gray"><p>기한: 2026-05-22 오후 세션 중</p></div>
-      <div class="effect-badge"><p>+0.07 → 4.60</p></div>
     </div>
-
   </div>
 
-  <div class="timeline">
-    <div class="tl-step">
-      <div class="tl-dot tl-dot-gold"></div>
-      <div class="tl-time tl-time-gold"><p>오전</p></div>
-      <div class="tl-desc"><p>S3 FW 개선 파일 생성</p></div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-step">
-      <div class="tl-dot tl-dot-gold"></div>
-      <div class="tl-time tl-time-gold"><p>오후</p></div>
-      <div class="tl-desc"><p>포트폴리오 최종 리허설 완결</p></div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-step">
-      <div class="tl-dot"></div>
-      <div class="tl-time tl-time-red"><p>저녁</p></div>
-      <div class="tl-desc"><p>P7+P1 로컬 학습</p></div>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-step">
-      <div class="tl-dot tl-dot-grn"></div>
-      <div class="tl-time tl-time-grn"><p>주말 전</p></div>
-      <div class="tl-desc"><p>결과 push → 4.78 예상</p></div>
-    </div>
+  <div class="quote-box">
+    <div class="qb-text"><p>"4.38. 12일입니다. 어제 금요일 데드라인을 경고와 함께 발동했습니다. P7, P1, S3 파일 — 세 가지 모두 금요일에 달성되지 않았습니다. 오늘 토요일 오전에 S3 파일을 만들고, 오후에 P7을 돌리고, 저녁에 P1을 돌리십시오."</p></div>
+    <div class="qb-attr"><p>— 김태현 스카우트</p></div>
   </div>
 
 </div>
