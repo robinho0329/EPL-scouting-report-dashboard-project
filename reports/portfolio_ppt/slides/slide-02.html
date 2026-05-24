@@ -14,99 +14,95 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 28px 40px 22px;
+    padding: 28px 36px 24px 36px;
   }
 </style>
 </head>
 <body>
+
   <!-- 슬라이드 헤더 -->
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-    <div style="display:flex; align-items:center; gap:10px;">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+    <div style="display:flex; align-items:center; gap:12px;">
       <div style="width:4px; height:22px; background:#ff6b6b; border-radius:2px;"></div>
-      <h2 style="font-size:18px; font-weight:700; color:#e6edf3; letter-spacing:-0.01em;">이그제큐티브 서머리</h2>
-      <p style="display:inline-block; padding:3px 9px; background:#0f3460; color:#58a6ff; border-radius:8px; font-size:8px; font-weight:600;">2026-05-24 (일) 09:00</p>
+      <h2 style="font-size:20px; font-weight:700; color:#e6edf3;">이그제큐티브 서머리</h2>
     </div>
-    <p style="font-size:8px; color:#8b949e;">2 / 8</p>
+    <p style="font-size:10px; color:#8b949e;">2026-05-24 | 33회차 미팅</p>
   </div>
 
   <!-- KPI 카드 4개 (상단) -->
-  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px;">
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px;">
+
     <!-- 정상 모델 -->
-    <div style="background:#16213e; border:1.5px solid #38d9a9; border-radius:8px; padding:12px 14px; position:relative;">
-      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">정상 모델</p>
-      <p style="font-size:34px; font-weight:800; color:#38d9a9; line-height:1; letter-spacing:-0.02em;">10</p>
-      <p style="font-size:9px; color:#8b949e; margin-top:3px;">/ 12개 모델</p>
-      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#38d9a9;"></div>
+    <div style="background:#16213e; border:1px solid #38d9a9; border-top:3px solid #38d9a9; border-radius:8px; padding:14px 16px;">
+      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">정상 모델</p>
+      <p style="font-size:36px; font-weight:800; color:#38d9a9; line-height:1;">10</p>
+      <p style="font-size:10px; color:#8b949e; margin-top:4px;">/ 12개 모델</p>
     </div>
+
     <!-- 연속 미달 -->
-    <div style="background:#16213e; border:1.5px solid #ff6b6b; border-radius:8px; padding:12px 14px; position:relative;">
-      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">연속 미달</p>
-      <p style="font-size:34px; font-weight:800; color:#ff6b6b; line-height:1; letter-spacing:-0.02em;">13</p>
-      <p style="font-size:9px; color:#ff6b6b; margin-top:3px; font-weight:600;">일 연속 (P1·P7)</p>
-      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#ff6b6b;"></div>
+    <div style="background:#16213e; border:1px solid #ff6b6b; border-top:3px solid #ff6b6b; border-radius:8px; padding:14px 16px;">
+      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">연속 미달</p>
+      <p style="font-size:36px; font-weight:800; color:#ff6b6b; line-height:1;">13일</p>
+      <p style="font-size:10px; color:#ff6b6b; margin-top:4px; font-weight:700;">P7 + P1</p>
     </div>
+
     <!-- 스카우트 평가 -->
-    <div style="background:#16213e; border:1.5px solid #ff6b6b; border-radius:8px; padding:12px 14px; position:relative;">
-      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">스카우트 평가</p>
-      <p style="font-size:34px; font-weight:800; color:#ff6b6b; line-height:1; letter-spacing:-0.02em;">4.25</p>
-      <p style="font-size:9px; color:#ff6b6b; margin-top:3px; font-weight:600;">▼ 0.13 (전일 4.38)</p>
-      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#ff6b6b;"></div>
+    <div style="background:#16213e; border:1px solid #ff6b6b; border-top:3px solid #ff6b6b; border-radius:8px; padding:14px 16px;">
+      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">스카우트 평가</p>
+      <p style="font-size:36px; font-weight:800; color:#ff6b6b; line-height:1;">4.25</p>
+      <p style="font-size:10px; color:#ff6b6b; margin-top:4px; font-weight:700;">전일 4.38 ▼0.13</p>
     </div>
+
     <!-- 대시보드 페이지 -->
-    <div style="background:#16213e; border:1.5px solid #38d9a9; border-radius:8px; padding:12px 14px; position:relative;">
-      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">대시보드 페이지</p>
-      <p style="font-size:34px; font-weight:800; color:#38d9a9; line-height:1; letter-spacing:-0.02em;">16</p>
-      <p style="font-size:9px; color:#8b949e; margin-top:3px;">즉시 활용 9개</p>
-      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#38d9a9;"></div>
+    <div style="background:#16213e; border:1px solid #38d9a9; border-top:3px solid #38d9a9; border-radius:8px; padding:14px 16px;">
+      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">대시보드 페이지</p>
+      <p style="font-size:36px; font-weight:800; color:#38d9a9; line-height:1;">16개</p>
+      <p style="font-size:10px; color:#8b949e; margin-top:4px;">즉시 활용 9개</p>
     </div>
+
   </div>
 
-  <!-- 핵심 요약 불릿 3줄 -->
-  <div style="background:#16213e; border-radius:8px; padding:12px 16px; margin-bottom:12px; flex:1;">
-    <p style="font-size:9px; color:#8b949e; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:9px;">핵심 현황</p>
+  <!-- 3줄 핵심 요약 -->
+  <div style="background:#16213e; border-radius:8px; padding:14px 18px; margin-bottom:14px; flex:1;">
     <ul style="list-style:none; display:flex; flex-direction:column; gap:8px;">
-      <li style="display:flex; gap:10px; align-items:flex-start;">
-        <div style="width:6px; height:6px; border-radius:50%; background:#ff6b6b; margin-top:5px; flex-shrink:0;"></div>
-        <p style="font-size:10.5px; color:#e6edf3; line-height:1.5;">
-          <span style="color:#ff6b6b; font-weight:700;">P7(성장곡선 R²=0.586) · P1(경기결과 Acc=54.79%)</span> — 13일 연속 목표 미달, 오늘이 절대 마지막 기회, 저녁 <span style="color:#ffd43b; font-weight:600;">22시 데드라인</span>
-        </p>
+      <li style="display:flex; align-items:flex-start; gap:10px;">
+        <span style="display:inline-block; min-width:8px; height:8px; border-radius:50%; background:#ff6b6b; margin-top:5px;"></span>
+        <p style="font-size:12px; color:#e6edf3; line-height:1.6;"><strong style="color:#ff6b6b;">P7</strong>(성장곡선 R²=0.586) · <strong style="color:#ff6b6b;">P1</strong>(경기결과 Acc=54.79%) — 13일 연속 목표 미달, 오늘이 절대 마지막 기회, <strong style="color:#ff6b6b;">저녁 22시 데드라인</strong></p>
       </li>
-      <li style="display:flex; gap:10px; align-items:flex-start;">
-        <div style="width:6px; height:6px; border-radius:50%; background:#ff6b6b; margin-top:5px; flex-shrink:0;"></div>
-        <p style="font-size:10.5px; color:#e6edf3; line-height:1.5;">
-          어제(05-23 토) 액션아이템 <span style="color:#ff6b6b; font-weight:700;">3개 중 0개 달성</span> — 평가 4.38 → <span style="color:#ff6b6b; font-weight:700;">4.25 (−0.13)</span>, 내일 4.20 이하 경고 발동 중
-        </p>
+      <li style="display:flex; align-items:flex-start; gap:10px;">
+        <span style="display:inline-block; min-width:8px; height:8px; border-radius:50%; background:#ff6b6b; margin-top:5px;"></span>
+        <p style="font-size:12px; color:#e6edf3; line-height:1.6;">어제(05-23 토) 액션아이템 3개 중 <strong style="color:#ff6b6b;">0개 달성</strong> — 평가 4.38→<strong style="color:#ff6b6b;">4.25 (−0.13)</strong>, 내일 4.20 이하 경고 발동 중</p>
       </li>
-      <li style="display:flex; gap:10px; align-items:flex-start;">
-        <div style="width:6px; height:6px; border-radius:50%; background:#38d9a9; margin-top:5px; flex-shrink:0;"></div>
-        <p style="font-size:10.5px; color:#e6edf3; line-height:1.5;">
-          오늘 달성 시나리오: demo_script v2.0+S3파일(오전) <span style="color:#38d9a9; font-weight:600;">+0.10</span> → P7달성(오후) <span style="color:#38d9a9; font-weight:600;">+0.10</span> → P1달성(저녁) <span style="color:#38d9a9; font-weight:600;">+0.08</span> → <span style="color:#38d9a9; font-weight:700;">4.53까지 복원 가능</span>
-        </p>
+      <li style="display:flex; align-items:flex-start; gap:10px;">
+        <span style="display:inline-block; min-width:8px; height:8px; border-radius:50%; background:#38d9a9; margin-top:5px;"></span>
+        <p style="font-size:12px; color:#e6edf3; line-height:1.6;">오늘 달성 시나리오: demo_script v2.0(오전)+S3파일(오전)+P7달성(오후)+P1달성(저녁) → <strong style="color:#38d9a9;">4.53까지 복원 가능</strong></p>
       </li>
     </ul>
   </div>
 
-  <!-- 하단 신호등 요약 바 -->
-  <div style="display:flex; align-items:center; justify-content:space-between; background:#0f3460; border-radius:7px; padding:8px 16px;">
-    <p style="font-size:9px; color:#8b949e; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;">모델 상태 요약</p>
-    <div style="display:flex; gap:18px; align-items:center;">
-      <div style="display:flex; align-items:center; gap:6px;">
-        <div style="width:10px; height:10px; border-radius:50%; background:#ff6b6b;"></div>
-        <p style="font-size:10px; color:#ff6b6b; font-weight:700;">미달 2개 (P1·P7)</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <div style="width:10px; height:10px; border-radius:50%; background:#ffd43b;"></div>
-        <p style="font-size:10px; color:#ffd43b; font-weight:700;">양호 3개 (P5·S3·S6)</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <div style="width:10px; height:10px; border-radius:50%; background:#38d9a9;"></div>
-        <p style="font-size:10px; color:#38d9a9; font-weight:700;">우수 4개 (P2·P6·P8·S2)</p>
-      </div>
-      <div style="display:flex; align-items:center; gap:6px;">
-        <div style="width:10px; height:10px; border-radius:50%; background:#58a6ff;"></div>
-        <p style="font-size:10px; color:#58a6ff; font-weight:700;">최우수 3개 (P3·P4·S1)</p>
-      </div>
+  <!-- 하단 신호등 카운터 바 -->
+  <div style="display:flex; align-items:center; gap:16px; background:#0f3460; border-radius:6px; padding:10px 18px;">
+    <p style="font-size:10px; color:#8b949e; letter-spacing:0.05em; text-transform:uppercase; margin-right:4px;">신호등 요약</p>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#ff6b6b;"></span>
+      <p style="font-size:12px; font-weight:700; color:#ff6b6b;">2개 (P1·P7)</p>
+    </div>
+    <div style="width:1px; height:16px; background:#30363d;"></div>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#ffd43b;"></span>
+      <p style="font-size:12px; font-weight:700; color:#ffd43b;">3개 (P5·S3·S6)</p>
+    </div>
+    <div style="width:1px; height:16px; background:#30363d;"></div>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#38d9a9;"></span>
+      <p style="font-size:12px; font-weight:700; color:#38d9a9;">4개 (P2·P6·P8·S2)</p>
+    </div>
+    <div style="width:1px; height:16px; background:#30363d;"></div>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#38d9a9; box-shadow:0 0 0 2px #0d1117, 0 0 0 3px #38d9a9;"></span>
+      <p style="font-size:12px; font-weight:700; color:#38d9a9;">3개 최우수 (P3·P4·S1)</p>
     </div>
   </div>
+
 </body>
 </html>
