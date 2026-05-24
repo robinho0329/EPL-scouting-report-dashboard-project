@@ -2,205 +2,111 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    position: relative;
-  }
-  :root {
-    --accent: #ff6b6b;
-    --gold: #ffd43b;
-    --success: #38d9a9;
-    --surface: #16213e;
-    --panel: #0f3460;
-    --muted: #8b949e;
-  }
-  .slide-inner {
-    padding: 16pt 24pt 0 24pt;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 28px 40px 22px;
   }
-  .slide-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 11pt;
-  }
-  h2.slide-title { font-size: 14pt; font-weight: 800; color: #e6edf3; }
-  .slide-sub { font-size: 7.5pt; color: var(--muted); }
-
-  /* KPI 카드 4개 */
-  .kpi-row {
-    display: flex;
-    gap: 8pt;
-    margin-bottom: 11pt;
-  }
-  .kpi-card {
-    flex: 1;
-    background: var(--surface);
-    border-radius: 7pt;
-    padding: 9pt 12pt;
-    text-align: center;
-    border-top: 3pt solid transparent;
-    position: relative;
-  }
-  .kpi-normal  { border-top-color: var(--success); }
-  .kpi-danger  { border-top-color: var(--accent); }
-  .kpi-warn    { border-top-color: var(--gold); }
-  .kpi-info    { border-top-color: var(--success); }
-
-  .kpi-card .kpi-num {
-    font-size: 26pt;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2pt;
-  }
-  .kpi-normal .kpi-num { color: var(--success); }
-  .kpi-danger .kpi-num { color: var(--accent); }
-  .kpi-warn   .kpi-num { color: var(--gold); }
-  .kpi-info   .kpi-num { color: var(--success); }
-
-  .kpi-card .kpi-lbl { font-size: 7pt; color: var(--muted); line-height: 1.4; }
-  .kpi-card .kpi-sub { font-size: 6.5pt; color: var(--accent); font-weight: 700; margin-top: 2pt; }
-  .kpi-card .kpi-sub-g { font-size: 6.5pt; color: var(--muted); margin-top: 2pt; }
-
-  /* 핵심 요약 불릿 */
-  .bullet-section {
-    background: var(--surface);
-    border-radius: 7pt;
-    padding: 10pt 14pt;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 7pt;
-    margin-bottom: 9pt;
-  }
-  .bullet-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8pt;
-  }
-  .bullet-dot {
-    width: 6pt;
-    height: 6pt;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 3pt;
-  }
-  .bd-red   { background: var(--accent); }
-  .bd-gold  { background: var(--gold); }
-  .bd-green { background: var(--success); }
-  .bullet-item p { font-size: 8.5pt; color: #e6edf3; line-height: 1.5; }
-  .bullet-item .hi-red   { color: var(--accent); font-weight: 700; }
-  .bullet-item .hi-green { color: var(--success); font-weight: 700; }
-  .bullet-item .hi-gold  { color: var(--gold); font-weight: 700; }
-
-  /* 하단 신호등 카운터 바 */
-  .signal-bar {
-    background: var(--panel);
-    border-radius: 0 0 7pt 7pt;
-    padding: 6pt 14pt;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-  .sg-group { display: flex; align-items: center; gap: 5pt; }
-  .sg-dot {
-    width: 9pt; height: 9pt;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .sd-red   { background: var(--accent); }
-  .sd-gold  { background: var(--gold); }
-  .sd-green { background: var(--success); }
-  .sg-text p { font-size: 7.5pt; font-weight: 700; }
-  .sgt-red   p { color: var(--accent); }
-  .sgt-gold  p { color: var(--gold); }
-  .sgt-green p { color: var(--success); }
-  .sg-sep { color: #30363d; font-size: 10pt; margin: 0 4pt; }
 </style>
 </head>
 <body>
-<div class="slide-inner">
-
-  <div class="slide-header">
-    <h2 class="slide-title">이그제큐티브 서머리 — 10개 정상, P7·P1 12일 연속 미달 오늘 저녁 종결</h2>
-    <p class="slide-sub">2026-05-23 | 32회차</p>
+  <!-- 슬라이드 헤더 -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:4px; height:22px; background:#ff6b6b; border-radius:2px;"></div>
+      <h2 style="font-size:18px; font-weight:700; color:#e6edf3; letter-spacing:-0.01em;">이그제큐티브 서머리</h2>
+      <p style="display:inline-block; padding:3px 9px; background:#0f3460; color:#58a6ff; border-radius:8px; font-size:8px; font-weight:600;">2026-05-24 (일) 09:00</p>
+    </div>
+    <p style="font-size:8px; color:#8b949e;">2 / 8</p>
   </div>
 
-  <!-- KPI 카드 4개 -->
-  <div class="kpi-row">
-    <div class="kpi-card kpi-normal">
-      <p class="kpi-num">10</p>
-      <p class="kpi-lbl">정상 모델</p>
-      <p class="kpi-sub-g">/ 12개 중</p>
+  <!-- KPI 카드 4개 (상단) -->
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px;">
+    <!-- 정상 모델 -->
+    <div style="background:#16213e; border:1.5px solid #38d9a9; border-radius:8px; padding:12px 14px; position:relative;">
+      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">정상 모델</p>
+      <p style="font-size:34px; font-weight:800; color:#38d9a9; line-height:1; letter-spacing:-0.02em;">10</p>
+      <p style="font-size:9px; color:#8b949e; margin-top:3px;">/ 12개 모델</p>
+      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#38d9a9;"></div>
     </div>
-    <div class="kpi-card kpi-danger">
-      <p class="kpi-num">12일</p>
-      <p class="kpi-lbl">P7·P1 연속 미달</p>
-      <p class="kpi-sub">오늘 저녁 데드라인</p>
+    <!-- 연속 미달 -->
+    <div style="background:#16213e; border:1.5px solid #ff6b6b; border-radius:8px; padding:12px 14px; position:relative;">
+      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">연속 미달</p>
+      <p style="font-size:34px; font-weight:800; color:#ff6b6b; line-height:1; letter-spacing:-0.02em;">13</p>
+      <p style="font-size:9px; color:#ff6b6b; margin-top:3px; font-weight:600;">일 연속 (P1·P7)</p>
+      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#ff6b6b;"></div>
     </div>
-    <div class="kpi-card kpi-warn">
-      <p class="kpi-num">4.38</p>
-      <p class="kpi-lbl">스카우트 평가 / 5.0</p>
-      <p class="kpi-sub">전일 4.50 대비 ▼ 0.12</p>
+    <!-- 스카우트 평가 -->
+    <div style="background:#16213e; border:1.5px solid #ff6b6b; border-radius:8px; padding:12px 14px; position:relative;">
+      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">스카우트 평가</p>
+      <p style="font-size:34px; font-weight:800; color:#ff6b6b; line-height:1; letter-spacing:-0.02em;">4.25</p>
+      <p style="font-size:9px; color:#ff6b6b; margin-top:3px; font-weight:600;">▼ 0.13 (전일 4.38)</p>
+      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#ff6b6b;"></div>
     </div>
-    <div class="kpi-card kpi-info">
-      <p class="kpi-num">16</p>
-      <p class="kpi-lbl">대시보드 페이지</p>
-      <p class="kpi-sub-g">즉시 활용 9개</p>
-    </div>
-  </div>
-
-  <!-- 핵심 요약 불릿 -->
-  <div class="bullet-section">
-    <div class="bullet-item">
-      <div class="bullet-dot bd-red"></div>
-      <p><span class="hi-red">P7(성장곡선 R²=0.586) · P1(경기결과 Acc=54.79%)</span> — 12일 연속 목표 미달, 오늘 저녁 로컬 실행 데드라인. 결과 push 없으면 월요일 4.20 이하.</p>
-    </div>
-    <div class="bullet-item">
-      <div class="bullet-dot bd-gold"></div>
-      <p>어제(05-22 금) 액션아이템 3개 중 <span class="hi-red">0개 달성</span> — 금요일 경고 반영 평가 하락 <span class="hi-red">(4.50 → 4.38, −0.12)</span>. 12일 연속 미달 −0.10 / S3 파일 4일 연속 미달 −0.02.</p>
-    </div>
-    <div class="bullet-item">
-      <div class="bullet-dot bd-green"></div>
-      <p>대시보드 <span class="hi-green">즉시 활용 9개 페이지</span> — P7 달성 시 "현재가치→성장→이적적응" 완전한 가치 사슬 완성. S1+S2 조합으로 30초 정량화 가능.</p>
+    <!-- 대시보드 페이지 -->
+    <div style="background:#16213e; border:1.5px solid #38d9a9; border-radius:8px; padding:12px 14px; position:relative;">
+      <p style="font-size:9px; color:#8b949e; margin-bottom:4px; letter-spacing:0.05em; text-transform:uppercase;">대시보드 페이지</p>
+      <p style="font-size:34px; font-weight:800; color:#38d9a9; line-height:1; letter-spacing:-0.02em;">16</p>
+      <p style="font-size:9px; color:#8b949e; margin-top:3px;">즉시 활용 9개</p>
+      <div style="position:absolute; top:8px; right:10px; width:8px; height:8px; border-radius:50%; background:#38d9a9;"></div>
     </div>
   </div>
 
-  <!-- 하단 신호등 카운터 바 -->
-  <div class="signal-bar">
-    <div class="sg-group">
-      <div class="sg-dot sd-red"></div>
-      <div class="sg-text sgt-red"><p>미달 2개 (P1·P7)</p></div>
-    </div>
-    <span class="sg-sep">|</span>
-    <div class="sg-group">
-      <div class="sg-dot sd-gold"></div>
-      <div class="sg-text sgt-gold"><p>양호 3개 (P5·S3·S6)</p></div>
-    </div>
-    <span class="sg-sep">|</span>
-    <div class="sg-group">
-      <div class="sg-dot sd-green"></div>
-      <div class="sg-text sgt-green"><p>우수 4개 (P2·P6·P8·S2)</p></div>
-    </div>
-    <span class="sg-sep">|</span>
-    <div class="sg-group">
-      <div class="sg-dot sd-green"></div>
-      <div class="sg-text sgt-green"><p>최우수 3개 (P3·P4·S1)</p></div>
-    </div>
+  <!-- 핵심 요약 불릿 3줄 -->
+  <div style="background:#16213e; border-radius:8px; padding:12px 16px; margin-bottom:12px; flex:1;">
+    <p style="font-size:9px; color:#8b949e; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:9px;">핵심 현황</p>
+    <ul style="list-style:none; display:flex; flex-direction:column; gap:8px;">
+      <li style="display:flex; gap:10px; align-items:flex-start;">
+        <div style="width:6px; height:6px; border-radius:50%; background:#ff6b6b; margin-top:5px; flex-shrink:0;"></div>
+        <p style="font-size:10.5px; color:#e6edf3; line-height:1.5;">
+          <span style="color:#ff6b6b; font-weight:700;">P7(성장곡선 R²=0.586) · P1(경기결과 Acc=54.79%)</span> — 13일 연속 목표 미달, 오늘이 절대 마지막 기회, 저녁 <span style="color:#ffd43b; font-weight:600;">22시 데드라인</span>
+        </p>
+      </li>
+      <li style="display:flex; gap:10px; align-items:flex-start;">
+        <div style="width:6px; height:6px; border-radius:50%; background:#ff6b6b; margin-top:5px; flex-shrink:0;"></div>
+        <p style="font-size:10.5px; color:#e6edf3; line-height:1.5;">
+          어제(05-23 토) 액션아이템 <span style="color:#ff6b6b; font-weight:700;">3개 중 0개 달성</span> — 평가 4.38 → <span style="color:#ff6b6b; font-weight:700;">4.25 (−0.13)</span>, 내일 4.20 이하 경고 발동 중
+        </p>
+      </li>
+      <li style="display:flex; gap:10px; align-items:flex-start;">
+        <div style="width:6px; height:6px; border-radius:50%; background:#38d9a9; margin-top:5px; flex-shrink:0;"></div>
+        <p style="font-size:10.5px; color:#e6edf3; line-height:1.5;">
+          오늘 달성 시나리오: demo_script v2.0+S3파일(오전) <span style="color:#38d9a9; font-weight:600;">+0.10</span> → P7달성(오후) <span style="color:#38d9a9; font-weight:600;">+0.10</span> → P1달성(저녁) <span style="color:#38d9a9; font-weight:600;">+0.08</span> → <span style="color:#38d9a9; font-weight:700;">4.53까지 복원 가능</span>
+        </p>
+      </li>
+    </ul>
   </div>
 
-</div>
+  <!-- 하단 신호등 요약 바 -->
+  <div style="display:flex; align-items:center; justify-content:space-between; background:#0f3460; border-radius:7px; padding:8px 16px;">
+    <p style="font-size:9px; color:#8b949e; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;">모델 상태 요약</p>
+    <div style="display:flex; gap:18px; align-items:center;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#ff6b6b;"></div>
+        <p style="font-size:10px; color:#ff6b6b; font-weight:700;">미달 2개 (P1·P7)</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#ffd43b;"></div>
+        <p style="font-size:10px; color:#ffd43b; font-weight:700;">양호 3개 (P5·S3·S6)</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#38d9a9;"></div>
+        <p style="font-size:10px; color:#38d9a9; font-weight:700;">우수 4개 (P2·P6·P8·S2)</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#58a6ff;"></div>
+        <p style="font-size:10px; color:#58a6ff; font-weight:700;">최우수 3개 (P3·P4·S1)</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
