@@ -6,164 +6,198 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
-    position: relative;
     display: flex;
     flex-direction: column;
-    padding: 18pt 26pt 14pt 26pt;
   }
+  :root {
+    --success: #38d9a9;
+    --warning: #ffd43b;
+    --danger: #ff6b6b;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+
   .slide-header {
+    background: #161b22;
+    padding: 8pt 26pt;
+    border-bottom: 1pt solid #30363d;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 12pt;
+    flex-shrink: 0;
   }
-  .slide-title {
-    font-size: 15pt;
-    font-weight: 800;
-    color: #e6edf3;
+  .slide-header h2 { font-size: 13pt; font-weight: 700; }
+  .slide-header p { font-size: 9pt; color: var(--muted); }
+
+  .content-area {
+    flex: 1;
+    padding: 12pt 24pt 8pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
   }
-  .slide-tag {
-    font-size: 8pt;
-    color: #8b949e;
-    letter-spacing: 0.1em;
-  }
+
+  /* 2×2 KPI 카드 그리드 */
   .kpi-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 10pt;
     flex: 1;
-    margin-bottom: 10pt;
   }
+
   .kpi-card {
-    background: #161b22;
+    background: #16213e;
     border-radius: 6pt;
     padding: 10pt 14pt;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1.5pt solid #ff6b6b;
   }
-  .kpi-card.warning {
-    border-color: #ffd43b;
-  }
+  .kpi-card.danger { border: 2pt solid var(--danger); }
+  .kpi-card.warning { border: 2pt solid var(--warning); }
+
   .kpi-label {
     font-size: 8pt;
-    color: #8b949e;
-    font-weight: 600;
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-bottom: 4pt;
+    margin-bottom: 3pt;
   }
   .kpi-value {
-    font-size: 34pt;
-    font-weight: 900;
+    font-size: 42pt;
+    font-weight: 800;
     line-height: 1;
-    color: #ff6b6b;
+    margin-bottom: 4pt;
   }
-  .kpi-card.warning .kpi-value {
-    color: #ffd43b;
-  }
+  .kpi-card.danger .kpi-value { color: var(--danger); }
+  .kpi-card.warning .kpi-value { color: var(--warning); }
+
   .kpi-sub {
-    font-size: 7.5pt;
-    color: #8b949e;
-    margin-top: 4pt;
-    line-height: 1.45;
+    font-size: 8pt;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-bottom: 3pt;
   }
   .kpi-delta {
-    font-size: 7.5pt;
-    color: #ff6b6b;
-    font-weight: 700;
-    margin-top: 4pt;
-  }
-  .kpi-card.warning .kpi-delta {
-    color: #ffd43b;
-  }
-  .restore-row {
-    background: rgba(56, 217, 169, 0.08);
-    border-radius: 5pt;
-    padding: 6pt 12pt;
-    margin-bottom: 7pt;
-    border-left: 3pt solid #38d9a9;
-  }
-  .restore-row p {
     font-size: 8.5pt;
-    color: #38d9a9;
-    font-weight: 600;
+    font-weight: 700;
+  }
+  .kpi-card.danger .kpi-delta { color: var(--danger); }
+  .kpi-card.warning .kpi-delta { color: var(--warning); }
+
+  /* 복원 경로 안내 */
+  .restore-bar {
+    background: rgba(56, 217, 169, 0.08);
+    border: 1pt solid rgba(56, 217, 169, 0.35);
+    border-radius: 5pt;
+    padding: 7pt 16pt;
+    flex-shrink: 0;
+  }
+  .restore-bar p {
+    font-size: 9pt;
+    color: var(--success);
+    text-align: center;
     line-height: 1.5;
   }
+  .restore-bar p strong {
+    font-weight: 800;
+    font-size: 10pt;
+  }
+
+  /* 신호등 카운터 바 */
   .signal-bar {
     background: #161b22;
-    border-radius: 4pt;
-    padding: 5pt 12pt;
+    border-radius: 5pt;
+    padding: 5pt 16pt;
+    display: flex;
+    gap: 16pt;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .signal-item {
     display: flex;
     align-items: center;
-    gap: 14pt;
-    flex-wrap: wrap;
+    gap: 5pt;
   }
-  .signal-bar p {
-    font-size: 7.5pt;
-    color: #8b949e;
-    line-height: 1.5;
+  .signal-dot {
+    width: 9pt;
+    height: 9pt;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
+  .dot-best { background: #38d9a9; }
+  .dot-good { background: #3fb950; }
+  .dot-warn { background: #ffd43b; }
+  .dot-fail { background: #ff6b6b; }
+  .signal-item p { font-size: 8pt; color: var(--muted); }
 </style>
 </head>
 <body>
-
   <div class="slide-header">
-    <h2 class="slide-title">이그제큐티브 서머리</h2>
-    <p class="slide-tag">2026-05-25 · 34번째 정기 미팅</p>
+    <h2>이그제큐티브 서머리 — 핵심 KPI 4개</h2>
+    <p>2026-05-25 | 34번째 정기 미팅</p>
   </div>
 
-  <div class="kpi-grid">
-
-    <div class="kpi-card">
-      <p class="kpi-label">연속 미달 모델</p>
-      <p class="kpi-value">2개</p>
-      <p class="kpi-sub">P1 (Acc 54.79%) · P7 (R² 0.586)</p>
-      <p class="kpi-delta">▼ 14일 연속 — 변화 없음</p>
+  <div class="content-area">
+    <!-- 2×2 KPI 카드 그리드 -->
+    <div class="kpi-grid">
+      <div class="kpi-card danger">
+        <p class="kpi-label">연속 미달 모델</p>
+        <p class="kpi-value">2개</p>
+        <p class="kpi-sub">P1 (Acc 54.79%) · P7 (R² 0.586)</p>
+        <p class="kpi-delta">▼ 14일 연속 — 변화 없음</p>
+      </div>
+      <div class="kpi-card danger">
+        <p class="kpi-label">최장 연속 미달일</p>
+        <p class="kpi-value">14일</p>
+        <p class="kpi-sub">P1·P7 동시 연속 미달 최장 기록</p>
+        <p class="kpi-delta">▼ +1일 (전일 13일)</p>
+      </div>
+      <div class="kpi-card warning">
+        <p class="kpi-label">파일 연속 미달</p>
+        <p class="kpi-value">6일</p>
+        <p class="kpi-sub">S3 FW 개선 계획 · demo_script v2.0 미완성</p>
+        <p class="kpi-delta">▼ +1일 (전일 5일)</p>
+      </div>
+      <div class="kpi-card danger">
+        <p class="kpi-label">시스템 점수</p>
+        <p class="kpi-value">4.15</p>
+        <p class="kpi-sub">월요일 경고 집행: P7/P1 −0.05, S3 −0.03, demo_script −0.02</p>
+        <p class="kpi-delta">▼ −0.10 (전일 4.25)</p>
+      </div>
     </div>
 
-    <div class="kpi-card">
-      <p class="kpi-label">최장 연속 미달일</p>
-      <p class="kpi-value">14일</p>
-      <p class="kpi-sub">P1·P7 동시 연속 미달 최장 기록</p>
-      <p class="kpi-delta">▼ +1일 (전일 13일)</p>
+    <!-- 복원 경로 안내 -->
+    <div class="restore-bar">
+      <p>오늘 오전 파일 2개 <strong>(+0.05)</strong> + 오후 P7 <strong>(+0.10)</strong> + 저녁 P1 <strong>(+0.08)</strong> &nbsp;→&nbsp; <strong>4.38 복원 가능</strong></p>
     </div>
 
-    <div class="kpi-card warning">
-      <p class="kpi-label">파일 연속 미달</p>
-      <p class="kpi-value">6일</p>
-      <p class="kpi-sub">S3 FW 개선 계획 · demo_script v2.0 미완성</p>
-      <p class="kpi-delta">▼ +1일 (전일 5일)</p>
+    <!-- 신호등 카운터 바 -->
+    <div class="signal-bar">
+      <div class="signal-item">
+        <div class="signal-dot dot-best"></div>
+        <p>최우수 3개 (P3·P4·S1)</p>
+      </div>
+      <div class="signal-item">
+        <div class="signal-dot dot-good"></div>
+        <p>우수 4개 (P2·P6·P8·S2)</p>
+      </div>
+      <div class="signal-item">
+        <div class="signal-dot dot-warn"></div>
+        <p>주의 3개 (P5·S3·S6)</p>
+      </div>
+      <div class="signal-item">
+        <div class="signal-dot dot-fail"></div>
+        <p>미달 2개 (P1·P7)</p>
+      </div>
     </div>
-
-    <div class="kpi-card">
-      <p class="kpi-label">시스템 점수</p>
-      <p class="kpi-value" style="font-size:28pt;">4.15<span style="font-size:14pt; font-weight:600; color:#8b949e;">/5.0</span></p>
-      <p class="kpi-sub">월요일 경고 집행: P7/P1 −0.05, S3 −0.03, demo −0.02</p>
-      <p class="kpi-delta">▼ −0.10 (전일 4.25)</p>
-    </div>
-
   </div>
-
-  <div class="restore-row">
-    <p>오늘 오전 파일 2개 (+0.05) &nbsp;+&nbsp; 오후 P7 (+0.10) &nbsp;+&nbsp; 저녁 P1 (+0.08) &nbsp;→&nbsp; 4.38 복원 가능</p>
-  </div>
-
-  <div class="signal-bar">
-    <p>🟢🟢 최우수 3개 (P3·P4·S1)</p>
-    <p>🟢 우수 4개 (P2·P6·P8·S2)</p>
-    <p>🟡 주의 2개 (P5·S6)</p>
-    <p>🟡 FW미달 1개 (S3)</p>
-    <p>🔴 미달 2개 (P1·P7)</p>
-  </div>
-
 </body>
 </html>

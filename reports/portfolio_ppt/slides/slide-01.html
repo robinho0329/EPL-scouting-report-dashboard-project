@@ -6,149 +6,173 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt;
-    height: 405pt;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     position: relative;
   }
-  .alert-banner {
+  :root {
+    --success: #38d9a9;
+    --warning: #ffd43b;
+    --danger: #ff6b6b;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+
+  /* 좌측 수직 강조 라인 */
+  .left-bar {
     position: absolute;
-    top: 0; left: 0; right: 0;
-    background: #ff6b6b;
+    left: 0; top: 0; bottom: 0;
+    width: 5pt;
+    background: var(--danger);
+  }
+
+  /* 상단 긴급 배너 */
+  .top-banner {
+    position: absolute;
+    top: 0; left: 5pt; right: 0;
+    background: var(--danger);
     padding: 7pt 20pt;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
   }
-  .alert-banner p {
-    font-size: 9pt;
-    font-weight: 800;
+  .top-banner p {
+    font-size: 9.5pt;
+    font-weight: 700;
     color: #fff;
     letter-spacing: 0.06em;
     text-align: center;
   }
-  .left-line {
-    position: absolute;
-    left: 20pt;
-    top: 28pt;
-    bottom: 46pt;
-    width: 3pt;
-    background: #ff6b6b;
-    border-radius: 2pt;
-  }
+
+  /* 메인 콘텐츠 영역 */
   .main-content {
     position: absolute;
-    top: 30pt;
-    left: 40pt;
-    right: 118pt;
-    bottom: 48pt;
+    top: 42pt; left: 36pt; right: 130pt; bottom: 56pt;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: 8pt;
   }
-  .label-top {
-    font-size: 8pt;
-    letter-spacing: 0.2em;
-    color: #8b949e;
+
+  .eyebrow {
+    font-size: 9pt;
+    letter-spacing: 0.22em;
+    color: var(--muted);
     text-transform: uppercase;
-    margin-bottom: 10pt;
-  }
-  .main-title {
-    font-size: 37pt;
-    font-weight: 900;
-    line-height: 1.08;
-    color: #e6edf3;
     margin-bottom: 12pt;
   }
-  .sub-title {
-    font-size: 10.5pt;
-    font-weight: 600;
-    color: #38d9a9;
+
+  .main-title {
+    font-size: 46pt;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.05;
+    margin-bottom: 12pt;
+  }
+
+  .subtitle {
+    font-size: 11.5pt;
+    color: var(--success);
+    letter-spacing: 0.03em;
     margin-bottom: 14pt;
-    line-height: 1.6;
   }
-  .attendees {
-    font-size: 9pt;
-    color: #8b949e;
+
+  .attendee {
+    font-size: 10pt;
+    color: var(--muted);
   }
-  .score-badge {
+
+  /* 우측 원형 평점 배지 */
+  .badge-circle {
     position: absolute;
-    right: 22pt;
-    top: 44pt;
-    width: 86pt;
-    height: 86pt;
+    right: 36pt;
+    top: 50%;
+    transform: translateY(-70%);
+    width: 90pt;
+    height: 90pt;
     border-radius: 50%;
-    background: rgba(255, 107, 107, 0.10);
-    border: 3pt solid #ff6b6b;
+    background: rgba(255, 107, 107, 0.12);
+    border: 3pt solid var(--danger);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
   }
-  .score-num {
+  .badge-circle .score {
     font-size: 22pt;
-    font-weight: 900;
-    color: #ff6b6b;
+    font-weight: 800;
+    color: var(--danger);
     line-height: 1;
   }
-  .score-denom {
-    font-size: 8pt;
-    color: #8b949e;
+  .badge-circle .score-max {
+    font-size: 9pt;
+    color: var(--muted);
     margin-top: 2pt;
   }
-  .score-delta {
-    font-size: 7pt;
-    color: #ff6b6b;
-    margin-top: 4pt;
+  .badge-circle .score-delta {
+    font-size: 8.5pt;
+    color: var(--danger);
     font-weight: 700;
-    line-height: 1.4;
+    margin-top: 4pt;
   }
+  .badge-circle .score-prev {
+    font-size: 7pt;
+    color: var(--muted);
+    margin-top: 2pt;
+  }
+
+  /* 하단 슬로건 박스 */
   .slogan-box {
     position: absolute;
+    left: 5pt; right: 0;
     bottom: 0;
-    left: 0; right: 0;
-    border-top: 2pt solid #ff6b6b;
+    border-top: 2pt solid var(--danger);
     background: rgba(255, 107, 107, 0.07);
-    padding: 8pt 28pt;
+    padding: 9pt 22pt;
+    display: flex;
+    align-items: center;
   }
   .slogan-box p {
-    font-size: 8.5pt;
+    font-size: 9pt;
     color: #e6edf3;
-    line-height: 1.6;
+    line-height: 1.55;
     font-style: italic;
+  }
+  .slogan-box p strong {
+    color: var(--danger);
+    font-style: normal;
   }
 </style>
 </head>
 <body>
+  <div class="left-bar"></div>
 
-  <div class="alert-banner">
+  <!-- 상단 긴급 배너 -->
+  <div class="top-banner">
     <p>월요일 경고 집행 &nbsp;|&nbsp; P7·P1 14일 연속 미달 &nbsp;|&nbsp; 오늘 22시 절대 마감</p>
   </div>
 
-  <div class="left-line"></div>
-
+  <!-- 메인 콘텐츠 -->
   <div class="main-content">
-    <p class="label-top">EPL Scout Intelligence &nbsp;·&nbsp; Daily Briefing</p>
+    <p class="eyebrow">EPL Scout Intelligence &nbsp;·&nbsp; Daily Briefing</p>
     <h1 class="main-title">EPL 스카우트<br>인텔리전스</h1>
-    <h2 class="sub-title">데일리 브리핑 &nbsp;|&nbsp; 2026-05-25 (월) &nbsp;|&nbsp; 34번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</h2>
-    <p class="attendees">김태현 스카우트 · Marcus Webb (Analytics Agent)</p>
+    <p class="subtitle">데일리 브리핑 &nbsp;|&nbsp; 2026-05-25 (월) &nbsp;|&nbsp; 34번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</p>
+    <p class="attendee">김태현 스카우트 &nbsp;·&nbsp; Marcus Webb (Analytics Agent)</p>
   </div>
 
-  <div class="score-badge">
-    <p class="score-num">4.15</p>
-    <p class="score-denom">/ 5.0</p>
-    <p class="score-delta">▼ −0.10<br>전일 4.25</p>
+  <!-- 우하단 원형 평점 배지 -->
+  <div class="badge-circle">
+    <p class="score">4.15</p>
+    <p class="score-max">/ 5.0</p>
+    <p class="score-delta">▼ −0.10</p>
+    <p class="score-prev">전일 4.25</p>
   </div>
 
+  <!-- 하단 슬로건 박스 -->
   <div class="slogan-box">
-    <p>오늘 저녁 22시 이전에 P7+P1 push가 없으면 내일 아침 4.10 이하를 적용합니다. 로컬 PC를 지금 켜십시오. — 김태현</p>
+    <p>오늘 저녁 <strong>22시 이전</strong>에 P7+P1 push가 없으면 내일 아침 <strong>4.10 이하</strong>를 적용합니다. 로컬 PC를 지금 켜십시오. — 김태현</p>
   </div>
-
 </body>
 </html>

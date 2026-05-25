@@ -2,142 +2,218 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px;
-    height: 540px;
+    width: 720pt; height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 22px 32px 18px 32px;
   }
+  :root {
+    --success: #38d9a9;
+    --warning: #ffd43b;
+    --danger: #ff6b6b;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+
+  .slide-header {
+    background: #161b22;
+    padding: 6pt 20pt;
+    border-bottom: 1pt solid #30363d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .slide-header h2 { font-size: 12pt; font-weight: 700; }
+  .slide-header p { font-size: 8.5pt; color: var(--muted); }
+
+  /* 대시보드 현황 바 */
+  .status-bar {
+    background: #16213e;
+    border-bottom: 1pt solid #30363d;
+    padding: 7pt 20pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .stats-group {
+    display: flex;
+    gap: 20pt;
+    align-items: center;
+  }
+  .stat-item { text-align: center; }
+  .stat-item .stat-val { font-size: 18pt; font-weight: 800; color: var(--success); line-height: 1; }
+  .stat-item .stat-label { font-size: 7pt; color: var(--muted); margin-top: 2pt; }
+
+  .url-block { text-align: right; }
+  .url-block .url-label { font-size: 7pt; color: var(--muted); margin-bottom: 2pt; }
+  .url-block .url-text { font-size: 7.5pt; color: #58a6ff; text-decoration: underline; }
+
+  .content-area {
+    flex: 1;
+    padding: 10pt 20pt 8pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+  }
+
+  /* 3개 즉시 활용 카드 */
+  .combo-row {
+    display: flex;
+    gap: 10pt;
+    flex: 1;
+  }
+
+  .combo-card {
+    flex: 1;
+    background: #16213e;
+    border: 2pt solid var(--success);
+    border-radius: 7pt;
+    padding: 9pt 11pt;
+    display: flex;
+    flex-direction: column;
+    gap: 5pt;
+  }
+
+  .combo-card h3 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 2pt;
+  }
+  .combo-card .models {
+    font-size: 8pt;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .combo-card .scenario {
+    font-size: 8pt;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.4;
+    margin-top: auto;
+  }
+
+  /* 배지를 div로 — p/span에 border 금지 */
+  .ready-badge-wrap {
+    margin-top: 4pt;
+  }
+  .ready-badge-wrap .badge-inner {
+    background: rgba(56,217,169,0.15);
+    border: 1pt solid var(--success);
+    border-radius: 4pt;
+    padding: 2pt 7pt;
+    display: inline-block;
+  }
+  .ready-badge-wrap .badge-inner p { font-size: 7pt; color: var(--success); font-weight: 700; }
+
+  /* 예고 카드 */
+  .preview-card {
+    background: rgba(255,212,59,0.05);
+    border: 2pt dashed var(--warning);
+    border-radius: 7pt;
+    padding: 8pt 16pt;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .preview-left { flex: 1; }
+  .preview-left h4 { font-size: 9.5pt; font-weight: 700; color: var(--warning); margin-bottom: 3pt; }
+  .preview-left p { font-size: 8pt; color: var(--muted); line-height: 1.4; }
+
+  /* 예고 배지도 div로 */
+  .preview-badge-wrap {
+    flex-shrink: 0;
+    padding-left: 14pt;
+  }
+  .preview-badge-wrap .badge-inner {
+    background: rgba(255,212,59,0.15);
+    border: 1pt solid var(--warning);
+    border-radius: 5pt;
+    padding: 4pt 10pt;
+    white-space: nowrap;
+  }
+  .preview-badge-wrap .badge-inner p { font-size: 7.5pt; color: var(--warning); font-weight: 700; }
 </style>
 </head>
 <body>
-
-  <!-- 슬라이드 헤더 -->
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-    <div style="display:flex; align-items:center; gap:12px;">
-      <div style="width:4px; height:22px; background:#ffd43b; border-radius:2px;"></div>
-      <h2 style="font-size:19px; font-weight:700; color:#e6edf3;">포트폴리오 발표 리허설 준비 현황</h2>
-    </div>
-    <div style="padding:4px 12px; background:rgba(255,107,107,0.18); border:1px solid #ff6b6b; border-radius:12px"><p style="display:inline-block; color:#ff6b6b; font-size:10px; font-weight:700">v1.0 초안(05-19) 그대로 — 오늘 오전 v2.0 완성 필수</p></div>
+  <div class="slide-header">
+    <h2>Streamlit 대시보드 현황</h2>
+    <p>지금 당장 가능한 영입 회의 조합 3개</p>
   </div>
 
-  <!-- 메인 2열 레이아웃 -->
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:1; margin-bottom:12px;">
-
-    <!-- 좌측: 현재 준비 상태 -->
-    <div style="background:#16213e; border-radius:10px; padding:16px 18px; display:flex; flex-direction:column; gap:10px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <h3 style="font-size:13px; font-weight:700; color:#e6edf3;">현재 리허설 준비 상태</h3>
-        <div style="padding:3px 8px; background:#ff6b6b; border-radius:8px"><p style="display:inline-block; color:#fff; font-size:9px; font-weight:700">미완성</p></div>
+  <!-- 대시보드 현황 바 -->
+  <div class="status-bar">
+    <div class="stats-group">
+      <div class="stat-item">
+        <p class="stat-val">16</p>
+        <p class="stat-label">총 페이지</p>
       </div>
-
-      <!-- 파일 현황 -->
-      <div style="background:rgba(255,107,107,0.10); border-left:3px solid #ff6b6b; border-radius:4px; padding:8px 10px;">
-        <p style="font-size:10px; color:#8b949e; margin-bottom:2px;">현재 파일</p>
-        <p style="font-size:11px; color:#e6edf3; font-weight:600;">demo_script_draft.md</p>
-        <p style="font-size:10px; color:#ff6b6b; margin-top:2px;">작성일 2026-05-19 · v1.0 초안 · 일주일째 미업데이트</p>
+      <div class="stat-item">
+        <p class="stat-val">9개</p>
+        <p class="stat-label">즉시 활용 가능</p>
       </div>
-
-      <!-- 빠진 3가지 -->
-      <div>
-        <p style="font-size:10px; color:#ff6b6b; font-weight:700; margin-bottom:6px;">빠진 3가지 (오늘 오전 완성 목표)</p>
-        <ul style="list-style:none; display:flex; flex-direction:column; gap:5px;">
-          <li style="display:flex; align-items:flex-start; gap:8px;">
-            <div style="background:#ff6b6b; border-radius:50%"><p style="display:inline-block; min-width:16px; height:16px; font-size:8px; font-weight:800; color:#fff; text-align:center; line-height:16px; margin-top:1px">1</p></div>
-            <p style="font-size:11px; color:#e6edf3; line-height:1.5;">P8 AUC 0.6612 대응 논리 3문장 — <strong style="color:#ff6b6b;">미완성</strong></p>
-          </li>
-          <li style="display:flex; align-items:flex-start; gap:8px;">
-            <div style="background:#ff6b6b; border-radius:50%"><p style="display:inline-block; min-width:16px; height:16px; font-size:8px; font-weight:800; color:#fff; text-align:center; line-height:16px; margin-top:1px">2</p></div>
-            <p style="font-size:11px; color:#e6edf3; line-height:1.5;">Q&A 3개 대응 논리 (각 30초) — <strong style="color:#ff6b6b;">미완성</strong></p>
-          </li>
-          <li style="display:flex; align-items:flex-start; gap:8px;">
-            <div style="background:#ffd43b; border-radius:50%"><p style="display:inline-block; min-width:16px; height:16px; font-size:8px; font-weight:800; color:#0d1117; text-align:center; line-height:16px; margin-top:1px">3</p></div>
-            <p style="font-size:11px; color:#e6edf3; line-height:1.5;">발표 타이밍 5분 15초→5분 이내 단축 — <strong style="color:#ffd43b;">미완성</strong></p>
-          </li>
-        </ul>
+      <div class="stat-item">
+        <p class="stat-val">P7</p>
+        <p class="stat-label">달성 대기 (풀 체인)</p>
       </div>
     </div>
-
-    <!-- 우측: 5분 발표 흐름 체크리스트 -->
-    <div style="background:#16213e; border-radius:10px; padding:16px 18px; display:flex; flex-direction:column; gap:8px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <h3 style="font-size:13px; font-weight:700; color:#e6edf3;">5분 발표 흐름 체크리스트</h3>
-        <p style="font-size:10px; color:#8b949e;">합계 5분 15초 → 30초 단축 필요</p>
-      </div>
-      <ul style="list-style:none; display:flex; flex-direction:column; gap:5px;">
-        <li style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; background:rgba(56,217,169,0.08); border-radius:4px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <p style="font-size:11px; color:#8b949e;">☐</p>
-            <p style="font-size:10px; color:#e6edf3;"><strong style="color:#38d9a9;">S1</strong> 선수 종합 레이팅 — R² 0.9093</p>
-          </div>
-          <p style="font-size:9px; color:#8b949e;">1분</p>
-        </li>
-        <li style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; background:rgba(56,217,169,0.08); border-radius:4px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <p style="font-size:11px; color:#8b949e;">☐</p>
-            <p style="font-size:10px; color:#e6edf3;"><strong style="color:#38d9a9;">S2</strong> 포지션별 시장가치 — R² 0.8812</p>
-          </div>
-          <p style="font-size:9px; color:#8b949e;">1분</p>
-        </li>
-        <li style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; background:rgba(255,107,107,0.08); border-radius:4px; border:1px solid rgba(255,107,107,0.3);">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <p style="font-size:11px; color:#8b949e;">☐</p>
-            <p style="font-size:10px; color:#e6edf3;"><strong style="color:#ff6b6b;">P8</strong> 이적 적응 — AUC 0.6612 <span style="color:#ff6b6b;">"위험 플래그" 대응 필수</span></p>
-          </div>
-          <p style="font-size:9px; color:#8b949e;">1분</p>
-        </li>
-        <li style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; background:rgba(56,217,169,0.08); border-radius:4px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <p style="font-size:11px; color:#8b949e;">☐</p>
-            <p style="font-size:10px; color:#e6edf3;"><strong style="color:#38d9a9;">P6</strong> 시장가치 예측 — R² 0.8734</p>
-          </div>
-          <p style="font-size:9px; color:#8b949e;">45초</p>
-        </li>
-        <li style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; background:rgba(56,217,169,0.08); border-radius:4px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <p style="font-size:11px; color:#8b949e;">☐</p>
-            <p style="font-size:10px; color:#e6edf3;"><strong style="color:#38d9a9;">S6</strong> 하락세 감지 — AUC 0.8324</p>
-          </div>
-          <p style="font-size:9px; color:#8b949e;">45초</p>
-        </li>
-        <li style="display:flex; align-items:center; justify-content:space-between; padding:5px 8px; background:rgba(255,212,59,0.08); border-radius:4px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <p style="font-size:11px; color:#8b949e;">☐</p>
-            <p style="font-size:10px; color:#e6edf3;"><strong style="color:#ffd43b;">결론</strong> 영입 권고 — 5분 이내 완결 확인</p>
-          </div>
-          <p style="font-size:9px; color:#ffd43b; font-weight:700;">30초 (단축)</p>
-        </li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- 하단 Q&A 대응 3개 카드 -->
-  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
-    <div style="background:#16213e; border:1px solid #ffd43b; border-top:2px solid #ffd43b; border-radius:6px; padding:10px 12px;">
-      <p style="font-size:9px; color:#ffd43b; font-weight:700; margin-bottom:4px;">Q1 예상 질문</p>
-      <p style="font-size:10px; color:#e6edf3; margin-bottom:4px; font-style:italic;">"P1 Acc 54%는 낮지 않습니까?"</p>
-      <p style="font-size:10px; color:#38d9a9; line-height:1.5;">3클래스 분류 기준 랜덤 33%의 1.66배. 연속 개선 중.</p>
-    </div>
-    <div style="background:#16213e; border:1px solid #ffd43b; border-top:2px solid #ffd43b; border-radius:6px; padding:10px 12px;">
-      <p style="font-size:9px; color:#ffd43b; font-weight:700; margin-bottom:4px;">Q2 예상 질문</p>
-      <p style="font-size:10px; color:#e6edf3; margin-bottom:4px; font-style:italic;">"P7 0.62 이하면 못 쓰는 것 아닙니까?"</p>
-      <p style="font-size:10px; color:#38d9a9; line-height:1.5;">val R² 0.6302 이미 달성. test 일반화 갭 해결 중.</p>
-    </div>
-    <div style="background:#16213e; border:1px solid #ffd43b; border-top:2px solid #ffd43b; border-radius:6px; padding:10px 12px;">
-      <p style="font-size:9px; color:#ffd43b; font-weight:700; margin-bottom:4px;">Q3 예상 질문</p>
-      <p style="font-size:10px; color:#e6edf3; margin-bottom:4px; font-style:italic;">"AUC 0.66으로 영입 결정에 어떻게 씁니까?"</p>
-      <p style="font-size:10px; color:#38d9a9; line-height:1.5;">결정 도구 아닌 위험 플래그. 이적 10건 중 3건 실패 사전 플래그.</p>
+    <div class="url-block">
+      <p class="url-label">Streamlit Cloud URL</p>
+      <p class="url-text">epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
     </div>
   </div>
 
+  <div class="content-area">
+    <!-- 3개 즉시 활용 카드 -->
+    <div class="combo-row">
+      <div class="combo-card">
+        <h3>S1 + S2 저평가 스캐닝</h3>
+        <p class="models">WAR 레이팅 (S1, R² 0.9093)<br>vs 시장가치 예측 (S2, R² 0.8812)</p>
+        <p class="scenario">"지금 이 선수, 실력 대비 저평가됐습니까?" 30초 분석</p>
+        <div class="ready-badge-wrap">
+          <div class="badge-inner"><p>지금 즉시 가능</p></div>
+        </div>
+      </div>
+      <div class="combo-card">
+        <h3>P8 + S1 리스크 스크리닝</h3>
+        <p class="models">이적 적응 확률 (P8, AUC 0.6612)<br>+ 종합 레이팅 (S1)</p>
+        <p class="scenario">"데려왔을 때 성능 유지 확률이 몇 %입니까?"</p>
+        <div class="ready-badge-wrap">
+          <div class="badge-inner"><p>지금 즉시 가능</p></div>
+        </div>
+      </div>
+      <div class="combo-card">
+        <h3>S6 + P6 매도 타이밍 감지</h3>
+        <p class="models">하락세 감지 (S6, AUC 0.8324)<br>+ 시장가치 (P6, R² 0.8734)</p>
+        <p class="scenario">"지금 팔아야 할 선수가 누구입니까?"</p>
+        <div class="ready-badge-wrap">
+          <div class="badge-inner"><p>지금 즉시 가능</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 예고 카드 -->
+    <div class="preview-card">
+      <div class="preview-left">
+        <h4>P6 + P7 + P8 '가치→성장→적응' 풀 체인 (오늘 오후 활성화 대기)</h4>
+        <p>30M 투자 → 2시즌 후 가치 X, 적응 확률 Y% 시뮬레이션 — P7 R² ≥ 0.62 달성 시 완성</p>
+      </div>
+      <div class="preview-badge-wrap">
+        <div class="badge-inner">
+          <p>P7 오늘 오후 13~18시 달성 대기 중</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
