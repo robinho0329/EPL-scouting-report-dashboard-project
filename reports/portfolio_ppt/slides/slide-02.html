@@ -2,106 +2,167 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px;
-    height: 540px;
+    width: 720pt;
+    height: 405pt;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
     overflow: hidden;
+    position: relative;
     display: flex;
     flex-direction: column;
-    padding: 28px 36px 24px 36px;
+    padding: 18pt 26pt 14pt 26pt;
+  }
+  .slide-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12pt;
+  }
+  .slide-title {
+    font-size: 15pt;
+    font-weight: 800;
+    color: #e6edf3;
+  }
+  .slide-tag {
+    font-size: 8pt;
+    color: #8b949e;
+    letter-spacing: 0.1em;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10pt;
+    flex: 1;
+    margin-bottom: 10pt;
+  }
+  .kpi-card {
+    background: #161b22;
+    border-radius: 6pt;
+    padding: 10pt 14pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1.5pt solid #ff6b6b;
+  }
+  .kpi-card.warning {
+    border-color: #ffd43b;
+  }
+  .kpi-label {
+    font-size: 8pt;
+    color: #8b949e;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4pt;
+  }
+  .kpi-value {
+    font-size: 34pt;
+    font-weight: 900;
+    line-height: 1;
+    color: #ff6b6b;
+  }
+  .kpi-card.warning .kpi-value {
+    color: #ffd43b;
+  }
+  .kpi-sub {
+    font-size: 7.5pt;
+    color: #8b949e;
+    margin-top: 4pt;
+    line-height: 1.45;
+  }
+  .kpi-delta {
+    font-size: 7.5pt;
+    color: #ff6b6b;
+    font-weight: 700;
+    margin-top: 4pt;
+  }
+  .kpi-card.warning .kpi-delta {
+    color: #ffd43b;
+  }
+  .restore-row {
+    background: rgba(56, 217, 169, 0.08);
+    border-radius: 5pt;
+    padding: 6pt 12pt;
+    margin-bottom: 7pt;
+    border-left: 3pt solid #38d9a9;
+  }
+  .restore-row p {
+    font-size: 8.5pt;
+    color: #38d9a9;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .signal-bar {
+    background: #161b22;
+    border-radius: 4pt;
+    padding: 5pt 12pt;
+    display: flex;
+    align-items: center;
+    gap: 14pt;
+    flex-wrap: wrap;
+  }
+  .signal-bar p {
+    font-size: 7.5pt;
+    color: #8b949e;
+    line-height: 1.5;
   }
 </style>
 </head>
 <body>
 
-  <!-- 슬라이드 헤더 -->
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
-    <div style="display:flex; align-items:center; gap:12px;">
-      <div style="width:4px; height:22px; background:#ff6b6b; border-radius:2px;"></div>
-      <h2 style="font-size:20px; font-weight:700; color:#e6edf3;">이그제큐티브 서머리</h2>
-    </div>
-    <p style="font-size:10px; color:#8b949e;">2026-05-24 | 33회차 미팅</p>
+  <div class="slide-header">
+    <h2 class="slide-title">이그제큐티브 서머리</h2>
+    <p class="slide-tag">2026-05-25 · 34번째 정기 미팅</p>
   </div>
 
-  <!-- KPI 카드 4개 (상단) -->
-  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px;">
+  <div class="kpi-grid">
 
-    <!-- 정상 모델 -->
-    <div style="background:#16213e; border:1px solid #38d9a9; border-top:3px solid #38d9a9; border-radius:8px; padding:14px 16px;">
-      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">정상 모델</p>
-      <p style="font-size:36px; font-weight:800; color:#38d9a9; line-height:1;">10</p>
-      <p style="font-size:10px; color:#8b949e; margin-top:4px;">/ 12개 모델</p>
+    <div class="kpi-card">
+      <p class="kpi-label">연속 미달 모델</p>
+      <p class="kpi-value">2개</p>
+      <p class="kpi-sub">P1 (Acc 54.79%) · P7 (R² 0.586)</p>
+      <p class="kpi-delta">▼ 14일 연속 — 변화 없음</p>
     </div>
 
-    <!-- 연속 미달 -->
-    <div style="background:#16213e; border:1px solid #ff6b6b; border-top:3px solid #ff6b6b; border-radius:8px; padding:14px 16px;">
-      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">연속 미달</p>
-      <p style="font-size:36px; font-weight:800; color:#ff6b6b; line-height:1;">13일</p>
-      <p style="font-size:10px; color:#ff6b6b; margin-top:4px; font-weight:700;">P7 + P1</p>
+    <div class="kpi-card">
+      <p class="kpi-label">최장 연속 미달일</p>
+      <p class="kpi-value">14일</p>
+      <p class="kpi-sub">P1·P7 동시 연속 미달 최장 기록</p>
+      <p class="kpi-delta">▼ +1일 (전일 13일)</p>
     </div>
 
-    <!-- 스카우트 평가 -->
-    <div style="background:#16213e; border:1px solid #ff6b6b; border-top:3px solid #ff6b6b; border-radius:8px; padding:14px 16px;">
-      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">스카우트 평가</p>
-      <p style="font-size:36px; font-weight:800; color:#ff6b6b; line-height:1;">4.25</p>
-      <p style="font-size:10px; color:#ff6b6b; margin-top:4px; font-weight:700;">전일 4.38 ▼0.13</p>
+    <div class="kpi-card warning">
+      <p class="kpi-label">파일 연속 미달</p>
+      <p class="kpi-value">6일</p>
+      <p class="kpi-sub">S3 FW 개선 계획 · demo_script v2.0 미완성</p>
+      <p class="kpi-delta">▼ +1일 (전일 5일)</p>
     </div>
 
-    <!-- 대시보드 페이지 -->
-    <div style="background:#16213e; border:1px solid #38d9a9; border-top:3px solid #38d9a9; border-radius:8px; padding:14px 16px;">
-      <p style="font-size:10px; color:#8b949e; margin-bottom:6px; letter-spacing:0.05em; text-transform:uppercase;">대시보드 페이지</p>
-      <p style="font-size:36px; font-weight:800; color:#38d9a9; line-height:1;">16개</p>
-      <p style="font-size:10px; color:#8b949e; margin-top:4px;">즉시 활용 9개</p>
+    <div class="kpi-card">
+      <p class="kpi-label">시스템 점수</p>
+      <p class="kpi-value" style="font-size:28pt;">4.15<span style="font-size:14pt; font-weight:600; color:#8b949e;">/5.0</span></p>
+      <p class="kpi-sub">월요일 경고 집행: P7/P1 −0.05, S3 −0.03, demo −0.02</p>
+      <p class="kpi-delta">▼ −0.10 (전일 4.25)</p>
     </div>
 
   </div>
 
-  <!-- 3줄 핵심 요약 -->
-  <div style="background:#16213e; border-radius:8px; padding:14px 18px; margin-bottom:14px; flex:1;">
-    <ul style="list-style:none; display:flex; flex-direction:column; gap:8px;">
-      <li style="display:flex; align-items:flex-start; gap:10px;">
-        <span style="display:inline-block; min-width:8px; height:8px; border-radius:50%; background:#ff6b6b; margin-top:5px;"></span>
-        <p style="font-size:12px; color:#e6edf3; line-height:1.6;"><strong style="color:#ff6b6b;">P7</strong>(성장곡선 R²=0.586) · <strong style="color:#ff6b6b;">P1</strong>(경기결과 Acc=54.79%) — 13일 연속 목표 미달, 오늘이 절대 마지막 기회, <strong style="color:#ff6b6b;">저녁 22시 데드라인</strong></p>
-      </li>
-      <li style="display:flex; align-items:flex-start; gap:10px;">
-        <span style="display:inline-block; min-width:8px; height:8px; border-radius:50%; background:#ff6b6b; margin-top:5px;"></span>
-        <p style="font-size:12px; color:#e6edf3; line-height:1.6;">어제(05-23 토) 액션아이템 3개 중 <strong style="color:#ff6b6b;">0개 달성</strong> — 평가 4.38→<strong style="color:#ff6b6b;">4.25 (−0.13)</strong>, 내일 4.20 이하 경고 발동 중</p>
-      </li>
-      <li style="display:flex; align-items:flex-start; gap:10px;">
-        <span style="display:inline-block; min-width:8px; height:8px; border-radius:50%; background:#38d9a9; margin-top:5px;"></span>
-        <p style="font-size:12px; color:#e6edf3; line-height:1.6;">오늘 달성 시나리오: demo_script v2.0(오전)+S3파일(오전)+P7달성(오후)+P1달성(저녁) → <strong style="color:#38d9a9;">4.53까지 복원 가능</strong></p>
-      </li>
-    </ul>
+  <div class="restore-row">
+    <p>오늘 오전 파일 2개 (+0.05) &nbsp;+&nbsp; 오후 P7 (+0.10) &nbsp;+&nbsp; 저녁 P1 (+0.08) &nbsp;→&nbsp; 4.38 복원 가능</p>
   </div>
 
-  <!-- 하단 신호등 카운터 바 -->
-  <div style="display:flex; align-items:center; gap:16px; background:#0f3460; border-radius:6px; padding:10px 18px;">
-    <p style="font-size:10px; color:#8b949e; letter-spacing:0.05em; text-transform:uppercase; margin-right:4px;">신호등 요약</p>
-    <div style="display:flex; align-items:center; gap:6px;">
-      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#ff6b6b;"></span>
-      <p style="font-size:12px; font-weight:700; color:#ff6b6b;">2개 (P1·P7)</p>
-    </div>
-    <div style="width:1px; height:16px; background:#30363d;"></div>
-    <div style="display:flex; align-items:center; gap:6px;">
-      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#ffd43b;"></span>
-      <p style="font-size:12px; font-weight:700; color:#ffd43b;">3개 (P5·S3·S6)</p>
-    </div>
-    <div style="width:1px; height:16px; background:#30363d;"></div>
-    <div style="display:flex; align-items:center; gap:6px;">
-      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#38d9a9;"></span>
-      <p style="font-size:12px; font-weight:700; color:#38d9a9;">4개 (P2·P6·P8·S2)</p>
-    </div>
-    <div style="width:1px; height:16px; background:#30363d;"></div>
-    <div style="display:flex; align-items:center; gap:6px;">
-      <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#38d9a9; box-shadow:0 0 0 2px #0d1117, 0 0 0 3px #38d9a9;"></span>
-      <p style="font-size:12px; font-weight:700; color:#38d9a9;">3개 최우수 (P3·P4·S1)</p>
-    </div>
+  <div class="signal-bar">
+    <p>🟢🟢 최우수 3개 (P3·P4·S1)</p>
+    <p>🟢 우수 4개 (P2·P6·P8·S2)</p>
+    <p>🟡 주의 2개 (P5·S6)</p>
+    <p>🟡 FW미달 1개 (S3)</p>
+    <p>🔴 미달 2개 (P1·P7)</p>
   </div>
 
 </body>
