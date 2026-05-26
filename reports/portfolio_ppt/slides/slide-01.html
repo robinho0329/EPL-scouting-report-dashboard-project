@@ -6,7 +6,7 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 960px; height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
@@ -19,130 +19,170 @@
     --danger: #ff6b6b;
     --text: #e6edf3;
     --muted: #8b949e;
+    --surface: #161b22;
+    --header: #0f3460;
   }
 
-  /* 좌측 수직 강조 라인 */
+  /* 좌측 수직 강조선 */
   .left-bar {
     position: absolute;
     left: 0; top: 0; bottom: 0;
-    width: 5pt;
-    background: var(--danger);
+    width: 6px;
+    background: linear-gradient(180deg, #ff6b6b 0%, #e94560 50%, #ff6b6b 100%);
   }
 
-  /* 상단 긴급 배너 */
+  /* 상단 경고 배너 */
   .top-banner {
     position: absolute;
-    top: 0; left: 5pt; right: 0;
-    background: var(--danger);
-    padding: 7pt 20pt;
+    top: 0; left: 6px; right: 0;
+    background: #ff6b6b;
+    padding: 9px 28px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0;
   }
   .top-banner p {
-    font-size: 9.5pt;
-    font-weight: 700;
-    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    color: #0d1117;
     letter-spacing: 0.06em;
     text-align: center;
+    text-transform: uppercase;
+  }
+  .top-banner p span {
+    margin: 0 10px;
+    opacity: 0.45;
+    font-weight: 400;
   }
 
-  /* 메인 콘텐츠 영역 */
+  /* 메인 콘텐츠 */
   .main-content {
     position: absolute;
-    top: 42pt; left: 36pt; right: 130pt; bottom: 56pt;
+    top: 54px; left: 52px; right: 220px; bottom: 72px;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
-
   .eyebrow {
-    font-size: 9pt;
-    letter-spacing: 0.22em;
+    font-size: 10px;
+    letter-spacing: 0.24em;
     color: var(--muted);
     text-transform: uppercase;
-    margin-bottom: 12pt;
+    margin-bottom: 16px;
   }
-
-  .main-title {
-    font-size: 46pt;
+  h1.main-title {
+    font-size: 52px;
     font-weight: 800;
     color: var(--text);
-    line-height: 1.05;
-    margin-bottom: 12pt;
+    line-height: 1.1;
+    margin-bottom: 14px;
   }
-
-  .subtitle {
-    font-size: 11.5pt;
+  h1.main-title span {
     color: var(--success);
-    letter-spacing: 0.03em;
-    margin-bottom: 14pt;
   }
-
-  .attendee {
-    font-size: 10pt;
+  p.subtitle {
+    font-size: 14px;
+    color: var(--success);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    margin-bottom: 20px;
+  }
+  .divider {
+    width: 72px; height: 3px;
+    background: var(--danger);
+    margin-bottom: 18px;
+  }
+  p.attendee {
+    font-size: 12px;
     color: var(--muted);
+  }
+  p.attendee strong {
+    color: var(--text);
+    font-weight: 600;
   }
 
   /* 우측 원형 평점 배지 */
-  .badge-circle {
+  .badge-wrap {
     position: absolute;
-    right: 36pt;
-    top: 50%;
-    transform: translateY(-70%);
-    width: 90pt;
-    height: 90pt;
+    right: 40px;
+    top: 54px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .badge-circle {
+    width: 156px; height: 156px;
     border-radius: 50%;
-    background: rgba(255, 107, 107, 0.12);
-    border: 3pt solid var(--danger);
+    background: rgba(255,107,107,0.10);
+    border: 3px solid var(--danger);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .badge-circle .score {
-    font-size: 22pt;
+  .badge-circle p.score {
+    font-size: 40px;
     font-weight: 800;
-    color: var(--danger);
+    color: var(--warning);
     line-height: 1;
   }
-  .badge-circle .score-max {
-    font-size: 9pt;
+  .badge-circle p.score-max {
+    font-size: 13px;
     color: var(--muted);
-    margin-top: 2pt;
+    margin-top: 3px;
   }
-  .badge-circle .score-delta {
-    font-size: 8.5pt;
+  .badge-circle p.score-delta {
+    font-size: 12px;
     color: var(--danger);
     font-weight: 700;
-    margin-top: 4pt;
+    margin-top: 6px;
   }
-  .badge-circle .score-prev {
-    font-size: 7pt;
+  .badge-circle p.score-prev {
+    font-size: 10px;
     color: var(--muted);
-    margin-top: 2pt;
+    margin-top: 2px;
+  }
+  .warning-pill {
+    background: rgba(255,107,107,0.15);
+    border: 1px solid var(--danger);
+    border-radius: 20px;
+    padding: 6px 14px;
+    text-align: center;
+  }
+  .warning-pill p {
+    font-size: 10px;
+    color: var(--danger);
+    font-weight: 700;
+    line-height: 1.5;
   }
 
   /* 하단 슬로건 박스 */
   .slogan-box {
     position: absolute;
-    left: 5pt; right: 0;
-    bottom: 0;
-    border-top: 2pt solid var(--danger);
-    background: rgba(255, 107, 107, 0.07);
-    padding: 9pt 22pt;
+    left: 6px; right: 0; bottom: 0;
+    border-top: 2px solid var(--danger);
+    background: rgba(255,107,107,0.07);
+    padding: 13px 32px;
     display: flex;
     align-items: center;
+    gap: 14px;
+  }
+  .slogan-icon {
+    font-size: 20px;
+    flex-shrink: 0;
   }
   .slogan-box p {
-    font-size: 9pt;
+    font-size: 12.5px;
     color: #e6edf3;
-    line-height: 1.55;
     font-style: italic;
+    line-height: 1.5;
   }
   .slogan-box p strong {
     color: var(--danger);
     font-style: normal;
+    font-weight: 800;
   }
 </style>
 </head>
@@ -151,28 +191,35 @@
 
   <!-- 상단 긴급 배너 -->
   <div class="top-banner">
-    <p>월요일 경고 집행 &nbsp;|&nbsp; P7·P1 14일 연속 미달 &nbsp;|&nbsp; 오늘 22시 절대 마감</p>
+    <p>화요일 경고 집행<span>|</span>P7 · P1 15일 연속 미달<span>|</span>오늘 22시 절대 마감<span>|</span>미이행 시 4.0 이하 — 시스템 재설계</p>
   </div>
 
   <!-- 메인 콘텐츠 -->
   <div class="main-content">
-    <p class="eyebrow">EPL Scout Intelligence &nbsp;·&nbsp; Daily Briefing</p>
-    <h1 class="main-title">EPL 스카우트<br>인텔리전스</h1>
-    <p class="subtitle">데일리 브리핑 &nbsp;|&nbsp; 2026-05-25 (월) &nbsp;|&nbsp; 34번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</p>
-    <p class="attendee">김태현 스카우트 &nbsp;·&nbsp; Marcus Webb (Analytics Agent)</p>
+    <p class="eyebrow">EPL Scout Intelligence &nbsp;&middot;&nbsp; Daily Briefing &nbsp;&middot;&nbsp; Session 35</p>
+    <h1 class="main-title">EPL 스카우트<br><span>인텔리전스</span></h1>
+    <p class="subtitle">데일리 브리핑 &nbsp;|&nbsp; 2026-05-26 (화) &nbsp;|&nbsp; 35번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</p>
+    <div class="divider"></div>
+    <p class="attendee"><strong>김태현 스카우트</strong> &nbsp;&middot;&nbsp; <strong>Marcus Webb</strong> (Analytics Agent)</p>
   </div>
 
-  <!-- 우하단 원형 평점 배지 -->
-  <div class="badge-circle">
-    <p class="score">4.15</p>
-    <p class="score-max">/ 5.0</p>
-    <p class="score-delta">▼ −0.10</p>
-    <p class="score-prev">전일 4.25</p>
+  <!-- 우측 원형 평점 배지 -->
+  <div class="badge-wrap">
+    <div class="badge-circle">
+      <p class="score">4.05</p>
+      <p class="score-max">/ 5.0</p>
+      <p class="score-delta">▼ &minus;0.10</p>
+      <p class="score-prev">전일 4.15</p>
+    </div>
+    <div class="warning-pill">
+      <p>⚠ 15일 연속 미달<br>최후통첩 발동 중</p>
+    </div>
   </div>
 
   <!-- 하단 슬로건 박스 -->
   <div class="slogan-box">
-    <p>오늘 저녁 <strong>22시 이전</strong>에 P7+P1 push가 없으면 내일 아침 <strong>4.10 이하</strong>를 적용합니다. 로컬 PC를 지금 켜십시오. — 김태현</p>
+    <span class="slogan-icon">⚠</span>
+    <p><strong>15일입니다.</strong> 오늘 저녁 22시가 진짜 마지막입니다. — 김태현</p>
   </div>
 </body>
 </html>
