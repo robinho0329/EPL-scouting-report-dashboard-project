@@ -6,7 +6,7 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 960px; height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
@@ -14,320 +14,381 @@
     display: flex;
     flex-direction: column;
   }
-  :root {
-    --success: #38d9a9;
-    --warning: #ffd43b;
-    --danger: #ff6b6b;
-    --text: #e6edf3;
-    --muted: #8b949e;
-  }
-
   .slide-header {
-    background: #161b22;
-    padding: 6pt 20pt;
-    border-bottom: 1pt solid #30363d;
+    padding: 12px 32px 0;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     flex-shrink: 0;
   }
-  .slide-header h2 { font-size: 12pt; font-weight: 700; }
-  .slide-header p { font-size: 8.5pt; color: var(--muted); }
+  .slide-header h2 { font-size: 16px; font-weight: 700; }
+  .slide-header p.sub { font-size: 9px; color: #8b949e; }
 
-  .content-area {
+  .body-row {
+    display: flex;
     flex: 1;
-    display: flex;
-    padding: 10pt 20pt 0;
-    gap: 16pt;
-  }
-
-  /* 좌측 게이지 영역 */
-  .gauge-section {
-    width: 185pt;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    padding-top: 4pt;
-    gap: 6pt;
-  }
-
-  /* 점수 디스플레이 박스 (원형 대신 사각 카드) */
-  .score-card {
-    width: 110pt;
-    background: rgba(255,107,107,0.1);
-    border: 3pt solid var(--danger);
-    border-radius: 10pt;
-    padding: 10pt 6pt;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3pt;
-  }
-  .score-card .g-score { font-size: 36pt; font-weight: 800; color: var(--danger); line-height: 1; }
-  .score-card .g-max { font-size: 10pt; color: var(--muted); }
-  .score-card .g-pct { font-size: 9pt; color: var(--danger); font-weight: 700; }
-
-  /* 막대 게이지 (83%) */
-  .bar-gauge-wrap { width: 110pt; }
-  .bar-label-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 3pt;
-  }
-  .bar-label-row p { font-size: 7pt; color: var(--muted); }
-  .bar-track {
-    width: 110pt;
-    height: 10pt;
-    background: #30363d;
-    border-radius: 5pt;
+    padding: 10px 32px 0;
+    gap: 18px;
     overflow: hidden;
   }
-  .bar-fill {
-    width: 83%;
-    height: 100%;
-    background: var(--danger);
-    border-radius: 5pt;
-  }
 
-  .gauge-delta { font-size: 10pt; color: var(--danger); font-weight: 700; text-align: center; }
-  .gauge-delta-sub { font-size: 8pt; color: var(--muted); text-align: center; }
-
-  .deduct-list { width: 100%; }
-  .deduct-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 3pt 0;
-    border-bottom: 0.5pt solid rgba(48,54,61,0.5);
-  }
-  .deduct-item p { font-size: 7.5pt; color: var(--muted); }
-  .deduct-val { color: var(--danger); font-weight: 700; font-size: 8pt; }
-
-  .warn-alert {
-    width: 100%;
-    background: rgba(255,107,107,0.1);
-    border: 1pt solid rgba(255,107,107,0.4);
-    border-radius: 4pt;
-    padding: 5pt 8pt;
-  }
-  .warn-alert p { font-size: 7pt; color: var(--danger); font-weight: 600; line-height: 1.4; text-align: center; }
-
-  /* 우측 로드맵 */
-  .roadmap-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding-top: 4pt;
-  }
-
-  .roadmap-section h3 {
-    font-size: 9.5pt;
-    font-weight: 700;
-    color: var(--muted);
-    margin-bottom: 10pt;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .rm-steps {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-  }
-
-  /* 연결선: div 배경 (linear-gradient 금지이므로 solid 색으로) */
-  .rm-line-track {
-    position: absolute;
-    top: 8pt;
-    left: 9pt;
-    right: 9pt;
-    height: 2pt;
-    background: #ff6b6b;
-  }
-
-  .rm-step {
-    flex: 1;
+  /* 좌측 원형 게이지 */
+  .gauge-col {
+    flex: 0 0 190px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5pt;
-    position: relative;
-    z-index: 1;
+    gap: 6px;
   }
-
-  .rm-dot {
-    width: 18pt;
-    height: 18pt;
+  .gauge-ring {
+    width: 140px; height: 140px;
     border-radius: 50%;
-    border: 2pt solid #30363d;
+    border: 17px solid #ffd43b;
     background: #0d1117;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
-  .rm-inner { width: 7pt; height: 7pt; border-radius: 50%; }
+  .gauge-ring-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .gauge-ring-inner p.g-score { font-size: 28px; font-weight: 800; color: #ffd43b; line-height: 1; }
+  .gauge-ring-inner p.g-denom { font-size: 11px; color: #8b949e; }
+  .gauge-delta { font-size: 10px; color: #ff6b6b; font-weight: 700; }
+  .gauge-bar-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .gauge-bar-label {
+    display: flex;
+    justify-content: space-between;
+  }
+  .gauge-bar-label p { font-size: 8px; color: #8b949e; }
+  .gauge-bar-track {
+    height: 6px;
+    background: #1e2530;
+    border-radius: 3px;
+  }
+  .gauge-bar-fill {
+    width: 81%;
+    height: 100%;
+    background: #ffd43b;
+    border-radius: 3px;
+  }
 
-  .rm-dot-red { border-color: var(--danger); }
-  .rm-dot-red .rm-inner { background: var(--danger); }
-  .rm-dot-yellow { border-color: var(--warning); }
-  .rm-dot-yellow .rm-inner { background: var(--warning); }
-  .rm-dot-green { border-color: var(--success); }
-  .rm-dot-green .rm-inner { background: var(--success); }
-  .rm-dot-gray { border-color: var(--muted); }
-  .rm-dot-gray .rm-inner { background: var(--muted); }
+  .gauge-warn {
+    background: #1c1a0e;
+    border: 1px solid #ffd43b;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 100%;
+  }
+  .gauge-warn p { font-size: 8px; color: #ffd43b; text-align: center; line-height: 1.5; }
+  .deduction-list { width: 100%; }
+  .ded-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px solid #1e2530;
+  }
+  .ded-item p.ded-name { font-size: 8px; color: #8b949e; }
+  .ded-item p.ded-val { font-size: 8px; font-weight: 700; color: #ff6b6b; }
+  .recovery-line {
+    background: #0e1f1b;
+    border: 1px solid #38d9a9;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 100%;
+    text-align: center;
+  }
+  .recovery-line p { font-size: 9px; font-weight: 700; color: #38d9a9; }
 
-  .rm-label { text-align: center; }
-  .rm-label .rm-score { font-size: 10pt; font-weight: 800; line-height: 1.1; }
-  .rm-label .rm-gain { font-size: 7pt; color: var(--muted); }
-  .rm-label .rm-desc { font-size: 6.5pt; color: var(--muted); line-height: 1.3; margin-top: 2pt; }
+  /* 중앙 로드맵 타임라인 */
+  .roadmap-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .roadmap-col h3 { font-size: 11px; font-weight: 700; color: #8b949e; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .tl-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+  }
+  .tl-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 3px;
+  }
+  .tl-dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid #ffd43b;
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .tl-dot p {
+    font-size: 10px;
+    font-weight: 800;
+    color: #ffd43b;
+    line-height: 1;
+  }
+  .tl-dot.current-node { border-color: #ff6b6b; background: #1e0d0d; }
+  .tl-dot.current-node p { color: #ff6b6b; }
+  .tl-dot.final-node { border-color: #38d9a9; background: #0e1f1b; }
+  .tl-dot.final-node p { color: #38d9a9; }
+  .tl-score { font-size: 11px; font-weight: 800; color: #ffd43b; white-space: nowrap; }
+  .tl-score.current-score { color: #ff6b6b; }
+  .tl-score.final-score { color: #38d9a9; }
+  .tl-delta { font-size: 8px; color: #38d9a9; font-weight: 600; }
+  .tl-task-label { font-size: 7px; color: #8b949e; text-align: center; line-height: 1.3; max-width: 70px; }
+  .tl-line { flex: 0.2; height: 1px; background: #30363d; align-self: center; margin-top: -16px; }
+
+  /* 우측 대시보드 현황 */
+  .dash-col {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .dash-col h3 { font-size: 11px; font-weight: 700; color: #58a6ff; letter-spacing: 0.03em; }
+  .dash-stats {
+    display: flex;
+    gap: 8px;
+  }
+  .dash-stat-box {
+    flex: 1;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    padding: 6px 8px;
+    text-align: center;
+  }
+  .dash-stat-box p.ds-val { font-size: 18px; font-weight: 800; color: #38d9a9; }
+  .dash-stat-box p.ds-label { font-size: 8px; color: #8b949e; }
+  .page-list {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    padding: 8px 10px;
+    flex: 1;
+  }
+  .page-list ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 6px;
+  }
+  .page-list ul li { font-size: 7.5px; color: #8b949e; line-height: 1.6; }
+  .page-list ul li span.avail { color: #38d9a9; font-weight: 600; }
+  .dash-url {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 5px;
+    padding: 5px 8px;
+  }
+  .dash-url p { font-size: 7px; color: #58a6ff; font-family: monospace; word-break: break-all; line-height: 1.4; }
 
   /* 하단 코멘트 박스 */
   .comment-box {
     background: #161b22;
-    border: 1.5pt solid var(--danger);
-    border-radius: 6pt;
-    padding: 7pt 14pt;
-    margin: 6pt 20pt 8pt;
+    border-top: 2px solid #ff6b6b;
+    padding: 8px 32px;
     flex-shrink: 0;
   }
   .comment-box p {
-    font-size: 8pt;
-    color: var(--muted);
+    font-size: 8.5px;
     font-style: italic;
-    line-height: 1.55;
-    text-align: center;
+    color: #8b949e;
+    line-height: 1.6;
   }
-  .comment-box p strong { color: var(--danger); font-style: normal; }
+  .comment-box p span.hl-r { color: #ff6b6b; font-weight: 600; }
+  .comment-box p span.hl-g { color: #38d9a9; font-weight: 600; }
 </style>
 </head>
 <body>
+
   <div class="slide-header">
-    <h2>김태현 종합 평가 4.15 / 5.0 + 5.0 로드맵</h2>
-    <p>오늘 달성 시 4.38 복원 가능</p>
+    <h2>김태현 종합 평가 &amp; 5.0 로드맵</h2>
+    <p class="sub">4.05 최후통첩 &mdash; 오늘 22시 push 성공 시 4.28 즉시 복원 가능</p>
   </div>
 
-  <div class="content-area">
-    <!-- 좌측 게이지 -->
-    <div class="gauge-section">
-      <!-- 점수 카드 -->
-      <div class="score-card">
-        <p class="g-score">4.15</p>
-        <p class="g-max">/ 5.0</p>
-        <p class="g-pct">83%</p>
-      </div>
+  <div class="body-row">
 
-      <!-- 막대 게이지 -->
-      <div class="bar-gauge-wrap">
-        <div class="bar-label-row">
+    <!-- 좌측 원형 게이지 -->
+    <div class="gauge-col">
+      <div class="gauge-ring">
+        <div class="gauge-ring-inner">
+          <p class="g-score">4.05</p>
+          <p class="g-denom">/ 5.0</p>
+        </div>
+      </div>
+      <p class="gauge-delta">&#9660; &minus;0.10 (전일 4.15)</p>
+      <div class="gauge-bar-wrap">
+        <div class="gauge-bar-label">
           <p>0</p>
+          <p>81%</p>
           <p>5.0</p>
         </div>
-        <div class="bar-track">
-          <div class="bar-fill"></div>
+        <div class="gauge-bar-track">
+          <div class="gauge-bar-fill"></div>
         </div>
       </div>
-
-      <p class="gauge-delta">4.25 → 4.15</p>
-      <p class="gauge-delta-sub">(−0.10 전일 대비)</p>
-
-      <ul class="deduct-list">
-        <li class="deduct-item">
-          <p>P7/P1 14일 연속 미달</p>
-          <p class="deduct-val">−0.05</p>
-        </li>
-        <li class="deduct-item">
-          <p>S3 FW 파일 6일 연속</p>
-          <p class="deduct-val">−0.03</p>
-        </li>
-        <li class="deduct-item">
-          <p>demo_script 6일 연속</p>
-          <p class="deduct-val">−0.02</p>
-        </li>
-      </ul>
-
-      <div class="warn-alert">
-        <p>오늘 22시 P7+P1 push 없으면<br>내일 4.10 이하 경고 발동 중</p>
+      <div class="gauge-warn">
+        <p>경고 발동 중<br>오늘 22시 push 없으면<br>내일 4.0 이하</p>
+      </div>
+      <div class="deduction-list">
+        <div class="ded-item">
+          <p class="ded-name">P7/P1 15일 연속</p>
+          <p class="ded-val">&minus;0.07</p>
+        </div>
+        <div class="ded-item">
+          <p class="ded-name">S3 FW 파일 7일</p>
+          <p class="ded-val">&minus;0.02</p>
+        </div>
+        <div class="ded-item">
+          <p class="ded-name">demo_script 7일</p>
+          <p class="ded-val">&minus;0.01</p>
+        </div>
+      </div>
+      <div class="recovery-line">
+        <p>&#9650; 오늘 달성 +0.23 &rarr; 4.28</p>
       </div>
     </div>
 
-    <!-- 우측 로드맵 -->
-    <div class="roadmap-section">
-      <h3>5.0 복원 로드맵 (8단계)</h3>
-      <div class="rm-steps">
-        <div class="rm-line-track"></div>
+    <!-- 중앙 수평 로드맵 타임라인 -->
+    <div class="roadmap-col">
+      <h3>5.0 로드맵 &mdash; 8단계</h3>
+      <div class="tl-row">
 
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-red"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#ff6b6b;">4.15</p>
-            <p class="rm-gain">현재</p>
-            <p class="rm-desc">월요일<br>경고 집행</p>
-          </div>
+        <div class="tl-item">
+          <div class="tl-dot current-node"><p>&#9656;</p></div>
+          <p class="tl-score current-score">4.05</p>
+          <p class="tl-task-label">화요일<br>경고 집행</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-red"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#ff6b6b;">4.18</p>
-            <p class="rm-gain">+0.03</p>
-            <p class="rm-desc">S3 FW 파일<br>(오전 11시)</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><p>1</p></div>
+          <p class="tl-score">4.08</p>
+          <p class="tl-delta">+0.03</p>
+          <p class="tl-task-label">S3 FW<br>파일 (11시)</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-red"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#ff6b6b;">4.20</p>
-            <p class="rm-gain">+0.02</p>
-            <p class="rm-desc">demo_script<br>v2.0 (오전)</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><p>2</p></div>
+          <p class="tl-score">4.10</p>
+          <p class="tl-delta">+0.02</p>
+          <p class="tl-task-label">demo_script<br>v2.0 (11시)</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-yellow"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#ffd43b;">4.30</p>
-            <p class="rm-gain">+0.10</p>
-            <p class="rm-desc">P7 v5.1<br>(오후 로컬)</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><p>3</p></div>
+          <p class="tl-score">4.20</p>
+          <p class="tl-delta">+0.10</p>
+          <p class="tl-task-label">P7 R&sup2;<br>&ge;0.62 (오후)</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-yellow"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#ffd43b;">4.38</p>
-            <p class="rm-gain">+0.08</p>
-            <p class="rm-desc">P1 Acc≥57%<br>(저녁 로컬)</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><p>4</p></div>
+          <p class="tl-score">4.28</p>
+          <p class="tl-delta">+0.08</p>
+          <p class="tl-task-label">P1 Acc<br>&ge;57% (저녁)</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-gray"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#8b949e;">4.44</p>
-            <p class="rm-gain">+0.06</p>
-            <p class="rm-desc">S3 FW Sil<br>≥0.25 (내주)</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><p>5</p></div>
+          <p class="tl-score">4.34</p>
+          <p class="tl-delta">+0.06</p>
+          <p class="tl-task-label">S3 FW Sil<br>&ge;0.25</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-gray"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#8b949e;">4.52</p>
-            <p class="rm-gain">+0.08</p>
-            <p class="rm-desc">포트폴리오<br>발표 성공</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><p>6</p></div>
+          <p class="tl-score">4.42</p>
+          <p class="tl-delta">+0.08</p>
+          <p class="tl-task-label">포트폴리오<br>발표 성공</p>
         </div>
-        <div class="rm-step">
-          <div class="rm-dot rm-dot-green"><div class="rm-inner"></div></div>
-          <div class="rm-label">
-            <p class="rm-score" style="color:#38d9a9;">5.0</p>
-            <p class="rm-gain">+0.48</p>
-            <p class="rm-desc">실제 영입<br>회의 시연</p>
-          </div>
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot final-node"><p>&#9733;</p></div>
+          <p class="tl-score final-score">5.00</p>
+          <p class="tl-delta" style="color:#38d9a9">+0.58</p>
+          <p class="tl-task-label">영입 회의<br>시연 성공</p>
         </div>
+
       </div>
     </div>
+
+    <!-- 우측 대시보드 현황 -->
+    <div class="dash-col">
+      <h3>Streamlit 대시보드</h3>
+      <div class="dash-stats">
+        <div class="dash-stat-box">
+          <p class="ds-val">16</p>
+          <p class="ds-label">총 페이지</p>
+        </div>
+        <div class="dash-stat-box">
+          <p class="ds-val">9</p>
+          <p class="ds-label">즉시 활용</p>
+        </div>
+      </div>
+      <div class="page-list">
+        <ul>
+          <li><span class="avail">OK</span> 홈</li>
+          <li><span class="avail">OK</span> 선수 즉시 분석</li>
+          <li><span class="avail">OK</span> 쇼트리스트</li>
+          <li><span class="avail">OK</span> 종합 인텔리전스</li>
+          <li>스카우트 개요</li>
+          <li><span class="avail">OK</span> 선수 분석</li>
+          <li><span class="avail">OK</span> 이적 인텔리전스</li>
+          <li>강등권 탐색기</li>
+          <li><span class="avail">OK</span> S2 저평가 탐색</li>
+          <li>팀 프로파일</li>
+          <li>선수 통계 순위</li>
+          <li>시즌 개요</li>
+          <li><span class="avail">OK</span> 선수 비교</li>
+          <li>역대 기록</li>
+          <li>모델 설명(SHAP)</li>
+          <li>선수 유형 탐색기</li>
+        </ul>
+      </div>
+      <div class="dash-url">
+        <p>https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
+      </div>
+    </div>
+
   </div>
 
   <!-- 하단 코멘트 박스 -->
   <div class="comment-box">
-    <p>"14일입니다. 오늘 오전에 파일 두 개를 처리하고, 오후에 P7을 돌리고, 저녁에 P1을 돌리십시오. <strong>오늘 저녁 22시 이전에 숫자가 바뀌어 있으면 내일 아침에 4.38까지 복원할 수 있습니다.</strong> 로컬 PC를 지금 켜십시오. 오늘이 마지막입니다. — 김태현"</p>
+    <p>
+      &ldquo;<span class="hl-r">4.05. 15일입니다. 경고를 넘어 최후통첩입니다.</span>
+      P6+P7+P8 체인은 완성 직전입니다. P7 하나만 0.62를 달성하면 됩니다.
+      오늘 오후에 로컬 PC를 켜고 train_v5_1.py를 실행하십시오.
+      <span class="hl-g">오늘 저녁 22시 이전에 push가 있으면 내일 아침에 4.28까지 복원 가능합니다.</span>
+      오늘이 진짜 마지막입니다. &mdash; 김태현&rdquo;
+    </p>
   </div>
+
 </body>
 </html>

@@ -13,213 +13,169 @@
     overflow: hidden;
     position: relative;
   }
-  :root {
-    --success: #38d9a9;
-    --warning: #ffd43b;
-    --danger: #ff6b6b;
-    --text: #e6edf3;
-    --muted: #8b949e;
-    --surface: #161b22;
-    --header: #0f3460;
+  .alert-banner {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: #ff6b6b;
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 10;
   }
-
-  /* 좌측 수직 강조선 */
+  .alert-banner p {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .sep { width: 1px; height: 13px; background: #fff; opacity: 0.4; }
   .left-bar {
     position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 6px;
-    background: linear-gradient(180deg, #ff6b6b 0%, #e94560 50%, #ff6b6b 100%);
-  }
-
-  /* 상단 경고 배너 */
-  .top-banner {
-    position: absolute;
-    top: 0; left: 6px; right: 0;
+    left: 0; top: 38px; bottom: 0;
+    width: 5px;
     background: #ff6b6b;
-    padding: 9px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
   }
-  .top-banner p {
-    font-size: 11px;
-    font-weight: 800;
-    color: #0d1117;
-    letter-spacing: 0.06em;
-    text-align: center;
-    text-transform: uppercase;
-  }
-  .top-banner p span {
-    margin: 0 10px;
-    opacity: 0.45;
-    font-weight: 400;
-  }
-
-  /* 메인 콘텐츠 */
-  .main-content {
+  .main {
     position: absolute;
-    top: 54px; left: 52px; right: 220px; bottom: 72px;
+    top: 38px; left: 5px; bottom: 54px; right: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 0 52px 0 56px;
   }
-  .eyebrow {
+  .label-top {
     font-size: 10px;
-    letter-spacing: 0.24em;
-    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #8b949e;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+  }
+  .session-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #1e1014;
+    border: 1px solid #ff6b6b;
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+    width: fit-content;
+  }
+  .session-badge p {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ff6b6b;
+    letter-spacing: 0.08em;
   }
   h1.main-title {
-    font-size: 52px;
+    font-size: 46px;
     font-weight: 800;
-    color: var(--text);
-    line-height: 1.1;
-    margin-bottom: 14px;
+    line-height: 1.08;
+    color: #e6edf3;
+    margin-bottom: 12px;
   }
-  h1.main-title span {
-    color: var(--success);
-  }
-  p.subtitle {
-    font-size: 14px;
-    color: var(--success);
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    margin-bottom: 20px;
-  }
+  h1.main-title span.accent { color: #38d9a9; }
   .divider {
     width: 72px; height: 3px;
-    background: var(--danger);
+    background: #ff6b6b;
     margin-bottom: 18px;
   }
-  p.attendee {
-    font-size: 12px;
-    color: var(--muted);
+  .subtitle {
+    font-size: 13px;
+    font-weight: 400;
+    color: #8b949e;
+    margin-bottom: 20px;
+    line-height: 1.7;
   }
-  p.attendee strong {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  /* 우측 원형 평점 배지 */
-  .badge-wrap {
+  .subtitle span.date { color: #38d9a9; font-weight: 600; }
+  .attendees { font-size: 11px; color: #8b949e; }
+  .attendees span { color: #e6edf3; font-weight: 600; }
+  .score-badge {
     position: absolute;
-    right: 40px;
-    top: 54px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  .badge-circle {
-    width: 156px; height: 156px;
+    bottom: 72px; right: 44px;
+    width: 124px; height: 124px;
     border-radius: 50%;
-    background: rgba(255,107,107,0.10);
-    border: 3px solid var(--danger);
+    border: 4px solid #ff6b6b;
+    background: #161b22;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .badge-circle p.score {
-    font-size: 40px;
+  .score-badge .score-num {
+    font-size: 30px;
     font-weight: 800;
-    color: var(--warning);
+    color: #ff6b6b;
     line-height: 1;
   }
-  .badge-circle p.score-max {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-  .badge-circle p.score-delta {
-    font-size: 12px;
-    color: var(--danger);
-    font-weight: 700;
-    margin-top: 6px;
-  }
-  .badge-circle p.score-prev {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-  .warning-pill {
-    background: rgba(255,107,107,0.15);
-    border: 1px solid var(--danger);
-    border-radius: 20px;
-    padding: 6px 14px;
-    text-align: center;
-  }
-  .warning-pill p {
-    font-size: 10px;
-    color: var(--danger);
-    font-weight: 700;
-    line-height: 1.5;
-  }
-
-  /* 하단 슬로건 박스 */
+  .score-badge .score-denom { font-size: 11px; color: #8b949e; margin-top: 2px; }
+  .score-badge .score-delta { font-size: 10px; color: #ff6b6b; margin-top: 5px; font-weight: 700; }
+  .score-badge .score-prev { font-size: 9px; color: #8b949e; margin-top: 2px; }
   .slogan-box {
     position: absolute;
-    left: 6px; right: 0; bottom: 0;
-    border-top: 2px solid var(--danger);
-    background: rgba(255,107,107,0.07);
-    padding: 13px 32px;
+    bottom: 0; left: 5px; right: 0;
+    height: 54px;
+    background: #161b22;
+    border-top: 2px solid #ff6b6b;
     display: flex;
     align-items: center;
-    gap: 14px;
-  }
-  .slogan-icon {
-    font-size: 20px;
-    flex-shrink: 0;
+    padding: 0 32px;
   }
   .slogan-box p {
-    font-size: 12.5px;
-    color: #e6edf3;
+    font-size: 12px;
     font-style: italic;
-    line-height: 1.5;
+    color: #e6edf3;
+    font-weight: 600;
   }
-  .slogan-box p strong {
-    color: var(--danger);
-    font-style: normal;
-    font-weight: 800;
-  }
+  .slogan-box p span.hl { color: #ff6b6b; }
 </style>
 </head>
 <body>
+
+  <div class="alert-banner">
+    <p>화요일 경고 집행</p>
+    <div class="sep"></div>
+    <p>P7 &middot; P1 15일 연속 미달</p>
+    <div class="sep"></div>
+    <p>오늘 22시 절대 마감</p>
+    <div class="sep"></div>
+    <p>미이행 시 4.0 이하 &mdash; 시스템 재설계 개시</p>
+  </div>
+
   <div class="left-bar"></div>
 
-  <!-- 상단 긴급 배너 -->
-  <div class="top-banner">
-    <p>화요일 경고 집행<span>|</span>P7 · P1 15일 연속 미달<span>|</span>오늘 22시 절대 마감<span>|</span>미이행 시 4.0 이하 — 시스템 재설계</p>
-  </div>
+  <div class="main">
+    <p class="label-top">EPL Scout Intelligence &middot; Daily Briefing</p>
 
-  <!-- 메인 콘텐츠 -->
-  <div class="main-content">
-    <p class="eyebrow">EPL Scout Intelligence &nbsp;&middot;&nbsp; Daily Briefing &nbsp;&middot;&nbsp; Session 35</p>
-    <h1 class="main-title">EPL 스카우트<br><span>인텔리전스</span></h1>
-    <p class="subtitle">데일리 브리핑 &nbsp;|&nbsp; 2026-05-26 (화) &nbsp;|&nbsp; 35번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</p>
+    <div class="session-badge">
+      <p>35번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</p>
+    </div>
+
+    <h1 class="main-title">EPL 스카우트<br><span class="accent">인텔리전스</span></h1>
+
     <div class="divider"></div>
-    <p class="attendee"><strong>김태현 스카우트</strong> &nbsp;&middot;&nbsp; <strong>Marcus Webb</strong> (Analytics Agent)</p>
+
+    <p class="subtitle">
+      <span class="date">2026-05-26 (화)</span> &nbsp;&middot;&nbsp; 데일리 브리핑 &nbsp;&middot;&nbsp; 35번째 정기 미팅 &nbsp;&middot;&nbsp; 09:00 KST
+    </p>
+
+    <p class="attendees">
+      <span>김태현</span> 스카우트 &nbsp;&middot;&nbsp; <span>Marcus Webb</span> (Analytics Agent)
+    </p>
   </div>
 
-  <!-- 우측 원형 평점 배지 -->
-  <div class="badge-wrap">
-    <div class="badge-circle">
-      <p class="score">4.05</p>
-      <p class="score-max">/ 5.0</p>
-      <p class="score-delta">▼ &minus;0.10</p>
-      <p class="score-prev">전일 4.15</p>
-    </div>
-    <div class="warning-pill">
-      <p>⚠ 15일 연속 미달<br>최후통첩 발동 중</p>
-    </div>
+  <div class="score-badge">
+    <p class="score-num">4.05</p>
+    <p class="score-denom">/ 5.0</p>
+    <p class="score-delta">&#9660; &minus;0.10</p>
+    <p class="score-prev">전일 4.15</p>
   </div>
 
-  <!-- 하단 슬로건 박스 -->
   <div class="slogan-box">
-    <span class="slogan-icon">⚠</span>
-    <p><strong>15일입니다.</strong> 오늘 저녁 22시가 진짜 마지막입니다. — 김태현</p>
+    <p><span class="hl">15일입니다.</span> 오늘 저녁 22시가 진짜 마지막입니다. &mdash; 김태현</p>
   </div>
+
 </body>
 </html>

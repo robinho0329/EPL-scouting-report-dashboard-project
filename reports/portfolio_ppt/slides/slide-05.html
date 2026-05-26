@@ -6,7 +6,7 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 960px; height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
@@ -14,231 +14,218 @@
     display: flex;
     flex-direction: column;
   }
-  :root {
-    --success: #38d9a9;
-    --warning: #ffd43b;
-    --danger: #ff6b6b;
-    --text: #e6edf3;
-    --muted: #8b949e;
-  }
-
-  /* 상단 달성률 배너 */
   .result-banner {
-    background: rgba(255,107,107,0.15);
-    border-bottom: 2pt solid var(--danger);
-    padding: 7pt 22pt;
+    background: #1e0d0d;
+    border-bottom: 2px solid #ff6b6b;
+    padding: 9px 32px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 20px;
     flex-shrink: 0;
   }
-  .result-banner .rate {
-    font-size: 16pt;
-    font-weight: 800;
-    color: var(--danger);
-  }
-  .rate-sub {
-    font-size: 11pt;
-    font-weight: 400;
-    color: var(--muted);
-  }
-  .result-banner .right-info { text-align: right; }
-  .result-banner .right-info p {
-    font-size: 9pt;
-    color: var(--text);
-    line-height: 1.5;
-  }
-  .result-banner .right-info p strong { color: var(--danger); }
+  .result-banner h2 { font-size: 14px; font-weight: 700; color: #ff6b6b; }
+  .result-banner p { font-size: 10px; color: #8b949e; }
+  .banner-sep { width: 1px; height: 14px; background: #ff6b6b; opacity: 0.4; }
 
-  .main-area {
-    flex: 1;
+  .body-row {
     display: flex;
-    gap: 12pt;
-    padding: 10pt 20pt;
+    flex: 1;
+    overflow: hidden;
+    padding: 12px 32px;
+    gap: 16px;
   }
 
   /* 좌측 체크리스트 */
-  .checklist {
-    flex: 1;
+  .checklist-col {
+    flex: 2;
     display: flex;
     flex-direction: column;
-    gap: 7pt;
+    gap: 9px;
   }
-
   .check-item {
-    background: rgba(255,107,107,0.07);
-    border: 1pt solid rgba(255,107,107,0.3);
-    border-left: 3pt solid var(--danger);
-    border-radius: 5pt;
-    padding: 7pt 10pt;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-left: 3px solid #ff6b6b;
+    border-radius: 5px;
+    padding: 9px 12px;
     display: flex;
     align-items: flex-start;
-    gap: 8pt;
+    gap: 10px;
   }
-
-  /* ❌ 아이콘을 div 안에서 p로 감쌈 */
-  .check-icon p {
-    font-size: 14pt;
-    line-height: 1;
-  }
-
+  .check-icon { font-size: 15px; flex-shrink: 0; }
   .check-body { flex: 1; }
-
-  /* h4의 border 제거 — 이미 border 없음, 배지를 div 안에서 처리 */
-  .check-body h4 {
-    font-size: 9pt;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 3pt;
-    display: flex;
-    align-items: center;
-    gap: 6pt;
-  }
-
-  .badge-pill {
+  /* h4 inside check-body: pill is separate div below */
+  .check-body h4 { font-size: 11px; font-weight: 700; color: #e6edf3; }
+  .pill-wrap { display: flex; align-items: center; gap: 6px; margin-top: 2px; margin-bottom: 3px; }
+  .pill-wrap h4 { font-size: 11px; font-weight: 700; color: #e6edf3; flex: 1; }
+  .check-body p.check-meta { font-size: 9px; color: #8b949e; line-height: 1.5; }
+  .check-body p.check-meta span.hl-r { color: #ff6b6b; font-weight: 600; }
+  .check-body p.check-meta span.hl-y { color: #ffd43b; font-weight: 600; }
+  .pill {
     display: inline-block;
-    background: var(--danger);
+    background: #ff6b6b;
     color: #fff;
-    font-size: 6.5pt;
+    font-size: 8px;
     font-weight: 700;
-    padding: 1pt 5pt;
-    border-radius: 10pt;
+    border-radius: 3px;
+    padding: 2px 6px;
     white-space: nowrap;
-  }
-  .check-body p {
-    font-size: 7.5pt;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-  .check-body p strong { color: var(--danger); }
-
-  /* 우측 요약 박스 */
-  .summary-box {
-    width: 170pt;
-    background: #16213e;
-    border: 2pt solid var(--danger);
-    border-radius: 7pt;
-    padding: 12pt;
-    display: flex;
-    flex-direction: column;
-    gap: 8pt;
+    letter-spacing: 0.03em;
     flex-shrink: 0;
   }
-
-  /* summary-box 헤더: div wrapper로 border 처리 */
-  .sum-header-wrap {
-    border-bottom: 1pt solid #30363d;
-    padding-bottom: 5pt;
-  }
-  .sum-header-wrap h3 {
-    font-size: 9pt;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+  .pill.warn {
+    background: #ffd43b;
+    color: #0d1117;
   }
 
-  .sum-row { display: flex; flex-direction: column; gap: 2pt; }
-  .sum-label { font-size: 7pt; color: var(--muted); }
-  .sum-val { font-size: 11pt; font-weight: 800; color: var(--danger); }
-  .sum-detail { font-size: 7pt; color: var(--muted); line-height: 1.4; }
-
-  .warn-notice {
-    background: rgba(255,107,107,0.1);
-    border: 1pt solid rgba(255,107,107,0.35);
-    border-radius: 4pt;
-    padding: 5pt 7pt;
+  /* 우측 요약 + 회복 */
+  .right-col {
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
-  .warn-notice p { font-size: 7pt; color: var(--danger); font-weight: 600; line-height: 1.4; }
+  .summary-box {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 7px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .summary-box h4 { font-size: 11px; font-weight: 700; color: #e6edf3; margin-bottom: 4px; }
+  .summary-box p { font-size: 9.5px; color: #8b949e; line-height: 1.6; }
+  .summary-box p span.hl-r { color: #ff6b6b; font-weight: 600; }
+  .summary-box p span.hl-y { color: #ffd43b; font-weight: 600; }
+  .summary-box p span.val { color: #e6edf3; font-weight: 700; }
+
+  .recovery-box {
+    background: #0e1f1b;
+    border: 1.5px solid #38d9a9;
+    border-radius: 7px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .recovery-box h4 { font-size: 10px; font-weight: 700; color: #38d9a9; margin-bottom: 4px; }
+  .rec-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .rec-row p.rec-task { font-size: 8.5px; color: #8b949e; }
+  .rec-row p.rec-score { font-size: 9px; font-weight: 700; color: #38d9a9; white-space: nowrap; }
 
   /* 하단 코멘트 박스 */
   .comment-box {
-    background: rgba(255,107,107,0.06);
-    border-top: 1pt solid rgba(255,107,107,0.3);
-    padding: 7pt 22pt;
+    background: #161b22;
+    border-top: 2px solid #ff6b6b;
+    padding: 9px 32px;
     flex-shrink: 0;
   }
   .comment-box p {
-    font-size: 8.5pt;
-    color: var(--muted);
+    font-size: 10px;
     font-style: italic;
-    line-height: 1.5;
-    text-align: center;
+    color: #e6edf3;
+    font-weight: 600;
   }
-  .comment-box p strong { color: var(--text); font-style: normal; }
+  .comment-box p span.hl-r { color: #ff6b6b; }
 </style>
 </head>
 <body>
+
   <!-- 상단 달성률 배너 -->
   <div class="result-banner">
-    <div>
-      <p class="rate">달성 0건 / 미달 4건 &nbsp;<span class="rate-sub">달성률 0%</span></p>
-    </div>
-    <div class="right-info">
-      <p>어제 (05-24 일요일) 결과</p>
-      <p><strong>평가 4.25 → 4.15 (−0.10)</strong> 월요일 경고 집행</p>
-    </div>
+    <h2>달성 0건 / 미달 4건 &mdash; 달성률 0%</h2>
+    <div class="banner-sep"></div>
+    <p>어제(05-25 월요일) &nbsp;|&nbsp; 평가 4.15 &rarr; 4.05 (&minus;0.10) &nbsp;|&nbsp; 화요일 경고 집행</p>
   </div>
 
-  <div class="main-area">
-    <!-- 좌측 체크리스트 -->
-    <div class="checklist">
+  <div class="body-row">
+
+    <!-- 체크리스트 4항목 -->
+    <div class="checklist-col">
       <div class="check-item">
-        <div class="check-icon"><p>❌</p></div>
+        <p class="check-icon">&#10060;</p>
         <div class="check-body">
-          <h4>P7 v5.1 로컬 학습 (R² ≥ 0.62) <span class="badge-pill">14일 연속</span></h4>
-          <p>일요일 저녁 22시 데드라인 미실행 &nbsp;|&nbsp; <strong>평점 영향 −0.05</strong></p>
+          <div class="pill-wrap">
+            <h4>P7 v5.1 로컬 학습 (R&sup2; &ge; 0.62)</h4>
+            <span class="pill">15일 연속</span>
+          </div>
+          <p class="check-meta">어제 저녁 22시 데드라인 또 미이행 &middot; 현재 <span class="hl-r">R&sup2; 0.5752</span> &middot; 목표 0.62 갭 0.0448</p>
         </div>
       </div>
       <div class="check-item">
-        <div class="check-icon"><p>❌</p></div>
+        <p class="check-icon">&#10060;</p>
         <div class="check-body">
-          <h4>P1 v2 로컬 학습 (Acc ≥ 57%) <span class="badge-pill">14일 연속</span></h4>
-          <p>일요일 저녁 22시 데드라인 미실행 &nbsp;|&nbsp; <strong>평점 영향 −0.05 (P7과 합산)</strong></p>
+          <div class="pill-wrap">
+            <h4>P1 v2 로컬 학습 (Acc &ge; 57%)</h4>
+            <span class="pill">15일 연속</span>
+          </div>
+          <p class="check-meta">어제 저녁 22시 데드라인 또 미이행 &middot; 현재 <span class="hl-r">Acc 54.79%</span> &middot; 목표 57% 갭 2.21%p</p>
         </div>
       </div>
-      <div class="check-item">
-        <div class="check-icon"><p>❌</p></div>
+      <div class="check-item" style="border-left-color:#ffd43b">
+        <p class="check-icon">&#10060;</p>
         <div class="check-body">
-          <h4>S3 FW 개선 방향 파일 생성 <span class="badge-pill">6일 연속</span></h4>
-          <p>reports/s3_fw_improvement_plan.md 없음 &nbsp;|&nbsp; <strong>평점 영향 −0.03</strong></p>
+          <div class="pill-wrap">
+            <h4>S3 FW 개선 방향 파일 생성</h4>
+            <span class="pill warn">7일 연속</span>
+          </div>
+          <p class="check-meta"><span class="hl-y">reports/s3_fw_improvement_plan.md</span> 파일 없음</p>
         </div>
       </div>
-      <div class="check-item">
-        <div class="check-icon"><p>❌</p></div>
+      <div class="check-item" style="border-left-color:#ffd43b">
+        <p class="check-icon">&#10060;</p>
         <div class="check-body">
-          <h4>포트폴리오 demo_script v2.0 <span class="badge-pill">6일 연속</span></h4>
-          <p>v1.0 초안(05-19) 상태 그대로 &nbsp;|&nbsp; <strong>평점 영향 −0.02</strong></p>
+          <div class="pill-wrap">
+            <h4>포트폴리오 demo_script v2.0</h4>
+            <span class="pill warn">7일 연속</span>
+          </div>
+          <p class="check-meta">v1.0 초안(05-19) 상태 그대로 &middot; v2.0 최종본 미완성</p>
         </div>
       </div>
     </div>
 
-    <!-- 우측 요약 박스 -->
-    <div class="summary-box">
-      <div class="sum-header-wrap">
-        <h3>달성률 요약</h3>
+    <!-- 우측 요약 + 회복 시나리오 -->
+    <div class="right-col">
+      <div class="summary-box">
+        <h4>어제 달성률 요약</h4>
+        <p>달성률: <span class="hl-r">0 / 4 (0%)</span></p>
+        <p>평점: <span class="val">4.15 &rarr; 4.05</span> <span class="hl-r">(&minus;0.10)</span></p>
+        <p>감점: P7/P1 15일 &minus;0.07 &middot; S3 FW &minus;0.02 &middot; demo &minus;0.01</p>
+        <p>경고 발동: <span class="hl-r">오늘 22시 미이행 &rarr; 내일 4.0 이하</span></p>
       </div>
-      <div class="sum-row">
-        <p class="sum-label">달성률</p>
-        <p class="sum-val">0 / 4 (0%)</p>
-      </div>
-      <div class="sum-row">
-        <p class="sum-label">평점 변화</p>
-        <p class="sum-val">4.25 → 4.15</p>
-      </div>
-      <div class="sum-row">
-        <p class="sum-label">하락 내역</p>
-        <p class="sum-detail">P7/P1 14일 연속 −0.05<br>S3 파일 6일 연속 −0.03<br>demo_script 6일 연속 −0.02</p>
-      </div>
-      <div class="warn-notice">
-        <p>오늘 22시 P7+P1 push 없으면 내일 4.10 이하 경고 발동 중</p>
+      <div class="recovery-box">
+        <h4>오늘 전부 달성 시 복원 시나리오</h4>
+        <div class="rec-row">
+          <p class="rec-task">S3 FW 파일 (11시)</p>
+          <p class="rec-score">+0.03 &rarr; 4.08</p>
+        </div>
+        <div class="rec-row">
+          <p class="rec-task">demo_script v2.0 (11시)</p>
+          <p class="rec-score">+0.02 &rarr; 4.10</p>
+        </div>
+        <div class="rec-row">
+          <p class="rec-task">P7 R&sup2; &ge; 0.62 (오후)</p>
+          <p class="rec-score">+0.10 &rarr; 4.20</p>
+        </div>
+        <div class="rec-row">
+          <p class="rec-task">P1 Acc &ge; 57% (저녁)</p>
+          <p class="rec-score">+0.08 &rarr; 4.28</p>
+        </div>
       </div>
     </div>
+
   </div>
 
-  <!-- 하단 김태현 코멘트 -->
+  <!-- 하단 코멘트 박스 -->
   <div class="comment-box">
-    <p>"4개 중 0개. 일요일도 3개 모두 미달, 어제도 4개 모두 미달. <strong>저는 4.20 이하를 예고했습니다. 오늘 4.15를 적용합니다.</strong> — 김태현"</p>
+    <p>&ldquo;<span class="hl-r">4개 중 0개. 15일입니다.</span> 경고를 넘어 최후통첩입니다. &mdash; 김태현&rdquo;</p>
   </div>
+
 </body>
 </html>

@@ -6,7 +6,7 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 960px; height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
@@ -14,272 +14,246 @@
     display: flex;
     flex-direction: column;
   }
-  :root {
-    --success: #38d9a9;
-    --warning: #ffd43b;
-    --danger: #ff6b6b;
-    --text: #e6edf3;
-    --muted: #8b949e;
-  }
-
   .slide-header {
-    background: #161b22;
-    padding: 6pt 20pt;
-    border-bottom: 1pt solid #30363d;
+    padding: 14px 32px 0;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     flex-shrink: 0;
   }
-  .slide-header h2 { font-size: 12pt; font-weight: 700; }
-  .slide-header p { font-size: 8.5pt; color: var(--muted); }
+  .slide-header h2 { font-size: 17px; font-weight: 700; }
+  .slide-header p.sub { font-size: 9px; color: #8b949e; }
 
-  .content-area {
+  .summary-cards {
+    display: flex;
+    gap: 8px;
+    padding: 10px 32px 0;
+    flex-shrink: 0;
+  }
+  .sum-card {
     flex: 1;
-    padding: 8pt 20pt 0;
+    border-radius: 5px;
+    padding: 6px 10px;
     display: flex;
     flex-direction: column;
+    gap: 2px;
+  }
+  .sum-card.best { background: rgba(56,217,169,0.1); border: 1px solid #38d9a9; }
+  .sum-card.good { background: rgba(56,217,169,0.06); border: 1px solid rgba(56,217,169,0.4); }
+  .sum-card.warn { background: rgba(255,212,59,0.08); border: 1px solid #ffd43b; }
+  .sum-card.fail { background: rgba(255,107,107,0.1); border: 1px solid #ff6b6b; }
+  .sum-card p.sc-label { font-size: 8px; font-weight: 600; letter-spacing: 0.05em; }
+  .sum-card.best p.sc-label { color: #38d9a9; }
+  .sum-card.good p.sc-label { color: #38d9a9; }
+  .sum-card.warn p.sc-label { color: #ffd43b; }
+  .sum-card.fail p.sc-label { color: #ff6b6b; }
+  .sum-card p.sc-val { font-size: 16px; font-weight: 800; }
+  .sum-card.best p.sc-val { color: #38d9a9; }
+  .sum-card.good p.sc-val { color: #38d9a9; }
+  .sum-card.warn p.sc-val { color: #ffd43b; }
+  .sum-card.fail p.sc-val { color: #ff6b6b; }
+  .sum-card p.sc-names { font-size: 8px; color: #8b949e; }
+
+  .table-wrap {
+    padding: 8px 32px 0;
+    flex: 1;
     overflow: hidden;
   }
-
-  /* 4개 분류 요약 카드 */
-  .category-row {
-    display: flex;
-    gap: 8pt;
-    margin-bottom: 8pt;
-    flex-shrink: 0;
-  }
-  .cat-card {
-    flex: 1;
-    border-radius: 5pt;
-    padding: 5pt 8pt;
-    text-align: center;
-  }
-  .cat-card.best { background: rgba(56,217,169,0.12); border: 1pt solid #38d9a9; }
-  .cat-card.good { background: rgba(63,185,80,0.10); border: 1pt solid #3fb950; }
-  .cat-card.warn { background: rgba(255,212,59,0.10); border: 1pt solid #ffd43b; }
-  .cat-card.fail { background: rgba(255,107,107,0.12); border: 1pt solid #ff6b6b; }
-  .cat-card .cat-count { font-size: 18pt; font-weight: 800; line-height: 1; }
-  .cat-card.best .cat-count { color: #38d9a9; }
-  .cat-card.good .cat-count { color: #3fb950; }
-  .cat-card.warn .cat-count { color: #ffd43b; }
-  .cat-card.fail .cat-count { color: #ff6b6b; }
-  .cat-card .cat-label { font-size: 7.5pt; color: var(--muted); margin-top: 2pt; }
-  .cat-card .cat-models { font-size: 7pt; color: var(--muted); margin-top: 1pt; }
-
-  /* 신호등 테이블 */
-  .model-table {
+  table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 7.5pt;
+    font-size: 9.5px;
   }
-  .model-table thead tr {
+  thead tr {
     background: #0f3460;
   }
-  .model-table th {
-    padding: 4pt 6pt;
+  thead th {
+    padding: 5px 8px;
     text-align: left;
-    color: var(--muted);
+    color: #8b949e;
     font-weight: 600;
-    white-space: nowrap;
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
   }
-  .model-table th:nth-child(3),
-  .model-table th:nth-child(4) { text-align: right; }
-  .model-table th:nth-child(5) { text-align: center; }
-  .model-table td {
-    padding: 3pt 6pt;
-    border-bottom: 0.5pt solid rgba(48,54,61,0.6);
-    vertical-align: middle;
+  thead th:nth-child(4),
+  thead th:nth-child(5) { text-align: center; }
+  thead th:nth-child(3) { text-align: right; }
+  tbody tr { border-bottom: 1px solid #1e2530; }
+  tbody tr.row-best { background: rgba(56,217,169,0.06); }
+  tbody tr.row-warn { background: rgba(255,212,59,0.06); }
+  tbody tr.row-fail { background: rgba(255,107,107,0.1); }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  td { padding: 4.5px 8px; color: #e6edf3; vertical-align: middle; }
+  td.model-id { font-weight: 700; color: #58a6ff; font-size: 9px; }
+  td.metric-val { text-align: right; font-family: monospace; font-size: 9px; color: #e6edf3; }
+  td.signal { text-align: center; font-size: 11px; }
+  td.note { color: #8b949e; font-size: 8.5px; }
+  td.badge-15 {
+    text-align: center;
   }
-  .model-table td:nth-child(3),
-  .model-table td:nth-child(4) { text-align: right; font-size: 7pt; }
-  .model-table td:nth-child(5) { text-align: center; }
-  .model-table td p { font-size: 7.5pt; }
-  .model-table td:nth-child(6) p { font-size: 6.5pt; color: var(--muted); }
-
-  .row-best { background: rgba(56,217,169,0.07); }
-  .row-good { background: transparent; }
-  .row-warn { background: rgba(255,212,59,0.07); }
-  .row-fail { background: rgba(255,107,107,0.12); }
-
-  .model-id { font-weight: 700; color: #58a6ff; font-size: 8pt; }
-
-  .badge-fail {
+  .pill-fail {
     display: inline-block;
-    background: var(--danger);
+    background: #ff6b6b;
     color: #fff;
-    font-size: 6pt;
+    font-size: 7.5px;
     font-weight: 700;
-    padding: 1pt 4pt;
-    border-radius: 3pt;
-    white-space: nowrap;
-  }
-  .badge-warn {
-    display: inline-block;
-    background: var(--warning);
-    color: #0d1117;
-    font-size: 6pt;
-    font-weight: 700;
-    padding: 1pt 4pt;
-    border-radius: 3pt;
-    white-space: nowrap;
+    border-radius: 3px;
+    padding: 1px 5px;
+    letter-spacing: 0.04em;
   }
 
-  .bottom-bar {
-    background: #161b22;
-    border-top: 1pt solid #30363d;
-    padding: 4pt 20pt;
+  .table-footer {
+    padding: 7px 32px 10px;
     flex-shrink: 0;
+    background: #161b22;
+    border-top: 1px solid #30363d;
   }
-  .bottom-bar p { font-size: 7.5pt; color: var(--muted); text-align: center; }
-  .bottom-bar p .green { color: #38d9a9; font-weight: 600; }
-  .bottom-bar p .red { color: var(--danger); font-weight: 700; }
+  .table-footer p {
+    font-size: 9px;
+    color: #8b949e;
+  }
+  .table-footer p span.hl { color: #38d9a9; font-weight: 600; }
+  .table-footer p span.hl-r { color: #ff6b6b; font-weight: 600; }
 </style>
 </head>
 <body>
+
   <div class="slide-header">
-    <h2>ML 모델 성능 현황 — 12개 신호등 테이블</h2>
-    <p>2026-05-25 | P1·P7 14일 연속 미달 강조</p>
+    <h2>ML 모델 성능 현황 &mdash; 12개 신호등 테이블</h2>
+    <p class="sub">P1 &middot; P7 15일 연속 미달 강조 &nbsp;|&nbsp; 2026-05-26</p>
   </div>
 
-  <div class="content-area">
-    <div class="category-row">
-      <div class="cat-card best">
-        <p class="cat-count">3개</p>
-        <p class="cat-label">최우수</p>
-        <p class="cat-models">P3, P4, S1</p>
-      </div>
-      <div class="cat-card good">
-        <p class="cat-count">4개</p>
-        <p class="cat-label">우수</p>
-        <p class="cat-models">P2, P6, P8, S2</p>
-      </div>
-      <div class="cat-card warn">
-        <p class="cat-count">3개</p>
-        <p class="cat-label">주의</p>
-        <p class="cat-models">P5, S3, S6</p>
-      </div>
-      <div class="cat-card fail">
-        <p class="cat-count">2개</p>
-        <p class="cat-label">미달</p>
-        <p class="cat-models">P1, P7 — 오늘 저녁 필수</p>
-      </div>
+  <!-- 상단 4분류 카드 -->
+  <div class="summary-cards">
+    <div class="sum-card best">
+      <p class="sc-label">&#9632;&#9632;최우수</p>
+      <p class="sc-val">3개</p>
+      <p class="sc-names">P3 &middot; P4 &middot; S1</p>
     </div>
+    <div class="sum-card good">
+      <p class="sc-label">&#9632;우수</p>
+      <p class="sc-val">4개</p>
+      <p class="sc-names">P2 &middot; P6 &middot; P8 &middot; S2</p>
+    </div>
+    <div class="sum-card warn">
+      <p class="sc-label">&#9651;주의</p>
+      <p class="sc-val">3개</p>
+      <p class="sc-names">P5 &middot; S3 &middot; S6</p>
+    </div>
+    <div class="sum-card fail">
+      <p class="sc-label">&#9660;미달 &mdash; 15일 연속</p>
+      <p class="sc-val">2개</p>
+      <p class="sc-names">P1 &middot; P7 &nbsp; 오늘 22시 최후 마감</p>
+    </div>
+  </div>
 
-    <table class="model-table">
+  <!-- 12행 신호등 테이블 -->
+  <div class="table-wrap">
+    <table>
       <thead>
         <tr>
-          <th>ID</th>
+          <th>모델 ID</th>
           <th>모델명</th>
-          <th>핵심 지표</th>
-          <th>실측값</th>
-          <th>상태</th>
+          <th style="text-align:right">핵심 지표 &middot; 실측값</th>
+          <th>신호</th>
           <th>비고</th>
         </tr>
       </thead>
       <tbody>
         <tr class="row-fail">
-          <td><p class="model-id">P1</p></td>
-          <td><p>경기 결과 예측</p></td>
-          <td><p>Test Acc / F1</p></td>
-          <td><p>54.79% / 40.65%</p></td>
-          <td><p>🔴</p></td>
-          <td><p>목표 Acc 57% &nbsp;<span class="badge-fail">14일 연속</span></p></td>
-        </tr>
-        <tr class="row-good">
-          <td><p class="model-id">P2</p></td>
-          <td><p>시즌 득점 예측</p></td>
-          <td><p>Test R² / MAE</p></td>
-          <td><p>0.8877 / 0.96골</p></td>
-          <td><p>🟢</p></td>
-          <td><p>목표 0.80 대폭 초과</p></td>
+          <td class="model-id">P1</td>
+          <td>경기 결과 예측</td>
+          <td class="metric-val" style="color:#ff6b6b">Acc 54.79% / F1 40.65%</td>
+          <td class="signal">&#128308;</td>
+          <td class="note">목표 Acc 57% &nbsp;<span class="pill-fail">15일 연속</span></td>
         </tr>
         <tr class="row-best">
-          <td><p class="model-id">P3</p></td>
-          <td><p>강등권 예측</p></td>
-          <td><p>Test AUC / F1</p></td>
-          <td><p>100% / 92.31%</p></td>
-          <td><p>🟢🟢</p></td>
-          <td><p>완벽한 분류 성능</p></td>
+          <td class="model-id">P2</td>
+          <td>시즌 득점 예측</td>
+          <td class="metric-val" style="color:#38d9a9">R&sup2; 0.8877 / MAE 0.96골</td>
+          <td class="signal">&#128994;</td>
+          <td class="note">목표 R&sup2; 0.85 대폭 초과</td>
         </tr>
         <tr class="row-best">
-          <td><p class="model-id">P4</p></td>
-          <td><p>MVP 스코어링</p></td>
-          <td><p>Spearman / NDCG</p></td>
-          <td><p>0.9987 / 0.9993</p></td>
-          <td><p>🟢🟢</p></td>
-          <td><p>영입 회의 임팩트</p></td>
+          <td class="model-id">P3</td>
+          <td>강등권 예측</td>
+          <td class="metric-val" style="color:#38d9a9">AUC 100% / F1 92.31%</td>
+          <td class="signal">&#128994;&#128994;</td>
+          <td class="note">완벽한 분류 성능</td>
         </tr>
-        <tr class="row-warn">
-          <td><p class="model-id">P5</p></td>
-          <td><p>선수 클러스터링</p></td>
-          <td><p>Silhouette</p></td>
-          <td><p>0.2851</p></td>
-          <td><p>🟡</p></td>
-          <td><p>목표 0.25 초과 유지</p></td>
+        <tr class="row-best">
+          <td class="model-id">P4</td>
+          <td>MVP 스코어링</td>
+          <td class="metric-val" style="color:#38d9a9">Spearman 0.9987 / NDCG 0.9993</td>
+          <td class="signal">&#128994;&#128994;</td>
+          <td class="note">영입 회의 임팩트 최상</td>
         </tr>
-        <tr class="row-good">
-          <td><p class="model-id">P6</p></td>
-          <td><p>시장가치 예측</p></td>
-          <td><p>Test R² / MAE</p></td>
-          <td><p>0.8734 / £3.28M</p></td>
-          <td><p>🟢</p></td>
-          <td><p>매도 타이밍 조합 활용</p></td>
+        <tr>
+          <td class="model-id">P5</td>
+          <td>선수 클러스터링</td>
+          <td class="metric-val" style="color:#ffd43b">Silhouette 0.2851</td>
+          <td class="signal">&#128993;</td>
+          <td class="note">목표 0.25 초과 유지</td>
+        </tr>
+        <tr class="row-best">
+          <td class="model-id">P6</td>
+          <td>시장가치 예측</td>
+          <td class="metric-val" style="color:#38d9a9">R&sup2; 0.8734 / MAE &pound;3.28M</td>
+          <td class="signal">&#128994;</td>
+          <td class="note">P7 달성 시 풀 체인 핵심</td>
         </tr>
         <tr class="row-fail">
-          <td><p class="model-id">P7</p></td>
-          <td><p>성장 곡선 예측</p></td>
-          <td><p>Test R² / MAE</p></td>
-          <td><p>0.586 / 1.16</p></td>
-          <td><p>🔴</p></td>
-          <td><p>목표 R² 0.62 &nbsp;<span class="badge-fail">14일 연속</span></p></td>
-        </tr>
-        <tr class="row-good">
-          <td><p class="model-id">P8</p></td>
-          <td><p>이적 적응 예측</p></td>
-          <td><p>AUC / F1 / Acc</p></td>
-          <td><p>0.6612 / 88.23% / 80.65%</p></td>
-          <td><p>🟢</p></td>
-          <td><p>위험 플래그 도구</p></td>
+          <td class="model-id">P7</td>
+          <td>성장 곡선 예측</td>
+          <td class="metric-val" style="color:#ff6b6b">R&sup2; 0.5752 / MAE 1.16</td>
+          <td class="signal">&#128308;</td>
+          <td class="note">목표 R&sup2; 0.62 &nbsp;<span class="pill-fail">15일 연속</span></td>
         </tr>
         <tr class="row-best">
-          <td><p class="model-id">S1</p></td>
-          <td><p>선수 종합 레이팅</p></td>
-          <td><p>Test R² / MAE</p></td>
-          <td><p>0.9093 / 4.66</p></td>
-          <td><p>🟢🟢</p></td>
-          <td><p>리허설 1단계 핵심</p></td>
+          <td class="model-id">P8</td>
+          <td>이적 적응 예측</td>
+          <td class="metric-val" style="color:#38d9a9">AUC 0.6612 / F1 88.23%</td>
+          <td class="signal">&#128994;</td>
+          <td class="note">이적 위험 플래그 도구</td>
         </tr>
-        <tr class="row-good">
-          <td><p class="model-id">S2</p></td>
-          <td><p>포지션별 시장가치</p></td>
-          <td><p>Overall R² / MAE</p></td>
-          <td><p>0.8812 / £3.23M</p></td>
-          <td><p>🟢</p></td>
-          <td><p>저평가 스캐닝 조합</p></td>
+        <tr class="row-best">
+          <td class="model-id">S1</td>
+          <td>선수 종합 레이팅</td>
+          <td class="metric-val" style="color:#38d9a9">R&sup2; 0.9093 / MAE 4.66</td>
+          <td class="signal">&#128994;&#128994;</td>
+          <td class="note">발표 리허설 1단계 핵심</td>
         </tr>
-        <tr class="row-warn">
-          <td><p class="model-id">S3</p></td>
-          <td><p>유사선수 탐색</p></td>
-          <td><p>FW/MID/DEF/GK Sil</p></td>
-          <td><p>0.2085/0.2299/0.3637/0.4873</p></td>
-          <td><p>🟡</p></td>
-          <td><p>FW &nbsp;<span class="badge-warn">6일 연속</span></p></td>
+        <tr class="row-best">
+          <td class="model-id">S2</td>
+          <td>포지션별 시장가치</td>
+          <td class="metric-val" style="color:#38d9a9">R&sup2; 0.8812 / MAE &pound;3.23M</td>
+          <td class="signal">&#128994;</td>
+          <td class="note">저평가 스캐닝 조합</td>
         </tr>
         <tr class="row-warn">
-          <td><p class="model-id">S6</p></td>
-          <td><p>선수 하락세 감지</p></td>
-          <td><p>AUC / F1 / Acc</p></td>
-          <td><p>0.8324 / 61.74% / 75%</p></td>
-          <td><p>🟡</p></td>
-          <td><p>매도 타이밍 조합 활용</p></td>
+          <td class="model-id">S3</td>
+          <td>유사선수 탐색</td>
+          <td class="metric-val" style="color:#ffd43b">FW 0.2085 / DEF 0.3637</td>
+          <td class="signal">&#128993;</td>
+          <td class="note">FW 개선 계획 <span style="color:#ffd43b;font-weight:700">7일 미달</span></td>
+        </tr>
+        <tr class="row-warn">
+          <td class="model-id">S6</td>
+          <td>선수 하락세 감지</td>
+          <td class="metric-val" style="color:#ffd43b">AUC 0.8324 / F1 61.74%</td>
+          <td class="signal">&#128993;</td>
+          <td class="note">매도 타이밍 조합 활용</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="bottom-bar">
-    <p><span class="green">즉시 활용 가능 9개: S1, P4, P6, S2, P8, P3, P2, S3, S6</span> &nbsp;|&nbsp; <span class="red">P1·P7 오늘 저녁 22시 해소 목표</span></p>
+  <div class="table-footer">
+    <p>
+      <span class="hl">즉시 활용 가능 9개</span>: S1, P4, P6, S2, P8, P3, P2, S3, S6 &nbsp;&nbsp;
+      <span class="hl-r">P1 &middot; P7 오늘 저녁 22시 해소 목표</span>
+    </p>
   </div>
+
 </body>
 </html>

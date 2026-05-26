@@ -6,7 +6,7 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 720pt; height: 405pt;
+    width: 960px; height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
     color: #e6edf3;
@@ -14,206 +14,238 @@
     display: flex;
     flex-direction: column;
   }
-  :root {
-    --success: #38d9a9;
-    --warning: #ffd43b;
-    --danger: #ff6b6b;
-    --text: #e6edf3;
-    --muted: #8b949e;
-  }
 
-  .slide-header {
-    background: #161b22;
-    padding: 6pt 20pt;
-    border-bottom: 1pt solid #30363d;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-  .slide-header h2 { font-size: 12pt; font-weight: 700; }
-  .slide-header p { font-size: 8.5pt; color: var(--muted); }
-
-  /* 대시보드 현황 바 */
+  /* 상단 현황 바 */
   .status-bar {
-    background: #16213e;
-    border-bottom: 1pt solid #30363d;
-    padding: 7pt 20pt;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    padding: 9px 32px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 24px;
     flex-shrink: 0;
   }
-  .stats-group {
+  .status-bar h2 { font-size: 16px; font-weight: 700; flex-shrink: 0; }
+  .status-bar p.stat { font-size: 10px; color: #8b949e; }
+  .status-bar p.stat span.mint { color: #38d9a9; font-weight: 600; }
+  .status-bar p.stat span.red { color: #ff6b6b; font-weight: 600; }
+  .sb-sep { width: 1px; height: 16px; background: #30363d; flex-shrink: 0; }
+  .status-bar p.url { font-size: 8.5px; color: #58a6ff; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* 메인 2열 레이아웃 */
+  .main-row {
     display: flex;
-    gap: 20pt;
-    align-items: center;
-  }
-  .stat-item { text-align: center; }
-  .stat-item .stat-val { font-size: 18pt; font-weight: 800; color: var(--success); line-height: 1; }
-  .stat-item .stat-label { font-size: 7pt; color: var(--muted); margin-top: 2pt; }
-
-  .url-block { text-align: right; }
-  .url-block .url-label { font-size: 7pt; color: var(--muted); margin-bottom: 2pt; }
-  .url-block .url-text { font-size: 7.5pt; color: #58a6ff; text-decoration: underline; }
-
-  .content-area {
     flex: 1;
-    padding: 10pt 20pt 8pt;
+    padding: 12px 32px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  /* 좌측 즉시 조합 3개 */
+  .left-col {
+    flex: 1.4;
     display: flex;
     flex-direction: column;
-    gap: 8pt;
+    gap: 9px;
   }
-
-  /* 3개 즉시 활용 카드 */
-  .combo-row {
-    display: flex;
-    gap: 10pt;
-    flex: 1;
+  .left-col h3 {
+    font-size: 11px;
+    font-weight: 700;
+    color: #38d9a9;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
   }
-
   .combo-card {
     flex: 1;
-    background: #16213e;
-    border: 2pt solid var(--success);
-    border-radius: 7pt;
-    padding: 9pt 11pt;
+    background: #0e1f1b;
+    border: 1.5px solid #38d9a9;
+    border-radius: 7px;
+    padding: 9px 12px;
     display: flex;
     flex-direction: column;
-    gap: 5pt;
+    gap: 4px;
   }
-
-  .combo-card h3 {
-    font-size: 10pt;
-    font-weight: 700;
-    color: var(--success);
-    margin-bottom: 2pt;
-  }
-  .combo-card .models {
-    font-size: 8pt;
-    color: var(--text);
-    line-height: 1.4;
-  }
-  .combo-card .scenario {
-    font-size: 8pt;
-    color: var(--muted);
-    font-style: italic;
-    line-height: 1.4;
-    margin-top: auto;
-  }
-
-  /* 배지를 div로 — p/span에 border 금지 */
-  .ready-badge-wrap {
-    margin-top: 4pt;
-  }
-  .ready-badge-wrap .badge-inner {
-    background: rgba(56,217,169,0.15);
-    border: 1pt solid var(--success);
-    border-radius: 4pt;
-    padding: 2pt 7pt;
-    display: inline-block;
-  }
-  .ready-badge-wrap .badge-inner p { font-size: 7pt; color: var(--success); font-weight: 700; }
-
-  /* 예고 카드 */
-  .preview-card {
-    background: rgba(255,212,59,0.05);
-    border: 2pt dashed var(--warning);
-    border-radius: 7pt;
-    padding: 8pt 16pt;
+  .combo-card .combo-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
+    gap: 8px;
   }
-  .preview-left { flex: 1; }
-  .preview-left h4 { font-size: 9.5pt; font-weight: 700; color: var(--warning); margin-bottom: 3pt; }
-  .preview-left p { font-size: 8pt; color: var(--muted); line-height: 1.4; }
-
-  /* 예고 배지도 div로 */
-  .preview-badge-wrap {
-    flex-shrink: 0;
-    padding-left: 14pt;
-  }
-  .preview-badge-wrap .badge-inner {
-    background: rgba(255,212,59,0.15);
-    border: 1pt solid var(--warning);
-    border-radius: 5pt;
-    padding: 4pt 10pt;
+  .combo-card .combo-header h4 { font-size: 11px; font-weight: 700; color: #e6edf3; }
+  .avail-badge {
+    font-size: 8px;
+    font-weight: 700;
+    background: #0e1f1b;
+    color: #38d9a9;
+    border: 1px solid #38d9a9;
+    border-radius: 3px;
+    padding: 1px 5px;
     white-space: nowrap;
   }
-  .preview-badge-wrap .badge-inner p { font-size: 7.5pt; color: var(--warning); font-weight: 700; }
+  .combo-card p.combo-metrics { font-size: 9px; color: #8b949e; line-height: 1.4; }
+  .combo-card p.combo-metrics span.mint { color: #38d9a9; font-weight: 600; }
+  .combo-card p.combo-use { font-size: 9.5px; color: #e6edf3; font-style: italic; margin-top: 1px; }
+
+  /* 우측 잠금 해제 대기 카드 */
+  .right-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .right-col h3 {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffd43b;
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  .locked-card {
+    flex: 1;
+    background: #1c1a0e;
+    border: 2px dashed #ffd43b;
+    border-radius: 7px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+  }
+  .locked-card h4 { font-size: 12px; font-weight: 700; color: #ffd43b; line-height: 1.3; }
+  .locked-card p.lc-desc { font-size: 10px; color: #8b949e; line-height: 1.6; font-style: italic; }
+  .locked-card p.lc-desc span.hl { color: #e6edf3; font-weight: 600; }
+  .locked-card .lc-metrics {
+    background: #0d1117;
+    border-radius: 5px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .locked-card .lc-metrics p { font-size: 9px; color: #8b949e; line-height: 1.5; }
+  .locked-card .lc-metrics p span.red { color: #ff6b6b; font-weight: 600; }
+  .locked-card .lc-metrics p span.mint { color: #38d9a9; font-weight: 600; }
+  .lock-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1c1a0e;
+    border: 1px solid #ffd43b;
+    border-radius: 4px;
+    padding: 4px 10px;
+    width: fit-content;
+  }
+  .lock-status p { font-size: 9px; font-weight: 700; color: #ffd43b; }
+
+  /* 하단 완성도 진행 바 */
+  .progress-bar-wrap {
+    padding: 8px 32px 12px;
+    flex-shrink: 0;
+  }
+  .progress-label-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .progress-label-row p { font-size: 10px; color: #8b949e; }
+  .progress-label-row p span.mint { color: #38d9a9; font-weight: 700; }
+  .progress-label-row p span.yellow { color: #ffd43b; font-weight: 700; }
+  .progress-track {
+    height: 10px;
+    background: #161b22;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #30363d;
+  }
+  .progress-fill {
+    width: 75%;
+    height: 100%;
+    background: #38d9a9;
+    border-radius: 5px;
+  }
 </style>
 </head>
 <body>
-  <div class="slide-header">
-    <h2>Streamlit 대시보드 현황</h2>
-    <p>지금 당장 가능한 영입 회의 조합 3개</p>
-  </div>
 
-  <!-- 대시보드 현황 바 -->
+  <!-- 상단 현황 요약 바 -->
   <div class="status-bar">
-    <div class="stats-group">
-      <div class="stat-item">
-        <p class="stat-val">16</p>
-        <p class="stat-label">총 페이지</p>
-      </div>
-      <div class="stat-item">
-        <p class="stat-val">9개</p>
-        <p class="stat-label">즉시 활용 가능</p>
-      </div>
-      <div class="stat-item">
-        <p class="stat-val">P7</p>
-        <p class="stat-label">달성 대기 (풀 체인)</p>
-      </div>
-    </div>
-    <div class="url-block">
-      <p class="url-label">Streamlit Cloud URL</p>
-      <p class="url-text">epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
-    </div>
+    <h2>이적 시장 분석 현황</h2>
+    <div class="sb-sep"></div>
+    <p class="stat">총 페이지: <span class="mint">16개</span></p>
+    <div class="sb-sep"></div>
+    <p class="stat">즉시 활용: <span class="mint">9개</span></p>
+    <div class="sb-sep"></div>
+    <p class="stat">P7 달성 대기: <span class="red">P6+P7+P8 풀 체인</span></p>
+    <div class="sb-sep"></div>
+    <p class="url">https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
   </div>
 
-  <div class="content-area">
-    <!-- 3개 즉시 활용 카드 -->
-    <div class="combo-row">
+  <div class="main-row">
+
+    <!-- 좌측 즉시 활용 조합 3개 -->
+    <div class="left-col">
+      <h3>즉시 활용 가능한 영입 분석 조합</h3>
+
       <div class="combo-card">
-        <h3>S1 + S2 저평가 스캐닝</h3>
-        <p class="models">WAR 레이팅 (S1, R² 0.9093)<br>vs 시장가치 예측 (S2, R² 0.8812)</p>
-        <p class="scenario">"지금 이 선수, 실력 대비 저평가됐습니까?" 30초 분석</p>
-        <div class="ready-badge-wrap">
-          <div class="badge-inner"><p>지금 즉시 가능</p></div>
+        <div class="combo-header">
+          <h4>A. S1+S2 &mdash; 저평가 스캐닝</h4>
+          <span class="avail-badge">즉시 가능</span>
         </div>
+        <p class="combo-metrics">S1 R&sup2; <span class="mint">0.9093</span> (WAR 레이팅) + S2 R&sup2; <span class="mint">0.8812</span> / MAE &pound;3.23M</p>
+        <p class="combo-use">&ldquo;이 선수, 실력 대비 저평가됐습니까?&rdquo; &mdash; 30초 분석</p>
       </div>
+
       <div class="combo-card">
-        <h3>P8 + S1 리스크 스크리닝</h3>
-        <p class="models">이적 적응 확률 (P8, AUC 0.6612)<br>+ 종합 레이팅 (S1)</p>
-        <p class="scenario">"데려왔을 때 성능 유지 확률이 몇 %입니까?"</p>
-        <div class="ready-badge-wrap">
-          <div class="badge-inner"><p>지금 즉시 가능</p></div>
+        <div class="combo-header">
+          <h4>B. P8+S1 &mdash; 리스크 스크리닝</h4>
+          <span class="avail-badge">즉시 가능</span>
         </div>
+        <p class="combo-metrics">P8 AUC <span class="mint">0.6612</span> / F1 88.23% + S1 R&sup2; 0.9093</p>
+        <p class="combo-use">&ldquo;데려왔을 때 성능 유지 확률이 몇 %입니까?&rdquo;</p>
       </div>
+
       <div class="combo-card">
-        <h3>S6 + P6 매도 타이밍 감지</h3>
-        <p class="models">하락세 감지 (S6, AUC 0.8324)<br>+ 시장가치 (P6, R² 0.8734)</p>
-        <p class="scenario">"지금 팔아야 할 선수가 누구입니까?"</p>
-        <div class="ready-badge-wrap">
-          <div class="badge-inner"><p>지금 즉시 가능</p></div>
+        <div class="combo-header">
+          <h4>C. S6+P6 &mdash; 매도 타이밍 감지</h4>
+          <span class="avail-badge">즉시 가능</span>
         </div>
+        <p class="combo-metrics">S6 AUC <span class="mint">0.8324</span> + P6 R&sup2; <span class="mint">0.8734</span> / MAE &pound;3.28M</p>
+        <p class="combo-use">&ldquo;지금 팔아야 할 선수가 누구입니까?&rdquo;</p>
       </div>
     </div>
 
-    <!-- 예고 카드 -->
-    <div class="preview-card">
-      <div class="preview-left">
-        <h4>P6 + P7 + P8 '가치→성장→적응' 풀 체인 (오늘 오후 활성화 대기)</h4>
-        <p>30M 투자 → 2시즌 후 가치 X, 적응 확률 Y% 시뮬레이션 — P7 R² ≥ 0.62 달성 시 완성</p>
-      </div>
-      <div class="preview-badge-wrap">
-        <div class="badge-inner">
-          <p>P7 오늘 오후 13~18시 달성 대기 중</p>
+    <!-- 우측 잠금 해제 대기 카드 -->
+    <div class="right-col">
+      <h3>P7 달성 후 잠금 해제 대기</h3>
+
+      <div class="locked-card">
+        <h4>P6+P7+P8<br>&ldquo;가치 &rarr; 성장 &rarr; 적응&rdquo; 풀 체인</h4>
+        <p class="lc-desc">
+          &ldquo;<span class="hl">이 선수를 30M에 사면</span><br>
+          2시즌 후 시장가치 Xm 성장 확률 Y%,<br>
+          EPL 적응 확률 Z%&rdquo;
+        </p>
+        <div class="lc-metrics">
+          <p>P7 현재: R&sup2; <span class="red">0.5752</span> &nbsp;|&nbsp; 목표: R&sup2; &ge; <span class="mint">0.62</span> (갭 0.0448)</p>
+          <p>달성 시: +0.10 가산 + 이사회 설득 직결 데이터</p>
+        </div>
+        <div class="lock-status">
+          <p>P7 오늘 오후 13시 달성 대기 중</p>
         </div>
       </div>
     </div>
+
   </div>
+
+  <!-- 하단 완성도 진행 바 -->
+  <div class="progress-bar-wrap">
+    <div class="progress-label-row">
+      <p>영입 분석 체인 완성도: <span class="mint">75%</span> (3/4 활성화)</p>
+      <p>P7 달성 시 <span class="yellow">100% 완성</span></p>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
 </body>
 </html>
