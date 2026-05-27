@@ -2,249 +2,194 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #f8f9fa;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-  }
-
-  /* 상단 현황 바 */
-  .status-bar {
-    background: #161b22;
-    border-bottom: 1px solid #30363d;
-    padding: 9px 32px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    flex-shrink: 0;
-  }
-  .status-bar h2 { font-size: 16px; font-weight: 700; flex-shrink: 0; }
-  .status-bar p.stat { font-size: 10px; color: #8b949e; }
-  .status-bar p.stat span.mint { color: #38d9a9; font-weight: 600; }
-  .status-bar p.stat span.red { color: #ff6b6b; font-weight: 600; }
-  .sb-sep { width: 1px; height: 16px; background: #30363d; flex-shrink: 0; }
-  .status-bar p.url { font-size: 8.5px; color: #58a6ff; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  /* 메인 2열 레이아웃 */
-  .main-row {
-    display: flex;
-    flex: 1;
-    padding: 12px 32px;
-    gap: 16px;
-    overflow: hidden;
-  }
-
-  /* 좌측 즉시 조합 3개 */
-  .left-col {
-    flex: 1.4;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-  .left-col h3 {
-    font-size: 11px;
-    font-weight: 700;
-    color: #38d9a9;
-    letter-spacing: 0.05em;
-    margin-bottom: 2px;
-  }
-  .combo-card {
-    flex: 1;
-    background: #0e1f1b;
-    border: 1.5px solid #38d9a9;
-    border-radius: 7px;
-    padding: 9px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .combo-card .combo-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .combo-card .combo-header h4 { font-size: 11px; font-weight: 700; color: #e6edf3; }
-  .avail-badge {
-    font-size: 8px;
-    font-weight: 700;
-    background: #0e1f1b;
-    color: #38d9a9;
-    border: 1px solid #38d9a9;
-    border-radius: 3px;
-    padding: 1px 5px;
-    white-space: nowrap;
-  }
-  .combo-card p.combo-metrics { font-size: 9px; color: #8b949e; line-height: 1.4; }
-  .combo-card p.combo-metrics span.mint { color: #38d9a9; font-weight: 600; }
-  .combo-card p.combo-use { font-size: 9.5px; color: #e6edf3; font-style: italic; margin-top: 1px; }
-
-  /* 우측 잠금 해제 대기 카드 */
-  .right-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .right-col h3 {
-    font-size: 11px;
-    font-weight: 700;
-    color: #ffd43b;
-    letter-spacing: 0.05em;
-    margin-bottom: 2px;
-  }
-  .locked-card {
-    flex: 1;
-    background: #1c1a0e;
-    border: 2px dashed #ffd43b;
-    border-radius: 7px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    justify-content: center;
-  }
-  .locked-card h4 { font-size: 12px; font-weight: 700; color: #ffd43b; line-height: 1.3; }
-  .locked-card p.lc-desc { font-size: 10px; color: #8b949e; line-height: 1.6; font-style: italic; }
-  .locked-card p.lc-desc span.hl { color: #e6edf3; font-weight: 600; }
-  .locked-card .lc-metrics {
-    background: #0d1117;
-    border-radius: 5px;
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .locked-card .lc-metrics p { font-size: 9px; color: #8b949e; line-height: 1.5; }
-  .locked-card .lc-metrics p span.red { color: #ff6b6b; font-weight: 600; }
-  .locked-card .lc-metrics p span.mint { color: #38d9a9; font-weight: 600; }
-  .lock-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #1c1a0e;
-    border: 1px solid #ffd43b;
-    border-radius: 4px;
-    padding: 4px 10px;
-    width: fit-content;
-  }
-  .lock-status p { font-size: 9px; font-weight: 700; color: #ffd43b; }
-
-  /* 하단 완성도 진행 바 */
-  .progress-bar-wrap {
-    padding: 8px 32px 12px;
-    flex-shrink: 0;
-  }
-  .progress-label-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  .progress-label-row p { font-size: 10px; color: #8b949e; }
-  .progress-label-row p span.mint { color: #38d9a9; font-weight: 700; }
-  .progress-label-row p span.yellow { color: #ffd43b; font-weight: 700; }
-  .progress-track {
-    height: 10px;
-    background: #161b22;
-    border-radius: 5px;
-    overflow: hidden;
-    border: 1px solid #30363d;
-  }
-  .progress-fill {
-    width: 75%;
-    height: 100%;
-    background: #38d9a9;
-    border-radius: 5px;
+    padding: 22px 32px 16px 32px;
   }
 </style>
 </head>
 <body>
 
-  <!-- 상단 현황 요약 바 -->
-  <div class="status-bar">
-    <h2>이적 시장 분석 현황</h2>
-    <div class="sb-sep"></div>
-    <p class="stat">총 페이지: <span class="mint">16개</span></p>
-    <div class="sb-sep"></div>
-    <p class="stat">즉시 활용: <span class="mint">9개</span></p>
-    <div class="sb-sep"></div>
-    <p class="stat">P7 달성 대기: <span class="red">P6+P7+P8 풀 체인</span></p>
-    <div class="sb-sep"></div>
-    <p class="url">https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
+  <!-- 헤더 -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 4px; height: 22px; background: #ff6b6b; border-radius: 2px;"></div>
+      <h2 style="font-size: 19px; font-weight: 700; color: #f8f9fa;">김태현 스카우트 종합 평가 — 시스템 재설계 논의 개시</h2>
+    </div>
+    <p style="font-size: 11px; color: #8b949e;">07 / 08</p>
   </div>
 
-  <div class="main-row">
+  <!-- 2열 메인 -->
+  <div style="flex: 1; display: flex; gap: 24px;">
 
-    <!-- 좌측 즉시 활용 조합 3개 -->
-    <div class="left-col">
-      <h3>즉시 활용 가능한 영입 분석 조합</h3>
+    <!-- 좌측 40%: 게이지 (CSS div 기반) -->
+    <div style="width: 260px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px;">
 
-      <div class="combo-card">
-        <div class="combo-header">
-          <h4>A. S1+S2 &mdash; 저평가 스캐닝</h4>
-          <span class="avail-badge">즉시 가능</span>
+      <!-- 원형 게이지 (border 기반) -->
+      <div style="width: 160px; height: 160px; border-radius: 50%; border: 14px solid #ff6b6b; background: #161b22; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+          <p style="font-size: 40px; font-weight: 800; color: #ff6b6b; line-height: 1; letter-spacing: -0.03em;">3.95</p>
+          <p style="font-size: 13px; color: #8b949e; margin-top: 4px;">/ 5.0</p>
         </div>
-        <p class="combo-metrics">S1 R&sup2; <span class="mint">0.9093</span> (WAR 레이팅) + S2 R&sup2; <span class="mint">0.8812</span> / MAE &pound;3.23M</p>
-        <p class="combo-use">&ldquo;이 선수, 실력 대비 저평가됐습니까?&rdquo; &mdash; 30초 분석</p>
       </div>
 
-      <div class="combo-card">
-        <div class="combo-header">
-          <h4>B. P8+S1 &mdash; 리스크 스크리닝</h4>
-          <span class="avail-badge">즉시 가능</span>
+      <!-- 4.0 경고 진행 바 -->
+      <div style="width: 100%; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <p style="font-size: 10px; color: #8b949e;">0</p>
+          <p style="font-size: 10px; color: #ffd43b;">4.0</p>
+          <p style="font-size: 10px; color: #38d9a9;">5.0</p>
         </div>
-        <p class="combo-metrics">P8 AUC <span class="mint">0.6612</span> / F1 88.23% + S1 R&sup2; 0.9093</p>
-        <p class="combo-use">&ldquo;데려왔을 때 성능 유지 확률이 몇 %입니까?&rdquo;</p>
+        <div style="width: 100%; height: 8px; background: #30363d; border-radius: 4px; overflow: hidden;">
+          <div style="width: 79%; height: 100%; background: #ff6b6b; border-radius: 4px;"></div>
+        </div>
       </div>
 
-      <div class="combo-card">
-        <div class="combo-header">
-          <h4>C. S6+P6 &mdash; 매도 타이밍 감지</h4>
-          <span class="avail-badge">즉시 가능</span>
+      <!-- 하락 표시 -->
+      <p style="font-size: 14px; color: #ff6b6b; font-weight: 700; margin-bottom: 4px;">&#9660; &minus;0.10 (전일 4.05)</p>
+
+      <!-- 감점 내역 -->
+      <div style="margin-top: 10px; width: 100%;">
+        <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #30363d;">
+          <p style="font-size: 10px; color: #8b949e;">P7/P1 16일 연속</p>
+          <p style="font-size: 10px; color: #ff6b6b; font-weight: 600;">&minus;0.08</p>
         </div>
-        <p class="combo-metrics">S6 AUC <span class="mint">0.8324</span> + P6 R&sup2; <span class="mint">0.8734</span> / MAE &pound;3.28M</p>
-        <p class="combo-use">&ldquo;지금 팔아야 할 선수가 누구입니까?&rdquo;</p>
+        <div style="display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #30363d;">
+          <p style="font-size: 10px; color: #8b949e;">S3 FW 파일 8일</p>
+          <p style="font-size: 10px; color: #ff6b6b; font-weight: 600;">&minus;0.02</p>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 3px 0;">
+          <p style="font-size: 10px; color: #8b949e;">demo_script 8일</p>
+          <p style="font-size: 10px; color: #ff6b6b; font-weight: 600;">&minus;0.01</p>
+        </div>
       </div>
+
+      <!-- 경고 배지 -->
+      <div style="margin-top: 10px; background: rgba(255,107,107,0.12); border: 1px solid #ff6b6b; border-radius: 6px; padding: 5px 10px; width: 100%; text-align: center;">
+        <p style="font-size: 11px; font-weight: 700; color: #ff6b6b;">4.0 이하 경고 집행 중</p>
+      </div>
+
     </div>
 
-    <!-- 우측 잠금 해제 대기 카드 -->
-    <div class="right-col">
-      <h3>P7 달성 후 잠금 해제 대기</h3>
+    <!-- 우측 60%: 복원 경로 + 로드맵 -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
 
-      <div class="locked-card">
-        <h4>P6+P7+P8<br>&ldquo;가치 &rarr; 성장 &rarr; 적응&rdquo; 풀 체인</h4>
-        <p class="lc-desc">
-          &ldquo;<span class="hl">이 선수를 30M에 사면</span><br>
-          2시즌 후 시장가치 Xm 성장 확률 Y%,<br>
-          EPL 적응 확률 Z%&rdquo;
+      <!-- 오늘 달성 시 복원 수평 진행 바 -->
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 14px;">
+        <p style="font-size: 11px; color: #8b949e; font-weight: 600; margin-bottom: 10px;">오늘 달성 시 복원 경로</p>
+        <div style="display: flex; align-items: center; gap: 4px;">
+
+          <div style="background: rgba(255,107,107,0.2); border: 1.5px solid #ff6b6b; border-radius: 6px; padding: 7px 10px; text-align: center; flex-shrink: 0;">
+            <p style="font-size: 16px; font-weight: 800; color: #ff6b6b; line-height: 1;">3.95</p>
+            <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">현재</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <p style="font-size: 9px; color: #ffd43b; margin-bottom: 2px;">+0.03</p>
+            <div style="height: 2px; width: 100%; background: #ffd43b; border-radius: 1px;"></div>
+            <p style="font-size: 8px; color: #8b949e; margin-top: 2px;">S3 FW 11시</p>
+          </div>
+
+          <div style="background: rgba(255,212,59,0.12); border: 1.5px solid #ffd43b; border-radius: 6px; padding: 7px 10px; text-align: center; flex-shrink: 0;">
+            <p style="font-size: 16px; font-weight: 800; color: #ffd43b; line-height: 1;">3.98</p>
+            <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">S3 FW</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <p style="font-size: 9px; color: #ffd43b; margin-bottom: 2px;">+0.02</p>
+            <div style="height: 2px; width: 100%; background: #ffd43b; border-radius: 1px;"></div>
+            <p style="font-size: 8px; color: #8b949e; margin-top: 2px;">demo 11시</p>
+          </div>
+
+          <div style="background: rgba(255,212,59,0.12); border: 1.5px solid #ffd43b; border-radius: 6px; padding: 7px 10px; text-align: center; flex-shrink: 0;">
+            <p style="font-size: 16px; font-weight: 800; color: #ffd43b; line-height: 1;">4.00</p>
+            <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">demo</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <p style="font-size: 9px; color: #38d9a9; margin-bottom: 2px;">+0.10</p>
+            <div style="height: 2px; width: 100%; background: #38d9a9; border-radius: 1px;"></div>
+            <p style="font-size: 8px; color: #8b949e; margin-top: 2px;">P7 Actions</p>
+          </div>
+
+          <div style="background: rgba(56,217,169,0.12); border: 1.5px solid #38d9a9; border-radius: 6px; padding: 7px 10px; text-align: center; flex-shrink: 0;">
+            <p style="font-size: 16px; font-weight: 800; color: #38d9a9; line-height: 1;">4.10</p>
+            <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">P7</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <p style="font-size: 9px; color: #38d9a9; margin-bottom: 2px;">+0.08</p>
+            <div style="height: 2px; width: 100%; background: #38d9a9; border-radius: 1px;"></div>
+            <p style="font-size: 8px; color: #8b949e; margin-top: 2px;">P1 22시</p>
+          </div>
+
+          <div style="background: rgba(56,217,169,0.2); border: 2px solid #38d9a9; border-radius: 6px; padding: 7px 10px; text-align: center; flex-shrink: 0;">
+            <p style="font-size: 18px; font-weight: 800; color: #38d9a9; line-height: 1;">4.18</p>
+            <p style="font-size: 9px; color: #38d9a9; margin-top: 2px; font-weight: 600;">목표</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 5.0 달성 로드맵 타임라인 -->
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 14px; flex: 1;">
+        <p style="font-size: 11px; color: #8b949e; font-weight: 600; margin-bottom: 12px;">5.0 달성 로드맵</p>
+        <div style="display: flex; align-items: center; position: relative; padding: 0 8px;">
+          <div style="position: absolute; top: 12px; left: 20px; right: 20px; height: 2px; background: #30363d;"></div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: #ff6b6b; margin-bottom: 6px;"></div>
+            <p style="font-size: 13px; font-weight: 800; color: #ff6b6b; text-align: center;">3.95</p>
+            <p style="font-size: 9px; color: #8b949e; text-align: center; margin-top: 3px;">현재</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: #ffd43b; margin-bottom: 6px;"></div>
+            <p style="font-size: 13px; font-weight: 800; color: #ffd43b; text-align: center;">4.18</p>
+            <p style="font-size: 9px; color: #8b949e; text-align: center; margin-top: 3px;">오늘 전체 달성</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: #161b22; border: 2px solid #ffd43b; margin-bottom: 6px;"></div>
+            <p style="font-size: 13px; font-weight: 800; color: #ffd43b; text-align: center;">4.24</p>
+            <p style="font-size: 9px; color: #8b949e; text-align: center; margin-top: 3px;">S3 FW Sil 0.25</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: #161b22; border: 2px solid #38d9a9; margin-bottom: 6px;"></div>
+            <p style="font-size: 13px; font-weight: 800; color: #38d9a9; text-align: center;">4.32</p>
+            <p style="font-size: 9px; color: #8b949e; text-align: center; margin-top: 3px;">포트폴리오 발표</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div style="width: 24px; height: 24px; border-radius: 50%; background: #161b22; border: 2px solid #38d9a9; margin-bottom: 6px;"></div>
+            <p style="font-size: 13px; font-weight: 800; color: #38d9a9; text-align: center;">5.00</p>
+            <p style="font-size: 9px; color: #8b949e; text-align: center; margin-top: 3px;">영입 회의 시연</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 김태현 코멘트 -->
+      <div style="background: rgba(255, 212, 59, 0.06); border: 1px solid rgba(255,212,59,0.3); border-radius: 8px; padding: 10px 14px; flex-shrink: 0;">
+        <p style="font-size: 11px; color: #ffd43b; font-style: italic; line-height: 1.6;">
+          "3.95. 16일입니다. 4.0 이하는 경고가 아니라 분기점입니다. 오늘 P7+P1이 push되면 4.18까지 복원 가능합니다. 안 되면 내일부터 P6+S1+P8 체인으로 방향을 전환합니다."
         </p>
-        <div class="lc-metrics">
-          <p>P7 현재: R&sup2; <span class="red">0.5752</span> &nbsp;|&nbsp; 목표: R&sup2; &ge; <span class="mint">0.62</span> (갭 0.0448)</p>
-          <p>달성 시: +0.10 가산 + 이사회 설득 직결 데이터</p>
-        </div>
-        <div class="lock-status">
-          <p>P7 오늘 오후 13시 달성 대기 중</p>
-        </div>
+        <p style="font-size: 10px; color: #8b949e; margin-top: 4px; text-align: right;">— 김태현 스카우트</p>
       </div>
+
     </div>
 
-  </div>
-
-  <!-- 하단 완성도 진행 바 -->
-  <div class="progress-bar-wrap">
-    <div class="progress-label-row">
-      <p>영입 분석 체인 완성도: <span class="mint">75%</span> (3/4 활성화)</p>
-      <p>P7 달성 시 <span class="yellow">100% 완성</span></p>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill"></div>
-    </div>
   </div>
 
 </body>

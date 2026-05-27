@@ -2,392 +2,194 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #f8f9fa;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    padding: 20px 28px 14px 28px;
   }
-  .slide-header {
-    padding: 12px 32px 0;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-  .slide-header h2 { font-size: 16px; font-weight: 700; }
-  .slide-header p.sub { font-size: 9px; color: #8b949e; }
-
-  .body-row {
-    display: flex;
-    flex: 1;
-    padding: 10px 32px 0;
-    gap: 18px;
-    overflow: hidden;
-  }
-
-  /* 좌측 원형 게이지 */
-  .gauge-col {
-    flex: 0 0 190px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-  }
-  .gauge-ring {
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    border: 17px solid #ffd43b;
-    background: #0d1117;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  .gauge-ring-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .gauge-ring-inner p.g-score { font-size: 28px; font-weight: 800; color: #ffd43b; line-height: 1; }
-  .gauge-ring-inner p.g-denom { font-size: 11px; color: #8b949e; }
-  .gauge-delta { font-size: 10px; color: #ff6b6b; font-weight: 700; }
-  .gauge-bar-wrap {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .gauge-bar-label {
-    display: flex;
-    justify-content: space-between;
-  }
-  .gauge-bar-label p { font-size: 8px; color: #8b949e; }
-  .gauge-bar-track {
-    height: 6px;
-    background: #1e2530;
-    border-radius: 3px;
-  }
-  .gauge-bar-fill {
-    width: 81%;
-    height: 100%;
-    background: #ffd43b;
-    border-radius: 3px;
-  }
-
-  .gauge-warn {
-    background: #1c1a0e;
-    border: 1px solid #ffd43b;
-    border-radius: 5px;
-    padding: 5px 10px;
-    width: 100%;
-  }
-  .gauge-warn p { font-size: 8px; color: #ffd43b; text-align: center; line-height: 1.5; }
-  .deduction-list { width: 100%; }
-  .ded-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 0;
-    border-bottom: 1px solid #1e2530;
-  }
-  .ded-item p.ded-name { font-size: 8px; color: #8b949e; }
-  .ded-item p.ded-val { font-size: 8px; font-weight: 700; color: #ff6b6b; }
-  .recovery-line {
-    background: #0e1f1b;
-    border: 1px solid #38d9a9;
-    border-radius: 4px;
-    padding: 4px 8px;
-    width: 100%;
-    text-align: center;
-  }
-  .recovery-line p { font-size: 9px; font-weight: 700; color: #38d9a9; }
-
-  /* 중앙 로드맵 타임라인 */
-  .roadmap-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .roadmap-col h3 { font-size: 11px; font-weight: 700; color: #8b949e; letter-spacing: 0.05em; margin-bottom: 4px; }
-  .tl-row {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex: 1;
-  }
-  .tl-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    gap: 3px;
-  }
-  .tl-dot {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 2px solid #ffd43b;
-    background: #0d1117;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .tl-dot p {
-    font-size: 10px;
-    font-weight: 800;
-    color: #ffd43b;
-    line-height: 1;
-  }
-  .tl-dot.current-node { border-color: #ff6b6b; background: #1e0d0d; }
-  .tl-dot.current-node p { color: #ff6b6b; }
-  .tl-dot.final-node { border-color: #38d9a9; background: #0e1f1b; }
-  .tl-dot.final-node p { color: #38d9a9; }
-  .tl-score { font-size: 11px; font-weight: 800; color: #ffd43b; white-space: nowrap; }
-  .tl-score.current-score { color: #ff6b6b; }
-  .tl-score.final-score { color: #38d9a9; }
-  .tl-delta { font-size: 8px; color: #38d9a9; font-weight: 600; }
-  .tl-task-label { font-size: 7px; color: #8b949e; text-align: center; line-height: 1.3; max-width: 70px; }
-  .tl-line { flex: 0.2; height: 1px; background: #30363d; align-self: center; margin-top: -16px; }
-
-  /* 우측 대시보드 현황 */
-  .dash-col {
-    flex: 0 0 200px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .dash-col h3 { font-size: 11px; font-weight: 700; color: #58a6ff; letter-spacing: 0.03em; }
-  .dash-stats {
-    display: flex;
-    gap: 8px;
-  }
-  .dash-stat-box {
-    flex: 1;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 5px;
-    padding: 6px 8px;
-    text-align: center;
-  }
-  .dash-stat-box p.ds-val { font-size: 18px; font-weight: 800; color: #38d9a9; }
-  .dash-stat-box p.ds-label { font-size: 8px; color: #8b949e; }
-  .page-list {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 5px;
-    padding: 8px 10px;
-    flex: 1;
-  }
-  .page-list ul {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px 6px;
-  }
-  .page-list ul li { font-size: 7.5px; color: #8b949e; line-height: 1.6; }
-  .page-list ul li span.avail { color: #38d9a9; font-weight: 600; }
-  .dash-url {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 5px;
-    padding: 5px 8px;
-  }
-  .dash-url p { font-size: 7px; color: #58a6ff; font-family: monospace; word-break: break-all; line-height: 1.4; }
-
-  /* 하단 코멘트 박스 */
-  .comment-box {
-    background: #161b22;
-    border-top: 2px solid #ff6b6b;
-    padding: 8px 32px;
-    flex-shrink: 0;
-  }
-  .comment-box p {
-    font-size: 8.5px;
-    font-style: italic;
-    color: #8b949e;
-    line-height: 1.6;
-  }
-  .comment-box p span.hl-r { color: #ff6b6b; font-weight: 600; }
-  .comment-box p span.hl-g { color: #38d9a9; font-weight: 600; }
 </style>
 </head>
 <body>
 
-  <div class="slide-header">
-    <h2>김태현 종합 평가 &amp; 5.0 로드맵</h2>
-    <p class="sub">4.05 최후통첩 &mdash; 오늘 22시 push 성공 시 4.28 즉시 복원 가능</p>
+  <!-- 헤더 -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 4px; height: 22px; background: #38d9a9; border-radius: 2px;"></div>
+      <h2 style="font-size: 19px; font-weight: 700; color: #f8f9fa;">Streamlit 대시보드 현황 — 16개 페이지 / 9개 즉시 활용</h2>
+    </div>
+    <p style="font-size: 11px; color: #8b949e;">08 / 08</p>
   </div>
 
-  <div class="body-row">
+  <!-- 상단 KPI 타일 4개 -->
+  <div style="display: flex; gap: 12px; margin-bottom: 14px; flex-shrink: 0;">
+    <div style="flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px 14px; text-align: center;">
+      <p style="font-size: 32px; font-weight: 800; color: #00d4ff; line-height: 1; letter-spacing: -0.02em;">16</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">총 페이지</p>
+    </div>
+    <div style="flex: 1; background: rgba(56,217,169,0.08); border: 1px solid #38d9a9; border-radius: 8px; padding: 10px 14px; text-align: center;">
+      <p style="font-size: 32px; font-weight: 800; color: #38d9a9; line-height: 1; letter-spacing: -0.02em;">9</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">즉시 활용 가능</p>
+    </div>
+    <div style="flex: 1; background: rgba(255,212,59,0.08); border: 1px solid #ffd43b; border-radius: 8px; padding: 10px 14px; text-align: center;">
+      <p style="font-size: 32px; font-weight: 800; color: #ffd43b; line-height: 1; letter-spacing: -0.02em;">11</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">P1+P7 달성 시</p>
+    </div>
+    <div style="flex: 1; background: rgba(255,107,107,0.08); border: 1px solid #ff6b6b; border-radius: 8px; padding: 10px 14px; text-align: center;">
+      <p style="font-size: 32px; font-weight: 800; color: #ff6b6b; line-height: 1; letter-spacing: -0.02em;">2</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">개발 중 (P1, P7)</p>
+    </div>
+  </div>
 
-    <!-- 좌측 원형 게이지 -->
-    <div class="gauge-col">
-      <div class="gauge-ring">
-        <div class="gauge-ring-inner">
-          <p class="g-score">4.05</p>
-          <p class="g-denom">/ 5.0</p>
+  <!-- 중단: 9개 페이지 그리드 + 우측 패널 -->
+  <div style="flex: 1; display: flex; gap: 14px;">
+
+    <!-- 즉시 활용 9개 그리드 (3x3) -->
+    <div style="flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px;">
+
+      <!-- S1 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">S1</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">선수 종합 레이팅</p>
+          <p style="font-size: 10px; color: #38d9a9;">R² 0.9093 &#9989;</p>
         </div>
       </div>
-      <p class="gauge-delta">&#9660; &minus;0.10 (전일 4.15)</p>
-      <div class="gauge-bar-wrap">
-        <div class="gauge-bar-label">
-          <p>0</p>
-          <p>81%</p>
-          <p>5.0</p>
+
+      <!-- P4 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">P4</p>
         </div>
-        <div class="gauge-bar-track">
-          <div class="gauge-bar-fill"></div>
-        </div>
-      </div>
-      <div class="gauge-warn">
-        <p>경고 발동 중<br>오늘 22시 push 없으면<br>내일 4.0 이하</p>
-      </div>
-      <div class="deduction-list">
-        <div class="ded-item">
-          <p class="ded-name">P7/P1 15일 연속</p>
-          <p class="ded-val">&minus;0.07</p>
-        </div>
-        <div class="ded-item">
-          <p class="ded-name">S3 FW 파일 7일</p>
-          <p class="ded-val">&minus;0.02</p>
-        </div>
-        <div class="ded-item">
-          <p class="ded-name">demo_script 7일</p>
-          <p class="ded-val">&minus;0.01</p>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">MVP 스코어링</p>
+          <p style="font-size: 10px; color: #38d9a9;">Spearman 0.9987 &#9989;&#9989;</p>
         </div>
       </div>
-      <div class="recovery-line">
-        <p>&#9650; 오늘 달성 +0.23 &rarr; 4.28</p>
+
+      <!-- P6 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">P6</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">시장가치 예측</p>
+          <p style="font-size: 10px; color: #38d9a9;">R² 0.8734 &#9989;</p>
+        </div>
       </div>
+
+      <!-- S2 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">S2</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">포지션별 시장가치</p>
+          <p style="font-size: 10px; color: #38d9a9;">R² 0.8915 &#9989;</p>
+        </div>
+      </div>
+
+      <!-- P8 -->
+      <div style="background: #161b22; border: 1px solid #ffd43b; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(255,212,59,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #ffd43b;">P8</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">이적 적응 예측</p>
+          <p style="font-size: 10px; color: #ffd43b;">AUC 0.6612 &#9888;</p>
+        </div>
+      </div>
+
+      <!-- P3 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">P3</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">강등권 예측</p>
+          <p style="font-size: 10px; color: #38d9a9;">AUC 100% &#9989;&#9989;</p>
+        </div>
+      </div>
+
+      <!-- P2 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">P2</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">시즌 득점 예측</p>
+          <p style="font-size: 10px; color: #38d9a9;">R² 0.8877 &#9989;&#9989;</p>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div style="background: #161b22; border: 1px solid #ffd43b; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(255,212,59,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #ffd43b;">S3</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">유사선수 탐색</p>
+          <p style="font-size: 10px; color: #ffd43b;">DEF Sil 0.3637 &#9888;</p>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 7px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 3px; padding: 2px 6px; flex-shrink: 0; display: inline-block;">
+          <p style="font-size: 10px; font-weight: 800; color: #38d9a9;">S6</p>
+        </div>
+        <div>
+          <p style="font-size: 11px; font-weight: 600; color: #f8f9fa; line-height: 1.2;">하락세 감지</p>
+          <p style="font-size: 10px; color: #38d9a9;">AUC 0.8324 &#9989;</p>
+        </div>
+      </div>
+
     </div>
 
-    <!-- 중앙 수평 로드맵 타임라인 -->
-    <div class="roadmap-col">
-      <h3>5.0 로드맵 &mdash; 8단계</h3>
-      <div class="tl-row">
+    <!-- 우측: URL + 분기 카드 -->
+    <div style="width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;">
 
-        <div class="tl-item">
-          <div class="tl-dot current-node"><p>&#9656;</p></div>
-          <p class="tl-score current-score">4.05</p>
-          <p class="tl-task-label">화요일<br>경고 집행</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><p>1</p></div>
-          <p class="tl-score">4.08</p>
-          <p class="tl-delta">+0.03</p>
-          <p class="tl-task-label">S3 FW<br>파일 (11시)</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><p>2</p></div>
-          <p class="tl-score">4.10</p>
-          <p class="tl-delta">+0.02</p>
-          <p class="tl-task-label">demo_script<br>v2.0 (11시)</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><p>3</p></div>
-          <p class="tl-score">4.20</p>
-          <p class="tl-delta">+0.10</p>
-          <p class="tl-task-label">P7 R&sup2;<br>&ge;0.62 (오후)</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><p>4</p></div>
-          <p class="tl-score">4.28</p>
-          <p class="tl-delta">+0.08</p>
-          <p class="tl-task-label">P1 Acc<br>&ge;57% (저녁)</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><p>5</p></div>
-          <p class="tl-score">4.34</p>
-          <p class="tl-delta">+0.06</p>
-          <p class="tl-task-label">S3 FW Sil<br>&ge;0.25</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><p>6</p></div>
-          <p class="tl-score">4.42</p>
-          <p class="tl-delta">+0.08</p>
-          <p class="tl-task-label">포트폴리오<br>발표 성공</p>
-        </div>
-        <div class="tl-line"></div>
-
-        <div class="tl-item">
-          <div class="tl-dot final-node"><p>&#9733;</p></div>
-          <p class="tl-score final-score">5.00</p>
-          <p class="tl-delta" style="color:#38d9a9">+0.58</p>
-          <p class="tl-task-label">영입 회의<br>시연 성공</p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- 우측 대시보드 현황 -->
-    <div class="dash-col">
-      <h3>Streamlit 대시보드</h3>
-      <div class="dash-stats">
-        <div class="dash-stat-box">
-          <p class="ds-val">16</p>
-          <p class="ds-label">총 페이지</p>
-        </div>
-        <div class="dash-stat-box">
-          <p class="ds-val">9</p>
-          <p class="ds-label">즉시 활용</p>
+      <!-- Streamlit URL -->
+      <div style="background: #161b22; border: 1px solid #38d9a9; border-radius: 8px; padding: 12px;">
+        <p style="font-size: 10px; color: #38d9a9; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.04em;">STREAMLIT APP</p>
+        <p style="font-size: 9px; color: #8b949e; line-height: 1.5; word-break: break-all;">https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
+        <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid #30363d;">
+          <p style="font-size: 9px; color: #8b949e;">GitHub: robinho0329/EPL-scouting-report-dashboard-project</p>
         </div>
       </div>
-      <div class="page-list">
-        <ul>
-          <li><span class="avail">OK</span> 홈</li>
-          <li><span class="avail">OK</span> 선수 즉시 분석</li>
-          <li><span class="avail">OK</span> 쇼트리스트</li>
-          <li><span class="avail">OK</span> 종합 인텔리전스</li>
-          <li>스카우트 개요</li>
-          <li><span class="avail">OK</span> 선수 분석</li>
-          <li><span class="avail">OK</span> 이적 인텔리전스</li>
-          <li>강등권 탐색기</li>
-          <li><span class="avail">OK</span> S2 저평가 탐색</li>
-          <li>팀 프로파일</li>
-          <li>선수 통계 순위</li>
-          <li>시즌 개요</li>
-          <li><span class="avail">OK</span> 선수 비교</li>
-          <li>역대 기록</li>
-          <li>모델 설명(SHAP)</li>
-          <li>선수 유형 탐색기</li>
+
+      <!-- 분기 카드: 달성 시 -->
+      <div style="background: rgba(56,217,169,0.08); border: 1.5px solid #38d9a9; border-radius: 8px; padding: 12px; flex: 1;">
+        <p style="font-size: 10px; color: #38d9a9; font-weight: 700; margin-bottom: 6px;">&#9989; 오늘 22시 달성 시</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="font-size: 11px; color: #f8f9fa; padding: 2px 0; line-height: 1.5;">&#8226; 내일 4.18로 시작</li>
+          <li style="font-size: 11px; color: #f8f9fa; padding: 2px 0; line-height: 1.5;">&#8226; 11개 페이지 즉시 활용</li>
+          <li style="font-size: 11px; color: #f8f9fa; padding: 2px 0; line-height: 1.5;">&#8226; P6+P7+P8 체인 완성</li>
         </ul>
       </div>
-      <div class="dash-url">
-        <p>https://epl-scouting-report-dashboard-project-ffyb8msh6uafxyyg8txsm8.streamlit.app</p>
+
+      <!-- 분기 카드: 미달 시 -->
+      <div style="background: rgba(255,107,107,0.08); border: 1.5px solid #ff6b6b; border-radius: 8px; padding: 12px; flex: 1;">
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 700; margin-bottom: 6px;">&#10060; 오늘 22시 미달 시</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="font-size: 11px; color: #f8f9fa; padding: 2px 0; line-height: 1.5;">&#8226; P6+S1+P8 공식 전환</li>
+          <li style="font-size: 11px; color: #f8f9fa; padding: 2px 0; line-height: 1.5;">&#8226; P7 장기 과제 분류</li>
+          <li style="font-size: 11px; color: #f8f9fa; padding: 2px 0; line-height: 1.5;">&#8226; 9개 페이지 유지</li>
+        </ul>
       </div>
+
     </div>
 
-  </div>
-
-  <!-- 하단 코멘트 박스 -->
-  <div class="comment-box">
-    <p>
-      &ldquo;<span class="hl-r">4.05. 15일입니다. 경고를 넘어 최후통첩입니다.</span>
-      P6+P7+P8 체인은 완성 직전입니다. P7 하나만 0.62를 달성하면 됩니다.
-      오늘 오후에 로컬 PC를 켜고 train_v5_1.py를 실행하십시오.
-      <span class="hl-g">오늘 저녁 22시 이전에 push가 있으면 내일 아침에 4.28까지 복원 가능합니다.</span>
-      오늘이 진짜 마지막입니다. &mdash; 김태현&rdquo;
-    </p>
   </div>
 
 </body>

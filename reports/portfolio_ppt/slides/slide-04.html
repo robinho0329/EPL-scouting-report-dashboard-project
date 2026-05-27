@@ -2,287 +2,151 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #f8f9fa;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-  }
-  .slide-header {
-    padding: 14px 32px 0;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-  .slide-header h2 { font-size: 17px; font-weight: 700; }
-  .slide-header p.sub { font-size: 9px; color: #8b949e; }
-
-  .cards-row {
-    display: flex;
-    gap: 14px;
-    padding: 12px 32px 0;
-    flex: 1;
-    overflow: hidden;
-  }
-  .diag-card {
-    flex: 1;
-    background: #161b22;
-    border: 1.5px solid #ff6b6b;
-    border-radius: 8px;
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    overflow: hidden;
-  }
-  /* h3 cannot have border — use div wrapper with border-bottom instead */
-  .diag-card h3 {
-    font-size: 13px;
-    font-weight: 700;
-    color: #ff6b6b;
-    padding-bottom: 6px;
-  }
-  .card-title-sep {
-    height: 1px;
-    background: rgba(255,107,107,0.25);
-    margin-top: -5px;
-    flex-shrink: 0;
-  }
-  .metric-row {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  .metric-box {
-    flex: 1;
-    background: #0d1117;
-    border-radius: 5px;
-    padding: 6px 8px;
-  }
-  .metric-box p.mb-label { font-size: 7.5px; color: #8b949e; margin-bottom: 2px; letter-spacing: 0.04em; }
-  .metric-box p.mb-val { font-size: 16px; font-weight: 800; line-height: 1; }
-  .metric-box.current p.mb-val { color: #ff6b6b; }
-  .metric-box.target p.mb-val { color: #38d9a9; }
-  .metric-box.gap p.mb-val { color: #ffd43b; }
-
-  .diag-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .diag-row p.diag-label {
-    font-size: 8px;
-    font-weight: 700;
-    color: #8b949e;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .diag-row p.diag-val {
-    font-size: 10px;
-    color: #e6edf3;
-    line-height: 1.5;
-  }
-  .diag-row p.diag-val span.hl-r { color: #ff6b6b; font-weight: 600; }
-  .diag-row p.diag-val span.hl-g { color: #38d9a9; font-weight: 600; }
-  .diag-row p.diag-val span.hl-y { color: #ffd43b; font-weight: 600; }
-
-  .solution-box {
-    background: rgba(56,217,169,0.08);
-    border: 1px solid rgba(56,217,169,0.3);
-    border-radius: 5px;
-    padding: 7px 10px;
-  }
-  .solution-box p.sol-label { font-size: 7.5px; font-weight: 700; color: #38d9a9; margin-bottom: 3px; letter-spacing: 0.05em; text-transform: uppercase; }
-  .solution-box p.sol-val { font-size: 9.5px; color: #e6edf3; line-height: 1.5; }
-  .solution-box p.sol-val code { font-family: monospace; color: #ffd43b; font-size: 9px; }
-
-  .script-line {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .script-line p { font-size: 8.5px; color: #8b949e; }
-  .script-line p code { font-family: monospace; color: #58a6ff; font-size: 8px; }
-  .script-line p span.hl-g { color: #38d9a9; font-weight: 600; }
-
-  .timeline {
-    display: flex;
-    align-items: center;
-    padding: 10px 32px 12px;
-    gap: 0;
-    flex-shrink: 0;
-    background: #0d1117;
-  }
-  .tl-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    flex: 1;
-  }
-  /* tl-dot is now a div with a p inside */
-  .tl-dot {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    border: 2px solid #ffd43b;
-    background: #0d1117;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .tl-dot p {
-    font-size: 9px;
-    font-weight: 800;
-    color: #ffd43b;
-    line-height: 1;
-  }
-  .tl-dot.deadline { border-color: #ff6b6b; }
-  .tl-dot.deadline p { color: #ff6b6b; }
-  .tl-time { font-size: 8px; font-weight: 600; color: #ffd43b; }
-  .tl-time.deadline { color: #ff6b6b; }
-  .tl-desc { font-size: 7.5px; color: #8b949e; text-align: center; line-height: 1.4; max-width: 110px; }
-  .tl-line { flex: 1; height: 1px; background: #30363d; margin-top: -22px; }
-  .tl-badge {
-    font-size: 8px;
-    font-weight: 700;
-    color: #38d9a9;
-    white-space: nowrap;
+    padding: 22px 32px 16px 32px;
   }
 </style>
 </head>
 <body>
 
-  <div class="slide-header">
-    <h2>P7 &middot; P1 15일 연속 미달 &mdash; 원인 진단 딥다이브</h2>
-    <p class="sub">기술 준비 완료 &mdash; 로컬 실행만 남았다</p>
+  <!-- 헤더 -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 4px; height: 22px; background: #38d9a9; border-radius: 2px;"></div>
+      <h2 style="font-size: 19px; font-weight: 700; color: #f8f9fa;">P6+S1+P8 체인 — 30M 이하 딜 즉시 적용 가능</h2>
+    </div>
+    <p style="font-size: 11px; color: #8b949e;">04 / 08</p>
   </div>
 
-  <div class="cards-row">
+  <!-- 상단 KPI 카드 3개 -->
+  <div style="display: flex; gap: 14px; margin-bottom: 16px; flex-shrink: 0;">
 
-    <!-- P7 카드 -->
-    <div class="diag-card">
-      <h3>P7 성장 곡선 예측 &mdash; v5 &rarr; v5.1</h3>
-      <div class="card-title-sep"></div>
-
-      <div class="metric-row">
-        <div class="metric-box current">
-          <p class="mb-label">현재 (test)</p>
-          <p class="mb-val">0.5752</p>
+    <!-- S1 카드 -->
+    <div style="flex: 1; background: rgba(56, 217, 169, 0.08); border: 1.5px solid #38d9a9; border-radius: 10px; padding: 14px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 4px; padding: 3px 8px; display: inline-block;">
+          <p style="font-size: 11px; font-weight: 800; color: #38d9a9;">S1</p>
         </div>
-        <div class="metric-box target">
-          <p class="mb-label">목표</p>
-          <p class="mb-val">R&sup2; &ge; 0.62</p>
-        </div>
-        <div class="metric-box gap">
-          <p class="mb-label">갭</p>
-          <p class="mb-val">&minus;0.0448</p>
-        </div>
+        <p style="font-size: 10px; color: #8b949e;">선수 종합 레이팅</p>
       </div>
-
-      <div class="diag-row">
-        <p class="diag-label">Val vs Test</p>
-        <p class="diag-val">val R&sup2; <span class="hl-g">0.6302 이미 달성</span> &rarr; val-test 갭 <span class="hl-r">0.055</span> 해소가 핵심</p>
-      </div>
-
-      <div class="diag-row">
-        <p class="diag-label">핵심 원인</p>
-        <p class="diag-val"><span class="hl-r">lag 피처 부재</span> &rarr; 최근 성장 추세 포착 실패</p>
-      </div>
-
-      <div class="solution-box">
-        <p class="sol-label">해결책</p>
-        <p class="sol-val"><code>lag3_rating, delta_lag1_2, delta_lag2_3</code> 피처 추가<br>+ Optuna 35 trials &rarr; stacking 재학습</p>
-      </div>
-
-      <div class="script-line">
-        <p>스크립트: <code>models/p7_growth_curve/train_v5_1.py</code> (준비 완료)</p>
-      </div>
-      <div class="script-line">
-        <p>달성 시: <span class="hl-g">+0.10 &rarr; 4.15</span> &middot; P6+P7+P8 풀 체인 완성</p>
-      </div>
+      <p style="font-size: 26px; font-weight: 800; color: #38d9a9; letter-spacing: -0.02em; line-height: 1;">0.9093</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">test R² / MAE 4.66</p>
+      <p style="font-size: 10px; color: #38d9a9; margin-top: 6px; font-weight: 600;">12,283명 WAR 평가</p>
     </div>
 
-    <!-- P1 카드 -->
-    <div class="diag-card">
-      <h3>P1 경기 결과 예측 &mdash; v2</h3>
-      <div class="card-title-sep"></div>
+    <!-- 화살표 -->
+    <div style="display: flex; align-items: center; justify-content: center; width: 28px; flex-shrink: 0;">
+      <p style="font-size: 22px; color: #00d4ff;">&#8594;</p>
+    </div>
 
-      <div class="metric-row">
-        <div class="metric-box current">
-          <p class="mb-label">현재 (test Acc)</p>
-          <p class="mb-val">54.79%</p>
+    <!-- P6 카드 -->
+    <div style="flex: 1; background: rgba(56, 217, 169, 0.08); border: 1.5px solid #38d9a9; border-radius: 10px; padding: 14px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 4px; padding: 3px 8px; display: inline-block;">
+          <p style="font-size: 11px; font-weight: 800; color: #38d9a9;">P6</p>
         </div>
-        <div class="metric-box target">
-          <p class="mb-label">목표</p>
-          <p class="mb-val">Acc &ge; 57%</p>
+        <p style="font-size: 10px; color: #8b949e;">시장가치 예측</p>
+      </div>
+      <p style="font-size: 26px; font-weight: 800; color: #38d9a9; letter-spacing: -0.02em; line-height: 1;">0.8734</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">test R² / MAE £3.28M</p>
+      <p style="font-size: 10px; color: #38d9a9; margin-top: 6px; font-weight: 600;">저평가 112명 탐지</p>
+    </div>
+
+    <!-- 화살표 -->
+    <div style="display: flex; align-items: center; justify-content: center; width: 28px; flex-shrink: 0;">
+      <p style="font-size: 22px; color: #00d4ff;">&#8594;</p>
+    </div>
+
+    <!-- P8 카드 -->
+    <div style="flex: 1; background: rgba(255, 212, 59, 0.08); border: 1.5px solid #ffd43b; border-radius: 10px; padding: 14px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div style="background: rgba(255,212,59,0.15); border-radius: 4px; padding: 3px 8px; display: inline-block;">
+          <p style="font-size: 11px; font-weight: 800; color: #ffd43b;">P8</p>
         </div>
-        <div class="metric-box gap">
-          <p class="mb-label">갭</p>
-          <p class="mb-val">&minus;2.21%p</p>
-        </div>
+        <p style="font-size: 10px; color: #8b949e;">이적 적응 예측</p>
       </div>
-
-      <div class="diag-row">
-        <p class="diag-label">F1 현황</p>
-        <p class="diag-val">F1 <span class="hl-r">40.65%</span> &middot; D(무승부) recall 사실상 0</p>
-      </div>
-
-      <div class="diag-row">
-        <p class="diag-label">핵심 원인</p>
-        <p class="diag-val"><span class="hl-r">D 클래스 미분류</span> &mdash; class_weight 미적용, H2H 무승부 피처 부재</p>
-      </div>
-
-      <div class="solution-box">
-        <p class="sol-label">해결책</p>
-        <p class="sol-val"><code>class_weight={0:1, 1:2.5, 2:1}</code><br>+ H2H 무승부 비율 피처 추가</p>
-      </div>
-
-      <div class="script-line">
-        <p>스크립트: <code>models/p1_match_result/train_pipeline.py</code> (준비 완료)</p>
-      </div>
-      <div class="script-line">
-        <p>달성 시: <span class="hl-g">+0.08 &rarr; 4.23</span> (P7 달성 후 순차 적용 시 4.28)</p>
-      </div>
+      <p style="font-size: 26px; font-weight: 800; color: #ffd43b; letter-spacing: -0.02em; line-height: 1;">0.6612</p>
+      <p style="font-size: 11px; color: #8b949e; margin-top: 4px;">AUC / F1 88.23%</p>
+      <p style="font-size: 10px; color: #ffd43b; margin-top: 6px; font-weight: 600;">이적 적응률 74.98%</p>
     </div>
 
   </div>
 
-  <!-- 하단 4단계 타임라인 -->
-  <div class="timeline">
-    <div class="tl-node">
-      <div class="tl-dot"><p>1</p></div>
-      <p class="tl-time">~ 11:00</p>
-      <p class="tl-desc">S3 FW 파일<br>demo_script v2.0</p>
-      <p class="tl-badge">+0.05</p>
+  <!-- 중단: 모델 역할 설명 + 시나리오 -->
+  <div style="display: flex; gap: 14px; flex: 1;">
+
+    <!-- 좌측: 체인 역할 설명 -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 4px; padding: 3px 8px; display: inline-block; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #38d9a9;">S1</p>
+        </div>
+        <div>
+          <p style="font-size: 12px; font-weight: 700; color: #f8f9fa; margin-bottom: 3px;">"현재 실력 수준"</p>
+          <p style="font-size: 11px; color: #8b949e; line-height: 1.4;">WAR 기반 12,283명 종합 레이팅. 실력 대비 저평가 선수 필터링의 기준점.</p>
+        </div>
+      </div>
+
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+        <div style="background: rgba(56,217,169,0.15); border-radius: 4px; padding: 3px 8px; display: inline-block; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #38d9a9;">P6</p>
+        </div>
+        <div>
+          <p style="font-size: 12px; font-weight: 700; color: #f8f9fa; margin-bottom: 3px;">"저평가 탐지"</p>
+          <p style="font-size: 11px; color: #8b949e; line-height: 1.4;">실력(S1) 대비 시장가치 갭 분석. 저평가 112명 중 30M 이하 우선 타겟 추출.</p>
+        </div>
+      </div>
+
+      <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
+        <div style="background: rgba(255,212,59,0.15); border-radius: 4px; padding: 3px 8px; display: inline-block; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #ffd43b;">P8</p>
+        </div>
+        <div>
+          <p style="font-size: 12px; font-weight: 700; color: #f8f9fa; margin-bottom: 3px;">"EPL 적응 확률"</p>
+          <p style="font-size: 11px; color: #8b949e; line-height: 1.4;">age_x_style (importance 0.1342): 30세↑ + style_distance&gt;0.02 &rarr; 실패 위험 3배.</p>
+        </div>
+      </div>
+
     </div>
-    <div class="tl-line"></div>
-    <div class="tl-node">
-      <div class="tl-dot"><p>2</p></div>
-      <p class="tl-time">13:00 ~ 16:00</p>
-      <p class="tl-desc">P7 v5.1 로컬<br>Optuna 35 trials</p>
-      <p class="tl-badge">+0.10</p>
+
+    <!-- 우측: 영입 시나리오 + 경고 배지 -->
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+
+      <!-- 영입 시나리오 인용 카드 -->
+      <div style="background: #161b22; border: 1.5px solid #f5a623; border-radius: 10px; padding: 16px; flex: 1;">
+        <p style="font-size: 10px; color: #f5a623; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 8px;">영입 회의 활용 시나리오</p>
+        <p style="font-size: 13px; color: #f8f9fa; font-style: italic; line-height: 1.6; margin-bottom: 10px;">
+          "이 선수, 실력 대비 저평가됐고 (P6 R² 0.8734), EPL 적응 확률 X% (P8)"
+        </p>
+        <ul style="list-style: none; padding-left: 0;">
+          <li style="font-size: 11px; color: #8b949e; padding: 2px 0; line-height: 1.5;">&#8226; 30M 이하 딜 우선 적용</li>
+          <li style="font-size: 11px; color: #8b949e; padding: 2px 0; line-height: 1.5;">&#8226; P7 없이도 완결된 영입 논리 성립</li>
+          <li style="font-size: 11px; color: #8b949e; padding: 2px 0; line-height: 1.5;">&#8226; 결정 도구가 아닌 위험 플래그 활용</li>
+        </ul>
+      </div>
+
+      <!-- 조건 경고 배지 -->
+      <div style="background: rgba(255, 107, 107, 0.12); border: 1.5px solid #ff6b6b; border-radius: 10px; padding: 12px 14px;">
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 700; margin-bottom: 6px;">&#9888; 분기 조건</p>
+        <p style="font-size: 12px; color: #f8f9fa; line-height: 1.5; font-weight: 600;">P7 오늘 22시 push 실패 시</p>
+        <p style="font-size: 12px; color: #ff6b6b; line-height: 1.5; font-weight: 700;">&rarr; 내일 이 체인으로 공식 전환</p>
+        <p style="font-size: 10px; color: #8b949e; margin-top: 4px;">P7 장기 과제 분류 &amp; P6+S1+P8 포트폴리오 메인</p>
+      </div>
+
     </div>
-    <div class="tl-line"></div>
-    <div class="tl-node">
-      <div class="tl-dot"><p>3</p></div>
-      <p class="tl-time">17:00 ~ 22:00</p>
-      <p class="tl-desc">P1 v2 로컬<br>class_weight+H2H</p>
-      <p class="tl-badge">+0.08</p>
-    </div>
-    <div class="tl-line"></div>
-    <div class="tl-node">
-      <div class="tl-dot deadline"><p>!</p></div>
-      <p class="tl-time deadline">22:00 이전</p>
-      <p class="tl-desc">results_summary<br>.json push</p>
-      <p class="tl-badge" style="color:#ff6b6b">4.28 복원</p>
-    </div>
+
   </div>
 
 </body>

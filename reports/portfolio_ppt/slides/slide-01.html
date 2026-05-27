@@ -6,290 +6,94 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #f8f9fa;
     overflow: hidden;
-    position: relative;
-  }
-  .alert-banner {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    background: #ff6b6b;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    z-index: 10;
-  }
-  .alert-banner p {
-    font-size: 11px;
-    font-weight: 700;
-    color: #0d1117;
-    letter-spacing: 0.04em;
-  }
-  .sep { width: 1px; height: 14px; background: rgba(0,0,0,0.3); }
-  .left-bar {
-    position: absolute;
-    left: 0; top: 42px; bottom: 0;
-    width: 5px;
-    background: #ff6b6b;
-  }
-  .main {
-    position: absolute;
-    top: 42px; left: 5px; bottom: 52px; right: 200px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0 48px 0 52px;
-  }
-  .brand-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .brand-badge {
-    background: #3D195B;
-    border-radius: 4px;
-    padding: 3px 10px;
-    display: inline-flex;
-    align-items: center;
-  }
-  .brand-badge p {
-    font-size: 9px;
-    font-weight: 700;
-    color: #00d4ff;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-  .session-info p {
-    font-size: 10px;
-    color: #8b949e;
-    letter-spacing: 0.03em;
-  }
-  h1.main-title {
-    font-size: 44px;
-    font-weight: 800;
-    line-height: 1.1;
-    color: #e6edf3;
-    letter-spacing: -0.02em;
-    margin-bottom: 10px;
-  }
-  h1.main-title span.accent { color: #38d9a9; }
-  .date-line {
-    font-size: 18px;
-    font-weight: 500;
-    color: #38d9a9;
-    margin-bottom: 18px;
-    letter-spacing: 0.01em;
-  }
-  .divider {
-    width: 64px; height: 3px;
-    background: #ff6b6b;
-    margin-bottom: 18px;
-    border-radius: 2px;
-  }
-  .attendees-row {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 18px;
-  }
-  .attendee {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .attendee .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-  }
-  .attendee .dot.green { background: #38d9a9; }
-  .attendee .dot.blue { background: #00d4ff; }
-  .attendee p { font-size: 12px; color: #8b949e; }
-  .slogan-box {
-    border: 1px solid #ff6b6b;
-    border-radius: 6px;
-    padding: 9px 14px;
-    background: rgba(255,107,107,0.06);
-  }
-  .slogan-box p {
-    font-size: 11.5px;
-    font-style: italic;
-    color: #ff6b6b;
-    line-height: 1.5;
-  }
-  /* 우측 평점 패널 */
-  .score-panel {
-    position: absolute;
-    top: 42px; right: 0; bottom: 52px;
-    width: 195px;
-    border-left: 1px solid #30363d;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 18px;
-    gap: 10px;
-  }
-  .gauge-svg-wrap {
-    position: relative;
-    width: 120px; height: 120px;
-  }
-  .gauge-center {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-  .gauge-center p.score-num {
-    font-size: 26px;
-    font-weight: 800;
-    color: #ff6b6b;
-    line-height: 1;
-  }
-  .gauge-center p.score-denom {
-    font-size: 10px;
-    color: #8b949e;
-  }
-  .delta-line p {
-    font-size: 11px;
-    font-weight: 700;
-    color: #ff6b6b;
-    text-align: center;
-  }
-  .delta-line p.prev {
-    font-size: 9px;
-    color: #8b949e;
-    font-weight: 400;
-  }
-  .warn-badge {
-    background: rgba(255,107,107,0.15);
-    border: 1px solid #ff6b6b;
-    border-radius: 20px;
-    padding: 4px 10px;
-  }
-  .warn-badge p {
-    font-size: 9px;
-    font-weight: 700;
-    color: #ff6b6b;
-    letter-spacing: 0.04em;
-    text-align: center;
-  }
-  /* 하단 슬로건 바 */
-  .bottom-bar {
-    position: absolute;
-    bottom: 0; left: 5px; right: 0;
-    height: 52px;
-    background: #161b22;
-    border-top: 2px solid #ff6b6b;
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    gap: 16px;
-  }
-  .bottom-bar p.bbar-main {
-    font-size: 11px;
-    font-weight: 700;
-    color: #ff6b6b;
-    white-space: nowrap;
-  }
-  .bottom-bar p.bbar-sub {
-    font-size: 10px;
-    color: #8b949e;
-  }
-  .bottom-bar p.page-num {
-    margin-left: auto;
-    font-size: 9px;
-    color: #8b949e;
   }
 </style>
 </head>
 <body>
 
   <!-- 상단 긴급 배너 -->
-  <div class="alert-banner">
-    <p>수요일 — 4.0 이하 경고 집행</p>
-    <div class="sep"></div>
-    <p>P7 · P1 16일 연속 미달</p>
-    <div class="sep"></div>
-    <p>오늘 22시 최후 마감</p>
-    <div class="sep"></div>
-    <p>미이행 시 P6+S1+P8 체인 공식 전환</p>
+  <div style="width: 100%; background: #ff6b6b; padding: 9px 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+    <p style="font-size: 13px; font-weight: 700; color: #0d1117; letter-spacing: 0.02em; text-align: center;">
+      수요일 — 4.0 이하 경고 집행 &nbsp;|&nbsp; P7·P1 16일 연속 미달 &nbsp;|&nbsp; 오늘 22시 최후 마감
+    </p>
   </div>
 
-  <div class="left-bar"></div>
+  <!-- 메인 콘텐츠 -->
+  <div style="flex: 1; display: flex; position: relative;">
 
-  <div class="main">
-    <div class="brand-row">
-      <div class="brand-badge">
-        <p>EPL Scout Intelligence</p>
+    <!-- 좌측 수직 강조 라인 -->
+    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #ff6b6b;"></div>
+
+    <!-- 타이틀 영역 -->
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 48px 0 28px;">
+
+      <!-- 브랜드 배지 (div 래퍼 사용) -->
+      <div style="margin-bottom: 18px;">
+        <div style="display: inline-block; padding: 5px 16px; border: 1px solid #3D195B; border-radius: 20px;">
+          <p style="font-size: 11px; font-weight: 600; color: #00d4ff; letter-spacing: 0.12em; text-transform: uppercase;">
+            EPL Scout Intelligence
+          </p>
+        </div>
       </div>
-      <div class="session-info">
-        <p>36번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST</p>
-      </div>
+
+      <!-- 메인 타이틀 -->
+      <h1 style="font-size: 50px; font-weight: 800; color: #f8f9fa; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 14px;">
+        EPL 스카우트 인텔리전스
+      </h1>
+
+      <!-- 서브타이틀 -->
+      <h2 style="font-size: 19px; font-weight: 500; color: #38d9a9; letter-spacing: -0.01em; margin-bottom: 26px; line-height: 1.4;">
+        2026-05-27 (수) 데일리 브리핑 — 36번째 정기 미팅 &nbsp;|&nbsp; 09:00 KST
+      </h2>
+
+      <!-- 구분선 -->
+      <div style="width: 56px; height: 3px; background: #ff6b6b; margin-bottom: 20px; border-radius: 2px;"></div>
+
+      <!-- 참석자 -->
+      <p style="font-size: 14px; color: #8b949e; font-weight: 400; line-height: 1.5;">
+        김태현 스카우트 &nbsp;·&nbsp; Marcus Webb (Analytics Agent)
+      </p>
+
     </div>
 
-    <h1 class="main-title">EPL 스카우트<br><span class="accent">인텔리전스</span></h1>
+    <!-- 우측: 평점 배지 -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 220px; flex-shrink: 0; padding-right: 40px; gap: 12px;">
 
-    <p class="date-line">2026-05-27 (수) 데일리 브리핑</p>
-
-    <div class="divider"></div>
-
-    <div class="attendees-row">
-      <div class="attendee">
-        <div class="dot green"></div>
-        <p>김태현 스카우트</p>
+      <!-- 원형 게이지 (border trick, div 기반) -->
+      <div style="width: 148px; height: 148px; border-radius: 50%; border: 14px solid #ff6b6b; background: #161b22; display: flex; align-items: center; justify-content: center;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+          <p style="font-size: 36px; font-weight: 800; color: #ff6b6b; line-height: 1; letter-spacing: -0.02em;">3.95</p>
+          <p style="font-size: 13px; color: #8b949e; margin-top: 3px;">/ 5.0</p>
+        </div>
       </div>
-      <div class="attendee">
-        <div class="dot blue"></div>
-        <p>Marcus Webb (Analytics Agent)</p>
+
+      <!-- 하락 표시 -->
+      <p style="font-size: 14px; color: #ff6b6b; font-weight: 700; text-align: center;">&#9660; &minus;0.10</p>
+      <p style="font-size: 11px; color: #8b949e; text-align: center;">전일 4.05</p>
+
+      <!-- 경고 배지 (div 래퍼) -->
+      <div style="background: rgba(255, 107, 107, 0.15); border: 1px solid #ff6b6b; border-radius: 8px; padding: 6px 12px; text-align: center; width: 100%;">
+        <p style="font-size: 11px; font-weight: 700; color: #ff6b6b; line-height: 1.4;">4.0 이하 경고 집행</p>
+        <p style="font-size: 10px; color: #8b949e; line-height: 1.4;">16일 연속 미달</p>
       </div>
+
     </div>
 
-    <div class="slogan-box">
-      <p>"시스템 재설계 논의 개시. 오늘 저녁 22시가 마지노선. — 김태현"</p>
-    </div>
   </div>
 
-  <!-- 우측 평점 패널 -->
-  <div class="score-panel">
-    <div class="gauge-svg-wrap">
-      <svg width="120" height="120" viewBox="0 0 120 120">
-        <!-- 배경 원 -->
-        <circle cx="60" cy="60" r="50" fill="none" stroke="#30363d" stroke-width="9"/>
-        <!-- 채움: 3.95/5.0 = 79% → circumference = 2π×50 ≈ 314.16 → fill = 248.2 -->
-        <circle cx="60" cy="60" r="50" fill="none" stroke="#ff6b6b" stroke-width="9"
-          stroke-dasharray="248 314" stroke-dashoffset="79" stroke-linecap="round"/>
-        <!-- 4.0 기준선 마커(80%) → position at ~80% -->
-        <circle cx="60" cy="60" r="50" fill="none" stroke="#ffd43b" stroke-width="3"
-          stroke-dasharray="3 311" stroke-dashoffset="1" stroke-linecap="round"/>
-      </svg>
-      <div class="gauge-center">
-        <p class="score-num">3.95</p>
-        <p class="score-denom">/ 5.0</p>
-      </div>
-    </div>
-
-    <div class="delta-line">
-      <p>&#9660; &minus;0.10</p>
-      <p class="prev">전일 4.05</p>
-    </div>
-
-    <div class="warn-badge">
-      <p>16일 연속 경고</p>
-      <p>4.0 이하 집행</p>
-    </div>
-  </div>
-
-  <!-- 하단 바 -->
-  <div class="bottom-bar">
-    <p class="bbar-main">3.95 / 5.0 &nbsp;—&nbsp; 16일 연속 경고 집행</p>
-    <p class="bbar-sub">오늘 전부 달성 시 4.18 복원 가능</p>
-    <p class="page-num">01 / 08</p>
+  <!-- 하단 슬로건 박스 -->
+  <div style="border-top: 1px solid #ff6b6b; background: rgba(255, 107, 107, 0.06); padding: 13px 48px; flex-shrink: 0;">
+    <p style="font-size: 13px; color: #f8f9fa; font-style: italic; text-align: center; line-height: 1.5;">
+      시스템 재설계 논의 개시. 오늘 저녁 22시가 마지노선. &nbsp;— 김태현
+    </p>
   </div>
 
 </body>

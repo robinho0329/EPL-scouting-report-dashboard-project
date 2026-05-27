@@ -2,266 +2,142 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #f8f9fa;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    padding: 18px 28px 0 28px;
   }
-  .urgent-banner {
-    background: #1e0d0d;
-    border-bottom: 2px solid #ff6b6b;
-    padding: 8px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-shrink: 0;
-  }
-  .urgent-banner h2 { font-size: 14px; font-weight: 700; color: #ff6b6b; }
-  .urgent-banner p { font-size: 10px; color: #8b949e; }
-  .urgent-banner p span.mint { color: #38d9a9; font-weight: 700; }
-
-  .cards-row {
-    display: flex;
-    gap: 12px;
-    padding: 12px 32px 0;
-    flex: 1;
-    overflow: hidden;
-  }
-  .action-card {
-    flex: 1;
-    border-radius: 8px;
-    padding: 13px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    background: #161b22;
-    overflow: hidden;
-  }
-  .action-card.p1 { border: 2px solid #ff6b6b; border-top-width: 4px; }
-  .action-card.p2 { border: 2px solid #ffd43b; border-top-width: 4px; }
-  .action-card.p3 { border: 2px solid #ffd43b; border-top-width: 4px; }
-
-  .card-rank {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .rank-badge {
-    font-size: 9px;
-    font-weight: 700;
-    border-radius: 3px;
-    padding: 2px 7px;
-    letter-spacing: 0.05em;
-  }
-  .rank-badge.r1 { background: #ff6b6b; color: #fff; }
-  .rank-badge.r2, .rank-badge.r3 { background: #ffd43b; color: #0d1117; }
-
-  .pill-streak {
-    font-size: 8px;
-    font-weight: 700;
-    border-radius: 3px;
-    padding: 1px 5px;
-  }
-  .pill-streak.red { background: #1e0d0d; color: #ff6b6b; border: 1px solid #ff6b6b; }
-  .pill-streak.yellow { background: #1c1a0e; color: #ffd43b; border: 1px solid #ffd43b; }
-
-  .action-card h3 {
-    font-size: 12px;
-    font-weight: 700;
-    color: #e6edf3;
-    line-height: 1.3;
-  }
-  .action-card p.assignee { font-size: 9px; color: #8b949e; }
-  .action-card p.assignee span { color: #58a6ff; font-weight: 600; }
-
-  .target-box {
-    background: #0d1117;
-    border-radius: 4px;
-    padding: 5px 8px;
-  }
-  .target-box p { font-size: 8.5px; color: #8b949e; line-height: 1.5; }
-  .target-box p span.hl-r { color: #ff6b6b; font-weight: 600; }
-  .target-box p span.hl-g { color: #38d9a9; font-weight: 600; }
-  .target-box p span.hl-y { color: #ffd43b; font-weight: 600; }
-  .target-box p code { font-family: monospace; color: #58a6ff; font-size: 8px; }
-
-  .deadline-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    border-radius: 4px;
-    padding: 3px 8px;
-    width: fit-content;
-  }
-  .deadline-badge.red { background: #1e0d0d; border: 1px solid #ff6b6b; }
-  .deadline-badge.yellow { background: #1c1a0e; border: 1px solid #ffd43b; }
-  .deadline-badge p { font-size: 9px; font-weight: 700; }
-  .deadline-badge.red p { color: #ff6b6b; }
-  .deadline-badge.yellow p { color: #ffd43b; }
-
-  .success-line { display: flex; align-items: center; gap: 4px; }
-  .success-line p { font-size: 9px; color: #38d9a9; font-weight: 700; }
-
-  /* 하단 타임라인 바 */
-  .timeline-row {
-    display: flex;
-    align-items: stretch;
-    padding: 10px 32px 12px;
-    gap: 0;
-    flex-shrink: 0;
-    background: #0d1117;
-  }
-  .tl-seg {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 0 4px;
-  }
-  .tl-dot {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    border: 2px solid #ffd43b;
-    background: #0d1117;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .tl-dot p {
-    font-size: 10px;
-    font-weight: 800;
-    color: #ffd43b;
-    line-height: 1;
-  }
-  .tl-dot.deadline { border-color: #ff6b6b; }
-  .tl-dot.deadline p { color: #ff6b6b; }
-  .tl-time { font-size: 8px; font-weight: 700; color: #ffd43b; }
-  .tl-time.deadline { color: #ff6b6b; }
-  .tl-task { font-size: 7.5px; color: #8b949e; text-align: center; line-height: 1.3; }
-  .tl-effect { font-size: 8.5px; font-weight: 700; color: #38d9a9; white-space: nowrap; }
-  .tl-arrow {
-    flex: 0.2;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 3px;
-  }
-  .tl-arrow p { font-size: 14px; color: #30363d; }
 </style>
 </head>
 <body>
 
-  <!-- 상단 긴급 배너 -->
-  <div class="urgent-banner">
-    <h2>오늘 액션아이템 Top 3 &mdash; 저녁 22시 절대 마감</h2>
-    <p>4개 완결 시 4.05 &rarr; <span class="mint">4.28</span> &middot; 미이행 시 내일 4.0 이하 (시스템 재설계)</p>
+  <!-- 헤더 -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 4px; height: 22px; background: #e94560; border-radius: 2px;"></div>
+      <h2 style="font-size: 19px; font-weight: 700; color: #f8f9fa;">2026-05-27 (수) 액션아이템 Top 3 — 오늘이 마지막 기회</h2>
+    </div>
+    <p style="font-size: 11px; color: #8b949e;">06 / 08</p>
   </div>
 
-  <!-- 3열 카드 -->
-  <div class="cards-row">
+  <!-- 카드 3개 -->
+  <div style="flex: 1; display: flex; gap: 14px; margin-bottom: 14px;">
 
-    <div class="action-card p1">
-      <div class="card-rank">
-        <span class="rank-badge r1">1순위</span>
-        <span class="pill-streak red">15일 연속 미달</span>
+    <!-- 카드 1: 1순위 -->
+    <div style="flex: 1; background: #161b22; border: 2px solid #e94560; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #e94560;"></div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 3px;">
+        <div style="background: #e94560; border-radius: 4px; padding: 3px 10px; display: inline-block;">
+          <p style="font-size: 11px; font-weight: 800; color: #0d1117;">&#129351; 1순위</p>
+        </div>
+        <div style="background: rgba(233,69,96,0.2); border: 1px solid #e94560; border-radius: 6px; padding: 3px 8px;">
+          <p style="font-size: 11px; font-weight: 800; color: #e94560;">22시 최후</p>
+        </div>
       </div>
-      <h3>P7 v5.1 + P1 v2<br>로컬 학습</h3>
-      <p class="assignee">담당: <span>Marcus Webb</span></p>
-      <div class="target-box">
-        <p>P7: R&sup2; <span class="hl-r">0.5752</span> &rarr; <span class="hl-g">&ge; 0.62</span> (Optuna 35 trials)</p>
-        <p>P1: Acc <span class="hl-r">54.79%</span> &rarr; <span class="hl-g">&ge; 57%</span> (class_weight)</p>
-        <p>오후 13시 P7 시작 &rarr; 저녁 17시 P1 시작</p>
-        <p><code>train_v5_1.py</code> &rarr; <code>train_pipeline.py</code></p>
+
+      <h3 style="font-size: 14px; font-weight: 700; color: #f8f9fa; margin-bottom: 6px; line-height: 1.3;">P7 v5.1 Actions 경로 수정 + 로컬 병행</h3>
+      <p style="font-size: 10px; color: #8b949e; margin-bottom: 8px; font-style: italic;">16일 연속 미달</p>
+
+      <ul style="list-style: none; padding: 0; margin-bottom: 10px; flex: 1;">
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; train_v5_1.py 절대경로 &rarr; $GITHUB_WORKSPACE</li>
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; Optuna trials 35 &rarr; 20 (30분 작업)</li>
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; P1 class_weight + H2H 피처 추가</li>
+      </ul>
+
+      <div style="background: rgba(233,69,96,0.08); border-radius: 6px; padding: 8px 10px;">
+        <p style="font-size: 11px; color: #f8f9fa; font-weight: 600; margin-bottom: 4px;">목표: P7 R² &ge; 0.62 &nbsp;/&nbsp; P1 Acc &ge; 57%</p>
+        <p style="font-size: 11px; color: #38d9a9; font-weight: 700;">달성 시 &rarr; +0.18 &nbsp; 4.13점</p>
       </div>
-      <div class="deadline-badge red">
-        <p>22:00 KST 최후 마감</p>
-      </div>
-      <div class="success-line">
-        <p>달성 시 +0.18 &rarr; 4.23</p>
+
+      <div style="margin-top: 8px; text-align: center;">
+        <p style="font-size: 10px; color: #8b949e;">담당: Marcus Webb</p>
       </div>
     </div>
 
-    <div class="action-card p2">
-      <div class="card-rank">
-        <span class="rank-badge r2">2순위</span>
-        <span class="pill-streak yellow">7일 연속 미달</span>
+    <!-- 카드 2: 2순위 -->
+    <div style="flex: 1; background: #161b22; border: 2px solid #f5a623; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #f5a623;"></div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 3px;">
+        <div style="background: #f5a623; border-radius: 4px; padding: 3px 10px; display: inline-block;">
+          <p style="font-size: 11px; font-weight: 800; color: #0d1117;">&#129352; 2순위</p>
+        </div>
+        <div style="background: rgba(245,166,35,0.2); border: 1px solid #f5a623; border-radius: 6px; padding: 3px 8px;">
+          <p style="font-size: 11px; font-weight: 800; color: #f5a623;">오전 11시</p>
+        </div>
       </div>
-      <h3>S3 FW 클러스터<br>개선 방향 파일 생성</h3>
-      <p class="assignee">담당: <span>Marcus Webb</span></p>
-      <div class="target-box">
-        <p>파일: <code>reports/s3_fw_improvement_plan.md</code></p>
-        <p>FW Sil <span class="hl-y">0.2085</span> &rarr; <span class="hl-g">0.25</span> 달성 방안</p>
-        <p>추가 피처: dribbles_completed_pct, pressures_att_3rd</p>
-        <p>K=7 유지 vs K=5 대안 (Sil 비교 포함)</p>
+
+      <h3 style="font-size: 14px; font-weight: 700; color: #f8f9fa; margin-bottom: 6px; line-height: 1.3;">S3 FW 클러스터 개선 계획 파일</h3>
+      <p style="font-size: 10px; color: #8b949e; margin-bottom: 8px; font-style: italic;">8일 연속 미달</p>
+
+      <ul style="list-style: none; padding: 0; margin-bottom: 10px; flex: 1;">
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; s3_fw_improvement_plan.md 생성</li>
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; K=7 유지 방안 + K=5 대안 명시</li>
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; 추가 피처 4종 (dribbles_pct 등)</li>
+      </ul>
+
+      <div style="background: rgba(245,166,35,0.08); border-radius: 6px; padding: 8px 10px;">
+        <p style="font-size: 11px; color: #f8f9fa; font-weight: 600; margin-bottom: 4px;">목표: FW Sil 0.2085 &rarr; 0.25</p>
+        <p style="font-size: 11px; color: #38d9a9; font-weight: 700;">달성 시 &rarr; +0.03 &nbsp; 3.98점</p>
       </div>
-      <div class="deadline-badge yellow">
-        <p>11:00 KST</p>
-      </div>
-      <div class="success-line">
-        <p>달성 시 +0.03 &rarr; 4.08</p>
+
+      <div style="margin-top: 8px; text-align: center;">
+        <p style="font-size: 10px; color: #8b949e;">담당: Marcus Webb</p>
       </div>
     </div>
 
-    <div class="action-card p3">
-      <div class="card-rank">
-        <span class="rank-badge r3">3순위</span>
-        <span class="pill-streak yellow">7일 연속 미달</span>
+    <!-- 카드 3: 3순위 -->
+    <div style="flex: 1; background: #161b22; border: 2px solid #f5a623; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #f5a623;"></div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; margin-top: 3px;">
+        <div style="background: #f5a623; border-radius: 4px; padding: 3px 10px; display: inline-block;">
+          <p style="font-size: 11px; font-weight: 800; color: #0d1117;">&#129353; 3순위</p>
+        </div>
+        <div style="background: rgba(245,166,35,0.2); border: 1px solid #f5a623; border-radius: 6px; padding: 3px 8px;">
+          <p style="font-size: 11px; font-weight: 800; color: #f5a623;">오전 11시</p>
+        </div>
       </div>
-      <h3>포트폴리오 demo_script<br>v2.0 최종 완결</h3>
-      <p class="assignee">담당: <span>Marcus Webb</span></p>
-      <div class="target-box">
-        <p>v1.0 초안(05-19) &rarr; <span class="hl-g">v2.0 최종본</span></p>
-        <p>5분 이내 발표 &middot; Q&amp;A 3개 완비</p>
-        <p>발표 흐름: S1 &rarr; S2 &rarr; P8 &rarr; P6 &rarr; S6</p>
-        <p>P8 AUC 0.6612 대응 논리 3문장 포함</p>
+
+      <h3 style="font-size: 14px; font-weight: 700; color: #f8f9fa; margin-bottom: 6px; line-height: 1.3;">demo_script v2.0 최종 완결</h3>
+      <p style="font-size: 10px; color: #8b949e; margin-bottom: 8px; font-style: italic;">8일 연속 미달</p>
+
+      <ul style="list-style: none; padding: 0; margin-bottom: 10px; flex: 1;">
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; 5분 이내 발표 스크립트 완성</li>
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; Q&amp;A 3개 완비 (P1/P7/AUC 대응)</li>
+        <li style="font-size: 11px; color: #8b949e; padding: 3px 0; line-height: 1.5;">&#8226; S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 흐름 완성</li>
+      </ul>
+
+      <div style="background: rgba(245,166,35,0.08); border-radius: 6px; padding: 8px 10px;">
+        <p style="font-size: 11px; color: #f8f9fa; font-weight: 600; margin-bottom: 4px;">목표: demo_script_draft.md v2.0</p>
+        <p style="font-size: 11px; color: #38d9a9; font-weight: 700;">달성 시 &rarr; +0.02 &nbsp; 4.00점</p>
       </div>
-      <div class="deadline-badge yellow">
-        <p>11:00 KST</p>
-      </div>
-      <div class="success-line">
-        <p>달성 시 +0.02 &rarr; 4.10</p>
+
+      <div style="margin-top: 8px; text-align: center;">
+        <p style="font-size: 10px; color: #8b949e;">담당: Marcus Webb</p>
       </div>
     </div>
 
   </div>
 
-  <!-- 하단 4단계 타임라인 바 -->
-  <div class="timeline-row">
-    <div class="tl-seg">
-      <div class="tl-dot"><p>1</p></div>
-      <p class="tl-time">~ 11:00</p>
-      <p class="tl-task">S3 FW 파일<br>+ demo_script</p>
-      <p class="tl-effect">+0.05 (4.10)</p>
-    </div>
-    <div class="tl-arrow"><p>&rarr;</p></div>
-    <div class="tl-seg">
-      <div class="tl-dot"><p>2</p></div>
-      <p class="tl-time">13:00 ~ 16:00</p>
-      <p class="tl-task">P7 v5.1<br>로컬 실행</p>
-      <p class="tl-effect">+0.10 (4.20)</p>
-    </div>
-    <div class="tl-arrow"><p>&rarr;</p></div>
-    <div class="tl-seg">
-      <div class="tl-dot"><p>3</p></div>
-      <p class="tl-time">17:00 ~ 22:00</p>
-      <p class="tl-task">P1 v2<br>로컬 실행</p>
-      <p class="tl-effect">+0.08 (4.28)</p>
-    </div>
-    <div class="tl-arrow"><p>&rarr;</p></div>
-    <div class="tl-seg">
-      <div class="tl-dot deadline"><p>!</p></div>
-      <p class="tl-time deadline">22:00 이전</p>
-      <p class="tl-task">Push &rarr;<br>내일 아침 확인</p>
-      <p class="tl-effect" style="color:#ff6b6b">4.28 복원</p>
-    </div>
+  <!-- 하단 경고 배너 -->
+  <div style="background: rgba(233,69,96,0.12); border-top: 1px solid rgba(233,69,96,0.4); padding: 11px 20px; flex-shrink: 0;">
+    <p style="font-size: 12px; color: #f8f9fa; text-align: center; line-height: 1.5; font-weight: 500;">
+      오늘 저녁 22시 P7+P1 push 없으면 내일 아침 P6+S1+P8 체인 공식 전환 — P7 장기 과제 분류
+    </p>
+    <p style="font-size: 11px; color: #8b949e; text-align: center; margin-top: 3px;">
+      모든 항목 달성 시: 3.95 &rarr; 4.18 (+0.23)
+    </p>
   </div>
 
 </body>

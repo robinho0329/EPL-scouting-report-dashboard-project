@@ -2,229 +2,162 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    width: 960px; height: 540px;
+    width: 960px;
+    height: 540px;
     background: #0d1117;
     font-family: 'Pretendard', 'Noto Sans KR', system-ui, sans-serif;
-    color: #e6edf3;
+    color: #f8f9fa;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    padding: 22px 32px 16px 32px;
   }
-  .result-banner {
-    background: #1e0d0d;
-    border-bottom: 2px solid #ff6b6b;
-    padding: 9px 32px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-shrink: 0;
-  }
-  .result-banner h2 { font-size: 14px; font-weight: 700; color: #ff6b6b; }
-  .result-banner p { font-size: 10px; color: #8b949e; }
-  .banner-sep { width: 1px; height: 14px; background: #ff6b6b; opacity: 0.4; }
-
-  .body-row {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    padding: 12px 32px;
-    gap: 16px;
-  }
-
-  /* 좌측 체크리스트 */
-  .checklist-col {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-  .check-item {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-left: 3px solid #ff6b6b;
-    border-radius: 5px;
-    padding: 9px 12px;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .check-icon { font-size: 15px; flex-shrink: 0; }
-  .check-body { flex: 1; }
-  /* h4 inside check-body: pill is separate div below */
-  .check-body h4 { font-size: 11px; font-weight: 700; color: #e6edf3; }
-  .pill-wrap { display: flex; align-items: center; gap: 6px; margin-top: 2px; margin-bottom: 3px; }
-  .pill-wrap h4 { font-size: 11px; font-weight: 700; color: #e6edf3; flex: 1; }
-  .check-body p.check-meta { font-size: 9px; color: #8b949e; line-height: 1.5; }
-  .check-body p.check-meta span.hl-r { color: #ff6b6b; font-weight: 600; }
-  .check-body p.check-meta span.hl-y { color: #ffd43b; font-weight: 600; }
-  .pill {
-    display: inline-block;
-    background: #ff6b6b;
-    color: #fff;
-    font-size: 8px;
-    font-weight: 700;
-    border-radius: 3px;
-    padding: 2px 6px;
-    white-space: nowrap;
-    letter-spacing: 0.03em;
-    flex-shrink: 0;
-  }
-  .pill.warn {
-    background: #ffd43b;
-    color: #0d1117;
-  }
-
-  /* 우측 요약 + 회복 */
-  .right-col {
-    flex: 1.1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .summary-box {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 7px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .summary-box h4 { font-size: 11px; font-weight: 700; color: #e6edf3; margin-bottom: 4px; }
-  .summary-box p { font-size: 9.5px; color: #8b949e; line-height: 1.6; }
-  .summary-box p span.hl-r { color: #ff6b6b; font-weight: 600; }
-  .summary-box p span.hl-y { color: #ffd43b; font-weight: 600; }
-  .summary-box p span.val { color: #e6edf3; font-weight: 700; }
-
-  .recovery-box {
-    background: #0e1f1b;
-    border: 1.5px solid #38d9a9;
-    border-radius: 7px;
-    padding: 10px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .recovery-box h4 { font-size: 10px; font-weight: 700; color: #38d9a9; margin-bottom: 4px; }
-  .rec-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-  }
-  .rec-row p.rec-task { font-size: 8.5px; color: #8b949e; }
-  .rec-row p.rec-score { font-size: 9px; font-weight: 700; color: #38d9a9; white-space: nowrap; }
-
-  /* 하단 코멘트 박스 */
-  .comment-box {
-    background: #161b22;
-    border-top: 2px solid #ff6b6b;
-    padding: 9px 32px;
-    flex-shrink: 0;
-  }
-  .comment-box p {
-    font-size: 10px;
-    font-style: italic;
-    color: #e6edf3;
-    font-weight: 600;
-  }
-  .comment-box p span.hl-r { color: #ff6b6b; }
 </style>
 </head>
 <body>
 
-  <!-- 상단 달성률 배너 -->
-  <div class="result-banner">
-    <h2>달성 0건 / 미달 4건 &mdash; 달성률 0%</h2>
-    <div class="banner-sep"></div>
-    <p>어제(05-25 월요일) &nbsp;|&nbsp; 평가 4.15 &rarr; 4.05 (&minus;0.10) &nbsp;|&nbsp; 화요일 경고 집행</p>
+  <!-- 헤더 -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 4px; height: 22px; background: #ff6b6b; border-radius: 2px;"></div>
+      <h2 style="font-size: 19px; font-weight: 700; color: #f8f9fa;">2026-05-26 (화) 액션아이템 — 4개 중 0개 달성</h2>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="background: rgba(255,107,107,0.15); border: 1px solid #ff6b6b; border-radius: 6px; padding: 5px 14px; text-align: center;">
+        <p style="font-size: 18px; font-weight: 800; color: #ff6b6b; line-height: 1;">0 / 4</p>
+        <p style="font-size: 10px; color: #8b949e;">달성률 0%</p>
+      </div>
+      <p style="font-size: 11px; color: #8b949e;">05 / 08</p>
+    </div>
   </div>
 
-  <div class="body-row">
+  <!-- 2x2 카드 그리드 -->
+  <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 14px;">
 
-    <!-- 체크리스트 4항목 -->
-    <div class="checklist-col">
-      <div class="check-item">
-        <p class="check-icon">&#10060;</p>
-        <div class="check-body">
-          <div class="pill-wrap">
-            <h4>P7 v5.1 로컬 학습 (R&sup2; &ge; 0.62)</h4>
-            <span class="pill">15일 연속</span>
+    <!-- 카드 1: P7 v5.1 -->
+    <div style="background: #161b22; border: 2px solid #ff6b6b; border-radius: 10px; padding: 16px; display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <p style="font-size: 22px; line-height: 1;">&#10060;</p>
+          <div>
+            <p style="font-size: 13px; font-weight: 700; color: #f8f9fa; line-height: 1.3;">P7 v5.1 로컬 학습</p>
+            <p style="font-size: 11px; color: #8b949e; margin-top: 2px;">R² &ge; 0.62 목표</p>
           </div>
-          <p class="check-meta">어제 저녁 22시 데드라인 또 미이행 &middot; 현재 <span class="hl-r">R&sup2; 0.5752</span> &middot; 목표 0.62 갭 0.0448</p>
+        </div>
+        <div style="background: rgba(255,107,107,0.2); border: 1px solid #ff6b6b; border-radius: 20px; padding: 3px 10px; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #ff6b6b;">16일 연속</p>
         </div>
       </div>
-      <div class="check-item">
-        <p class="check-icon">&#10060;</p>
-        <div class="check-body">
-          <div class="pill-wrap">
-            <h4>P1 v2 로컬 학습 (Acc &ge; 57%)</h4>
-            <span class="pill">15일 연속</span>
-          </div>
-          <p class="check-meta">어제 저녁 22시 데드라인 또 미이행 &middot; 현재 <span class="hl-r">Acc 54.79%</span> &middot; 목표 57% 갭 2.21%p</p>
-        </div>
-      </div>
-      <div class="check-item" style="border-left-color:#ffd43b">
-        <p class="check-icon">&#10060;</p>
-        <div class="check-body">
-          <div class="pill-wrap">
-            <h4>S3 FW 개선 방향 파일 생성</h4>
-            <span class="pill warn">7일 연속</span>
-          </div>
-          <p class="check-meta"><span class="hl-y">reports/s3_fw_improvement_plan.md</span> 파일 없음</p>
-        </div>
-      </div>
-      <div class="check-item" style="border-left-color:#ffd43b">
-        <p class="check-icon">&#10060;</p>
-        <div class="check-body">
-          <div class="pill-wrap">
-            <h4>포트폴리오 demo_script v2.0</h4>
-            <span class="pill warn">7일 연속</span>
-          </div>
-          <p class="check-meta">v1.0 초안(05-19) 상태 그대로 &middot; v2.0 최종본 미완성</p>
-        </div>
+      <div style="background: rgba(255,107,107,0.06); border-radius: 6px; padding: 8px 10px; margin-top: auto;">
+        <p style="font-size: 10px; color: #8b949e; line-height: 1.5;">어제 저녁 22시 최후 마감 미이행</p>
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 600; margin-top: 3px;">P7 현재: 0.5752 (목표 0.62, 갭 &minus;0.0448)</p>
       </div>
     </div>
 
-    <!-- 우측 요약 + 회복 시나리오 -->
-    <div class="right-col">
-      <div class="summary-box">
-        <h4>어제 달성률 요약</h4>
-        <p>달성률: <span class="hl-r">0 / 4 (0%)</span></p>
-        <p>평점: <span class="val">4.15 &rarr; 4.05</span> <span class="hl-r">(&minus;0.10)</span></p>
-        <p>감점: P7/P1 15일 &minus;0.07 &middot; S3 FW &minus;0.02 &middot; demo &minus;0.01</p>
-        <p>경고 발동: <span class="hl-r">오늘 22시 미이행 &rarr; 내일 4.0 이하</span></p>
+    <!-- 카드 2: P1 v2 -->
+    <div style="background: #161b22; border: 2px solid #ff6b6b; border-radius: 10px; padding: 16px; display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <p style="font-size: 22px; line-height: 1;">&#10060;</p>
+          <div>
+            <p style="font-size: 13px; font-weight: 700; color: #f8f9fa; line-height: 1.3;">P1 v2 로컬 학습</p>
+            <p style="font-size: 11px; color: #8b949e; margin-top: 2px;">Acc &ge; 57% 목표</p>
+          </div>
+        </div>
+        <div style="background: rgba(255,107,107,0.2); border: 1px solid #ff6b6b; border-radius: 20px; padding: 3px 10px; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #ff6b6b;">16일 연속</p>
+        </div>
       </div>
-      <div class="recovery-box">
-        <h4>오늘 전부 달성 시 복원 시나리오</h4>
-        <div class="rec-row">
-          <p class="rec-task">S3 FW 파일 (11시)</p>
-          <p class="rec-score">+0.03 &rarr; 4.08</p>
+      <div style="background: rgba(255,107,107,0.06); border-radius: 6px; padding: 8px 10px; margin-top: auto;">
+        <p style="font-size: 10px; color: #8b949e; line-height: 1.5;">어제 저녁 22시 최후 마감 미이행</p>
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 600; margin-top: 3px;">P1 현재: 54.79% (목표 57%, D클래스 recall ≈ 0)</p>
+      </div>
+    </div>
+
+    <!-- 카드 3: S3 FW -->
+    <div style="background: #161b22; border: 2px solid #ff6b6b; border-radius: 10px; padding: 16px; display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <p style="font-size: 22px; line-height: 1;">&#10060;</p>
+          <div>
+            <p style="font-size: 13px; font-weight: 700; color: #f8f9fa; line-height: 1.3;">S3 FW 개선 방향 파일 생성</p>
+            <p style="font-size: 11px; color: #8b949e; margin-top: 2px;">s3_fw_improvement_plan.md</p>
+          </div>
         </div>
-        <div class="rec-row">
-          <p class="rec-task">demo_script v2.0 (11시)</p>
-          <p class="rec-score">+0.02 &rarr; 4.10</p>
+        <div style="background: rgba(255,107,107,0.2); border: 1px solid #ff6b6b; border-radius: 20px; padding: 3px 10px; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #ff6b6b;">8일 연속</p>
         </div>
-        <div class="rec-row">
-          <p class="rec-task">P7 R&sup2; &ge; 0.62 (오후)</p>
-          <p class="rec-score">+0.10 &rarr; 4.20</p>
+      </div>
+      <div style="background: rgba(255,107,107,0.06); border-radius: 6px; padding: 8px 10px; margin-top: auto;">
+        <p style="font-size: 10px; color: #8b949e; line-height: 1.5;">reports/s3_fw_improvement_plan.md 없음</p>
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 600; margin-top: 3px;">FW Sil: 0.2085 (목표 0.25, 갭 &minus;0.0415)</p>
+      </div>
+    </div>
+
+    <!-- 카드 4: demo_script v2.0 -->
+    <div style="background: #161b22; border: 2px solid #ff6b6b; border-radius: 10px; padding: 16px; display: flex; flex-direction: column;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <p style="font-size: 22px; line-height: 1;">&#10060;</p>
+          <div>
+            <p style="font-size: 13px; font-weight: 700; color: #f8f9fa; line-height: 1.3;">포트폴리오 demo_script v2.0</p>
+            <p style="font-size: 11px; color: #8b949e; margin-top: 2px;">5분 발표 + Q&amp;A 3개</p>
+          </div>
         </div>
-        <div class="rec-row">
-          <p class="rec-task">P1 Acc &ge; 57% (저녁)</p>
-          <p class="rec-score">+0.08 &rarr; 4.28</p>
+        <div style="background: rgba(255,107,107,0.2); border: 1px solid #ff6b6b; border-radius: 20px; padding: 3px 10px; flex-shrink: 0;">
+          <p style="font-size: 11px; font-weight: 800; color: #ff6b6b;">8일 연속</p>
         </div>
+      </div>
+      <div style="background: rgba(255,107,107,0.06); border-radius: 6px; padding: 8px 10px; margin-top: auto;">
+        <p style="font-size: 10px; color: #8b949e; line-height: 1.5;">v1.0 초안(05-19) 그대로 — 8일째 미완성</p>
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 600; margin-top: 3px;">S1&rarr;S2&rarr;P8&rarr;P6&rarr;S6 흐름 미완성</p>
       </div>
     </div>
 
   </div>
 
-  <!-- 하단 코멘트 박스 -->
-  <div class="comment-box">
-    <p>&ldquo;<span class="hl-r">4개 중 0개. 15일입니다.</span> 경고를 넘어 최후통첩입니다. &mdash; 김태현&rdquo;</p>
+  <!-- 하단 점수 타임라인 -->
+  <div style="margin-top: 14px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px 16px; flex-shrink: 0;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+
+      <div style="text-align: center; flex-shrink: 0;">
+        <p style="font-size: 16px; font-weight: 800; color: #ffd43b; line-height: 1;">4.05</p>
+        <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">전일</p>
+      </div>
+
+      <div style="flex: 1; height: 2px; background: #ff6b6b; border-radius: 1px;"></div>
+
+      <div style="text-align: center; flex-shrink: 0; padding: 4px 8px; background: rgba(255,107,107,0.12); border-radius: 4px;">
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 600;">&minus;0.08</p>
+        <p style="font-size: 9px; color: #8b949e;">P7/P1 16일</p>
+      </div>
+
+      <div style="flex: 1; height: 2px; background: #ff6b6b; border-radius: 1px;"></div>
+
+      <div style="text-align: center; flex-shrink: 0;">
+        <p style="font-size: 16px; font-weight: 800; color: #ffd43b; line-height: 1;">3.97</p>
+        <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">중간</p>
+      </div>
+
+      <div style="flex: 1; height: 2px; background: #ff6b6b; border-radius: 1px;"></div>
+
+      <div style="text-align: center; flex-shrink: 0; padding: 4px 8px; background: rgba(255,107,107,0.12); border-radius: 4px;">
+        <p style="font-size: 10px; color: #ff6b6b; font-weight: 600;">&minus;0.02</p>
+        <p style="font-size: 9px; color: #8b949e;">S3 FW 파일</p>
+      </div>
+
+      <div style="flex: 1; height: 2px; background: #ff6b6b; border-radius: 1px;"></div>
+
+      <div style="text-align: center; flex-shrink: 0; background: rgba(255,107,107,0.15); border: 1.5px solid #ff6b6b; border-radius: 8px; padding: 6px 12px;">
+        <p style="font-size: 20px; font-weight: 800; color: #ff6b6b; line-height: 1;">3.95</p>
+        <p style="font-size: 9px; color: #8b949e; margin-top: 2px;">수요일 집행 완료</p>
+      </div>
+
+    </div>
   </div>
 
 </body>
