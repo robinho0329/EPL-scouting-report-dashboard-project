@@ -1,7 +1,7 @@
 {
   "pipeline": "P5 Player Clustering",
   "version": "v2",
-  "improvement": "피처 22개→13개 정제(원시 카운트 제거, 수비지표 추가) + n_init 10→20 | Silhouette K=3: 0.2442→0.2851 (+0.041)",
+  "improvement": "\ud53c\ucc98 22\uac1c\u219213\uac1c \uc815\uc81c(\uc6d0\uc2dc \uce74\uc6b4\ud2b8 \uc81c\uac70, \uc218\ube44\uc9c0\ud45c \ucd94\uac00) + n_init 10\u219220 | Silhouette K=3: 0.2442\u21920.2851 (+0.041)",
   "data": {
     "source_features": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\features\\player_features.parquet",
     "source_season": "C:\\Users\\xcv54\\workspace\\EPL project\\data\\processed\\player_season_stats.parquet",
@@ -24,8 +24,27 @@
       "sot_p90"
     ],
     "n_features": 13,
-    "removed_features_v2": ["red_cards_p90", "penalties_p90", "gls", "ast", "g_a", "g_pk", "90s", "min", "mp", "starts", "age_used", "height_cm", "consistency_mean"],
-    "added_features_v2": ["tackles_p90", "interceptions_p90", "shots_p90", "sot_p90"]
+    "removed_features_v2": [
+      "red_cards_p90",
+      "penalties_p90",
+      "gls",
+      "ast",
+      "g_a",
+      "g_pk",
+      "90s",
+      "min",
+      "mp",
+      "starts",
+      "age_used",
+      "height_cm",
+      "consistency_mean"
+    ],
+    "added_features_v2": [
+      "tackles_p90",
+      "interceptions_p90",
+      "shots_p90",
+      "sot_p90"
+    ]
   },
   "pca": {
     "n_components": 7,
@@ -351,6 +370,10 @@
     "cluster_radar_charts.png",
     "cluster_heatmap.png",
     "clustering_methods_comparison.png",
+    "clusters_k6_umap.png",
+    "cluster_k6_radar.png",
+    "cluster_k6_distribution.png",
+    "cluster_k6_heatmap.png",
     "clusters_k6_umap.png",
     "cluster_k6_radar.png",
     "cluster_k6_distribution.png",
