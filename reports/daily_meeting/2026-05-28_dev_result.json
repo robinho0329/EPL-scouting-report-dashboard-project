@@ -1,0 +1,23 @@
+{
+  "date": "2026-05-28",
+  "results": [
+    {
+      "item": "P7 v5.1 Actions 경로 수정 + 로컬 병행 실행 (16일 연속 미달 — 오늘 저",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": false,
+      "error": "-28 22:24:49,963 [INFO] Optuna best val AUC=0.6260, params={'n_estimators': 252, 'max_depth': 6, 'learning_rate': 0.0225184770889096, 'subsample': 0.7327103183621441, 'colsample_bytree': 0.510005204664907, 'min_child_weight': 4, 'gamma': 0.5396201068027978, 'reg_alpha': 0.04865404358658991, 'reg_lambda': 0.00010651522920218802}\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
+    },
+    {
+      "item": "S3 FW 클러스터 개선 방향 파일 생성 (8일 연속 미달): `reports/s3_fw_",
+      "script": "models/p5_clustering/run_clustering_k6.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "포트폴리오 demo_script v2.0 최종 완결 (8일 연속 미달): `reports/",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": true,
+      "reason": "중복 스킵"
+    }
+  ]
+}
