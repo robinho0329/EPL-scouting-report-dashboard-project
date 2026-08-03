@@ -9,9 +9,7 @@ P8 이적 적응 모델 학습 데이터 확장 목적:
 데이터 출처: FBref (undetected-chromedriver로 Cloudflare 우회, 레이트 리밋 6초)
 
 실행 방법:
-  VS Code 터미널에서:
-    cd "C:\\Users\\xcv54\\workspace\\EPL project"
-    .venv\\Scripts\\activate
+  저장소 루트에서 (가상환경 활성화 후):
     python scripts/p8_championship_crawler.py
 
   ※ Chrome 브라우저 창이 자동으로 열립니다 (닫지 마세요)
