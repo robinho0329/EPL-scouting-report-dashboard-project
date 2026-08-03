@@ -160,8 +160,8 @@ def build_agent_prompt(items: list[dict], agent_type: str, meeting_path: Path) -
 {items_text}
 
 ## 지침
-- `C:/Users/xcv54/workspace/EPL project/` 기준으로 작업
-- 가상환경: `.venv/Scripts/python`
+- `{ROOT}` 기준으로 작업
+- 파이썬은 지금 PATH 에 있는 `python` 을 쓴다 (로컬은 .venv, Actions 는 setup-python)
 - 기존 train 스크립트(train_v2.py, train_v3.py 등)를 참고해 개선 버전 작성
 - 모델 학습 후 results_summary.json 업데이트
 - random_state=42 일관 사용
@@ -177,7 +177,7 @@ def build_agent_prompt(items: list[dict], agent_type: str, meeting_path: Path) -
 {items_text}
 
 ## 지침
-- `C:/Users/xcv54/workspace/EPL project/dashboard/` 기준으로 작업
+- `{ROOT}/dashboard/` 기준으로 작업
 - `@st.cache_data` 데코레이터 사용, 기존 페이지 스타일 유지
 - 신규 페이지는 `pages/` 디렉토리에, 메뉴 추가는 `app.py`에
 - AST 문법 검사 후 git add까지만 수행 (커밋은 오케스트레이터가 함)"""
@@ -268,7 +268,7 @@ def check_streamlit_and_fix(streamlit_url: str) -> bool:
 
 ## 작업
 1. 에러 원인 분석
-2. `C:/Users/xcv54/workspace/EPL project/dashboard/` 내 해당 파일 수정
+2. `{ROOT}/dashboard/` 내 해당 파일 수정
    - FileNotFoundError → Path(__file__) 기반 상대경로로 교체
    - ModuleNotFoundError → requirements.txt 추가
    - KeyError / AttributeError → 컬럼명 또는 데이터 로딩 수정
