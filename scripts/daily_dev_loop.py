@@ -9,7 +9,9 @@
 """
 
 import logging
+import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import date, datetime, timedelta
@@ -36,7 +38,13 @@ logging.basicConfig(
 logger = logging.getLogger("daily_dev_loop")
 
 # ─── Claude CLI 경로 ──────────────────────────────────────────────────────────
-CLAUDE_CLI = r"C:\Users\xcv54\AppData\Roaming\npm\claude.cmd"
+# 설치 위치는 사람마다 다르다. PATH 에서 찾고, 없으면 CLAUDE_CLI 환경변수를 쓴다.
+CLAUDE_CLI = (
+    os.environ.get("CLAUDE_CLI")
+    or shutil.which("claude")
+    or shutil.which("claude.cmd")
+    or "claude"
+)
 
 # ─── Streamlit Cloud 앱 URL ───────────────────────────────────────────────────
 # ※ 실제 배포 URL로 교체 필요

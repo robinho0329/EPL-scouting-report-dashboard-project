@@ -4,6 +4,7 @@
 EPL 데이터 프로젝트 - 전처리 및 탐색적 데이터 분석(EDA) 종합 보고서 생성기 v2
 """
 
+from pathlib import Path
 import json
 import os
 from docx import Document
@@ -14,8 +15,11 @@ from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 import copy
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # ─── 파일 경로 설정 ───────────────────────────────────────────────────────────
-BASE = "C:/Users/xcv54/workspace/EPL project"
+BASE = str(_PROJECT_ROOT)
 JSON_MATCH   = f"{BASE}/reports/analysis_match_results.json"
 JSON_SQUAD   = f"{BASE}/reports/analysis_fbref_squad.json"
 JSON_LOGS    = f"{BASE}/reports/analysis_fbref_matchlogs.json"

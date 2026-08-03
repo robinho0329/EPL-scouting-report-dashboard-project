@@ -1,6 +1,7 @@
 """
 Build EDA_시각화.ipynb programmatically using nbformat.
 """
+from pathlib import Path
 import nbformat
 from nbformat.v4 import new_notebook, new_markdown_cell, new_code_cell
 
@@ -39,6 +40,9 @@ import matplotlib.ticker as mticker
 import seaborn as sns
 from matplotlib.patches import FancyBboxPatch
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # ── 한글 폰트 설정 ──────────────────────────────────────────────────────────
 plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
@@ -53,10 +57,10 @@ EPL_PALETTE = [EPL_PURPLE, EPL_CYAN, EPL_MAGENTA, EPL_GREEN, EPL_DARK,
                '#FF6B35', '#FFD700', '#1DB954', '#0A84FF', '#FF2D55']
 
 # ── 저장 디렉터리 ─────────────────────────────────────────────────────────
-FIG_DIR = r'C:/Users/xcv54/workspace/EPL project/reports/figures'
+FIG_DIR = str(_PROJECT_ROOT / "reports" / "figures")
 os.makedirs(FIG_DIR, exist_ok=True)
 
-BASE = r'C:/Users/xcv54/workspace/EPL project'
+BASE = str(_PROJECT_ROOT)
 
 # ── 데이터 로딩 ──────────────────────────────────────────────────────────────
 print("데이터 로딩 중...")
@@ -1399,7 +1403,7 @@ nb.metadata = {
     }
 }
 
-out_path = r'C:/Users/xcv54/workspace/EPL project/notebooks/EDA_시각화.ipynb'
+out_path = str(_PROJECT_ROOT / "notebooks" / "EDA_시각화.ipynb")
 with open(out_path, 'w', encoding='utf-8') as f:
     nbformat.write(nb, f)
 

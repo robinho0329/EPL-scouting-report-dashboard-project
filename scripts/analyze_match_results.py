@@ -3,16 +3,20 @@ EPL Match Results – Comprehensive Analysis Script
 For Korean preprocessing-EDA report
 RESEARCH ONLY – writes output JSON only
 """
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import json
 import os
 import warnings
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 warnings.filterwarnings("ignore")
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-BASE       = "C:/Users/xcv54/workspace/EPL project"
+BASE       = str(_PROJECT_ROOT)
 # The spec says data/epl_final.csv but the file lives at root – check both
 CSV_CANDIDATES = [
     BASE + "/data/epl_final.csv",

@@ -3,15 +3,19 @@ EPL Team Season Summary - Comprehensive Statistical Analysis
 Produces structured JSON report for Korean preprocessing-EDA report
 """
 
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import json
 import os
 from collections import defaultdict
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # ── paths ──────────────────────────────────────────────────────────────────────
-PARQUET_PATH = "C:/Users/xcv54/workspace/EPL project/data/processed/team_season_summary.parquet"
-OUTPUT_PATH  = "C:/Users/xcv54/workspace/EPL project/reports/analysis_team_season.json"
+PARQUET_PATH = str(_PROJECT_ROOT / "data" / "processed" / "team_season_summary.parquet")
+OUTPUT_PATH  = str(_PROJECT_ROOT / "reports" / "analysis_team_season.json")
 
 os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 

@@ -49,6 +49,9 @@ import matplotlib.ticker as mticker
 import seaborn as sns
 from pathlib import Path
 import warnings
+
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
 warnings.filterwarnings('ignore')
 
 # 한글 폰트 설정
@@ -57,7 +60,7 @@ plt.rcParams['axes.unicode_minus'] = False
 plt.rcParams['figure.dpi'] = 100
 
 # 경로 설정
-BASE = Path(r'C:/Users/xcv54/workspace/EPL project')
+BASE = Path(str(_PROJECT_ROOT))
 FIG_DIR = BASE / 'reports' / 'figures'
 FIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -922,5 +925,5 @@ md("""## 10. 요약 및 주요 발견
 nb.cells = cells
 
 import nbformat
-nbformat.write(nb, 'C:/Users/xcv54/workspace/EPL project/notebooks/eda.ipynb')
+nbformat.write(nb, str(_PROJECT_ROOT / "notebooks" / "eda.ipynb"))
 print('Notebook saved successfully!')

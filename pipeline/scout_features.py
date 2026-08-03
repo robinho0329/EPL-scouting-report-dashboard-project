@@ -7,16 +7,20 @@ Reads all processed EPL data and generates enriched datasets for scouting:
   3. scout_transfer_history.parquet — one row per transfer event
 """
 
+from pathlib import Path
 import os
 import warnings
 import numpy as np
 import pandas as pd
 from scipy import stats as sp_stats
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 warnings.filterwarnings("ignore")
 
 # ── paths ────────────────────────────────────────────────────────────────────
-BASE = r"C:\Users\xcv54\workspace\EPL project"
+BASE = str(_PROJECT_ROOT)
 PROCESSED = os.path.join(BASE, "data", "processed")
 SCOUT = os.path.join(BASE, "data", "scout")
 os.makedirs(SCOUT, exist_ok=True)

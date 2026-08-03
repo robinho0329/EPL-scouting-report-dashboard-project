@@ -14,11 +14,14 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent
+
 warnings.filterwarnings("ignore")
 
-BASE_DIR = "C:/Users/xcv54/workspace/EPL project/data/raw/fbref"
-PARQUET_PATH = "C:/Users/xcv54/workspace/EPL project/data/processed/player_match_logs.parquet"
-REPORTS_DIR = "C:/Users/xcv54/workspace/EPL project/reports"
+BASE_DIR = str(_PROJECT_ROOT / "data" / "raw" / "fbref")
+PARQUET_PATH = str(_PROJECT_ROOT / "data" / "processed" / "player_match_logs.parquet")
+REPORTS_DIR = str(_PROJECT_ROOT / "reports")
 OUTPUT_PATH = f"{REPORTS_DIR}/analysis_fbref_matchlogs.json"
 
 os.makedirs(REPORTS_DIR, exist_ok=True)

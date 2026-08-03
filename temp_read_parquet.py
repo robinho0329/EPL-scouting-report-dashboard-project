@@ -1,10 +1,14 @@
+from pathlib import Path
 import pandas as pd
+
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent
 
 # File 1: transfer_targets
 print('='*80)
 print('FILE 1: s2_v4_2025_transfer_targets.parquet')
 print('='*80)
-df1 = pd.read_parquet(r'C:\Users\xcv54\workspace\EPL project\data\scout\s2_v4_2025_transfer_targets.parquet')
+df1 = pd.read_parquet(str(_PROJECT_ROOT / "data" / "scout" / "s2_v4_2025_transfer_targets.parquet"))
 print(f'Shape: {df1.shape}')
 print(f'Columns: {list(df1.columns)}')
 print('First 15 rows:')
@@ -18,7 +22,7 @@ print()
 print('='*80)
 print('FILE 2: s2_v4_undervalued.parquet')
 print('='*80)
-df2 = pd.read_parquet(r'C:\Users\xcv54\workspace\EPL project\data\scout\s2_v4_undervalued.parquet')
+df2 = pd.read_parquet(str(_PROJECT_ROOT / "data" / "scout" / "s2_v4_undervalued.parquet"))
 print(f'Shape: {df2.shape}')
 if 'season' in df2.columns:
     print('season value_counts:')
@@ -31,7 +35,7 @@ print()
 print('='*80)
 print('FILE 3: s2_v4_all_predictions.parquet')
 print('='*80)
-df3 = pd.read_parquet(r'C:\Users\xcv54\workspace\EPL project\data\scout\s2_v4_all_predictions.parquet')
+df3 = pd.read_parquet(str(_PROJECT_ROOT / "data" / "scout" / "s2_v4_all_predictions.parquet"))
 print(f'Shape: {df3.shape}')
 if 'season' in df3.columns:
     print('season value_counts:')

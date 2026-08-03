@@ -13,6 +13,9 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 warnings.filterwarnings("ignore")
 
 # ─────────────────────────────────────────────
@@ -58,9 +61,9 @@ def safe_json(obj):
 # ─────────────────────────────────────────────
 # 1. Discover all squad_values.csv files
 # ─────────────────────────────────────────────
-BASE = r"C:/Users/xcv54/workspace/EPL project/data/raw/transfermarkt"
-PARQUET = r"C:/Users/xcv54/workspace/EPL project/data/processed/player_season_stats.parquet"
-REPORT = r"C:/Users/xcv54/workspace/EPL project/reports/analysis_transfermarkt.json"
+BASE = str(_PROJECT_ROOT / "data" / "raw" / "transfermarkt")
+PARQUET = str(_PROJECT_ROOT / "data" / "processed" / "player_season_stats.parquet")
+REPORT = str(_PROJECT_ROOT / "reports" / "analysis_transfermarkt.json")
 
 all_csvs = sorted(glob.glob(os.path.join(BASE, "**", "squad_values.csv"), recursive=True))
 

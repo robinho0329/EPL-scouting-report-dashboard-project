@@ -9,6 +9,9 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # ─────────────────────────────────────────
 # Helpers
 # ─────────────────────────────────────────
@@ -89,9 +92,9 @@ def analyze_file(path: str) -> dict:
 # Load all files
 # ─────────────────────────────────────────
 
-PROCESSED_DIR = "C:/Users/xcv54/workspace/EPL project/data/processed/"
-DASHBOARD_DIR = "C:/Users/xcv54/workspace/EPL project/data/dashboard/"
-REPORT_PATH   = "C:/Users/xcv54/workspace/EPL project/reports/analysis_processed.json"
+PROCESSED_DIR = str(_PROJECT_ROOT / "data" / "processed")
+DASHBOARD_DIR = str(_PROJECT_ROOT / "data" / "dashboard")
+REPORT_PATH   = str(_PROJECT_ROOT / "reports" / "analysis_processed.json")
 
 os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
 
@@ -522,7 +525,7 @@ cross["key_derived_columns"] = derived_cols_analysis
 
 
 # ── 6. Pipeline summary ──
-raw_dir = "C:/Users/xcv54/workspace/EPL project/data/raw/"
+raw_dir = str(_PROJECT_ROOT / "data" / "raw")
 pipeline = {
     "raw_input": {"total_files": 0, "total_size_bytes": 0, "file_types": {}},
     "processed_output": [],

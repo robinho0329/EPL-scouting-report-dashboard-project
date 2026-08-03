@@ -20,12 +20,15 @@ from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 warnings.filterwarnings("ignore")
 
 # ─────────────────────────────────────────────────────────────────
 # 경로 설정
 # ─────────────────────────────────────────────────────────────────
-BASE_DIR = Path("C:/Users/xcv54/workspace/EPL project")
+BASE_DIR = Path(str(_PROJECT_ROOT))
 DATA_DIR  = BASE_DIR / "data" / "processed"
 SCOUT_DIR = BASE_DIR / "data" / "scout"
 MODELS_DIR = BASE_DIR / "models"

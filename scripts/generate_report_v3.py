@@ -7,6 +7,7 @@ EPL 전처리 EDA 보고서 생성 스크립트 v3
 - 폰트: 맑은 고딕
 """
 
+from pathlib import Path
 import os
 import json
 from docx import Document
@@ -19,7 +20,7 @@ from docx.oxml import OxmlElement
 # ─────────────────────────────────────────────
 # 경로 설정
 # ─────────────────────────────────────────────
-BASE_DIR = r"C:\Users\xcv54\workspace\EPL project"
+BASE_DIR = str(_PROJECT_ROOT)
 REPORTS_DIR = os.path.join(BASE_DIR, "reports")
 FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
 OUTPUT_PATH = os.path.join(REPORTS_DIR, "전처리_EDA_보고서_v2.docx")
@@ -48,6 +49,9 @@ doc = Document()
 
 # 기본 페이지 여백 설정
 from docx.shared import Cm
+
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
 for section in doc.sections:
     section.top_margin    = Cm(2.5)
     section.bottom_margin = Cm(2.5)

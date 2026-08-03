@@ -3,6 +3,7 @@ EPL EDA Visualization Script
 Generates 30 PNG plots covering match, team, player, matchlog, value, correlation, and era analyses.
 """
 
+from pathlib import Path
 import os
 import warnings
 warnings.filterwarnings('ignore')
@@ -15,11 +16,14 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-BASE = r'C:/Users/xcv54/workspace/EPL project'
+BASE = str(_PROJECT_ROOT)
 DATA = os.path.join(BASE, 'data')
 PROC = os.path.join(DATA, 'processed')
 FIGS = os.path.join(BASE, 'reports', 'figures')

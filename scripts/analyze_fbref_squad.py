@@ -14,11 +14,14 @@ from collections import defaultdict, Counter
 import pandas as pd
 import numpy as np
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 warnings.filterwarnings("ignore")
 
-BASE_DIR = r"C:/Users/xcv54/workspace/EPL project/data/raw/fbref"
-PROCESSED_PARQUET = r"C:/Users/xcv54/workspace/EPL project/data/processed/team_season_summary.parquet"
-OUTPUT_JSON = r"C:/Users/xcv54/workspace/EPL project/reports/analysis_fbref_squad.json"
+BASE_DIR = str(_PROJECT_ROOT / "data" / "raw" / "fbref")
+PROCESSED_PARQUET = str(_PROJECT_ROOT / "data" / "processed" / "team_season_summary.parquet")
+OUTPUT_JSON = str(_PROJECT_ROOT / "reports" / "analysis_fbref_squad.json")
 
 # ─────────────────────────────────────────────
 # 1. Find all squad_stats.csv files

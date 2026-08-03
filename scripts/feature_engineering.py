@@ -25,12 +25,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+# 프로젝트 루트 — 절대경로를 박으면 다른 PC에서 클론했을 때 이 줄에서 멈춘다
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-BASE = Path("C:/Users/xcv54/workspace/EPL project")
+BASE = Path(str(_PROJECT_ROOT))
 DATA_PROC = BASE / "data" / "processed"
 DATA_FEAT = BASE / "data" / "features"
 DATA_FEAT.mkdir(parents=True, exist_ok=True)
