@@ -85,12 +85,46 @@ def parse_action_items(note: Path) -> list:
     return items
 
 
-def resolve_script(content: str) -> Tuple[Optional[Path], Optional[Path]]:
-    """액션아이템 내용 → (스크립트 경로, 모델 디렉토리) 반환."""
-    lower = content.lower()
-    for keys, dirname, preferred in MODEL_MAP:
-        if not any(k in lower for k in keys):
+def _match_rank(lower: str, keys: list) -> Optional[Tuple[int, int]]:
+    """액션아이템 본문과 키워드 목록의 매칭 점수 → (우선순위, 등장위치). 없으면 None.
+
+    우선순위 0 = 명시적 모델 ID(p7, s6 …), 1 = 서술 키워드(성장 곡선 …).
+    ID는 단어 경계로 찾아 'p1'이 'p10' 같은 문자열에 걸리지 않게 한다.
+    """
+    best = None
+    for k in keys:
+        if re.fullmatch(r"[ps]\d", k):
+            m = re.search(rf"\b{k}\b", lower)
+            rank = 0
+        else:
+            m = re.search(re.escape(k), lower)
+            rank = 1
+        if m is None:
             continue
+        cand = (rank, m.start())
+        if best is None or cand < best:
+            best = cand
+    return best
+
+
+def resolve_script(content: str) -> Tuple[Optional[Path], Optional[Path]]:
+    """액션아이템 내용 → (스크립트 경로, 모델 디렉토리) 반환.
+
+    한 항목이 여러 모델을 언급하는 일이 잦다(예: "P7 개선 — P8 대비 AUC 열세").
+    MODEL_MAP 순서대로 첫 매치를 채택하면 목록 앞에 있는 모델이 이겨서
+    엉뚱한 학습이 돈다. 명시적 ID를 서술 키워드보다 우선하고, 같은 등급이면
+    본문에 먼저 나온 쪽을 택한다 — 제목이 앞에 오므로 항목이 실제 겨냥한 모델이 잡힌다.
+    """
+    lower = content.lower()
+    ranked = sorted(
+        (
+            (rank, entry)
+            for entry in MODEL_MAP
+            if (rank := _match_rank(lower, entry[0])) is not None
+        ),
+        key=lambda pair: pair[0],
+    )
+    for _, (keys, dirname, preferred) in ranked:
         model_dir = ROOT / "models" / dirname
         if not model_dir.exists():
             print(f"  ⚠️  디렉토리 없음: models/{dirname}")
