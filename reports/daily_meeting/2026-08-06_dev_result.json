@@ -1,0 +1,23 @@
+{
+  "date": "2026-08-06",
+  "results": [
+    {
+      "item": "P7 성장 곡선 v5.1 Actions 단독 실행: `models/p7_growth_cur",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": false,
+      "error": "-06 14:43:03,264 [INFO] Optuna best val AUC=0.6318, params={'n_estimators': 584, 'max_depth': 6, 'learning_rate': 0.012187080542843112, 'subsample': 0.6921555966726817, 'colsample_bytree': 0.8016633658988104, 'min_child_weight': 5, 'gamma': 0.7030943674696017, 'reg_alpha': 0.0005080459362397396, 'reg_lambda': 4.979457043233078}\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
+    },
+    {
+      "item": "P1 경기 결과 무승부 클래스 복구: XGBoost가 무승부를 단 1건도 예측하지 못하는 ",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S6 쇠퇴 감지 정밀도 개선 + 영입 회의 리스크 표 연동: `models/s6_decli",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": true,
+      "reason": "중복 스킵"
+    }
+  ]
+}

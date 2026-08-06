@@ -1,7 +1,7 @@
 {
   "task": "P1 Match Result Prediction (3-class: H/D/A)",
   "features_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/features/match_features.parquet",
-  "n_features": 49,
+  "n_features": 51,
   "feature_columns": [
     "season_year",
     "home_elo_pre",
@@ -51,7 +51,9 @@
     "form_diff_10",
     "gd_trend_diff",
     "is_derby",
-    "is_weekend"
+    "is_weekend",
+    "elo_trend_3",
+    "form_elo_composite"
   ],
   "splits": {
     "train": 7890,
@@ -66,78 +68,78 @@
   "models": {
     "xgboost": {
       "train": {
-        "accuracy": 0.5743,
-        "f1_macro": 0.4312,
+        "accuracy": 0.5703,
+        "f1_macro": 0.4362,
         "confusion_matrix": [
           [
-            1190,
-            1,
-            1098
+            1205,
+            4,
+            1080
           ],
           [
-            448,
-            41,
-            1479
+            497,
+            72,
+            1399
           ],
           [
-            332,
+            409,
             1,
-            3300
+            3223
           ]
         ]
       },
       "val": {
-        "accuracy": 0.5368,
-        "f1_macro": 0.3942,
+        "accuracy": 0.5434,
+        "f1_macro": 0.4053,
         "confusion_matrix": [
           [
-            134,
+            147,
             0,
-            104
+            91
           ],
           [
-            62,
-            0,
-            113
+            74,
+            1,
+            100
           ],
           [
-            73,
-            0,
-            274
+            81,
+            1,
+            265
           ]
         ]
       },
       "test": {
-        "accuracy": 0.5479,
-        "f1_macro": 0.4065,
+        "accuracy": 0.5507,
+        "f1_macro": 0.4117,
         "confusion_matrix": [
           [
-            144,
+            159,
+            0,
+            82
+          ],
+          [
+            73,
             0,
             97
           ],
           [
-            68,
+            76,
             0,
-            102
-          ],
-          [
-            63,
-            0,
-            256
+            243
           ]
         ]
       }
     },
     "lightgbm": {
       "train": {
-        "accuracy": 0.9991,
-        "f1_macro": 0.9991,
+        "accuracy": 0.9994,
+        "f1_macro": 0.9994,
         "confusion_matrix": [
           [
-            2285,
+            2287,
             0,
-            4
+            2
           ],
           [
             0,
@@ -152,44 +154,44 @@
         ]
       },
       "val": {
-        "accuracy": 0.5079,
-        "f1_macro": 0.4488,
+        "accuracy": 0.5184,
+        "f1_macro": 0.4509,
         "confusion_matrix": [
           [
-            151,
-            26,
-            61
+            152,
+            16,
+            70
           ],
           [
-            83,
-            28,
-            64
+            80,
+            25,
+            70
           ],
           [
-            96,
-            44,
-            207
+            103,
+            27,
+            217
           ]
         ]
       },
       "test": {
-        "accuracy": 0.5055,
-        "f1_macro": 0.4371,
+        "accuracy": 0.5274,
+        "f1_macro": 0.4237,
         "confusion_matrix": [
           [
-            164,
+            172,
+            16,
+            53
+          ],
+          [
+            86,
+            6,
+            78
+          ],
+          [
+            89,
             23,
-            54
-          ],
-          [
-            76,
-            20,
-            74
-          ],
-          [
-            102,
-            32,
-            185
+            207
           ]
         ]
       }
