@@ -43,11 +43,13 @@
 ```bash
 git config user.email epl-scout-bot@anthropic.com
 git config user.name EPL Scout Bot
-git remote set-url origin https://${GITHUB_TOKEN}@github.com/robinho0329/EPL-scouting-report-dashboard-project
 git add reports/daily_meeting/
 git commit -m "daily: YYYY-MM-DD 아침 스카우트팀 미팅 결과"
 git push origin HEAD:master
 ```
+
+> 원격 URL에 토큰을 박지 말 것. 자동 실행 경로는 GitHub Actions이며
+> 푸시는 워크플로의 `GITHUB_TOKEN`으로 처리된다. 로컬에서는 기존 자격증명을 쓴다.
 
 ---
 
@@ -139,7 +141,7 @@ base64 인코딩 파일은 디코딩해서 읽을 것.
 
 | 구분 | 방식 | 시간 |
 |------|------|------|
-| 미팅 시뮬레이션 | CCR RemoteTrigger | 매일 09:00 KST |
+| 미팅 노트 생성 | GitHub Actions (`scripts/generate_meeting_note.py`) | 매일 09:15 KST — 학습 단계 직전 |
 | 모델 학습 + Streamlit 체크 | GitHub Actions | 매일 09:15 KST (cron: 20:50 UTC, 지연 3h24m 역산) |
 | 로컬 실행 (PC 켤 때) | Windows Task Scheduler | 매일 09:15 KST |
 | **데일리 PPT 생성** | 미팅 루틴 5단계 (아래 참고) | 매일 09:00 KST (미팅 노트 생성 직후) |
