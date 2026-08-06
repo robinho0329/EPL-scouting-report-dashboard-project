@@ -45,6 +45,13 @@ jobs:
             matplotlib seaborn \
             imbalanced-learn
 
+      - name: 📝 아침 미팅 노트 생성
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install --quiet --no-warn-script-location anthropic
+          python -W ignore scripts/generate_meeting_note.py
+
       - name: 🤖 액션아이템 → 기존 스크립트 학습 실행
         run: python -W ignore scripts/github_actions_dev.py
 
