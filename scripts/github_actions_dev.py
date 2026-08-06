@@ -126,13 +126,20 @@ def resolve_script(content: str) -> Tuple[Optional[Path], Optional[Path]]:
 def run_script(script: Path, model_dir: Path):
     """스크립트 실행 → (성공여부, 에러메시지) 반환."""
     print(f"  🚀 실행: {script.relative_to(ROOT)}")
-    result = subprocess.run(
-        [sys.executable, "-W", "ignore", str(script)],
-        cwd=str(ROOT),
-        capture_output=True,
-        text=True,
-        timeout=1500,   # 25분
-    )
+    try:
+        result = subprocess.run(
+            [sys.executable, "-W", "ignore", str(script)],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            timeout=1500,   # 25분
+        )
+    except subprocess.TimeoutExpired:
+        # 잡지 않으면 예외가 main()까지 올라가 프로세스가 죽고,
+        # 워크플로의 커밋 단계가 스킵되어 나머지 액션아이템 결과까지 통째로 날아간다.
+        print("  ⏱️  25분 초과 — 이 항목만 실패 처리하고 다음으로 넘어갑니다")
+        return False, "timeout(1500s)"
+
     stdout_tail = result.stdout[-1500:] if result.stdout else ""
     if stdout_tail:
         print(stdout_tail)
