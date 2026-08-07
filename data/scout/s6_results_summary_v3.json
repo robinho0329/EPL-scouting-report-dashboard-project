@@ -7,7 +7,7 @@
     "fix1_late_bloomer_exception": {
       "description": "perf_slope > 0 AND perf_score > career_mean 조건 충족 시 decline_prob 감쇠: adjusted = prob * (1 - min(slope/2, 0.3)). 최대 30% 감소. Chris Wood(slope=+0.816) 등 상승세 선수 오탐 방지.",
       "formula": "adjusted_prob = prob * (1 - min(perf_slope / 2, 0.3))",
-      "n_affected": 3320,
+      "n_affected": 3319,
       "max_reduction": "30%"
     },
     "fix2_def_model_improvement": {
@@ -19,27 +19,27 @@
       ],
       "progressive_pass": "skipped (데이터 없음)",
       "def_auc_v2": 0.6814,
-      "def_auc_v3": 0.6946,
+      "def_auc_v3": 0.6841,
       "target_met": false
     },
     "fix3_sanity_checks": {
       "chris_wood": {
         "found": true,
-        "prob": 0.5497,
+        "prob": 0.5368,
         "in_career_watch": false,
         "pass": true,
         "note": "career_watch 제외 또는 prob < 0.5 이어야 함 (late bloomer 감쇠 적용)"
       },
       "casemiro": {
         "found": true,
-        "prob": 0.7297,
+        "prob": 0.747,
         "in_career_watch": true,
         "pass": true,
         "note": "career_watch에 포함되어야 함 (MID, age 31, declining form)"
       },
       "cole_palmer": {
         "found": true,
-        "prob": 0.3199,
+        "prob": 0.3256,
         "in_career_watch": false,
         "in_regression_alert": true,
         "pass": "True",
@@ -61,41 +61,41 @@
   },
   "model_performance_by_position": {
     "FWD": {
-      "auc_roc": 0.8039,
-      "avg_precision": 0.4699,
-      "precision_decline": 0.4265,
-      "recall_decline": 0.7436,
-      "f1_decline": 0.5421,
+      "auc_roc": 0.7985,
+      "avg_precision": 0.4644,
+      "precision_decline": 0.4219,
+      "recall_decline": 0.6923,
+      "f1_decline": 0.5243,
       "n_test": 176,
       "decline_rate_test": 0.2216,
       "n_features": 17
     },
     "MID": {
-      "auc_roc": 0.8158,
-      "avg_precision": 0.5726,
-      "precision_decline": 0.4444,
+      "auc_roc": 0.8173,
+      "avg_precision": 0.5459,
+      "precision_decline": 0.4267,
       "recall_decline": 0.7273,
-      "f1_decline": 0.5517,
+      "f1_decline": 0.5378,
       "n_test": 193,
       "decline_rate_test": 0.228,
       "n_features": 17
     },
     "DEF": {
-      "auc_roc": 0.6946,
-      "avg_precision": 0.4573,
-      "precision_decline": 0.3974,
-      "recall_decline": 0.6078,
-      "f1_decline": 0.4806,
+      "auc_roc": 0.6841,
+      "avg_precision": 0.4398,
+      "precision_decline": 0.3882,
+      "recall_decline": 0.6471,
+      "f1_decline": 0.4853,
       "n_test": 165,
       "decline_rate_test": 0.3091,
       "n_features": 20
     },
     "GK": {
-      "auc_roc": 0.8351,
-      "avg_precision": 0.6083,
-      "precision_decline": 0.4118,
-      "recall_decline": 0.6364,
-      "f1_decline": 0.5,
+      "auc_roc": 0.8422,
+      "avg_precision": 0.6189,
+      "precision_decline": 0.4211,
+      "recall_decline": 0.7273,
+      "f1_decline": 0.5333,
       "n_test": 62,
       "decline_rate_test": 0.1774,
       "n_features": 17
@@ -156,209 +156,209 @@
     "FWD": [
       {
         "feature": "min",
-        "importance_xgb": 0.1935,
-        "importance_rf": 0.2125
+        "importance_xgb": 0.1663,
+        "importance_rf": 0.2205
       },
       {
         "feature": "mp",
-        "importance_xgb": 0.0916,
-        "importance_rf": 0.1973
-      },
-      {
-        "feature": "perf_score",
-        "importance_xgb": 0.0669,
-        "importance_rf": 0.1119
+        "importance_xgb": 0.1141,
+        "importance_rf": 0.1868
       },
       {
         "feature": "age",
-        "importance_xgb": 0.0597,
-        "importance_rf": 0.0469
+        "importance_xgb": 0.0669,
+        "importance_rf": 0.0468
       },
       {
-        "feature": "avg_min_match",
-        "importance_xgb": 0.059,
-        "importance_rf": 0.0427
+        "feature": "perf_score",
+        "importance_xgb": 0.0656,
+        "importance_rf": 0.1164
       },
       {
         "feature": "min_slope",
-        "importance_xgb": 0.0582,
-        "importance_rf": 0.0493
+        "importance_xgb": 0.0637,
+        "importance_rf": 0.0509
       },
       {
-        "feature": "match_count",
-        "importance_xgb": 0.0527,
-        "importance_rf": 0.044
+        "feature": "avg_min_match",
+        "importance_xgb": 0.0523,
+        "importance_rf": 0.0377
+      },
+      {
+        "feature": "consistency_score",
+        "importance_xgb": 0.0501,
+        "importance_rf": 0.0262
+      },
+      {
+        "feature": "perf_slope",
+        "importance_xgb": 0.0488,
+        "importance_rf": 0.0348
       },
       {
         "feature": "market_value",
-        "importance_xgb": 0.0512,
-        "importance_rf": 0.0331
+        "importance_xgb": 0.0484,
+        "importance_rf": 0.0326
       },
       {
         "feature": "workload_2y_mp",
-        "importance_xgb": 0.0464,
-        "importance_rf": 0.0445
-      },
-      {
-        "feature": "team_quality",
-        "importance_xgb": 0.0445,
-        "importance_rf": 0.0294
+        "importance_xgb": 0.047,
+        "importance_rf": 0.0496
       }
     ],
     "MID": [
       {
         "feature": "min",
-        "importance_xgb": 0.2149,
-        "importance_rf": 0.1894
+        "importance_xgb": 0.1675,
+        "importance_rf": 0.1908
       },
       {
         "feature": "mp",
-        "importance_xgb": 0.0709,
-        "importance_rf": 0.1707
+        "importance_xgb": 0.1045,
+        "importance_rf": 0.1619
       },
       {
         "feature": "perf_score",
-        "importance_xgb": 0.0675,
-        "importance_rf": 0.1807
-      },
-      {
-        "feature": "consistency_score",
-        "importance_xgb": 0.062,
-        "importance_rf": 0.0445
-      },
-      {
-        "feature": "min_slope",
-        "importance_xgb": 0.0563,
-        "importance_rf": 0.0534
+        "importance_xgb": 0.0781,
+        "importance_rf": 0.179
       },
       {
         "feature": "age",
-        "importance_xgb": 0.0554,
-        "importance_rf": 0.0305
+        "importance_xgb": 0.0584,
+        "importance_rf": 0.0342
       },
       {
-        "feature": "market_value",
-        "importance_xgb": 0.0527,
-        "importance_rf": 0.0291
-      },
-      {
-        "feature": "match_count",
-        "importance_xgb": 0.0518,
-        "importance_rf": 0.046
-      },
-      {
-        "feature": "mv_slope",
-        "importance_xgb": 0.0479,
-        "importance_rf": 0.0118
+        "feature": "consistency_score",
+        "importance_xgb": 0.0568,
+        "importance_rf": 0.0383
       },
       {
         "feature": "team_quality",
-        "importance_xgb": 0.0474,
-        "importance_rf": 0.0371
+        "importance_xgb": 0.0532,
+        "importance_rf": 0.0349
+      },
+      {
+        "feature": "match_count",
+        "importance_xgb": 0.0522,
+        "importance_rf": 0.0452
+      },
+      {
+        "feature": "min_slope",
+        "importance_xgb": 0.0519,
+        "importance_rf": 0.0573
+      },
+      {
+        "feature": "market_value",
+        "importance_xgb": 0.0516,
+        "importance_rf": 0.0291
+      },
+      {
+        "feature": "perf_slope",
+        "importance_xgb": 0.0472,
+        "importance_rf": 0.0332
       }
     ],
     "DEF": [
       {
         "feature": "min",
-        "importance_xgb": 0.2281,
-        "importance_rf": 0.2053
+        "importance_xgb": 0.1974,
+        "importance_rf": 0.1889
       },
       {
         "feature": "match_count",
-        "importance_xgb": 0.0679,
-        "importance_rf": 0.0769
+        "importance_xgb": 0.073,
+        "importance_rf": 0.0808
       },
       {
         "feature": "consistency_score",
-        "importance_xgb": 0.0628,
-        "importance_rf": 0.0367
+        "importance_xgb": 0.0574,
+        "importance_rf": 0.0462
       },
       {
         "feature": "mp",
-        "importance_xgb": 0.0519,
-        "importance_rf": 0.1863
+        "importance_xgb": 0.0573,
+        "importance_rf": 0.1982
       },
       {
         "feature": "injury_proxy",
-        "importance_xgb": 0.0504,
-        "importance_rf": 0.0392
+        "importance_xgb": 0.0549,
+        "importance_rf": 0.036
       },
       {
         "feature": "perf_score",
-        "importance_xgb": 0.0503,
-        "importance_rf": 0.0673
-      },
-      {
-        "feature": "minutes_stability",
-        "importance_xgb": 0.0451,
-        "importance_rf": 0.0316
+        "importance_xgb": 0.0521,
+        "importance_rf": 0.0707
       },
       {
         "feature": "age",
-        "importance_xgb": 0.0425,
-        "importance_rf": 0.0231
+        "importance_xgb": 0.0468,
+        "importance_rf": 0.022
       },
       {
-        "feature": "avg_min_match",
-        "importance_xgb": 0.0398,
-        "importance_rf": 0.0319
+        "feature": "minutes_stability",
+        "importance_xgb": 0.0439,
+        "importance_rf": 0.0289
       },
       {
-        "feature": "min_slope",
-        "importance_xgb": 0.0385,
-        "importance_rf": 0.0508
+        "feature": "team_quality",
+        "importance_xgb": 0.042,
+        "importance_rf": 0.0305
+      },
+      {
+        "feature": "mv_slope",
+        "importance_xgb": 0.0411,
+        "importance_rf": 0.0246
       }
     ],
     "GK": [
       {
-        "feature": "min",
-        "importance_xgb": 0.1801,
-        "importance_rf": 0.189
+        "feature": "mp",
+        "importance_xgb": 0.1652,
+        "importance_rf": 0.1943
       },
       {
-        "feature": "mp",
-        "importance_xgb": 0.1131,
-        "importance_rf": 0.2052
+        "feature": "min",
+        "importance_xgb": 0.1568,
+        "importance_rf": 0.1934
       },
       {
         "feature": "consistency_score",
-        "importance_xgb": 0.0811,
-        "importance_rf": 0.0386
+        "importance_xgb": 0.0948,
+        "importance_rf": 0.0399
       },
       {
         "feature": "injury_proxy",
-        "importance_xgb": 0.0726,
-        "importance_rf": 0.0304
+        "importance_xgb": 0.0628,
+        "importance_rf": 0.0276
       },
       {
         "feature": "team_quality_change",
-        "importance_xgb": 0.0614,
-        "importance_rf": 0.0844
+        "importance_xgb": 0.0565,
+        "importance_rf": 0.0801
       },
       {
         "feature": "workload_2y_mp",
-        "importance_xgb": 0.0565,
-        "importance_rf": 0.0756
-      },
-      {
-        "feature": "match_count",
-        "importance_xgb": 0.0542,
-        "importance_rf": 0.0768
-      },
-      {
-        "feature": "perf_slope",
-        "importance_xgb": 0.0465,
-        "importance_rf": 0.0171
+        "importance_xgb": 0.0564,
+        "importance_rf": 0.0774
       },
       {
         "feature": "perf_score",
-        "importance_xgb": 0.0462,
-        "importance_rf": 0.0062
+        "importance_xgb": 0.0461,
+        "importance_rf": 0.0081
+      },
+      {
+        "feature": "match_count",
+        "importance_xgb": 0.0452,
+        "importance_rf": 0.0863
+      },
+      {
+        "feature": "age",
+        "importance_xgb": 0.0434,
+        "importance_rf": 0.0343
       },
       {
         "feature": "market_value",
-        "importance_xgb": 0.0437,
-        "importance_rf": 0.0311
+        "importance_xgb": 0.0411,
+        "importance_rf": 0.0312
       }
     ]
   },
@@ -367,7 +367,7 @@
       "description": "Age 28+ 선수 중 지속 하락세. 계약 검토, 로테이션 계획, 이적 결정에 활용. Late bloomer 감쇠 계수 적용으로 상승세 선수 오탐 방지.",
       "criteria": "age >= 28, 포지션별 decline 확률 (late bloomer 감쇠 후)",
       "count": 30,
-      "avg_age": 31.8,
+      "avg_age": 31.7,
       "pct_30plus": 0.8,
       "list": [
         {
@@ -375,8 +375,8 @@
           "team": "Fulham",
           "pos_group": "FWD",
           "age": 34,
-          "decline_prob_ensemble": 0.8456,
-          "decline_prob_xgb": 0.9332,
+          "decline_prob_ensemble": 0.8311,
+          "decline_prob_xgb": 0.8996,
           "perf_score": -0.1763,
           "perf_slope": -0.0622,
           "min_slope": 236.2857,
@@ -386,42 +386,12 @@
           "late_bloomer_dampen": 1.0
         },
         {
-          "player_key": "Wes Foderingham",
-          "team": "Sheffield United",
-          "pos_group": "GK",
-          "age": 32,
-          "decline_prob_ensemble": 0.8075,
-          "decline_prob_xgb": 0.8919,
-          "perf_score": -0.1257,
-          "perf_slope": -0.0,
-          "min_slope": 883.0,
-          "peak_minus_current": 0.0,
-          "market_value": 900000.0,
-          "injury_proxy": 0.0263,
-          "late_bloomer_dampen": 1.0
-        },
-        {
-          "player_key": "Danny Welbeck",
-          "team": "Brighton",
-          "pos_group": "FWD",
-          "age": 32,
-          "decline_prob_ensemble": 0.7971,
-          "decline_prob_xgb": 0.8604,
-          "perf_score": -0.0773,
-          "perf_slope": -0.1633,
-          "min_slope": 107.5,
-          "peak_minus_current": 1.6674,
-          "market_value": 5000000.0,
-          "injury_proxy": 0.4,
-          "late_bloomer_dampen": 1.0
-        },
-        {
           "player_key": "Michail Antonio",
           "team": "West Ham",
           "pos_group": "FWD",
           "age": 33,
-          "decline_prob_ensemble": 0.7903,
-          "decline_prob_xgb": 0.9137,
+          "decline_prob_ensemble": 0.785,
+          "decline_prob_xgb": 0.8998,
           "perf_score": 0.1274,
           "perf_slope": -0.117,
           "min_slope": -638.0,
@@ -431,12 +401,27 @@
           "late_bloomer_dampen": 1.0
         },
         {
+          "player_key": "Danny Welbeck",
+          "team": "Brighton",
+          "pos_group": "FWD",
+          "age": 32,
+          "decline_prob_ensemble": 0.7699,
+          "decline_prob_xgb": 0.8019,
+          "perf_score": -0.0773,
+          "perf_slope": -0.1633,
+          "min_slope": 107.5,
+          "peak_minus_current": 1.6674,
+          "market_value": 5000000.0,
+          "injury_proxy": 0.4,
+          "late_bloomer_dampen": 1.0
+        },
+        {
           "player_key": "Raúl Jiménez",
           "team": "Fulham",
           "pos_group": "FWD",
           "age": 32,
-          "decline_prob_ensemble": 0.7711,
-          "decline_prob_xgb": 0.9187,
+          "decline_prob_ensemble": 0.7697,
+          "decline_prob_xgb": 0.915,
           "perf_score": 0.164,
           "perf_slope": 0.0926,
           "min_slope": -618.0,
@@ -450,8 +435,8 @@
           "team": "Newcastle",
           "pos_group": "GK",
           "age": 34,
-          "decline_prob_ensemble": 0.7625,
-          "decline_prob_xgb": 0.9732,
+          "decline_prob_ensemble": 0.7601,
+          "decline_prob_xgb": 0.9481,
           "perf_score": -0.1257,
           "perf_slope": 0.0,
           "min_slope": 1906.5,
@@ -461,42 +446,12 @@
           "late_bloomer_dampen": 1.0
         },
         {
-          "player_key": "Casemiro",
-          "team": "Man United",
-          "pos_group": "MID",
-          "age": 31,
-          "decline_prob_ensemble": 0.7297,
-          "decline_prob_xgb": 0.6996,
-          "perf_score": -0.1066,
-          "perf_slope": -0.4526,
-          "min_slope": -142.0,
-          "peak_minus_current": 0.4526,
-          "market_value": 20000000.0,
-          "injury_proxy": 0.1538,
-          "late_bloomer_dampen": 1.0
-        },
-        {
-          "player_key": "Adam Smith",
-          "team": "Bournemouth",
-          "pos_group": "DEF",
-          "age": 32,
-          "decline_prob_ensemble": 0.7296,
-          "decline_prob_xgb": 0.7533,
-          "perf_score": -0.1187,
-          "perf_slope": 0.0182,
-          "min_slope": 86.5769,
-          "peak_minus_current": 0.4091,
-          "market_value": 1000000.0,
-          "injury_proxy": 0.1176,
-          "late_bloomer_dampen": 1.0
-        },
-        {
           "player_key": "Christian Eriksen",
           "team": "Man United",
           "pos_group": "MID",
           "age": 31,
-          "decline_prob_ensemble": 0.7271,
-          "decline_prob_xgb": 0.7985,
+          "decline_prob_ensemble": 0.7531,
+          "decline_prob_xgb": 0.8709,
           "perf_score": 0.1271,
           "perf_slope": -0.2521,
           "min_slope": 101.0,
@@ -506,72 +461,57 @@
           "late_bloomer_dampen": 1.0
         },
         {
-          "player_key": "Matz Sels",
-          "team": "Nott'm Forest",
-          "pos_group": "GK",
+          "player_key": "Casemiro",
+          "team": "Man United",
+          "pos_group": "MID",
           "age": 31,
-          "decline_prob_ensemble": 0.7164,
-          "decline_prob_xgb": 0.6396,
+          "decline_prob_ensemble": 0.747,
+          "decline_prob_xgb": 0.7487,
+          "perf_score": -0.1066,
+          "perf_slope": -0.4526,
+          "min_slope": -142.0,
+          "peak_minus_current": 0.4526,
+          "market_value": 20000000.0,
+          "injury_proxy": 0.1538,
+          "late_bloomer_dampen": 1.0
+        },
+        {
+          "player_key": "Wes Foderingham",
+          "team": "Sheffield United",
+          "pos_group": "GK",
+          "age": 32,
+          "decline_prob_ensemble": 0.7456,
+          "decline_prob_xgb": 0.7238,
           "perf_score": -0.1257,
-          "perf_slope": null,
-          "min_slope": null,
-          "peak_minus_current": null,
-          "market_value": 7000000.0,
-          "injury_proxy": 0.0,
+          "perf_slope": -0.0,
+          "min_slope": 883.0,
+          "peak_minus_current": 0.0,
+          "market_value": 900000.0,
+          "injury_proxy": 0.0263,
           "late_bloomer_dampen": 1.0
         },
         {
-          "player_key": "Adam Lallana",
-          "team": "Brighton",
-          "pos_group": "MID",
-          "age": 35,
-          "decline_prob_ensemble": 0.715,
-          "decline_prob_xgb": 0.7404,
-          "perf_score": -0.2215,
-          "perf_slope": 0.0502,
-          "min_slope": -355.5,
-          "peak_minus_current": 1.2026,
+          "player_key": "Adam Smith",
+          "team": "Bournemouth",
+          "pos_group": "DEF",
+          "age": 32,
+          "decline_prob_ensemble": 0.7445,
+          "decline_prob_xgb": 0.789,
+          "perf_score": -0.1187,
+          "perf_slope": 0.0182,
+          "min_slope": 86.5769,
+          "peak_minus_current": 0.4091,
           "market_value": 1000000.0,
-          "injury_proxy": 0.697,
+          "injury_proxy": 0.1176,
           "late_bloomer_dampen": 1.0
-        },
-        {
-          "player_key": "Will Hughes",
-          "team": "Crystal Palace",
-          "pos_group": "MID",
-          "age": 28,
-          "decline_prob_ensemble": 0.7116,
-          "decline_prob_xgb": 0.7433,
-          "perf_score": -0.342,
-          "perf_slope": -0.0402,
-          "min_slope": 419.0,
-          "peak_minus_current": 1.0004,
-          "market_value": 9000000.0,
-          "injury_proxy": 0.2903,
-          "late_bloomer_dampen": 1.0
-        },
-        {
-          "player_key": "Ross Barkley",
-          "team": "Luton",
-          "pos_group": "MID",
-          "age": 29,
-          "decline_prob_ensemble": 0.7046,
-          "decline_prob_xgb": 0.739,
-          "perf_score": 0.3661,
-          "perf_slope": 0.178,
-          "min_slope": 910.2143,
-          "peak_minus_current": 0.7421,
-          "market_value": 8000000.0,
-          "injury_proxy": 0.0938,
-          "late_bloomer_dampen": 0.911
         },
         {
           "player_key": "Raheem Sterling",
           "team": "Chelsea",
           "pos_group": "FWD",
           "age": 28,
-          "decline_prob_ensemble": 0.7024,
-          "decline_prob_xgb": 0.7191,
+          "decline_prob_ensemble": 0.7169,
+          "decline_prob_xgb": 0.7498,
           "perf_score": 0.3565,
           "perf_slope": -0.2049,
           "min_slope": -75.0,
@@ -581,63 +521,18 @@
           "late_bloomer_dampen": 1.0
         },
         {
-          "player_key": "Son Heung-min",
-          "team": "Tottenham",
+          "player_key": "Adam Lallana",
+          "team": "Brighton",
           "pos_group": "MID",
-          "age": 31,
-          "decline_prob_ensemble": 0.6992,
-          "decline_prob_xgb": 0.6127,
-          "perf_score": 1.7932,
-          "perf_slope": -0.1631,
-          "min_slope": -36.0,
-          "peak_minus_current": 0.3263,
-          "market_value": null,
-          "injury_proxy": 0.0571,
-          "late_bloomer_dampen": 1.0
-        },
-        {
-          "player_key": "Tom Cairney",
-          "team": "Fulham",
-          "pos_group": "MID",
-          "age": 32,
-          "decline_prob_ensemble": 0.6971,
-          "decline_prob_xgb": 0.6022,
-          "perf_score": 0.2259,
-          "perf_slope": 0.0118,
-          "min_slope": 224.6429,
-          "peak_minus_current": 0.0,
-          "market_value": 2000000.0,
-          "injury_proxy": 0.5789,
-          "late_bloomer_dampen": 0.9941
-        },
-        {
-          "player_key": "Idrissa Gana Gueye",
-          "team": "Everton",
-          "pos_group": "MID",
-          "age": 33,
-          "decline_prob_ensemble": 0.6866,
-          "decline_prob_xgb": 0.7437,
-          "perf_score": 0.1468,
-          "perf_slope": 0.0627,
-          "min_slope": -151.5,
-          "peak_minus_current": 0.0,
-          "market_value": null,
-          "injury_proxy": 0.2143,
-          "late_bloomer_dampen": 0.9687
-        },
-        {
-          "player_key": "Matt Turner",
-          "team": "Nott'm Forest",
-          "pos_group": "GK",
-          "age": 29,
-          "decline_prob_ensemble": 0.6836,
-          "decline_prob_xgb": 0.8758,
-          "perf_score": -0.1257,
-          "perf_slope": 0.0,
-          "min_slope": 1530.0,
-          "peak_minus_current": 0.0,
-          "market_value": 7000000.0,
-          "injury_proxy": 0.0,
+          "age": 35,
+          "decline_prob_ensemble": 0.7138,
+          "decline_prob_xgb": 0.7264,
+          "perf_score": -0.2215,
+          "perf_slope": 0.0502,
+          "min_slope": -355.5,
+          "peak_minus_current": 1.2026,
+          "market_value": 1000000.0,
+          "injury_proxy": 0.697,
           "late_bloomer_dampen": 1.0
         },
         {
@@ -645,8 +540,8 @@
           "team": "Everton",
           "pos_group": "DEF",
           "age": 38,
-          "decline_prob_ensemble": 0.6809,
-          "decline_prob_xgb": 0.5555,
+          "decline_prob_ensemble": 0.7088,
+          "decline_prob_xgb": 0.638,
           "perf_score": -0.3286,
           "perf_slope": -0.1837,
           "min_slope": 515.0,
@@ -656,19 +551,124 @@
           "late_bloomer_dampen": 1.0
         },
         {
-          "player_key": "Miguel Almirón",
+          "player_key": "Tom Cairney",
+          "team": "Fulham",
+          "pos_group": "MID",
+          "age": 32,
+          "decline_prob_ensemble": 0.7049,
+          "decline_prob_xgb": 0.5749,
+          "perf_score": 0.2259,
+          "perf_slope": 0.0118,
+          "min_slope": 224.6429,
+          "peak_minus_current": 0.0,
+          "market_value": 2000000.0,
+          "injury_proxy": 0.5789,
+          "late_bloomer_dampen": 0.9941
+        },
+        {
+          "player_key": "Will Hughes",
+          "team": "Crystal Palace",
+          "pos_group": "MID",
+          "age": 28,
+          "decline_prob_ensemble": 0.7044,
+          "decline_prob_xgb": 0.7181,
+          "perf_score": -0.342,
+          "perf_slope": -0.0402,
+          "min_slope": 419.0,
+          "peak_minus_current": 1.0004,
+          "market_value": 9000000.0,
+          "injury_proxy": 0.2903,
+          "late_bloomer_dampen": 1.0
+        },
+        {
+          "player_key": "Idrissa Gana Gueye",
+          "team": "Everton",
+          "pos_group": "MID",
+          "age": 33,
+          "decline_prob_ensemble": 0.7002,
+          "decline_prob_xgb": 0.7838,
+          "perf_score": 0.1468,
+          "perf_slope": 0.0627,
+          "min_slope": -151.5,
+          "peak_minus_current": 0.0,
+          "market_value": null,
+          "injury_proxy": 0.2143,
+          "late_bloomer_dampen": 0.9687
+        },
+        {
+          "player_key": "Matz Sels",
+          "team": "Nott'm Forest",
+          "pos_group": "GK",
+          "age": 31,
+          "decline_prob_ensemble": 0.6957,
+          "decline_prob_xgb": 0.5762,
+          "perf_score": -0.1257,
+          "perf_slope": null,
+          "min_slope": null,
+          "peak_minus_current": null,
+          "market_value": 7000000.0,
+          "injury_proxy": 0.0,
+          "late_bloomer_dampen": 1.0
+        },
+        {
+          "player_key": "Jonny Evans",
+          "team": "Man United",
+          "pos_group": "DEF",
+          "age": 35,
+          "decline_prob_ensemble": 0.6916,
+          "decline_prob_xgb": 0.7034,
+          "perf_score": -0.1712,
+          "perf_slope": -0.2538,
+          "min_slope": 22.0,
+          "peak_minus_current": 0.9367,
+          "market_value": 2000000.0,
+          "injury_proxy": 0.3077,
+          "late_bloomer_dampen": 1.0
+        },
+        {
+          "player_key": "Kieran Trippier",
           "team": "Newcastle",
-          "pos_group": "FWD",
-          "age": 29,
-          "decline_prob_ensemble": 0.6684,
-          "decline_prob_xgb": 0.7157,
-          "perf_score": -0.3226,
-          "perf_slope": 0.1342,
-          "min_slope": 110.5,
-          "peak_minus_current": 0.5301,
-          "market_value": 20000000.0,
-          "injury_proxy": 0.4242,
-          "late_bloomer_dampen": 0.9329
+          "pos_group": "DEF",
+          "age": 32,
+          "decline_prob_ensemble": 0.6836,
+          "decline_prob_xgb": 0.7152,
+          "perf_score": 0.9962,
+          "perf_slope": -0.7819,
+          "min_slope": 903.5,
+          "peak_minus_current": 1.5639,
+          "market_value": 10000000.0,
+          "injury_proxy": 0.1071,
+          "late_bloomer_dampen": 1.0
+        },
+        {
+          "player_key": "Son Heung-min",
+          "team": "Tottenham",
+          "pos_group": "MID",
+          "age": 31,
+          "decline_prob_ensemble": 0.681,
+          "decline_prob_xgb": 0.5701,
+          "perf_score": 1.7932,
+          "perf_slope": -0.1631,
+          "min_slope": -36.0,
+          "peak_minus_current": 0.3263,
+          "market_value": null,
+          "injury_proxy": 0.0571,
+          "late_bloomer_dampen": 1.0
+        },
+        {
+          "player_key": "Neto",
+          "team": "Bournemouth",
+          "pos_group": "GK",
+          "age": 34,
+          "decline_prob_ensemble": 0.681,
+          "decline_prob_xgb": 0.5631,
+          "perf_score": -0.1257,
+          "perf_slope": 0.0,
+          "min_slope": 495.0,
+          "peak_minus_current": 0.0,
+          "market_value": 2500000.0,
+          "injury_proxy": 0.0,
+          "late_bloomer_dampen": 1.0
         }
       ]
     },
@@ -687,80 +687,152 @@
           "career_perf_mean": -0.2352,
           "seasons_above_mean_std": 2.07,
           "perf_slope": 0.0627,
-          "decline_prob_ensemble": 0.6866,
+          "decline_prob_ensemble": 0.7002,
           "market_value": null
         },
         {
-          "player_key": "Adama Traoré",
-          "team": "Fulham",
+          "player_key": "Charlie Taylor",
+          "team": "Burnley",
+          "pos_group": "DEF",
+          "age": 29,
+          "perf_score": 0.0514,
+          "career_perf_mean": -0.1919,
+          "seasons_above_mean_std": 1.74,
+          "perf_slope": 0.087,
+          "decline_prob_ensemble": 0.6629,
+          "market_value": 3000000.0
+        },
+        {
+          "player_key": "Dan Burn",
+          "team": "Newcastle",
+          "pos_group": "DEF",
+          "age": 31,
+          "perf_score": 0.3365,
+          "career_perf_mean": -0.0833,
+          "seasons_above_mean_std": 1.67,
+          "perf_slope": 0.2538,
+          "decline_prob_ensemble": 0.6212,
+          "market_value": 8000000.0
+        },
+        {
+          "player_key": "Jean-Philippe Mateta",
+          "team": "Crystal Palace",
           "pos_group": "FWD",
-          "age": 27,
-          "perf_score": 1.6306,
-          "career_perf_mean": 0.0128,
-          "seasons_above_mean_std": 2.35,
-          "perf_slope": 1.0825,
-          "decline_prob_ensemble": 0.2401,
-          "market_value": 9000000.0
+          "age": 26,
+          "perf_score": 0.8976,
+          "career_perf_mean": 0.2588,
+          "seasons_above_mean_std": 1.52,
+          "perf_slope": 0.3447,
+          "decline_prob_ensemble": 0.6204,
+          "market_value": 20000000.0
         },
         {
-          "player_key": "Declan Rice",
-          "team": "Arsenal",
-          "pos_group": "MID",
-          "age": 24,
-          "perf_score": 0.6199,
-          "career_perf_mean": -0.0748,
-          "seasons_above_mean_std": 1.92,
-          "perf_slope": 0.3741,
-          "decline_prob_ensemble": 0.2651,
-          "market_value": 120000000.0
+          "player_key": "Harry Maguire",
+          "team": "Man United",
+          "pos_group": "DEF",
+          "age": 30,
+          "perf_score": 0.7166,
+          "career_perf_mean": 0.113,
+          "seasons_above_mean_std": 1.85,
+          "perf_slope": 0.3851,
+          "decline_prob_ensemble": 0.5996,
+          "market_value": 18000000.0
         },
         {
-          "player_key": "Cole Palmer",
-          "team": "Chelsea",
-          "pos_group": "MID",
-          "age": 21,
-          "perf_score": 2.6782,
-          "career_perf_mean": 0.3243,
-          "seasons_above_mean_std": 1.93,
-          "perf_slope": 1.0781,
-          "decline_prob_ensemble": 0.3199,
-          "market_value": 80000000.0
+          "player_key": "Victor Lindelöf",
+          "team": "Man United",
+          "pos_group": "DEF",
+          "age": 29,
+          "perf_score": 0.3365,
+          "career_perf_mean": -0.1222,
+          "seasons_above_mean_std": 2.05,
+          "perf_slope": 0.2276,
+          "decline_prob_ensemble": 0.576,
+          "market_value": 15000000.0
         },
         {
-          "player_key": "Rodri",
-          "team": "Man City",
-          "pos_group": "MID",
-          "age": 27,
-          "perf_score": 0.8862,
-          "career_perf_mean": 0.1458,
-          "seasons_above_mean_std": 1.65,
-          "perf_slope": 0.2629,
-          "decline_prob_ensemble": 0.3539,
-          "market_value": 120000000.0
-        },
-        {
-          "player_key": "Ben White",
-          "team": "Arsenal",
+          "player_key": "Konstantinos Mavropanos",
+          "team": "West Ham",
           "pos_group": "DEF",
           "age": 25,
-          "perf_score": 0.8116,
-          "career_perf_mean": 0.0614,
-          "seasons_above_mean_std": 1.54,
-          "perf_slope": 0.5701,
-          "decline_prob_ensemble": 0.3974,
-          "market_value": 55000000.0
+          "perf_score": 0.084,
+          "career_perf_mean": -0.2461,
+          "seasons_above_mean_std": 1.79,
+          "perf_slope": 0.0884,
+          "decline_prob_ensemble": 0.5701,
+          "market_value": 20000000.0
         },
         {
-          "player_key": "Joachim Andersen",
-          "team": "Crystal Palace",
+          "player_key": "Richarlison",
+          "team": "Tottenham",
+          "pos_group": "FWD",
+          "age": 26,
+          "perf_score": 1.0409,
+          "career_perf_mean": 0.326,
+          "seasons_above_mean_std": 1.55,
+          "perf_slope": 0.3462,
+          "decline_prob_ensemble": 0.5589,
+          "market_value": 38000000.0
+        },
+        {
+          "player_key": "Willy Boly",
+          "team": "Nott'm Forest",
           "pos_group": "DEF",
-          "age": 27,
-          "perf_score": 0.2252,
-          "career_perf_mean": -0.1151,
-          "seasons_above_mean_std": 1.65,
-          "perf_slope": 0.1588,
-          "decline_prob_ensemble": 0.3987,
-          "market_value": 35000000.0
+          "age": 32,
+          "perf_score": 0.7229,
+          "career_perf_mean": 0.0158,
+          "seasons_above_mean_std": 1.79,
+          "perf_slope": 0.881,
+          "decline_prob_ensemble": 0.5489,
+          "market_value": 2500000.0
+        },
+        {
+          "player_key": "Sean Longstaff",
+          "team": "Newcastle",
+          "pos_group": "MID",
+          "age": 25,
+          "perf_score": 0.3091,
+          "career_perf_mean": -0.1088,
+          "seasons_above_mean_std": 1.75,
+          "perf_slope": 0.2225,
+          "decline_prob_ensemble": 0.5332,
+          "market_value": 25000000.0
+        },
+        {
+          "player_key": "Neal Maupay",
+          "team": "Brentford",
+          "pos_group": "FWD",
+          "age": 26,
+          "perf_score": 0.4824,
+          "career_perf_mean": -0.2382,
+          "seasons_above_mean_std": 1.56,
+          "perf_slope": 0.4329,
+          "decline_prob_ensemble": 0.5127,
+          "market_value": 12000000.0
+        },
+        {
+          "player_key": "Scott McTominay",
+          "team": "Man United",
+          "pos_group": "MID",
+          "age": 26,
+          "perf_score": 0.6814,
+          "career_perf_mean": -0.0474,
+          "seasons_above_mean_std": 1.83,
+          "perf_slope": 0.4598,
+          "decline_prob_ensemble": 0.5068,
+          "market_value": 32000000.0
+        },
+        {
+          "player_key": "John McGinn",
+          "team": "Aston Villa",
+          "pos_group": "MID",
+          "age": 28,
+          "perf_score": 0.3569,
+          "career_perf_mean": 0.0881,
+          "seasons_above_mean_std": 1.6,
+          "perf_slope": 0.1442,
+          "decline_prob_ensemble": 0.499,
+          "market_value": 30000000.0
         },
         {
           "player_key": "Cameron Archer",
@@ -775,148 +847,76 @@
           "market_value": 13000000.0
         },
         {
-          "player_key": "John McGinn",
-          "team": "Aston Villa",
-          "pos_group": "MID",
-          "age": 28,
-          "perf_score": 0.3569,
-          "career_perf_mean": 0.0881,
-          "seasons_above_mean_std": 1.6,
-          "perf_slope": 0.1442,
-          "decline_prob_ensemble": 0.5141,
-          "market_value": 30000000.0
-        },
-        {
-          "player_key": "Anthony Gordon",
-          "team": "Newcastle",
-          "pos_group": "FWD",
-          "age": 22,
-          "perf_score": 0.5669,
-          "career_perf_mean": -0.1575,
-          "seasons_above_mean_std": 1.84,
-          "perf_slope": 0.8464,
-          "decline_prob_ensemble": 0.2291,
-          "market_value": 60000000.0
-        },
-        {
-          "player_key": "Scott McTominay",
-          "team": "Man United",
-          "pos_group": "MID",
-          "age": 26,
-          "perf_score": 0.6814,
-          "career_perf_mean": -0.0474,
-          "seasons_above_mean_std": 1.83,
-          "perf_slope": 0.4598,
-          "decline_prob_ensemble": 0.5259,
-          "market_value": 32000000.0
-        },
-        {
-          "player_key": "Richarlison",
-          "team": "Tottenham",
-          "pos_group": "FWD",
-          "age": 26,
-          "perf_score": 1.0409,
-          "career_perf_mean": 0.326,
-          "seasons_above_mean_std": 1.55,
-          "perf_slope": 0.3462,
-          "decline_prob_ensemble": 0.5381,
-          "market_value": 38000000.0
-        },
-        {
-          "player_key": "Konstantinos Mavropanos",
-          "team": "West Ham",
-          "pos_group": "DEF",
-          "age": 25,
-          "perf_score": 0.084,
-          "career_perf_mean": -0.2461,
-          "seasons_above_mean_std": 1.79,
-          "perf_slope": 0.0884,
-          "decline_prob_ensemble": 0.5428,
-          "market_value": 20000000.0
-        },
-        {
-          "player_key": "Willy Boly",
-          "team": "Nott'm Forest",
-          "pos_group": "DEF",
-          "age": 32,
-          "perf_score": 0.7229,
-          "career_perf_mean": 0.0158,
-          "seasons_above_mean_std": 1.79,
-          "perf_slope": 0.881,
-          "decline_prob_ensemble": 0.56,
-          "market_value": 2500000.0
-        },
-        {
-          "player_key": "Victor Lindelöf",
-          "team": "Man United",
-          "pos_group": "DEF",
-          "age": 29,
-          "perf_score": 0.3365,
-          "career_perf_mean": -0.1222,
-          "seasons_above_mean_std": 2.05,
-          "perf_slope": 0.2276,
-          "decline_prob_ensemble": 0.5976,
-          "market_value": 15000000.0
-        },
-        {
-          "player_key": "Harry Maguire",
-          "team": "Man United",
-          "pos_group": "DEF",
-          "age": 30,
-          "perf_score": 0.7166,
-          "career_perf_mean": 0.113,
-          "seasons_above_mean_std": 1.85,
-          "perf_slope": 0.3851,
-          "decline_prob_ensemble": 0.6148,
-          "market_value": 18000000.0
-        },
-        {
-          "player_key": "Jean-Philippe Mateta",
+          "player_key": "Joachim Andersen",
           "team": "Crystal Palace",
-          "pos_group": "FWD",
-          "age": 26,
-          "perf_score": 0.8976,
-          "career_perf_mean": 0.2588,
-          "seasons_above_mean_std": 1.52,
-          "perf_slope": 0.3447,
-          "decline_prob_ensemble": 0.6212,
-          "market_value": 20000000.0
-        },
-        {
-          "player_key": "Dan Burn",
-          "team": "Newcastle",
           "pos_group": "DEF",
-          "age": 31,
-          "perf_score": 0.3365,
-          "career_perf_mean": -0.0833,
-          "seasons_above_mean_std": 1.67,
-          "perf_slope": 0.2538,
-          "decline_prob_ensemble": 0.6217,
-          "market_value": 8000000.0
+          "age": 27,
+          "perf_score": 0.2252,
+          "career_perf_mean": -0.1151,
+          "seasons_above_mean_std": 1.65,
+          "perf_slope": 0.1588,
+          "decline_prob_ensemble": 0.4223,
+          "market_value": 35000000.0
         },
         {
-          "player_key": "Charlie Taylor",
-          "team": "Burnley",
+          "player_key": "Ben White",
+          "team": "Arsenal",
           "pos_group": "DEF",
-          "age": 29,
-          "perf_score": 0.0514,
-          "career_perf_mean": -0.1919,
-          "seasons_above_mean_std": 1.74,
-          "perf_slope": 0.087,
-          "decline_prob_ensemble": 0.6463,
-          "market_value": 3000000.0
-        },
-        {
-          "player_key": "Sean Longstaff",
-          "team": "Newcastle",
-          "pos_group": "MID",
           "age": 25,
-          "perf_score": 0.3091,
-          "career_perf_mean": -0.1088,
-          "seasons_above_mean_std": 1.75,
-          "perf_slope": 0.2225,
-          "decline_prob_ensemble": 0.5305,
-          "market_value": 25000000.0
+          "perf_score": 0.8116,
+          "career_perf_mean": 0.0614,
+          "seasons_above_mean_std": 1.54,
+          "perf_slope": 0.5701,
+          "decline_prob_ensemble": 0.3943,
+          "market_value": 55000000.0
+        },
+        {
+          "player_key": "Rodri",
+          "team": "Man City",
+          "pos_group": "MID",
+          "age": 27,
+          "perf_score": 0.8862,
+          "career_perf_mean": 0.1458,
+          "seasons_above_mean_std": 1.65,
+          "perf_slope": 0.2629,
+          "decline_prob_ensemble": 0.3302,
+          "market_value": 120000000.0
+        },
+        {
+          "player_key": "Cole Palmer",
+          "team": "Chelsea",
+          "pos_group": "MID",
+          "age": 21,
+          "perf_score": 2.6782,
+          "career_perf_mean": 0.3243,
+          "seasons_above_mean_std": 1.93,
+          "perf_slope": 1.0781,
+          "decline_prob_ensemble": 0.3256,
+          "market_value": 80000000.0
+        },
+        {
+          "player_key": "Declan Rice",
+          "team": "Arsenal",
+          "pos_group": "MID",
+          "age": 24,
+          "perf_score": 0.6199,
+          "career_perf_mean": -0.0748,
+          "seasons_above_mean_std": 1.92,
+          "perf_slope": 0.3741,
+          "decline_prob_ensemble": 0.2858,
+          "market_value": 120000000.0
+        },
+        {
+          "player_key": "Adama Traoré",
+          "team": "Fulham",
+          "pos_group": "FWD",
+          "age": 27,
+          "perf_score": 1.6306,
+          "career_perf_mean": 0.0128,
+          "seasons_above_mean_std": 2.35,
+          "perf_slope": 1.0825,
+          "decline_prob_ensemble": 0.231,
+          "market_value": 9000000.0
         }
       ]
     }
@@ -924,108 +924,108 @@
   "age_position_decline_rates": {
     "DEF": {
       "18-22": {
-        "avg_decline_prob": 0.3005,
+        "avg_decline_prob": 0.2992,
         "actual_decline_rate": 0.2277,
         "n_players": 1063
       },
       "23-26": {
-        "avg_decline_prob": 0.3984,
+        "avg_decline_prob": 0.3978,
         "actual_decline_rate": 0.3064,
         "n_players": 1485
       },
       "27-30": {
-        "avg_decline_prob": 0.4006,
+        "avg_decline_prob": 0.4019,
         "actual_decline_rate": 0.2665,
         "n_players": 1396
       },
       "31-35": {
-        "avg_decline_prob": 0.473,
+        "avg_decline_prob": 0.4765,
         "actual_decline_rate": 0.3631,
         "n_players": 504
       },
       "36-40": {
-        "avg_decline_prob": 0.6176,
+        "avg_decline_prob": 0.6161,
         "actual_decline_rate": 0.3571,
         "n_players": 14
       }
     },
     "MID": {
       "18-22": {
-        "avg_decline_prob": 0.2797,
+        "avg_decline_prob": 0.2793,
         "actual_decline_rate": 0.2041,
         "n_players": 1264
       },
       "23-26": {
-        "avg_decline_prob": 0.3885,
+        "avg_decline_prob": 0.3886,
         "actual_decline_rate": 0.2874,
         "n_players": 1646
       },
       "27-30": {
-        "avg_decline_prob": 0.4232,
+        "avg_decline_prob": 0.4205,
         "actual_decline_rate": 0.308,
         "n_players": 1500
       },
       "31-35": {
-        "avg_decline_prob": 0.4997,
+        "avg_decline_prob": 0.495,
         "actual_decline_rate": 0.4011,
         "n_players": 359
       },
       "36-40": {
-        "avg_decline_prob": 0.5695,
+        "avg_decline_prob": 0.5559,
         "actual_decline_rate": 0.4286,
         "n_players": 14
       }
     },
     "FWD": {
       "18-22": {
-        "avg_decline_prob": 0.2514,
+        "avg_decline_prob": 0.25,
         "actual_decline_rate": 0.1886,
         "n_players": 1124
       },
       "23-26": {
-        "avg_decline_prob": 0.3979,
+        "avg_decline_prob": 0.3971,
         "actual_decline_rate": 0.331,
         "n_players": 1287
       },
       "27-30": {
-        "avg_decline_prob": 0.4261,
+        "avg_decline_prob": 0.4214,
         "actual_decline_rate": 0.3518,
         "n_players": 1154
       },
       "31-35": {
-        "avg_decline_prob": 0.5533,
+        "avg_decline_prob": 0.5515,
         "actual_decline_rate": 0.4853,
         "n_players": 307
       },
       "36-40": {
-        "avg_decline_prob": 0.5964,
+        "avg_decline_prob": 0.592,
         "actual_decline_rate": 0.5714,
         "n_players": 7
       }
     },
     "GK": {
       "18-22": {
-        "avg_decline_prob": 0.1867,
+        "avg_decline_prob": 0.1871,
         "actual_decline_rate": 0.0938,
         "n_players": 96
       },
       "23-26": {
-        "avg_decline_prob": 0.289,
+        "avg_decline_prob": 0.2884,
         "actual_decline_rate": 0.1974,
         "n_players": 228
       },
       "27-30": {
-        "avg_decline_prob": 0.3284,
+        "avg_decline_prob": 0.3289,
         "actual_decline_rate": 0.2129,
         "n_players": 310
       },
       "31-35": {
-        "avg_decline_prob": 0.3636,
+        "avg_decline_prob": 0.3628,
         "actual_decline_rate": 0.2031,
         "n_players": 256
       },
       "36-40": {
-        "avg_decline_prob": 0.3917,
+        "avg_decline_prob": 0.3896,
         "actual_decline_rate": 0.2951,
         "n_players": 61
       }
@@ -1045,9 +1045,9 @@
     "casemiro_pass": true,
     "cole_palmer_pass": "True",
     "career_watch_age_pass": true,
-    "career_watch_avg_age": 31.8,
+    "career_watch_avg_age": 31.7,
     "career_watch_pct_28plus": 1.0,
-    "n_late_bloomer_adjusted": 3320,
+    "n_late_bloomer_adjusted": 3319,
     "position_models_trained": [
       "FWD",
       "MID",
