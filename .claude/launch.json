@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "epl-stats",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "streamlit", "run", "C:\\Users\\xcv54\\workspace\\EPL project\\dashboard\\app.py", "--server.headless", "true"],
+      "port": 8501
+    }
+  ]
+}
