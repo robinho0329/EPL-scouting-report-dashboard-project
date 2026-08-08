@@ -1,0 +1,23 @@
+{
+  "date": "2026-08-08",
+  "results": [
+    {
+      "item": "P1 경기 결과 무승부 클래스 복구 (3회차 재시도): `models/p1_match_re",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S6 쇠퇴 감지 포지션 원핫 의존 제거 및 정밀도 개선: `models/s6_decline",
+      "script": "models/s6_decline/train_v4.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P7 성장 곡선 v5.1 Actions 단독 완결 — 최종 기한: `models/p7_gr",
+      "script": "models/p7_growth_curve/train_v5_1.py",
+      "success": false,
+      "error": "timeout(1500s)"
+    }
+  ]
+}
