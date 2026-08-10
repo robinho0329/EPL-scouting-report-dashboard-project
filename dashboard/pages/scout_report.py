@@ -39,7 +39,58 @@ from dashboard.components.data_loader import (
     load_s2_transfer_targets,
     load_undervalued,
     load_overvalued,
+    load_player_match_stats,
 )
+
+
+# ── 경기 단위 분석 헬퍼 ─────────────────────────────────────────────────
+@st.cache_data(show_spinner=False)
+def _match_context() -> tuple:
+    """매치로그 + (시즌, 팀)→최종순위 맵. 상대 강도 판정에 쓴다.
+
+    상대팀 표기가 FBref와 팀 프로파일 사이에서 갈리므로
+    (예: 'Nottingham' vs "Nott'm Forest") 양쪽 모두 표준명으로 맞춘 뒤 조인한다.
+    """
+    from pipeline.preprocess import load_team_mapping, standardize_team
+
+    mm = load_player_match_stats()
+    if mm.empty:
+        return mm, {}
+    mapping = load_team_mapping()
+    mm = mm.copy()
+    mm["opp_std"] = mm["opponent"].map(
+        lambda x: standardize_team(x, mapping) if pd.notna(x) else x
+    )
+
+    rank: dict = {}
+    tp_path = Path(__file__).resolve().parents[2] / "data" / "scout" / "scout_team_profiles.parquet"
+    if tp_path.exists():
+        tp = pd.read_parquet(tp_path)
+        if "league_position" in tp.columns:
+            for _, r in tp.iterrows():
+                team = standardize_team(r["team"], mapping)
+                rank[(str(r["season"]), team)] = r["league_position"]
+    return mm, rank
+
+
+def _opp_tier(row, rank: dict) -> str:
+    """상대 팀을 최종 순위 기준 3구간으로 나눈다."""
+    pos = rank.get((row["season"], row["opp_std"]))
+    if pos is None:
+        return "미상"
+    if pos <= 6:
+        return "상위 6팀"
+    if pos <= 13:
+        return "중위권"
+    return "하위권"
+
+
+def _p90(df: pd.DataFrame, col: str) -> float:
+    mins = pd.to_numeric(df["min"], errors="coerce").fillna(0).sum()
+    if mins <= 0:
+        return 0.0
+    return float(pd.to_numeric(df[col], errors="coerce").fillna(0).sum()) / mins * 90
+
 
 # ── 아이콘 / 색상 상수 ──────────────────────────────────────────────────
 RISK_ICON = {"high": "🔴", "medium": "🟡", "low": "🟢"}
@@ -1035,6 +1086,131 @@ def render():
                 st.success("✅ **저위험**: 안정적 상태. 장기 계약 가능.")
     else:
         st.info("이 선수의 하락 감지 데이터가 없습니다.")
+
+    # ──────────────────────────────────────────────────────────────────
+    # 섹션 3.5: 경기 단위 분석 (매치로그)
+    # ──────────────────────────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown("### 📅 경기 단위 분석")
+    st.caption(
+        "시즌 합계로는 안 보이는 것들 — 강팀 상대로도 통했는지, 원정에서 무너지는지, "
+        "선발로 쓰이는지를 경기 기록에서 직접 계산합니다."
+    )
+
+    _mm, _rank = _match_context()
+    pm = pd.DataFrame()
+    if not _mm.empty:
+        pm = _mm[(_mm["player"] == selected_player) & (_mm["season"] == selected_season)].copy()
+
+    if pm.empty:
+        st.info(
+            f"{selected_player}의 {selected_season} 경기 기록이 없습니다. "
+            "출전이 적은 선수는 매치로그가 수집되지 않았을 수 있습니다."
+        )
+    else:
+        pm["min_n"] = pd.to_numeric(pm["min"], errors="coerce").fillna(0)
+        pm["ga"] = pd.to_numeric(pm["gls"], errors="coerce").fillna(0) + pd.to_numeric(
+            pm["ast"], errors="coerce"
+        ).fillna(0)
+        starts = (pm["start"].astype(str).str.upper() == "Y").sum()
+
+        m1, m2, m3, m4 = st.columns(4)
+        with m1:
+            st.metric("출전", f"{len(pm)}경기")
+        with m2:
+            st.metric("선발 비율", f"{starts / len(pm) * 100:.0f}%", help=f"선발 {starts} / 교체 {len(pm)-starts}")
+        with m3:
+            st.metric("평균 출전", f"{pm['min_n'].mean():.0f}분")
+        with m4:
+            cards = pd.to_numeric(pm["crdy"], errors="coerce").fillna(0) + pd.to_numeric(
+                pm["crdr"], errors="coerce"
+            ).fillna(0)
+            tot_min = pm["min_n"].sum()
+            st.metric("90분당 카드", f"{cards.sum() / tot_min * 90:.2f}" if tot_min > 0 else "N/A")
+
+        tab_opp, tab_venue, tab_form = st.tabs(["상대 강도별", "홈/원정", "경기별 추이"])
+
+        with tab_opp:
+            pm["상대"] = pm.apply(lambda r: _opp_tier(r, _rank), axis=1)
+            rows = []
+            for tier in ["상위 6팀", "중위권", "하위권"]:
+                sub = pm[pm["상대"] == tier]
+                if sub.empty:
+                    continue
+                rows.append({
+                    "상대 강도": tier,
+                    "경기": len(sub),
+                    "출전(분)": int(sub["min_n"].sum()),
+                    "골": int(pd.to_numeric(sub["gls"], errors="coerce").fillna(0).sum()),
+                    "도움": int(pd.to_numeric(sub["ast"], errors="coerce").fillna(0).sum()),
+                    "90분당 공격P": round(_p90(sub, "gls") + _p90(sub, "ast"), 2),
+                    "90분당 슈팅": round(_p90(sub, "sh"), 2),
+                })
+            if rows:
+                tier_df = pd.DataFrame(rows)
+                st.dataframe(tier_df, use_container_width=True, hide_index=True)
+                top = tier_df[tier_df["상대 강도"] == "상위 6팀"]
+                rest = tier_df[tier_df["상대 강도"] != "상위 6팀"]
+                if not top.empty and not rest.empty:
+                    t_val = float(top["90분당 공격P"].iloc[0])
+                    r_val = float(rest["90분당 공격P"].mean())
+                    if r_val > 0:
+                        ratio = t_val / r_val
+                        if ratio >= 0.9:
+                            st.success(
+                                f"✅ 강팀 상대 생산성 유지 — 상위 6팀 {t_val:.2f} vs 그 외 {r_val:.2f} "
+                                f"(비율 {ratio:.0%}). 큰 경기에서도 통하는 유형."
+                            )
+                        elif ratio >= 0.6:
+                            st.warning(
+                                f"⚠️ 강팀 상대 생산성 하락 — 상위 6팀 {t_val:.2f} vs 그 외 {r_val:.2f} "
+                                f"(비율 {ratio:.0%}). 상위권 상대 표본 확인 필요."
+                            )
+                        else:
+                            st.warning(
+                                f"⚠️ 강팀 상대 생산성 급감 — 상위 6팀 {t_val:.2f} vs 그 외 {r_val:.2f} "
+                                f"(비율 {ratio:.0%}). 약팀 상대에 치우친 기록."
+                            )
+            else:
+                st.info("상대 강도를 판정할 순위 데이터가 없습니다.")
+
+        with tab_venue:
+            rows = []
+            for v, label in [("Home", "홈"), ("Away", "원정")]:
+                sub = pm[pm["venue"].astype(str).str.strip() == v]
+                if sub.empty:
+                    continue
+                rows.append({
+                    "장소": label,
+                    "경기": len(sub),
+                    "출전(분)": int(sub["min_n"].sum()),
+                    "골": int(pd.to_numeric(sub["gls"], errors="coerce").fillna(0).sum()),
+                    "도움": int(pd.to_numeric(sub["ast"], errors="coerce").fillna(0).sum()),
+                    "90분당 공격P": round(_p90(sub, "gls") + _p90(sub, "ast"), 2),
+                })
+            if rows:
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+            else:
+                st.info("홈/원정 구분 데이터가 없습니다.")
+
+        with tab_form:
+            pm_sorted = pm.sort_values("date")
+            roll = pm_sorted["ga"].rolling(5, min_periods=1).sum()
+            fig = go.Figure()
+            fig.add_trace(go.Bar(
+                x=pm_sorted["date"], y=pm_sorted["ga"],
+                name="경기별 공격P", marker_color="#4C9BE8",
+            ))
+            fig.add_trace(go.Scatter(
+                x=pm_sorted["date"], y=roll,
+                name="최근 5경기 누적", mode="lines+markers", line=dict(color="#F5A623", width=2),
+            ))
+            fig.update_layout(
+                height=320, margin=dict(l=10, r=10, t=30, b=10),
+                yaxis_title="골+도움", xaxis_title=None, hovermode="x unified",
+            )
+            st.plotly_chart(fig, use_container_width=True)
+            st.caption("막대는 경기별 골+도움, 선은 최근 5경기 누적입니다.")
 
     # ──────────────────────────────────────────────────────────────────
     # 섹션 4: 성장 궤적 (S4 + P7)
