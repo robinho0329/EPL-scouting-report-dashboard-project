@@ -269,10 +269,16 @@ def render():
         with col_t:
             if "team" in df.columns:
                 teams = sorted(df["team"].dropna().unique().tolist())
-                team_options = ["전체 팀"] + teams
-                selected_team = st.selectbox("② 팀 필터 (선택)", team_options)
-                if selected_team != "전체 팀":
-                    df = df[df["team"] == selected_team]
+                # 단일 선택이면 한 팀을 고르는 순간 나머지 팀 선수가 목록에서 사라져
+                # 타 팀 선수를 함께 비교할 수 없었다. 복수 선택으로 바꾸고
+                # 비워두면 전체 팀을 그대로 둔다.
+                selected_teams = st.multiselect(
+                    "② 팀 필터 (선택 · 여러 팀 가능)",
+                    teams,
+                    placeholder="비워두면 전체 팀에서 검색",
+                )
+                if selected_teams:
+                    df = df[df["team"].isin(selected_teams)]
     else:
         df = alltime_stats if not alltime_stats.empty else season_stats
 
