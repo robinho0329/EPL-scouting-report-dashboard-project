@@ -256,19 +256,28 @@ class TransfermarktAgent(BaseCrawlerAgent):
         url = f"{TM_BASE_URL}/{slug}/kader/verein/{team_id}/saison_id/{year}/plus/1"
         logger.info(f"TM: Crawling squad: {team_name} ({season})")
 
+        # 아래 두 경우는 반드시 예외로 올려야 한다. 조용히 return하면 호출부가
+        # 예외 없음 = 성공으로 보고 mark_completed를 찍어, 데이터가 0건인데도
+        # 체크포인트만 완료로 남아 재실행에서 영영 건너뛴다.
+        # 실제로 2025/26 Leeds가 이 경로로 유실됐다(TM 봇 차단 페이지 21,734자를
+        # HTTP 200으로 받아 파싱 0건 → completed 기록).
         soup = self.fetch(url)
         if not soup:
-            return
+            raise RuntimeError(f"{team_name} {season}: 페이지 응답 없음")
 
         players = self._parse_squad_page(soup, season, team_name)
+        if not players:
+            raise RuntimeError(
+                f"{team_name} {season}: 스쿼드 테이블 파싱 0건 "
+                f"(봇 차단 페이지 의심 — 응답 {len(str(soup)):,}자)"
+            )
 
-        if players:
-            save_dir = TM_RAW_DIR / str(year) / self._safe_dirname(team_name)
-            save_dir.mkdir(parents=True, exist_ok=True)
+        save_dir = TM_RAW_DIR / str(year) / self._safe_dirname(team_name)
+        save_dir.mkdir(parents=True, exist_ok=True)
 
-            df = pd.DataFrame(players)
-            df.to_csv(save_dir / "squad_values.csv", index=False, encoding="utf-8-sig")
-            logger.info(f"TM: Saved {len(df)} players for {team_name} {season}")
+        df = pd.DataFrame(players)
+        df.to_csv(save_dir / "squad_values.csv", index=False, encoding="utf-8-sig")
+        logger.info(f"TM: Saved {len(df)} players for {team_name} {season}")
 
     def _parse_squad_page(self, soup, season, team_name):
         """Parse the detailed squad page for player data."""
