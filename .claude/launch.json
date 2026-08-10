@@ -3,8 +3,17 @@
   "configurations": [
     {
       "name": "epl-stats",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "streamlit", "run", "C:\\Users\\xcv54\\workspace\\EPL project\\dashboard\\app.py", "--server.headless", "true"],
+      "runtimeExecutable": ".venv\\Scripts\\python.exe",
+      "runtimeArgs": [
+        "-m",
+        "streamlit",
+        "run",
+        "dashboard/app.py",
+        "--server.headless",
+        "true",
+        "--server.port",
+        "8501"
+      ],
       "port": 8501
     }
   ]
