@@ -50,8 +50,8 @@ def tm_season_id(season: str) -> int:
 # ============================================================
 # Seasons
 # ============================================================
-SEASONS = [f"{y}/{str(y+1)[-2:]}" for y in range(2000, 2025)]
-# e.g., ['2000/01', '2001/02', ..., '2024/25']
+SEASONS = [f"{y}/{str(y+1)[-2:]}" for y in range(2000, 2026)]
+# e.g., ['2000/01', '2001/02', ..., '2025/26']
 
 # FBref season URL IDs (season -> fbref path segment)
 # FBref uses format: /en/comps/9/{season_id}/stats/
