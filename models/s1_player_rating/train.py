@@ -449,6 +449,19 @@ metrics['XGBoost'] = {
 joblib.dump(xgb_model, os.path.join(MODEL_DIR, "xgb_model.pkl"))
 print("  XGBoost 모델 저장 완료.")
 
+# ── SHAP 설명용 피처 행렬 저장 ──
+# 대시보드의 모델 설명(SHAP) 페이지는 학습에 쓴 것과 똑같은 피처가 있어야
+# TreeExplainer를 돌릴 수 있다. FEATURES는 여기서 만들어지고 어디에도 남지
+# 않아, 페이지가 scout_ratings_v3에서 8개만 긁어 넘기다 피처 수 불일치로
+# 죽어 있었다. 선수·시즌 키를 붙여 그대로 내보낸다.
+_shap_df = df_model.loc[test_idx, FEATURES].copy()
+for _key in ("player", "season"):
+    if _key in df_model.columns:
+        _shap_df.insert(0, _key, df_model.loc[test_idx, _key].values)
+_shap_path = os.path.join(MODEL_DIR, "shap_features.parquet")
+_shap_df.to_parquet(_shap_path, index=False)
+print(f"  SHAP 피처 행렬 저장: {_shap_df.shape[0]}행 x {len(FEATURES)}피처")
+
 # ── MLP 신경망 ──
 print("\n  MLP 신경망 학습 중...")
 mlp_pipe = Pipeline([

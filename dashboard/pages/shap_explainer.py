@@ -6,10 +6,10 @@ SHAP summary plot(전체 피처 중요도) + 선수별 waterfall plot(개별 기
 
 from __future__ import annotations
 
-import pickle
 import warnings
 from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -43,25 +43,32 @@ FEATURE_NAMES_KO = [FEATURE_LABELS[f] for f in FEATURE_NAMES]
 
 @st.cache_resource(show_spinner="S1 PIS 모델 로드 중...")
 def _load_model():
-    """XGB 모델 + pos 인코더 로드."""
+    """XGB 모델 + pos 인코더 로드 → (model, enc, 실패사유).
+
+    train.py가 joblib.dump로 저장하므로 joblib.load로 읽어야 한다.
+    pickle.load로 읽으면 sklearn 객체(LabelEncoder·Pipeline)가
+    `UnpicklingError: STACK_GLOBAL requires str`로 깨진다. 실제로 인코더가
+    이 경로로 죽으면서 모델까지 None이 되어 페이지 전체가 막혀 있었다.
+    """
     xgb_path = _MODEL_DIR / "xgb_model.pkl"
     enc_path = _MODEL_DIR / "pos_encoder.pkl"
     if not xgb_path.exists():
-        return None, None
+        return None, None, f"모델 파일이 없습니다: `{xgb_path}`"
     try:
-        with open(xgb_path, "rb") as f:
-            model = pickle.load(f)
-        enc = None
-        if enc_path.exists():
-            with open(enc_path, "rb") as f:
-                enc = pickle.load(f)
-        return model, enc
+        model = joblib.load(xgb_path)
     except (ModuleNotFoundError, ImportError) as e:
-        st.warning(f"모델 로드 실패: {e}. xgboost 패키지가 필요합니다.")
-        return None, None
-    except Exception as e:
-        st.warning(f"모델 로드 중 오류: {e}")
-        return None, None
+        return None, None, f"모델 로드 실패 — xgboost 패키지가 필요합니다: {e}"
+    except Exception as e:  # noqa: BLE001
+        return None, None, f"모델 로드 실패: {type(e).__name__}: {e}"
+
+    # 인코더는 없어도 SHAP 계산은 가능하므로 실패를 치명적으로 다루지 않는다.
+    enc = None
+    if enc_path.exists():
+        try:
+            enc = joblib.load(enc_path)
+        except Exception as e:  # noqa: BLE001
+            st.warning(f"포지션 인코더를 읽지 못했습니다 ({type(e).__name__}). 포지션 없이 계산합니다.")
+    return model, enc, None
 
 
 @st.cache_data(show_spinner="선수 데이터 로드 중...")
@@ -92,12 +99,35 @@ def _load_data() -> pd.DataFrame:
     return sr
 
 
+@st.cache_data(show_spinner="SHAP 피처 로드 중...")
+def _load_shap_features(model_feats: list) -> pd.DataFrame:
+    """train.py가 남긴 SHAP용 피처 행렬 로드. 없거나 피처가 어긋나면 빈 DF."""
+    path = _MODEL_DIR / "shap_features.parquet"
+    if not path.exists():
+        return pd.DataFrame()
+    df = pd.read_parquet(path)
+    missing = [f for f in model_feats if f not in df.columns]
+    if missing:
+        st.warning(
+            f"저장된 피처 행렬이 현재 모델과 맞지 않습니다 (누락 {len(missing)}개). "
+            "모델을 다시 학습하세요."
+        )
+        return pd.DataFrame()
+    return df
+
+
 def _encode_pos(sr: pd.DataFrame, enc) -> pd.Series:
     """pos_group → 정수 인코딩."""
     if enc is None:
         mapping = {"DEF": 0, "FW": 1, "GK": 2, "MID": 3}
         return sr["pos_group"].map(mapping).fillna(0).astype(int)
-    pos_map = {cls: i for i, cls in enumerate(enc)}
+    # LabelEncoder 자체는 순회할 수 없다. 라벨 목록은 classes_에 있고,
+    # 인덱스가 곧 학습 때 부여된 인코딩 값이다.
+    classes = getattr(enc, "classes_", None)
+    if classes is None:
+        mapping = {"DEF": 0, "FW": 1, "GK": 2, "MID": 3}
+        return sr["pos_group"].map(mapping).fillna(0).astype(int)
+    pos_map = {cls: i for i, cls in enumerate(classes)}
     return sr["pos_group"].map(pos_map).fillna(0).astype(int)
 
 
@@ -129,21 +159,26 @@ def render():
     )
 
     # ── 모델 로드 ────────────────────────────────────────────────────────────
-    model, enc = _load_model()
+    model, enc, load_err = _load_model()
     if model is None:
-        st.error(
-            "S1 PIS 모델 파일을 찾을 수 없습니다. "
-            f"`{_MODEL_DIR / 'xgb_model.pkl'}` 가 존재하는지 확인하세요."
-        )
+        st.error(f"S1 PIS 모델을 사용할 수 없습니다. {load_err}")
         return
 
     # ── 데이터 로드 ──────────────────────────────────────────────────────────
-    sr = _load_data()
+    # 학습 때 쓴 피처 행렬이 있으면 그것을 쓴다. scout_ratings_v3로 재구성하는
+    # 경로는 모델이 요구하는 34개 중 3개만 채울 수 있어 피처 수 불일치로 죽는다.
+    model_feats = [str(c) for c in getattr(model, "feature_names_in_", [])]
+    sr = _load_shap_features(model_feats)
     if sr.empty:
-        st.error("선수 데이터를 불러올 수 없습니다. `data/scout/scout_ratings_v3.parquet` 를 확인하세요.")
+        st.info(
+            "SHAP 설명에 필요한 피처 행렬이 아직 없습니다.\n\n"
+            "S1 모델을 다시 학습하면 `models/s1_player_rating/shap_features.parquet` 가 "
+            "생성되고 이 페이지가 활성화됩니다.\n\n"
+            "```\npython models/s1_player_rating/train.py\n```"
+        )
         return
 
-    X = _build_X(sr, enc)
+    X = sr[model_feats] if model_feats else _build_X(sr, enc)
 
     # ── 사이드바 필터 ─────────────────────────────────────────────────────────
     with st.sidebar:
