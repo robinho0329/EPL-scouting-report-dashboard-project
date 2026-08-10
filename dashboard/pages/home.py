@@ -303,5 +303,8 @@ def render():
     for i, (label, page_key) in enumerate(nav_items):
         with nav_cols[i]:
             if st.button(label, use_container_width=True, key=f"home_nav_{i}"):
-                st.session_state["nav_menu"] = page_key
+                # nav_menu는 사이드바 라디오의 위젯 키라 페이지 본문에서 직접 대입하면
+                # StreamlitAPIException이 난다. app.py가 라디오 렌더 전에 처리하는
+                # _nav_target 플래그를 거쳐야 한다 (같은 파일의 🔍 버튼들과 동일 패턴).
+                st.session_state["_nav_target"] = page_key
                 st.rerun()
