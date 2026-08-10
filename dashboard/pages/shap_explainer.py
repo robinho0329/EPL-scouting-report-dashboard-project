@@ -140,12 +140,12 @@ def _build_X(sr: pd.DataFrame, enc) -> pd.DataFrame:
 
 
 @st.cache_data(show_spinner="SHAP 값 계산 중... (최초 1회 수행)")
-def _compute_shap(_X_values: np.ndarray, _model_key: str) -> np.ndarray:
-    """TreeExplainer로 SHAP 값 계산. 캐시 key는 모델 식별용."""
+def _compute_shap(_X_values: np.ndarray, _model_key: str, _cols: tuple) -> np.ndarray:
+    """TreeExplainer로 SHAP 값 계산. 컬럼은 모델이 학습한 피처를 그대로 받는다."""
     import shap
-    model, _ = _load_model()
+    model, _, _err = _load_model()
     explainer = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(pd.DataFrame(_X_values, columns=FEATURE_NAMES))
+    shap_values = explainer.shap_values(pd.DataFrame(_X_values, columns=list(_cols)))
     return shap_values
 
 
@@ -178,7 +178,14 @@ def render():
         )
         return
 
-    X = sr[model_feats] if model_feats else _build_X(sr, enc)
+    # 피처 목록·라벨은 모델에서 끌어온다. 하드코딩하면 재학습으로 피처가 바뀔 때
+    # 또 어긋난다(실제로 8개로 고정돼 있어 34개 모델과 맞지 않았다).
+    feats = model_feats or FEATURE_NAMES
+    feats_ko = [FEATURE_LABELS.get(f, f) for f in feats]
+    # PIS 값 컬럼명이 소스마다 다르다: scout_ratings_v3는 war, 학습 산출물은 war_rating
+    war_col = next((c for c in ("war", "war_rating") if c in sr.columns), None)
+
+    X = sr[feats] if model_feats else _build_X(sr, enc)
 
     # ── 사이드바 필터 ─────────────────────────────────────────────────────────
     with st.sidebar:
@@ -188,7 +195,7 @@ def render():
         sel_season = st.selectbox("시즌", seasons_all, key="shap_season")
 
     sr_f = sr[sr["season"] == sel_season].copy()
-    X_f = _build_X(sr_f, enc)
+    X_f = sr_f[feats] if feats else _build_X(sr_f, enc)
 
     if sr_f.empty:
         st.info("선택한 시즌 데이터가 없습니다.")
@@ -208,8 +215,9 @@ def render():
     st.markdown("---")
     st.markdown("### PIS 점수는 어떻게 결정되는가?")
     st.info(
-        "S1 PIS(Player Impact Score) 모델은 나이, 시장가치, 팀 전력(승점/득실차), "
-        "출전 시간, 포지션 등 8개 피처로 선수의 기여도를 0~100 퍼센타일로 환산합니다. "
+        f"S1 PIS(Player Impact Score) 모델은 나이, 팀 전력(승점/득실차), 출전 시간, 포지션, "
+        f"90분당 공수 지표와 그 표준화 값 등 **{len(feats)}개 피처**로 선수의 기여도를 "
+        "0~100 퍼센타일로 환산합니다. "
         "아래 차트는 각 피처가 PIS 점수를 얼마나 올리거나 낮추는지 보여줍니다."
     )
 
@@ -220,8 +228,8 @@ def render():
 
     mean_abs_shap = np.abs(shap_vals).mean(axis=0)
     importance_df = pd.DataFrame({
-        "피처": FEATURE_NAMES_KO,
-        "피처_원본": FEATURE_NAMES,
+        "피처": feats_ko,
+        "피처_원본": feats,
         "평균_SHAP": mean_abs_shap,
     }).sort_values("평균_SHAP", ascending=True)
 
@@ -278,7 +286,7 @@ def render():
 
     player_shap = shap_vals[p_idx]  # shape: (8,)
     player_x = X_f_reset.iloc[p_idx]
-    player_war = float(sr_f_reset.iloc[p_idx]["war"])
+    player_war = float(sr_f_reset.iloc[p_idx][war_col]) if war_col else float("nan")
 
     # 팀/포지션 정보
     player_team = sr_f_reset.iloc[p_idx].get("team", "")
@@ -296,7 +304,7 @@ def render():
     # Waterfall 데이터 구성
     # 순서: expected_value → 피처별 SHAP 누적 → 최종 예측값
     sorted_idx = np.argsort(np.abs(player_shap))[::-1]  # 절댓값 내림차순
-    sorted_feats_ko = [FEATURE_NAMES_KO[i] for i in sorted_idx]
+    sorted_feats_ko = [feats_ko[i] for i in sorted_idx]
     sorted_shap = [float(player_shap[i]) for i in sorted_idx]
     sorted_feat_vals = [float(player_x.iloc[i]) for i in sorted_idx]
 
@@ -378,7 +386,7 @@ def render():
 
     scatter_x = X_f_reset.iloc[:, feat_idx].values
     scatter_y = shap_vals[:, feat_idx]
-    scatter_war = sr_f_reset["war"].fillna(0).values
+    scatter_war = (sr_f_reset[war_col] if war_col else pd.Series(0, index=sr_f_reset.index)).fillna(0).values
     scatter_names = sr_f_reset["player"].values
 
     sc_fig = go.Figure(go.Scatter(
@@ -417,18 +425,16 @@ def render():
     st.markdown("---")
     st.markdown(f"### {sel_season} PIS 순위 (상위 20명)")
 
-    display_cols = ["player", "team", "pos_group", "age", "war"]
+    # PIS 값 컬럼명이 소스마다 다르다 (scout_ratings_v3: war / 학습 산출물: war_rating)
+    display_cols = [c for c in ("player", "team", "pos_group", "age", war_col) if c]
     available = [c for c in display_cols if c in sr_f_reset.columns]
     rename_map = {
         "player": "선수", "team": "팀", "pos_group": "포지션",
-        "age": "나이", "war": "PIS",
+        "age": "나이", "war": "PIS", "war_rating": "PIS",
     }
-    top20 = (
-        sr_f_reset[available]
-        .sort_values("war", ascending=False)
-        .head(20)
-        .rename(columns=rename_map)
-        .reset_index(drop=True)
-    )
+    top20 = sr_f_reset[available]
+    if war_col:
+        top20 = top20.sort_values(war_col, ascending=False)
+    top20 = top20.head(20).rename(columns=rename_map).reset_index(drop=True)
     top20.index += 1
     st.dataframe(top20, use_container_width=True)

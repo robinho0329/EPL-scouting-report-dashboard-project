@@ -455,8 +455,10 @@ print("  XGBoost 모델 저장 완료.")
 # 않아, 페이지가 scout_ratings_v3에서 8개만 긁어 넘기다 피처 수 불일치로
 # 죽어 있었다. 선수·시즌 키를 붙여 그대로 내보낸다.
 _shap_df = df_model.loc[test_idx, FEATURES].copy()
-for _key in ("player", "season"):
-    if _key in df_model.columns:
+# 대시보드가 선수 목록·표에 쓰는 식별/표시 컬럼도 함께 내보낸다.
+# (빠지면 SHAP 페이지가 KeyError로 죽는다 — 실제로 pos_group에서 걸렸다)
+for _key in ("player", "season", "team", "pos_group", "market_value", TARGET):
+    if _key in df_model.columns and _key not in _shap_df.columns:
         _shap_df.insert(0, _key, df_model.loc[test_idx, _key].values)
 _shap_path = os.path.join(MODEL_DIR, "shap_features.parquet")
 _shap_df.to_parquet(_shap_path, index=False)
