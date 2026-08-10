@@ -10,45 +10,45 @@
   "model_metrics": {
     "Ridge": {
       "val": {
-        "rmse": 13.7631,
-        "mae": 9.9021,
-        "r2": 0.6081
+        "rmse": 9.0499,
+        "mae": 6.5604,
+        "r2": 0.7792
       },
       "test": {
-        "rmse": 13.2223,
-        "mae": 9.8521,
-        "r2": 0.6305
+        "rmse": 10.2593,
+        "mae": 7.5013,
+        "r2": 0.7527
       }
     },
     "XGBoost": {
       "val": {
-        "rmse": 6.6345,
-        "mae": 4.5174,
-        "r2": 0.9089
+        "rmse": 5.5519,
+        "mae": 4.2894,
+        "r2": 0.9169
       },
       "test": {
-        "rmse": 6.5499,
-        "mae": 4.6617,
-        "r2": 0.9093
+        "rmse": 6.9807,
+        "mae": 4.871,
+        "r2": 0.8855
       }
     },
     "MLP": {
       "val": {
-        "rmse": 7.9628,
-        "mae": 5.8726,
-        "r2": 0.8688
+        "rmse": 5.487,
+        "mae": 4.1324,
+        "r2": 0.9188
       },
       "test": {
-        "rmse": 8.5829,
-        "mae": 6.9709,
-        "r2": 0.8443
+        "rmse": 6.2716,
+        "mae": 4.6945,
+        "r2": 0.9076
       }
     },
     "Ensemble": {
       "test": {
-        "rmse": 6.8259,
-        "mae": 4.9939,
-        "r2": 0.9015
+        "rmse": 6.4013,
+        "mae": 4.5086,
+        "r2": 0.9037
       }
     }
   },
@@ -61,14 +61,20 @@
         "war_rating": 100.0
       },
       {
-        "player": "Erling Haaland",
-        "team": "Man City",
+        "player": "Neal Maupay",
+        "team": "Everton",
         "pos_group": "FW",
         "war_rating": 100.0
       },
       {
-        "player": "Sergio Reguilón",
-        "team": "Man United",
+        "player": "Neco Williams",
+        "team": "Nott'm Forest",
+        "pos_group": "DEF",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Neco Williams",
+        "team": "Nott'm Forest",
         "pos_group": "DEF",
         "war_rating": 100.0
       },
@@ -79,103 +85,115 @@
         "war_rating": 100.0
       },
       {
-        "player": "Antonee Robinson",
-        "team": "Fulham",
+        "player": "Willy Boly",
+        "team": "Nott'm Forest",
         "pos_group": "DEF",
-        "war_rating": 99.38
+        "war_rating": 99.63
       },
       {
-        "player": "Cole Palmer",
-        "team": "Chelsea",
+        "player": "Willy Boly",
+        "team": "Nott'm Forest",
+        "pos_group": "DEF",
+        "war_rating": 99.63
+      },
+      {
+        "player": "Brennan Johnson",
+        "team": "Nott'm Forest",
         "pos_group": "FW",
-        "war_rating": 94.97
+        "war_rating": 99.26
+      },
+      {
+        "player": "Brennan Johnson",
+        "team": "Nott'm Forest",
+        "pos_group": "FW",
+        "war_rating": 99.26
+      },
+      {
+        "player": "Alex Iwobi",
+        "team": "Everton",
+        "pos_group": "FW",
+        "war_rating": 93.44
+      },
+      {
+        "player": "Sergio Reguilón",
+        "team": "Man United",
+        "pos_group": "DEF",
+        "war_rating": 92.63
       },
       {
         "player": "Julián Álvarez",
         "team": "Man City",
         "pos_group": "MID",
-        "war_rating": 88.89
+        "war_rating": 88.38
       },
       {
-        "player": "Mohamed Salah",
-        "team": "Liverpool",
-        "pos_group": "FW",
-        "war_rating": 88.32
-      },
-      {
-        "player": "Ollie Watkins",
-        "team": "Aston Villa",
-        "pos_group": "FW",
-        "war_rating": 83.84
-      },
-      {
-        "player": "Michael Olise",
-        "team": "Crystal Palace",
-        "pos_group": "FW",
-        "war_rating": 83.15
-      },
-      {
-        "player": "Sergio Reguilón",
-        "team": "Brentford",
+        "player": "Murillo",
+        "team": "Nott'm Forest",
         "pos_group": "DEF",
-        "war_rating": 82.64
+        "war_rating": 87.41
       },
       {
-        "player": "Alexander Isak",
-        "team": "Newcastle",
-        "pos_group": "FW",
-        "war_rating": 82.21
-      },
-      {
-        "player": "Emerson Palmieri",
-        "team": "West Ham",
+        "player": "Murillo",
+        "team": "Nott'm Forest",
         "pos_group": "DEF",
-        "war_rating": 81.99
+        "war_rating": 87.41
       },
       {
-        "player": "Phil Foden",
-        "team": "Man City",
-        "pos_group": "FW",
-        "war_rating": 81.8
+        "player": "Matheus Nunes",
+        "team": "Wolves",
+        "pos_group": "DEF",
+        "war_rating": 84.62
       },
       {
-        "player": "Ederson",
+        "player": "Ederson Moraes",
         "team": "Man City",
         "pos_group": "GK",
-        "war_rating": 79.07
-      },
-      {
-        "player": "Darwin Núñez",
-        "team": "Liverpool",
-        "pos_group": "FW",
-        "war_rating": 78.78
+        "war_rating": 79.96
       },
       {
         "player": "Jordan Pickford",
         "team": "Everton",
         "pos_group": "GK",
-        "war_rating": 78.63
+        "war_rating": 79.96
       },
       {
-        "player": "Enes Ünal",
+        "player": "Mark Travers",
         "team": "Bournemouth",
-        "pos_group": "FW",
-        "war_rating": 78.59
+        "pos_group": "GK",
+        "war_rating": 79.53
       },
       {
-        "player": "Jeremy Doku",
-        "team": "Man City",
-        "pos_group": "MID",
-        "war_rating": 78.44
-      },
-      {
-        "player": "Conor Bradley",
-        "team": "Liverpool",
+        "player": "Antonee Robinson",
+        "team": "Fulham",
         "pos_group": "DEF",
-        "war_rating": 78.39
+        "war_rating": 78.58
+      },
+      {
+        "player": "Felipe",
+        "team": "Nott'm Forest",
+        "pos_group": "DEF",
+        "war_rating": 77.4
       }
     ],
     "2024/25": [
+      {
+        "player": "James Ward-Prowse",
+        "team": "Nott'm Forest",
+        "pos_group": "MID",
+        "war_rating": 100.0
+      },
+      {
+        "player": "James Ward-Prowse",
+        "team": "Nott'm Forest",
+        "pos_group": "MID",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Joachim Andersen",
+        "team": "Crystal Palace",
+        "pos_group": "DEF",
+        "war_rating": 100.0
+      },
       {
         "player": "Marcus Rashford",
         "team": "Aston Villa",
@@ -183,118 +201,222 @@
         "war_rating": 100.0
       },
       {
-        "player": "Martin Dúbravka",
-        "team": "Newcastle",
+        "player": "Matz Sels",
+        "team": "Nott'm Forest",
         "pos_group": "GK",
         "war_rating": 100.0
-      },
-      {
-        "player": "Son Heung-min",
-        "team": "Tottenham",
-        "pos_group": "MID",
-        "war_rating": 100.0
-      },
-      {
-        "player": "Trevoh Chalobah",
-        "team": "Chelsea",
-        "pos_group": "DEF",
-        "war_rating": 100.0
-      },
-      {
-        "player": "Mohamed Salah",
-        "team": "Liverpool",
-        "pos_group": "FW",
-        "war_rating": 97.9
-      },
-      {
-        "player": "Trevoh Chalobah",
-        "team": "Crystal Palace",
-        "pos_group": "DEF",
-        "war_rating": 94.56
-      },
-      {
-        "player": "Daniel Muñoz",
-        "team": "Crystal Palace",
-        "pos_group": "DEF",
-        "war_rating": 92.62
-      },
-      {
-        "player": "David Raya",
-        "team": "Arsenal",
-        "pos_group": "GK",
-        "war_rating": 91.31
       },
       {
         "player": "Matz Sels",
         "team": "Nott'm Forest",
         "pos_group": "GK",
-        "war_rating": 91.31
+        "war_rating": 100.0
       },
       {
-        "player": "Antonee Robinson",
-        "team": "Fulham",
-        "pos_group": "DEF",
-        "war_rating": 91.16
+        "player": "Chris Wood",
+        "team": "Nott'm Forest",
+        "pos_group": "FW",
+        "war_rating": 96.48
       },
       {
-        "player": "Ederson",
-        "team": "Man City",
-        "pos_group": "GK",
-        "war_rating": 90.31
+        "player": "Chris Wood",
+        "team": "Nott'm Forest",
+        "pos_group": "FW",
+        "war_rating": 96.48
       },
       {
-        "player": "Aaron Wan-Bissaka",
-        "team": "West Ham",
-        "pos_group": "DEF",
-        "war_rating": 89.51
-      },
-      {
-        "player": "Noussair Mazraoui",
-        "team": "Man United",
-        "pos_group": "DEF",
-        "war_rating": 89.45
-      },
-      {
-        "player": "Alisson",
+        "player": "Mohamed Salah",
         "team": "Liverpool",
-        "pos_group": "GK",
-        "war_rating": 86.5
+        "pos_group": "FW",
+        "war_rating": 94.42
       },
       {
-        "player": "Jordan Pickford",
-        "team": "Everton",
-        "pos_group": "GK",
-        "war_rating": 86.25
-      },
-      {
-        "player": "Carlos Alcaraz",
-        "team": "Everton",
+        "player": "Son Heung-min",
+        "team": "Tottenham",
         "pos_group": "MID",
-        "war_rating": 85.22
+        "war_rating": 83.73
       },
       {
-        "player": "Ben Chilwell",
+        "player": "Hákon Valdimarsson",
+        "team": "Brentford",
+        "pos_group": "GK",
+        "war_rating": 82.13
+      },
+      {
+        "player": "Julio Enciso",
+        "team": "Brighton",
+        "pos_group": "FW",
+        "war_rating": 80.17
+      },
+      {
+        "player": "Martin Dúbravka",
+        "team": "Newcastle",
+        "pos_group": "GK",
+        "war_rating": 80.14
+      },
+      {
+        "player": "David Raya",
+        "team": "Arsenal",
+        "pos_group": "GK",
+        "war_rating": 77.58
+      },
+      {
+        "player": "Alexander Isak",
+        "team": "Newcastle",
+        "pos_group": "FW",
+        "war_rating": 77.1
+      },
+      {
+        "player": "Anthony Elanga",
+        "team": "Nott'm Forest",
+        "pos_group": "FW",
+        "war_rating": 76.42
+      },
+      {
+        "player": "Anthony Elanga",
+        "team": "Nott'm Forest",
+        "pos_group": "FW",
+        "war_rating": 76.42
+      },
+      {
+        "player": "Neco Williams",
+        "team": "Nott'm Forest",
+        "pos_group": "DEF",
+        "war_rating": 76.16
+      },
+      {
+        "player": "Neco Williams",
+        "team": "Nott'm Forest",
+        "pos_group": "DEF",
+        "war_rating": 76.16
+      },
+      {
+        "player": "Morgan Gibbs-White",
+        "team": "Nott'm Forest",
+        "pos_group": "FW",
+        "war_rating": 75.3
+      }
+    ],
+    "2025/26": [
+      {
+        "player": "Eli Junior Kroupi",
+        "team": "Bournemouth",
+        "pos_group": "MID",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Erling Haaland",
+        "team": "Man City",
+        "pos_group": "FW",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Marc Guéhi",
+        "team": "Man City",
+        "pos_group": "DEF",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Walter Benítez",
+        "team": "Crystal Palace",
+        "pos_group": "GK",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Enzo Fernández",
+        "team": "Chelsea",
+        "pos_group": "MID",
+        "war_rating": 99.14
+      },
+      {
+        "player": "Bruno Guimarães",
+        "team": "Newcastle",
+        "pos_group": "MID",
+        "war_rating": 98.55
+      },
+      {
+        "player": "Antoine Semenyo",
+        "team": "Man City",
+        "pos_group": "FW",
+        "war_rating": 97.39
+      },
+      {
+        "player": "Marc Guéhi",
         "team": "Crystal Palace",
         "pos_group": "DEF",
-        "war_rating": 84.34
+        "war_rating": 94.38
       },
       {
-        "player": "Victor Bernth Kristiansen",
-        "team": "Leicester",
+        "player": "Oliver Scarles",
+        "team": "West Ham",
         "pos_group": "DEF",
-        "war_rating": 83.69
+        "war_rating": 92.18
       },
       {
-        "player": "Kenny Tete",
-        "team": "Fulham",
+        "player": "David Raya",
+        "team": "Arsenal",
+        "pos_group": "GK",
+        "war_rating": 91.43
+      },
+      {
+        "player": "Antoine Semenyo",
+        "team": "Bournemouth",
+        "pos_group": "FW",
+        "war_rating": 91.0
+      },
+      {
+        "player": "Jeremy Doku",
+        "team": "Man City",
+        "pos_group": "MID",
+        "war_rating": 88.5
+      },
+      {
+        "player": "Neco Williams",
+        "team": "Nott'm Forest",
         "pos_group": "DEF",
-        "war_rating": 83.02
+        "war_rating": 84.98
       },
       {
         "player": "Ismaila Sarr",
         "team": "Crystal Palace",
         "pos_group": "MID",
-        "war_rating": 81.93
+        "war_rating": 84.43
+      },
+      {
+        "player": "Mikel Merino",
+        "team": "Arsenal",
+        "pos_group": "MID",
+        "war_rating": 84.43
+      },
+      {
+        "player": "Antonee Robinson",
+        "team": "Fulham",
+        "pos_group": "DEF",
+        "war_rating": 82.61
+      },
+      {
+        "player": "Kiernan Dewsbury-Hall",
+        "team": "Everton",
+        "pos_group": "MID",
+        "war_rating": 81.97
+      },
+      {
+        "player": "Casemiro",
+        "team": "Man United",
+        "pos_group": "MID",
+        "war_rating": 81.02
+      },
+      {
+        "player": "Max Alleyne",
+        "team": "Man City",
+        "pos_group": "DEF",
+        "war_rating": 80.91
+      },
+      {
+        "player": "Gianluigi Donnarumma",
+        "team": "Man City",
+        "pos_group": "GK",
+        "war_rating": 80.03
       }
     ]
   },
@@ -302,7 +424,7 @@
     "FW": [
       {
         "player": "Erling Haaland",
-        "season": "2023/24",
+        "season": "2025/26",
         "team": "Man City",
         "war_rating": 100.0
       },
@@ -313,176 +435,176 @@
         "war_rating": 100.0
       },
       {
-        "player": "Mohamed Salah",
-        "season": "2024/25",
-        "team": "Liverpool",
-        "war_rating": 97.9
+        "player": "Neal Maupay",
+        "season": "2023/24",
+        "team": "Everton",
+        "war_rating": 100.0
       },
       {
-        "player": "Cole Palmer",
+        "player": "Brennan Johnson",
         "season": "2023/24",
-        "team": "Chelsea",
-        "war_rating": 94.97
+        "team": "Nott'm Forest",
+        "war_rating": 99.26
       },
       {
-        "player": "Mohamed Salah",
+        "player": "Brennan Johnson",
         "season": "2023/24",
-        "team": "Liverpool",
-        "war_rating": 88.32
+        "team": "Nott'm Forest",
+        "war_rating": 99.26
       },
       {
-        "player": "Ollie Watkins",
-        "season": "2023/24",
-        "team": "Aston Villa",
-        "war_rating": 83.84
-      },
-      {
-        "player": "Michael Olise",
-        "season": "2023/24",
-        "team": "Crystal Palace",
-        "war_rating": 83.15
-      },
-      {
-        "player": "Alexander Isak",
-        "season": "2023/24",
-        "team": "Newcastle",
-        "war_rating": 82.21
-      },
-      {
-        "player": "Phil Foden",
-        "season": "2023/24",
+        "player": "Antoine Semenyo",
+        "season": "2025/26",
         "team": "Man City",
-        "war_rating": 81.8
+        "war_rating": 97.39
       },
       {
-        "player": "Julio Enciso",
+        "player": "Chris Wood",
         "season": "2024/25",
-        "team": "Brighton",
-        "war_rating": 81.1
+        "team": "Nott'm Forest",
+        "war_rating": 96.48
+      },
+      {
+        "player": "Chris Wood",
+        "season": "2024/25",
+        "team": "Nott'm Forest",
+        "war_rating": 96.48
+      },
+      {
+        "player": "Mohamed Salah",
+        "season": "2024/25",
+        "team": "Liverpool",
+        "war_rating": 94.42
+      },
+      {
+        "player": "Alex Iwobi",
+        "season": "2023/24",
+        "team": "Everton",
+        "war_rating": 93.44
       }
     ],
     "MID": [
       {
-        "player": "Son Heung-min",
-        "season": "2023/24",
-        "team": "Tottenham",
+        "player": "Eli Junior Kroupi",
+        "season": "2025/26",
+        "team": "Bournemouth",
         "war_rating": 100.0
-      },
-      {
-        "player": "Son Heung-min",
-        "season": "2024/25",
-        "team": "Tottenham",
-        "war_rating": 100.0
-      },
-      {
-        "player": "Julián Álvarez",
-        "season": "2023/24",
-        "team": "Man City",
-        "war_rating": 88.89
-      },
-      {
-        "player": "Carlos Alcaraz",
-        "season": "2024/25",
-        "team": "Everton",
-        "war_rating": 85.22
-      },
-      {
-        "player": "Ismaila Sarr",
-        "season": "2024/25",
-        "team": "Crystal Palace",
-        "war_rating": 81.93
       },
       {
         "player": "James Ward-Prowse",
         "season": "2024/25",
         "team": "Nott'm Forest",
-        "war_rating": 81.48
+        "war_rating": 100.0
       },
       {
-        "player": "Sávio",
+        "player": "James Ward-Prowse",
         "season": "2024/25",
-        "team": "Man City",
-        "war_rating": 80.92
+        "team": "Nott'm Forest",
+        "war_rating": 100.0
       },
       {
-        "player": "Jeremy Doku",
+        "player": "Son Heung-min",
         "season": "2023/24",
-        "team": "Man City",
-        "war_rating": 78.44
-      },
-      {
-        "player": "Luke Berry",
-        "season": "2023/24",
-        "team": "Luton",
-        "war_rating": 74.89
+        "team": "Tottenham",
+        "war_rating": 100.0
       },
       {
         "player": "Enzo Fernández",
-        "season": "2024/25",
+        "season": "2025/26",
         "team": "Chelsea",
-        "war_rating": 73.2
+        "war_rating": 99.14
+      },
+      {
+        "player": "Bruno Guimarães",
+        "season": "2025/26",
+        "team": "Newcastle",
+        "war_rating": 98.55
+      },
+      {
+        "player": "Jeremy Doku",
+        "season": "2025/26",
+        "team": "Man City",
+        "war_rating": 88.5
+      },
+      {
+        "player": "Julián Álvarez",
+        "season": "2023/24",
+        "team": "Man City",
+        "war_rating": 88.38
+      },
+      {
+        "player": "Ismaila Sarr",
+        "season": "2025/26",
+        "team": "Crystal Palace",
+        "war_rating": 84.43
+      },
+      {
+        "player": "Mikel Merino",
+        "season": "2025/26",
+        "team": "Arsenal",
+        "war_rating": 84.43
       }
     ],
     "DEF": [
       {
+        "player": "Joachim Andersen",
+        "season": "2024/25",
+        "team": "Crystal Palace",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Marc Guéhi",
+        "season": "2025/26",
+        "team": "Man City",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Neco Williams",
+        "season": "2023/24",
+        "team": "Nott'm Forest",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Neco Williams",
+        "season": "2023/24",
+        "team": "Nott'm Forest",
+        "war_rating": 100.0
+      },
+      {
+        "player": "Willy Boly",
+        "season": "2023/24",
+        "team": "Nott'm Forest",
+        "war_rating": 99.63
+      },
+      {
+        "player": "Willy Boly",
+        "season": "2023/24",
+        "team": "Nott'm Forest",
+        "war_rating": 99.63
+      },
+      {
+        "player": "Marc Guéhi",
+        "season": "2025/26",
+        "team": "Crystal Palace",
+        "war_rating": 94.38
+      },
+      {
         "player": "Sergio Reguilón",
         "season": "2023/24",
         "team": "Man United",
-        "war_rating": 100.0
+        "war_rating": 92.63
       },
       {
-        "player": "Trevoh Chalobah",
-        "season": "2024/25",
-        "team": "Chelsea",
-        "war_rating": 100.0
-      },
-      {
-        "player": "Antonee Robinson",
-        "season": "2023/24",
-        "team": "Fulham",
-        "war_rating": 99.38
-      },
-      {
-        "player": "Trevoh Chalobah",
-        "season": "2024/25",
-        "team": "Crystal Palace",
-        "war_rating": 94.56
-      },
-      {
-        "player": "Daniel Muñoz",
-        "season": "2024/25",
-        "team": "Crystal Palace",
-        "war_rating": 92.62
-      },
-      {
-        "player": "Antonee Robinson",
-        "season": "2024/25",
-        "team": "Fulham",
-        "war_rating": 91.16
-      },
-      {
-        "player": "Aaron Wan-Bissaka",
-        "season": "2024/25",
+        "player": "Oliver Scarles",
+        "season": "2025/26",
         "team": "West Ham",
-        "war_rating": 89.51
+        "war_rating": 92.18
       },
       {
-        "player": "Noussair Mazraoui",
-        "season": "2024/25",
-        "team": "Man United",
-        "war_rating": 89.45
-      },
-      {
-        "player": "Ben Chilwell",
-        "season": "2024/25",
-        "team": "Crystal Palace",
-        "war_rating": 84.34
-      },
-      {
-        "player": "Victor Bernth Kristiansen",
-        "season": "2024/25",
-        "team": "Leicester",
-        "war_rating": 83.69
+        "player": "Murillo",
+        "season": "2023/24",
+        "team": "Nott'm Forest",
+        "war_rating": 87.41
       }
     ],
     "GK": [
@@ -493,58 +615,58 @@
         "war_rating": 100.0
       },
       {
-        "player": "Martin Dúbravka",
+        "player": "Matz Sels",
         "season": "2024/25",
-        "team": "Newcastle",
+        "team": "Nott'm Forest",
         "war_rating": 100.0
-      },
-      {
-        "player": "David Raya",
-        "season": "2024/25",
-        "team": "Arsenal",
-        "war_rating": 91.31
       },
       {
         "player": "Matz Sels",
         "season": "2024/25",
         "team": "Nott'm Forest",
-        "war_rating": 91.31
+        "war_rating": 100.0
       },
       {
-        "player": "Ederson",
+        "player": "Walter Benítez",
+        "season": "2025/26",
+        "team": "Crystal Palace",
+        "war_rating": 100.0
+      },
+      {
+        "player": "David Raya",
+        "season": "2025/26",
+        "team": "Arsenal",
+        "war_rating": 91.43
+      },
+      {
+        "player": "Hákon Valdimarsson",
         "season": "2024/25",
+        "team": "Brentford",
+        "war_rating": 82.13
+      },
+      {
+        "player": "Martin Dúbravka",
+        "season": "2024/25",
+        "team": "Newcastle",
+        "war_rating": 80.14
+      },
+      {
+        "player": "Gianluigi Donnarumma",
+        "season": "2025/26",
         "team": "Man City",
-        "war_rating": 90.31
+        "war_rating": 80.03
       },
       {
-        "player": "Alisson",
-        "season": "2024/25",
-        "team": "Liverpool",
-        "war_rating": 86.5
+        "player": "Ederson Moraes",
+        "season": "2023/24",
+        "team": "Man City",
+        "war_rating": 79.96
       },
       {
         "player": "Jordan Pickford",
-        "season": "2024/25",
+        "season": "2023/24",
         "team": "Everton",
-        "war_rating": 86.25
-      },
-      {
-        "player": "Dean Henderson",
-        "season": "2024/25",
-        "team": "Crystal Palace",
-        "war_rating": 81.19
-      },
-      {
-        "player": "Robert Sánchez",
-        "season": "2024/25",
-        "team": "Chelsea",
-        "war_rating": 80.97
-      },
-      {
-        "player": "Caoimhín Kelleher",
-        "season": "2024/25",
-        "team": "Liverpool",
-        "war_rating": 80.77
+        "war_rating": 79.96
       }
     ]
   },
@@ -580,12 +702,10 @@
     "min_ratio_z",
     "min_ratio",
     "war_lag1",
-    "war_lag2",
-    "war_lag1_diff",
-    "pts_per_game"
+    "war_lag1_diff"
   ],
   "train_size": 10299,
-  "val_size": 984,
-  "test_size": 1000,
-  "total_players_rated": 12283
+  "val_size": 1014,
+  "test_size": 1539,
+  "total_players_rated": 12852
 }
