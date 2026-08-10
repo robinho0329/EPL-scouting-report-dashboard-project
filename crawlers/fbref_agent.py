@@ -31,7 +31,9 @@ from crawlers.utils.name_normalizer import normalize_team_name
 logger = logging.getLogger(__name__)
 
 # 매치로그 크롤링할 최소 출전 경기수
-MIN_APPEARANCES_FOR_MATCHLOG = 5
+# 1경기라도 뛰었으면 매치로그를 받는다. 기존 5경기 기준으로는 25시즌 누적
+# 2,349명이 빠져 있었다(0경기 1,270명은 애초에 받을 매치로그가 없어 제외).
+MIN_APPEARANCES_FOR_MATCHLOG = 1
 
 
 class FBrefAgent(BaseCrawlerAgent):
