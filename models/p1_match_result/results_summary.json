@@ -1,6 +1,6 @@
 {
   "task": "P1 Match Result Prediction (3-class: H/D/A)",
-  "features_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/features/match_features.parquet",
+  "features_file": "D:\\workspace\\EPL project\\data\\features\\match_features.parquet",
   "n_features": 51,
   "feature_columns": [
     "season_year",
@@ -68,64 +68,64 @@
   "models": {
     "xgboost": {
       "train": {
-        "accuracy": 0.5703,
-        "f1_macro": 0.4362,
+        "accuracy": 0.5691,
+        "f1_macro": 0.4358,
         "confusion_matrix": [
           [
-            1205,
-            4,
-            1080
+            1202,
+            5,
+            1082
           ],
           [
-            497,
-            72,
-            1399
+            494,
+            74,
+            1400
           ],
           [
-            409,
-            1,
-            3223
+            417,
+            2,
+            3214
           ]
         ]
       },
       "val": {
-        "accuracy": 0.5434,
-        "f1_macro": 0.4053,
+        "accuracy": 0.5316,
+        "f1_macro": 0.3929,
         "confusion_matrix": [
           [
-            147,
+            144,
             0,
-            91
+            94
           ],
           [
-            74,
-            1,
+            75,
+            0,
             100
           ],
           [
-            81,
-            1,
-            265
+            87,
+            0,
+            260
           ]
         ]
       },
       "test": {
-        "accuracy": 0.5507,
-        "f1_macro": 0.4117,
+        "accuracy": 0.5521,
+        "f1_macro": 0.413,
         "confusion_matrix": [
           [
-            159,
+            160,
             0,
-            82
-          ],
-          [
-            73,
-            0,
-            97
+            81
           ],
           [
             76,
             0,
+            94
+          ],
+          [
+            75,
+            1,
             243
           ]
         ]
