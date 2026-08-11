@@ -37,9 +37,11 @@
     color: #888888 !important;
 }
 
-/* Sidebar */
+/* Sidebar
+   PL 공식 배너가 쓰는 퍼플→마젠타 세로 그라디언트. 단색보다 깊이가 생기고,
+   아래쪽 메뉴 항목이 배경에 묻히지 않는다. */
 [data-testid="stSidebar"] {
-    background-color: #37003c;
+    background: linear-gradient(180deg, #37003c 0%, #4a0a4f 55%, #7f0f55 100%);
     color: #ffffff;
 }
 
@@ -115,6 +117,30 @@ h2, h3 {
 /* Buttons & selectbox */
 .stSelectbox [data-baseweb="select"] {
     border-color: #37003c;
+}
+
+/* 페이지 제목 — PL 배너의 퍼플→핑크 그라디언트를 글자에 입힌다.
+   단색 흰색 제목은 어느 대시보드에나 있는 모양이라 브랜드가 드러나지 않는다. */
+[data-testid="stAppViewContainer"] h1 {
+    background: linear-gradient(90deg, #ffffff 0%, #ff2882 65%, #e90052 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent !important;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+/* 메트릭 카드 — 평평한 나열 대신 카드로 띄우고 상단에 브랜드 톤을 얹는다. */
+[data-testid="stMetric"] {
+    background: linear-gradient(160deg, rgba(55, 0, 60, 0.55) 0%, rgba(13, 13, 26, 0.35) 100%);
+    border: 1px solid rgba(255, 40, 130, 0.22);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+}
+
+[data-testid="stMetric"]:hover {
+    border-color: rgba(0, 255, 135, 0.45);
 }
 
 /* Accent colors matching PL brand */
