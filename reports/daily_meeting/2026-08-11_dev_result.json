@@ -2,20 +2,20 @@
   "date": "2026-08-11",
   "results": [
     {
-      "item": "P1 경기 결과 무승부 클래스 복구 (5회차, 코드 커밋 우선): 성능 목표보다 코드 존재",
-      "script": "models\\p1_match_result\\train_pipeline.py",
+      "item": "P1 경기 결과 무승부 클래스 복구 (6회차, 커밋 단독 검증): 오늘은 성능을 묻지 않는",
+      "script": "models/p1_match_result/train_pipeline.py",
       "success": true,
       "error": ""
     },
     {
-      "item": "P8 이적 적응 AUC 개선과 영입 리스크 등급표 산출: `models/p8_transfe",
-      "script": "models\\p8_transfer_adapt\\train.py",
+      "item": "P8 이적 적응 AUC 개선과 순위 매김 능력 검증: `models/p8_transfer_",
+      "script": "models/p8_transfer_adapt/train.py",
       "success": false,
-      "error": " val AUC=0.6284, params={'n_estimators': 451, 'max_depth': 6, 'learning_rate': 0.01741451991761182, 'subsample': 0.7229302272825218, 'colsample_bytree': 0.8634707750856205, 'min_child_weight': 6, 'gamma': 0.6124416315784293, 'reg_alpha': 0.40735212479021876, 'reg_lambda': 2.628036102829786}\nTraceback (most recent call last):\n  File \"D:\\workspace\\EPL project\\models\\p8_transfer_adapt\\train.py\", line"
+      "error": "-11 21:37:23,477 [INFO] Optuna best val AUC=0.6318, params={'n_estimators': 584, 'max_depth': 6, 'learning_rate': 0.012187080542843112, 'subsample': 0.6921555966726817, 'colsample_bytree': 0.8016633658988104, 'min_child_weight': 5, 'gamma': 0.7030943674696017, 'reg_alpha': 0.0005080459362397396, 'reg_lambda': 4.979457043233078}\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
     },
     {
-      "item": "S6 쇠퇴 감지 라벨 재정의와 정밀도 개선: `models/s6_decline/train_",
-      "script": "models\\s6_decline\\train_v4.py",
+      "item": "S6 쇠퇴 감지 포지션 원핫 제거 단일 실험: `models/s6_decline/train",
+      "script": "models/s6_decline/train_v4.py",
       "success": true,
       "error": ""
     }
