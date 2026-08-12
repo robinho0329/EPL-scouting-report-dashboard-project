@@ -1,0 +1,23 @@
+{
+  "date": "2026-08-12",
+  "results": [
+    {
+      "item": "P1 경기 결과 무승부 클래스 복구 (7회차, 파일 생성 단독 검증): 오늘 요구사항은 두",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P8 이적 적응 AUC 검증 지표 교체 (2회차, 축소판): `models/p8_trans",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": false,
+      "error": "-12 21:36:58,700 [INFO] Optuna best val AUC=0.6318, params={'n_estimators': 584, 'max_depth': 6, 'learning_rate': 0.012187080542843112, 'subsample': 0.6921555966726817, 'colsample_bytree': 0.8016633658988104, 'min_child_weight': 5, 'gamma': 0.7030943674696017, 'reg_alpha': 0.0005080459362397396, 'reg_lambda': 4.979457043233078}\nTraceback (most recent call last):\n  File \"/home/runner/work/EPL-scout"
+    },
+    {
+      "item": "S6 쇠퇴 감지 임계값 표만 산출 (모델 재학습 없음): `models/s6_decline",
+      "script": "models/s6_decline/train_v4.py",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
