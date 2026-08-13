@@ -18,51 +18,49 @@ EPL_MAGENTA = "#e90052"
 EPL_GREEN = "#00ff87"
 EPL_CYAN = "#04f5ff"
 
-# P5 클러스터 메타데이터
-CLUSTER_INFO: dict[str, dict] = {
-    "Elite Attackers": {
-        "emoji": "전위",
-        "color": EPL_MAGENTA,
-        "desc": "최상위 공격수. 골+어시스트 압도적. Haaland, Salah 유형.",
-    },
-    "Solid Defenders": {
-        "emoji": "방패",
-        "color": EPL_CYAN,
-        "desc": "안정적 수비형 미드필더·수비수. 높은 출전 시간, 낮은 실수율.",
-    },
-    "Versatile Contributors": {
-        "emoji": "다용도",
-        "color": EPL_GREEN,
-        "desc": "다용도 기여자. 수비+GK 포함. 팀의 뼈대를 이루는 선수.",
-    },
-    "Goal Threats": {
-        "emoji": "골",
-        "color": "#ff6b35",
-        "desc": "골 위협형 공격수. 페널티 박스 전문가. 순수 스트라이커.",
-    },
-    "Defensive Workhorses": {
-        "emoji": "일꾼",
-        "color": "#9b59b6",
-        "desc": "수비 전문 일꾼. 태클·차단 특화. 프리미어리그 핵심 수비자원.",
-    },
-    "Creative Playmakers": {
-        "emoji": "창조",
-        "color": "#f39c12",
-        "desc": "창의적 플레이메이커. 어시스트·찬스 창출 특화. De Bruyne 유형.",
-    },
-}
+# 역할 메타데이터는 하드코딩하지 않고 클러스터링 산출물에서 만든다.
+# 과거에는 포지션을 무시한 6분류(Elite Attackers 등)를 여기에 박아뒀는데,
+# 모델이 역할 체계로 바뀌어도 화면이 따라가지 못했다.
+_PALETTE = [EPL_MAGENTA, EPL_CYAN, EPL_GREEN, "#ff6b35", "#9b59b6",
+            "#f39c12", "#4C9BE8", "#e74c3c", "#1abc9c", "#95a5a6"]
 
-CLUSTER_ORDER = list(CLUSTER_INFO.keys())
+CLUSTER_INFO: dict[str, dict] = {}
+CLUSTER_ORDER: list[str] = []
+
+
+def _build_cluster_info(df: pd.DataFrame) -> None:
+    """산출물의 archetype/archetype_desc로 메타데이터를 채운다."""
+    global CLUSTER_INFO, CLUSTER_ORDER
+    if df.empty or "cluster_name" not in df.columns:
+        return
+    names = sorted(df["cluster_name"].dropna().unique())
+    descs = {}
+    if "archetype_desc" in df.columns:
+        descs = (df.dropna(subset=["cluster_name"])
+                   .groupby("cluster_name")["archetype_desc"].first().to_dict())
+    CLUSTER_INFO = {
+        n: {"emoji": "", "color": _PALETTE[i % len(_PALETTE)],
+            "desc": descs.get(n, "")}
+        for i, n in enumerate(names)
+    }
+    CLUSTER_ORDER = names
 
 
 @st.cache_data(ttl=3600)
 def _load_cluster_data() -> pd.DataFrame:
     """P5 클러스터 할당 데이터 로드."""
     from pathlib import Path
-    path = Path(__file__).resolve().parent.parent.parent / "models" / "p5_clustering" / "cluster_assignments_k6.parquet"
-    if path.exists():
-        return pd.read_parquet(path)
-    return pd.DataFrame()
+    # S3 v4 역할 클러스터링 산출물. 구 p5(cluster_assignments_k6)는 포지션을
+    # 무시하고 뭉뚱그린 6분류라 "공격형 풀백" 같은 오배정이 났다.
+    path = (Path(__file__).resolve().parent.parent.parent
+            / "data" / "scout" / "cluster_assignments_v4.parquet")
+    if not path.exists():
+        return pd.DataFrame()
+    df = pd.read_parquet(path)
+    # 이 페이지는 cluster_name을 기준으로 쓰므로 이름을 맞춰준다.
+    if "archetype" in df.columns:
+        df = df.rename(columns={"archetype": "cluster_name"})
+    return df
 
 
 def _merge_pis(cluster_df: pd.DataFrame, ratings: pd.DataFrame) -> pd.DataFrame:
@@ -90,19 +88,25 @@ def render():
     ratings = load_scout_ratings()
 
     if cluster_df.empty:
-        st.error("클러스터 데이터(models/p5_clustering/cluster_assignments_k6.parquet)를 불러올 수 없습니다.")
+        st.error("클러스터 데이터(data/scout/cluster_assignments_v4.parquet)를 불러올 수 없습니다.")
         return
 
     # PIS 병합
     cluster_df = _merge_pis(cluster_df, ratings)
 
-    # session_state 초기화
-    if "cluster_selected" not in st.session_state:
+    # 역할 메타데이터를 데이터에서 생성 (이름·설명·색)
+    _build_cluster_info(cluster_df)
+    if not CLUSTER_ORDER:
+        st.error("클러스터 유형을 읽지 못했습니다.")
+        return
+
+    # session_state 초기화 — 이전에 고른 유형이 새 체계에 없으면 첫 항목으로
+    if st.session_state.get("cluster_selected") not in CLUSTER_ORDER:
         st.session_state["cluster_selected"] = CLUSTER_ORDER[0]
 
-    # ── 섹션 1: 6개 클러스터 카드 (2행 3열) ─────────────────────────
+    # ── 섹션 1: 역할 카드 ──────────────────────────────────────────
     st.markdown("---")
-    st.markdown("### 6가지 선수 유형")
+    st.markdown(f"### {len(CLUSTER_ORDER)}가지 선수 유형")
     st.markdown("유형 카드를 클릭해 해당 클러스터 선수를 탐색하세요.")
 
     # 전체 데이터에서 클러스터별 집계 (최신 시즌)
@@ -112,8 +116,9 @@ def render():
     else:
         latest_df = cluster_df
 
-    # 2행 3열 레이아웃으로 클러스터 카드 렌더링
-    for row_idx in range(2):
+    # 3열 레이아웃. 역할 수가 6개로 고정이 아니므로 행 수를 데이터에 맞춘다.
+    n_rows = -(-len(CLUSTER_ORDER) // 3)   # 올림 나눗셈
+    for row_idx in range(n_rows):
         row_clusters = CLUSTER_ORDER[row_idx * 3 : row_idx * 3 + 3]
         cols = st.columns(3)
         for col, cluster_name in zip(cols, row_clusters):
