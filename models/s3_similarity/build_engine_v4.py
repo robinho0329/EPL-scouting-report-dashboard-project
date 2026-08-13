@@ -81,77 +81,115 @@ CURRENT_YEAR = _season_to_year(CURRENT_SEASON)
 # ──────────────────────────────────────────────────────────────
 # 포지션별 피처 정의 (FIX 1, 2, 3)
 # ──────────────────────────────────────────────────────────────
-POS_FEATURES = {
-    'FW': [
-        'goals_p90', 'assists_p90', 'shots_p90', 'sot_p90',
-        'g_plus_a_p90', 'shot_conversion',
-        'fouls_drawn_p90', 'minutes_share', 'starter_ratio',
-    ],
-    'MID': [
-        'assists_p90', 'key_passes_p90',
-        'goals_p90', 'shots_p90',
-        'tackles_p90', 'interc_p90', 'def_actions_p90',
-        'fouls_drawn_p90', 'minutes_share', 'starter_ratio',
-    ],
-    'DEF': [
-        'tackles_p90', 'interc_p90', 'def_actions_p90',
-        'fouls_p90', 'crosses_p90',
-        'goals_p90', 'assists_p90',
-        'minutes_share', 'starter_ratio',
-    ],
-    'GK': [
-        'gk_save_pct', 'gk_cs_pct', 'gk_ga_p90_inv',
-        'minutes_share', 'starter_ratio',
-    ],
-}
-
-# 포지션별 K 탐색 범위 (FIX 4)
-POS_K_RANGE = {
-    'FW':  range(4, 8),
-    'MID': range(5, 9),
-    'DEF': range(4, 8),
-    'GK':  range(2, 5),
-}
-
-# 포지션별 아키타입 후보 레이블 — 지배 스탯 매핑 (FIX 6)
-FW_ARCHETYPE_RULES = [
-    # (조건 함수(row), 레이블)
-    ('goals_p90',      0.50, '⚽ 박스 스트라이커'),     # 골/90분 높음
-    ('shot_conversion',0.15, '🎯 효율형 득점왕'),        # 슈팅 효율 최고
-    ('shots_p90',      2.50, '🔫 고볼륨 슈터'),          # 슈팅 많음
-    ('assists_p90',    0.30, '🎨 찬스 메이커'),           # 어시 높음
-    ('fouls_drawn_p90',2.00, '🏃 압박형 전방'),           # 파울 유도 높음
-]
-MID_ARCHETYPE_RULES = [
-    ('def_actions_p90', 6.0, '🛡️ 수비형 미드필더'),
-    ('tackles_p90',     3.0, '💪 볼 위너'),
-    ('assists_p90',     0.25, '🎨 창의적 플레이메이커'),
-    ('goals_p90',       0.15, '📈 박스 투 박스'),
-    ('key_passes_p90',  2.5,  '🔑 딥라잉 플레이메이커'),
-]
-DEF_ARCHETYPE_RULES = [
-    ('crosses_p90',    2.5,  '🏃 공격형 풀백'),       # 크로스 많음 = 측면 활용 풀백
-    ('assists_p90',    0.12, '🏃 오버래핑 풀백'),      # 어시스트 있는 공격적 풀백
-    ('tackles_p90',    2.0,  '💪 강압형 센터백'),      # 태클 많음 = 적극적 CB
-    ('def_actions_p90',3.5,  '💪 강압형 센터백'),      # 수비액션 많음
-    ('goals_p90',      0.06, '🛡️ 볼배급 센터백'),     # 공격 기여 낮은 순수 수비형 CB
-]
-GK_ARCHETYPE_RULES = [
-    ('gk_save_pct',    0.73, '🧤 슈팅 스토퍼'),
-    ('gk_cs_pct',      0.40, '🧱 클린시트 머신'),
-]
-
-POS_ARCHETYPE_RULES = {
-    'FW':  FW_ARCHETYPE_RULES,
-    'MID': MID_ARCHETYPE_RULES,
-    'DEF': DEF_ARCHETYPE_RULES,
-    'GK':  GK_ARCHETYPE_RULES,
-}
-
-
 # ──────────────────────────────────────────────────────────────
-# 1. 데이터 로드 & 피처 생성
+# 역할 체계 — 포지션(구조) × 스탯(스타일)
 # ──────────────────────────────────────────────────────────────
+# 스탯만 KMeans에 던지면 "주전이냐 후보냐"로 갈리고 축구 용어와 어긋난다.
+# Transfermarkt의 세부 포지션을 구조로 깔고, 그 안에서 스타일로 나눈다.
+POSITION_GROUP = {
+    "Goalkeeper":         "GK",
+    "Centre-Back":        "CB",
+    "Left-Back":          "FB",
+    "Right-Back":         "FB",
+    "Defensive Midfield": "DM",
+    "Central Midfield":   "CM",
+    "Left Midfield":      "CM",
+    "Right Midfield":     "CM",
+    "Attacking Midfield": "AM",
+    "Left Winger":        "WG",
+    "Right Winger":       "WG",
+    "Centre-Forward":     "CF",
+}
+
+# 그룹별 스타일 축.
+# 원칙 — 합성 피처(g_plus_a, def_actions)는 구성 요소와 함께 쓰지 않는다.
+#        출전량(minutes_share, starter_ratio)은 스타일이 아니므로 뺀다.
+#        (MIN_MINUTES 필터가 이미 표본을 거른다)
+GROUP_FEATURES = {
+    "GK": ["gk_save_pct", "gk_cs_pct"],
+    "CB": ["tackles_p90", "interc_p90", "fouls_p90", "crosses_p90", "goals_p90"],
+    "FB": ["crosses_p90", "assists_p90", "tackles_p90", "interc_p90"],
+    "DM": ["tackles_p90", "interc_p90", "assists_p90", "goals_p90", "crosses_p90"],
+    "CM": ["goals_p90", "assists_p90", "tackles_p90", "interc_p90", "crosses_p90"],
+    "AM": ["assists_p90", "goals_p90", "shots_p90", "crosses_p90"],
+    "WG": ["crosses_p90", "shots_p90", "goals_p90", "assists_p90"],
+    "CF": ["goals_p90", "shots_p90", "fouls_drawn_p90", "offside_p90",
+           "assists_p90", "shot_conversion"],
+}
+
+# K 하한은 그 그룹에 정의한 역할 수에 맞춘다. 역할이 4개인데 군집이 2개면
+# 나머지 역할은 영영 나오지 않는다(실제로 CF가 36명 중 35명이 한 유형이었다).
+GROUP_K_RANGE = {
+    "GK": range(2, 4), "CB": range(3, 5), "FB": range(2, 4),
+    "DM": range(2, 4), "CM": range(3, 6), "AM": range(2, 4),
+    "WG": range(2, 4), "CF": range(3, 6),
+}
+
+# 역할 정의 — (축, 방향, 이름, 설명).
+# 클러스터 중심의 그룹 내 z-점수에서 가장 두드러진 축으로 배정한다.
+# 절대 임계값은 시즌 수준이 바뀌면 무너지므로 쓰지 않는다.
+GROUP_ROLES = {
+    "GK": [
+        ("gk_save_pct", "+", "🧤 슈팅 스토퍼",   "선방률이 높은 유형"),
+        ("gk_cs_pct",   "+", "🧱 클린시트 키퍼", "실점을 적게 허용하는 유형"),
+    ],
+    "CB": [
+        ("fouls_p90",   "+", "🪓 스토퍼",       "앞으로 나가 끊는 유형 — 태클·파울이 많다"),
+        ("tackles_p90", "+", "🪓 스토퍼",       "앞으로 나가 끊는 유형 — 태클·파울이 많다"),
+        ("interc_p90",  "+", "🧹 커버형 CB",    "위치로 차단하는 유형 — 인터셉트가 많고 파울이 적다"),
+        ("crosses_p90", "+", "🦶 빌드업 CB",    "전진 배급에 관여하는 유형"),
+    ],
+    "FB": [
+        ("crosses_p90", "+", "🏃 오버래핑 풀백", "측면을 올라가 크로스를 올리는 유형"),
+        ("assists_p90", "+", "🏃 오버래핑 풀백", "측면을 올라가 크로스를 올리는 유형"),
+        ("tackles_p90", "+", "🛡️ 수비형 풀백",  "전진을 자제하고 수비에 무게를 두는 유형"),
+        ("interc_p90",  "+", "🛡️ 수비형 풀백",  "전진을 자제하고 수비에 무게를 두는 유형"),
+    ],
+    "DM": [
+        ("tackles_p90", "+", "⚔️ 볼란치",       "중원에서 끊어내는 파괴형"),
+        ("interc_p90",  "+", "⚔️ 볼란치",       "중원에서 끊어내는 파괴형"),
+        ("assists_p90", "+", "🎼 레지스타",     "후방에서 공격을 조립하는 유형 (수비형 MF 중 공격 기여가 높은 쪽)"),
+        ("crosses_p90", "+", "🎼 레지스타",     "후방에서 공격을 조립하는 유형 (수비형 MF 중 공격 기여가 높은 쪽)"),
+    ],
+    "CM": [
+        ("goals_p90",   "+", "🔄 박스투박스",   "양쪽 박스를 오가며 공수에 모두 관여"),
+        ("assists_p90", "+", "🎨 메짤라",       "공격 쪽으로 치우쳐 기회를 만드는 유형"),
+        ("crosses_p90", "+", "🎨 메짤라",       "공격 쪽으로 치우쳐 기회를 만드는 유형"),
+        ("tackles_p90", "+", "🧱 홀딩 미드필더", "뒤를 지키며 균형을 잡는 유형"),
+        ("interc_p90",  "+", "🧱 홀딩 미드필더", "뒤를 지키며 균형을 잡는 유형"),
+    ],
+    "AM": [
+        ("assists_p90", "+", "🔟 클래식 10번",   "최전방 바로 뒤에서 패스로 풀어주는 유형"),
+        ("goals_p90",   "+", "👤 섀도 스트라이커", "직접 골을 노리며 침투하는 유형"),
+        ("shots_p90",   "+", "👤 섀도 스트라이커", "직접 골을 노리며 침투하는 유형"),
+        ("crosses_p90", "+", "↔️ 와이드 플레이메이커", "측면으로 벌려 공급하는 유형"),
+    ],
+    "WG": [
+        ("crosses_p90", "+", "🚩 클래식 윙어",   "측면을 파고들어 크로스를 올리는 유형"),
+        ("shots_p90",   "+", "↩️ 인버티드 윙어", "안쪽으로 접어 들어와 직접 슛하는 유형"),
+        ("goals_p90",   "+", "↩️ 인버티드 윙어", "안쪽으로 접어 들어와 직접 슛하는 유형"),
+        ("assists_p90", "+", "🚩 클래식 윙어",   "측면을 파고들어 크로스를 올리는 유형"),
+    ],
+    "CF": [
+        ("shot_conversion",  "+", "🎯 포처",         "적은 슈팅으로 마무리하는 골문 앞 유형"),
+        ("offside_p90",      "+", "🎯 포처",         "적은 슈팅으로 마무리하는 골문 앞 유형"),
+        ("fouls_drawn_p90",  "+", "🗼 타겟맨",       "몸으로 버티며 볼을 지켜주는 유형"),
+        ("assists_p90",      "+", "🌟 컴플리트 포워드", "득점과 연계를 겸하는 유형"),
+        ("shots_p90",        "+", "💥 볼륨 슈터",    "슈팅 시도가 많은 유형"),
+    ],
+}
+
+# 클러스터 최소 인원 — 이보다 작으면 가장 가까운 중심으로 병합한다.
+# 1~2명짜리는 아키타입이 아니라 이상치다.
+MIN_CLUSTER_FRAC = 0.05
+MIN_CLUSTER_ABS  = 8
+
+# K 검약 규칙 — 최고 실루엣과 이 값 이내면 더 작은 K를 택한다.
+# MID가 0.0012 차이로 K=7을 골라 1~2명짜리 군집을 만든 적이 있다.
+# 다만 너무 관대하면 반대로 K가 눌려 역할이 안 나온다. 0.005가 균형점.
+K_TOLERANCE = 0.005
+
+
 def load_and_engineer():
     print("[1/6] 데이터 로드 중...")
 
@@ -170,6 +208,7 @@ def load_and_engineer():
         ml_crs   = ('crs',  'sum'),
         ml_fls   = ('fls',  'sum'),
         ml_fld   = ('fld',  'sum'),
+        ml_off   = ('off',  'sum'),
         ml_games = ('min',  'count'),
         ml_starts= ('started', 'sum'),
     ).reset_index()
@@ -194,6 +233,7 @@ def load_and_engineer():
     df['crosses_p90']    = df['ml_crs'].fillna(0) / s90
     df['fouls_p90']      = df['ml_fls'].fillna(0) / s90
     df['fouls_drawn_p90']= df['ml_fld'].fillna(0) / s90
+    df['offside_p90']    = df['ml_off'].fillna(0) / s90   # 포처 판별축
     df['key_passes_p90'] = df['crosses_p90']   # 크로스를 key_pass 대리 지표로
 
     df['g_plus_a_p90']   = df['goals_p90'] + df['assists_p90']
@@ -227,26 +267,21 @@ def load_and_engineer():
     # pos_group → FW / MID / DEF / GK 4분류 (FIX 3)
     pos_map = {
         'Centre-Forward': 'FW', 'Second Striker': 'FW', 'Striker': 'FW',
-        'Right Winger': 'FW',   'Left Winger': 'FW',    # 윙어 → FW
-        'Attacking Midfield': 'MID',
-        'Left Midfield': 'MID', 'Right Midfield': 'MID',
-        'Central Midfield': 'MID', 'Defensive Midfield': 'MID', 'Midfielder': 'MID',
-        'Right-Back': 'DEF', 'Left-Back': 'DEF',
-        'Centre-Back': 'DEF', 'Defender': 'DEF',
-        'Goalkeeper': 'GK',
+        # (구 매핑은 POSITION_GROUP으로 대체됨)
     }
-    df['pos_group'] = df['position'].map(pos_map)
+    # 세부 포지션 → 역할 그룹 8종. 스타일 클러스터링은 이 그룹 안에서만 돈다.
+    df['pos_group'] = df['position'].map(POSITION_GROUP)
 
-    # 폴백: pos 컬럼으로 추론
+    # 폴백 — TM 포지션이 비면 FBref pos로 대략 배정한다.
     fallback_map = {
-        'FW': 'FW', 'MF': 'MID', 'DF': 'DEF', 'GK': 'GK',
-        'FW,MF': 'MID', 'MF,FW': 'MID', 'DF,MF': 'DEF', 'MF,DF': 'DEF',
+        'GK': 'GK', 'DF': 'CB', 'MF': 'CM', 'FW': 'CF',
+        'DF,MF': 'FB', 'MF,DF': 'DM', 'MF,FW': 'AM', 'FW,MF': 'WG',
     }
     mask_null = df['pos_group'].isna()
     if mask_null.any() and 'pos' in df.columns:
         df.loc[mask_null, 'pos_group'] = df.loc[mask_null, 'pos'].map(fallback_map)
 
-    df = df[df['pos_group'].isin(['FW', 'MID', 'DEF', 'GK'])].copy()
+    df = df[df['pos_group'].isin(GROUP_FEATURES.keys())].copy()
     print(f"   포지션 분포:\n{df['pos_group'].value_counts().to_string()}")
 
     # recency weight (최근 2시즌 1.3x, 3~4시즌 1.0x, 오래된 0.7x)
@@ -258,7 +293,7 @@ def load_and_engineer():
     )
 
     # inf / NaN 정리
-    for pos, feats in POS_FEATURES.items():
+    for pos, feats in GROUP_FEATURES.items():
         for col in feats:
             if col in df.columns:
                 med = df[df['pos_group'] == pos][col].median()
@@ -270,133 +305,148 @@ def load_and_engineer():
 # ──────────────────────────────────────────────────────────────
 # 2. 포지션별 클러스터링 (FIX 1, 4)
 # ──────────────────────────────────────────────────────────────
+def _pick_k(X, k_range, sample_weight=None):
+    """실루엣으로 K 선택 — 단, 최고점과 K_TOLERANCE 이내면 더 작은 K를 택한다.
+
+    차이가 0.001 수준이면 그건 구조가 아니라 노이즈다. 그걸 따라가면
+    1~2명짜리 군집이 생긴다(실제로 MID가 0.0012 차이로 K=7을 골랐다).
+    """
+    scores = {}
+    for k in k_range:
+        if k >= len(X):
+            continue
+        km = KMeans(n_clusters=k, random_state=42, n_init=20, max_iter=500)
+        lab = km.fit_predict(X)
+        if len(set(lab)) < 2:
+            continue
+        scores[k] = silhouette_score(X, lab, sample_size=min(3000, len(X)), random_state=42)
+    if not scores:
+        return None, {}, None
+    best = max(scores.values())
+    k = min(kk for kk, s in scores.items() if s >= best - K_TOLERANCE)
+    return k, scores, scores[k]
+
+
+def _merge_small_clusters(X, labels, min_size):
+    """최소 인원 미달 군집을 가장 가까운 중심으로 흡수한다."""
+    labels = labels.copy()
+    for _ in range(10):
+        uniq, cnt = np.unique(labels, return_counts=True)
+        small = uniq[cnt < min_size]
+        if len(small) == 0 or len(uniq) <= 2:
+            break
+        cents = {c: X[labels == c].mean(axis=0) for c in uniq}
+        victim = small[np.argmin([cnt[list(uniq).index(c)] for c in small])]
+        others = [c for c in uniq if c != victim]
+        target = min(others, key=lambda c: np.linalg.norm(cents[c] - cents[victim]))
+        labels[labels == victim] = target
+    # 라벨 0..n-1로 재정렬
+    remap = {old: i for i, old in enumerate(sorted(set(labels)))}
+    return np.array([remap[v] for v in labels])
+
+
+def _assign_roles(centroid_z: pd.DataFrame, group: str) -> dict:
+    """클러스터 중심의 그룹 내 z-점수에서 가장 두드러진 축으로 역할을 배정.
+
+    절대 임계값(goals_p90 > 0.5 같은)은 시즌 수준이 바뀌면 무너지고,
+    여러 규칙이 동시에 걸리면 먼저 나온 게 이겨서 라벨이 겹친다.
+    상대 순위로 판정하면 그 문제가 없다.
+    """
+    rules = GROUP_ROLES.get(group, [])
+    used, out = set(), {}
+    # z가 가장 큰 클러스터부터 배정해 강한 특성이 먼저 이름을 가져간다.
+    order = sorted(centroid_z.index, key=lambda c: -centroid_z.loc[c].abs().max())
+    for cid in order:
+        row = centroid_z.loc[cid]
+        best = None
+        for axis, direction, name, desc in rules:
+            if axis not in row.index:
+                continue
+            v = row[axis] if direction == "+" else -row[axis]
+            if best is None or v > best[0]:
+                best = (v, name, desc)
+        if best is None:
+            out[cid] = (f"{group} 유형", "")
+            continue
+        # 같은 이름이 이미 쓰였으면 다음 후보로 넘어간다
+        name, desc = best[1], best[2]
+        if name in used:
+            alts = [(row[a] if d == "+" else -row[a], n, ds)
+                    for a, d, n, ds in rules if a in row.index and n not in used]
+            if alts:
+                _, name, desc = max(alts)
+        used.add(name)
+        out[cid] = (name, desc)
+    return out
+
+
 def cluster_by_position(df):
-    print("\n[2/6] 포지션별 분리 K-Means 클러스터링...")
+    print("\n[2/6] 역할 그룹별 스타일 클러스터링...")
 
-    all_rows = []
-    cluster_meta = {}   # pos → {k, silhouette, centroids, scaler, feature_cols}
-    global_id_offset = 0
+    all_rows, cluster_meta = [], {}
+    offset = 0
 
-    for pos in ['FW', 'MID', 'DEF', 'GK']:
-        sub = df[df['pos_group'] == pos].copy()
-        feats = [f for f in POS_FEATURES[pos] if f in sub.columns]
-        X_raw = sub[feats].fillna(0.0).values
-
-        if len(sub) < 20:
-            print(f"   {pos}: 데이터 부족 ({len(sub)}행) → 단일 클러스터 처리")
+    for group in GROUP_FEATURES:
+        sub = df[df['pos_group'] == group].copy()
+        feats = [f for f in GROUP_FEATURES[group] if f in sub.columns]
+        if len(sub) < 20 or len(feats) < 2:
+            print(f"   {group}: 표본 {len(sub)}행 → 단일 유형 처리")
             sub['cluster_local'] = 0
-            sub['cluster'] = global_id_offset
-            sub['archetype'] = f"{pos} 선수"
-            all_rows.append(sub)
-            global_id_offset += 1
+            sub['cluster'] = offset
+            sub['archetype'] = f"{group} 유형"
+            sub['archetype_desc'] = ""
+            all_rows.append(sub); offset += 1
             continue
 
-        # StandardScaler (포지션 내 정규화)
         scaler = StandardScaler()
-        X = scaler.fit_transform(X_raw)
+        X = scaler.fit_transform(sub[feats].fillna(0.0).values)
+        X = X * sub['recency_weight'].values.reshape(-1, 1)
 
-        # recency weighting
-        rw = sub['recency_weight'].values.reshape(-1, 1)
-        X_weighted = X * rw
+        k, scores, sil = _pick_k(X, GROUP_K_RANGE[group])
+        if k is None:
+            sub['cluster_local'] = 0; sub['cluster'] = offset
+            sub['archetype'] = f"{group} 유형"; sub['archetype_desc'] = ""
+            all_rows.append(sub); offset += 1
+            continue
 
-        # K 탐색
-        best_k, best_score, best_labels = POS_K_RANGE[pos].start, -1, None
-        scores = {}
-        for k in POS_K_RANGE[pos]:
-            if len(sub) < k * 3:
-                continue
-            km = KMeans(n_clusters=k, random_state=42, n_init=20, max_iter=500)
-            labels = km.fit_predict(X_weighted)
-            score  = silhouette_score(X_weighted, labels,
-                                      sample_size=min(3000, len(X_weighted)),
-                                      random_state=42)
-            scores[k] = round(score, 4)
-            print(f"   {pos} K={k}: silhouette={score:.4f}")
-            if score > best_score:
-                best_k, best_score, best_labels = k, score, labels
-                best_km = km
+        km = KMeans(n_clusters=k, random_state=42, n_init=20, max_iter=500)
+        labels = _merge_small_clusters(
+            X, km.fit_predict(X),
+            max(MIN_CLUSTER_ABS, int(len(sub) * MIN_CLUSTER_FRAC)),
+        )
+        sub['cluster_local'] = labels
+        sub['cluster'] = labels + offset
 
-        print(f"   → {pos} 최적 K={best_k} (silhouette={best_score:.4f})")
+        # 산점도용 2차원 좌표 — 시각화 전용이며 클러스터링에는 쓰지 않는다.
+        if X.shape[1] >= 2:
+            xy = PCA(n_components=2, random_state=42).fit_transform(X)
+            sub['pca_x'], sub['pca_y'] = xy[:, 0], xy[:, 1]
+        else:
+            sub['pca_x'], sub['pca_y'] = X[:, 0], 0.0
 
-        sub['cluster_local'] = best_labels
-        sub['cluster']       = best_labels + global_id_offset
+        # 그룹 내 z-점수 중심 → 역할 배정
+        raw = sub.groupby('cluster_local')[feats].mean()
+        z = (raw - sub[feats].mean()) / sub[feats].std().replace(0, np.nan)
+        roles = _assign_roles(z.fillna(0), group)
+        sub['archetype'] = sub['cluster_local'].map(lambda c: roles[c][0])
+        sub['archetype_desc'] = sub['cluster_local'].map(lambda c: roles[c][1])
 
-        # 아키타입 레이블 부여 (FIX 6)
-        centroids_scaled = best_km.cluster_centers_          # (k, n_feats)
-        centroids_raw    = scaler.inverse_transform(centroids_scaled)
-        centroid_df      = pd.DataFrame(centroids_raw, columns=feats)
+        n_final = sub['cluster_local'].nunique()
+        print(f"   {group}: {len(sub):4d}명 → K={k}(병합 후 {n_final}) "
+              f"silhouette={sil:.4f}  {sorted(sub['archetype'].unique())}")
 
-        label_map = _assign_archetypes(centroid_df, pos, feats)
-        sub['archetype'] = sub['cluster_local'].map(label_map)
-
-        # PCA 2D (시각화용)
-        pca = PCA(n_components=2, random_state=42)
-        pca_coords = pca.fit_transform(X_weighted)
-        sub['pca_x'] = pca_coords[:, 0]
-        sub['pca_y'] = pca_coords[:, 1]
-
-        cluster_meta[pos] = {
-            'best_k':     best_k,
-            'silhouette': round(best_score, 4),
-            'k_scores':   scores,
-            'features':   feats,
-            'archetypes': label_map,
-            'centroids':  centroid_df.round(4).to_dict(),
+        cluster_meta[group] = {
+            'k': int(n_final), 'silhouette': round(float(sil), 4),
+            'k_scores': {int(kk): round(float(v), 4) for kk, v in scores.items()},
+            'features': feats,
+            'archetypes': {int(c): roles[c][0] for c in roles},
+            'centroids': raw.round(4).to_dict(),
         }
+        all_rows.append(sub); offset += n_final
 
-        all_rows.append(sub)
-        global_id_offset += best_k
-
-    result = pd.concat(all_rows, ignore_index=True)
-    return result, cluster_meta
+    return pd.concat(all_rows, ignore_index=True), cluster_meta
 
 
-# ──────────────────────────────────────────────────────────────
-# 3. 아키타입 레이블 자동 부여 (FIX 6)
-# ──────────────────────────────────────────────────────────────
-def _assign_archetypes(centroid_df: pd.DataFrame, pos: str, feats: list) -> dict:
-    """
-    각 클러스터 센트로이드의 지배적 스탯을 기반으로 아키타입 이름 부여.
-    규칙 우선순위 순으로 적용, 미매칭 시 'Generic {pos}' 반환.
-    """
-    rules = POS_ARCHETYPE_RULES.get(pos, [])
-    label_map   = {}
-    used_labels = set()
-
-    # 1순위: 규칙 기반
-    for cid, row in centroid_df.iterrows():
-        for (col, threshold, label) in rules:
-            if col not in row.index:
-                continue
-            if row[col] >= threshold and label not in used_labels:
-                label_map[cid] = label
-                used_labels.add(label)
-                break
-
-    # 2순위: 미매칭 클러스터 → 지배 스탯 이름
-    generic_names = {
-        'FW': ['🎯 측면 공격수', '⚽ 스트라이커', '🎨 창의적 공격수', '🏃 압박 전방'],
-        'MID': ['🔑 플레이메이커', '💪 수비형 MF', '📈 박스 투 박스', '🎯 공격형 MF', '⚖️ 올라운더 MF'],
-        'DEF': ['🛡️ 볼배급 센터백', '💪 강압형 센터백', '🏃 공격형 풀백', '🛡️ 수비형 풀백'],
-        'GK':  ['🧤 슈팅 스토퍼', '🧱 클린시트 키퍼', '🧠 스윕 키퍼'],
-    }
-    fallbacks = generic_names.get(pos, [f'{pos} 타입 A', f'{pos} 타입 B'])
-    fi = 0
-    for cid in centroid_df.index:
-        if cid not in label_map:
-            while fi < len(fallbacks) and fallbacks[fi] in used_labels:
-                fi += 1
-            lbl = fallbacks[fi] if fi < len(fallbacks) else f'{pos} 타입 {cid}'
-            label_map[cid] = lbl
-            used_labels.add(lbl)
-            fi += 1
-
-    return label_map
-
-
-# ──────────────────────────────────────────────────────────────
-# 4. 포지션 내 유사도 매트릭스 생성 (FIX 5)
-# ──────────────────────────────────────────────────────────────
 def build_similarity_matrix(df: pd.DataFrame) -> pd.DataFrame:
     """
     각 포지션 내에서 최근 3시즌(2022/23~2024/25) 선수들의
@@ -408,10 +458,10 @@ def build_similarity_matrix(df: pd.DataFrame) -> pd.DataFrame:
     recent_seasons = set(_ALL_SEASONS[-3:])
     sim_rows = []
 
-    for pos in ['FW', 'MID', 'DEF', 'GK']:
+    for pos in GROUP_FEATURES:
         sub = df[(df['pos_group'] == pos) &
                  (df['season'].isin(recent_seasons))].copy()
-        feats = [f for f in POS_FEATURES[pos] if f in sub.columns]
+        feats = [f for f in GROUP_FEATURES[pos] if f in sub.columns]
         if len(sub) < 5:
             continue
 
@@ -489,7 +539,7 @@ def save_results(df: pd.DataFrame, sim_df: pd.DataFrame, cluster_meta: dict):
         sub24 = df[(df['pos_group'] == pos) & (df['season'] == CURRENT_SEASON)]
         archetype_dist = sub24['archetype'].value_counts().to_dict() if not sub24.empty else {}
         summary['cluster_meta'][pos] = {
-            'best_k':       meta['best_k'],
+            'best_k':       meta['k'],
             'silhouette':   meta['silhouette'],
             'k_scores':     meta['k_scores'],
             'features':     meta['features'],
@@ -514,7 +564,7 @@ def visualize(df: pd.DataFrame):
     colors = ['#e90052', '#00ff87', '#04f5ff', '#ffd700', '#ff6b6b',
               '#a8e6cf', '#dda0dd', '#87ceeb']
 
-    for pos in ['FW', 'MID', 'DEF', 'GK']:
+    for pos in GROUP_FEATURES:
         sub = df[(df['pos_group'] == pos) & df['pca_x'].notna()].copy()
         if len(sub) < 5:
             continue
@@ -555,14 +605,14 @@ def validate(df: pd.DataFrame, sim_df: pd.DataFrame):
     print("\n[6/6] 검증 출력...")
 
     print("\n=== 포지션별 아키타입 분포 (전체) ===")
-    for pos in ['FW', 'MID', 'DEF', 'GK']:
+    for pos in GROUP_FEATURES:
         sub = df[df['pos_group'] == pos]
         print(f"\n{pos}:")
         print(sub['archetype'].value_counts().to_string())
 
     print("\n=== 2024/25 아키타입별 대표 선수 ===")
     sub24 = df[df['season'] == CURRENT_SEASON].copy()
-    for pos in ['FW', 'MID', 'DEF', 'GK']:
+    for pos in GROUP_FEATURES:
         p24 = sub24[sub24['pos_group'] == pos]
         if p24.empty:
             continue
@@ -605,6 +655,6 @@ if __name__ == '__main__':
     print("\n" + "=" * 60)
     print("S3 v4 완료!")
     for pos, m in meta.items():
-        print(f"  {pos}: K={m['best_k']}, silhouette={m['silhouette']:.4f}, "
+        print(f"  {pos}: K={m['k']}, silhouette={m['silhouette']:.4f}, "
               f"archetypes={list(m['archetypes'].values())}")
     print("=" * 60)
