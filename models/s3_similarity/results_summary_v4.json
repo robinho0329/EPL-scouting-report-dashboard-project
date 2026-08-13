@@ -1,142 +1,196 @@
 {
   "version": "v4",
-  "created_at": "2026-08-13 11:36:42",
+  "created_at": "2026-08-13 23:38:05",
   "description": "S3 v4 — Position-Stratified Clustering + Style Features Only",
   "min_minutes": 900,
   "current_season": "2025/26",
   "total_player_seasons": 9064,
   "cluster_meta": {
-    "FW": {
-      "best_k": 6,
-      "silhouette": 0.204,
-      "k_scores": {
-        "4": 0.1979,
-        "5": 0.2012,
-        "6": 0.204,
-        "7": 0.2017
-      },
-      "features": [
-        "goals_p90",
-        "assists_p90",
-        "shots_p90",
-        "sot_p90",
-        "g_plus_a_p90",
-        "shot_conversion",
-        "fouls_drawn_p90",
-        "minutes_share",
-        "starter_ratio"
-      ],
-      "archetypes": {
-        "3": "🎯 효율형 득점왕",
-        "4": "⚽ 박스 스트라이커",
-        "0": "🎯 측면 공격수",
-        "1": "⚽ 스트라이커",
-        "2": "🎨 창의적 공격수",
-        "5": "🏃 압박 전방"
-      },
-      "2024_25_dist": {
-        "🏃 압박 전방": 37,
-        "⚽ 스트라이커": 21,
-        "🎯 효율형 득점왕": 16,
-        "⚽ 박스 스트라이커": 13
-      }
-    },
-    "MID": {
-      "best_k": 7,
-      "silhouette": 0.2207,
-      "k_scores": {
-        "5": 0.2195,
-        "6": 0.2188,
-        "7": 0.2207,
-        "8": 0.2055
-      },
-      "features": [
-        "assists_p90",
-        "key_passes_p90",
-        "goals_p90",
-        "shots_p90",
-        "tackles_p90",
-        "interc_p90",
-        "def_actions_p90",
-        "fouls_drawn_p90",
-        "minutes_share",
-        "starter_ratio"
-      ],
-      "archetypes": {
-        "2": "🔑 딥라잉 플레이메이커",
-        "5": "📈 박스 투 박스",
-        "6": "🎨 창의적 플레이메이커",
-        "0": "🔑 플레이메이커",
-        "1": "💪 수비형 MF",
-        "3": "🎯 공격형 MF",
-        "4": "⚖️ 올라운더 MF"
-      },
-      "2024_25_dist": {
-        "🎯 공격형 MF": 41,
-        "🔑 플레이메이커": 28,
-        "🎨 창의적 플레이메이커": 21,
-        "🔑 딥라잉 플레이메이커": 17,
-        "⚖️ 올라운더 MF": 2,
-        "📈 박스 투 박스": 1
-      }
-    },
-    "DEF": {
-      "best_k": 4,
-      "silhouette": 0.36,
-      "k_scores": {
-        "4": 0.36,
-        "5": 0.2187,
-        "6": 0.2006,
-        "7": 0.2061
-      },
-      "features": [
-        "tackles_p90",
-        "interc_p90",
-        "def_actions_p90",
-        "fouls_p90",
-        "crosses_p90",
-        "goals_p90",
-        "assists_p90",
-        "minutes_share",
-        "starter_ratio"
-      ],
-      "archetypes": {
-        "3": "🏃 공격형 풀백",
-        "0": "🛡️ 볼배급 센터백",
-        "1": "💪 강압형 센터백",
-        "2": "🛡️ 수비형 풀백"
-      },
-      "2024_25_dist": {
-        "🛡️ 수비형 풀백": 54,
-        "💪 강압형 센터백": 43,
-        "🏃 공격형 풀백": 26,
-        "🛡️ 볼배급 센터백": 5
-      }
-    },
     "GK": {
-      "best_k": 3,
-      "silhouette": 0.4958,
+      "best_k": 2,
+      "silhouette": 0.7041,
       "k_scores": {
-        "2": 0.487,
-        "3": 0.4958,
-        "4": 0.3918
+        "2": 0.7041,
+        "3": 0.6602
       },
       "features": [
         "gk_save_pct",
-        "gk_cs_pct",
-        "gk_ga_p90_inv",
-        "minutes_share",
-        "starter_ratio"
+        "gk_cs_pct"
       ],
       "archetypes": {
-        "0": "🧤 슈팅 스토퍼",
         "1": "🧱 클린시트 키퍼",
-        "2": "🧠 스윕 키퍼"
+        "0": "🧤 슈팅 스토퍼"
       },
       "2024_25_dist": {
-        "🧤 슈팅 스토퍼": 18,
-        "🧱 클린시트 키퍼": 5,
-        "🧠 스윕 키퍼": 1
+        "🧤 슈팅 스토퍼": 21,
+        "🧱 클린시트 키퍼": 3
+      }
+    },
+    "CB": {
+      "best_k": 2,
+      "silhouette": 0.5297,
+      "k_scores": {
+        "3": 0.5297,
+        "4": 0.5053
+      },
+      "features": [
+        "tackles_p90",
+        "interc_p90",
+        "fouls_p90",
+        "crosses_p90",
+        "goals_p90"
+      ],
+      "archetypes": {
+        "1": "🪓 스토퍼",
+        "0": "🦶 빌드업 CB"
+      },
+      "2024_25_dist": {
+        "🪓 스토퍼": 60,
+        "🦶 빌드업 CB": 6
+      }
+    },
+    "FB": {
+      "best_k": 3,
+      "silhouette": 0.5476,
+      "k_scores": {
+        "2": 0.5355,
+        "3": 0.5476
+      },
+      "features": [
+        "crosses_p90",
+        "assists_p90",
+        "tackles_p90",
+        "interc_p90"
+      ],
+      "archetypes": {
+        "2": "🏃 오버래핑 풀백",
+        "1": "🛡️ 수비형 풀백",
+        "0": "🏃 오버래핑 풀백"
+      },
+      "2024_25_dist": {
+        "🛡️ 수비형 풀백": 41,
+        "🏃 오버래핑 풀백": 20
+      }
+    },
+    "DM": {
+      "best_k": 3,
+      "silhouette": 0.3755,
+      "k_scores": {
+        "2": 0.3424,
+        "3": 0.3755
+      },
+      "features": [
+        "tackles_p90",
+        "interc_p90",
+        "assists_p90",
+        "goals_p90",
+        "crosses_p90"
+      ],
+      "archetypes": {
+        "0": "🎼 레지스타",
+        "1": "⚔️ 볼란치",
+        "2": "🎼 레지스타"
+      },
+      "2024_25_dist": {
+        "⚔️ 볼란치": 20,
+        "🎼 레지스타": 13
+      }
+    },
+    "CM": {
+      "best_k": 3,
+      "silhouette": 0.4259,
+      "k_scores": {
+        "3": 0.4259,
+        "4": 0.3746,
+        "5": 0.3362
+      },
+      "features": [
+        "goals_p90",
+        "assists_p90",
+        "tackles_p90",
+        "interc_p90",
+        "crosses_p90"
+      ],
+      "archetypes": {
+        "2": "🎨 메짤라",
+        "1": "🧱 홀딩 미드필더",
+        "0": "🔄 박스투박스"
+      },
+      "2024_25_dist": {
+        "🧱 홀딩 미드필더": 28,
+        "🎨 메짤라": 21,
+        "🔄 박스투박스": 5
+      }
+    },
+    "AM": {
+      "best_k": 2,
+      "silhouette": 0.3829,
+      "k_scores": {
+        "2": 0.3829,
+        "3": 0.3811
+      },
+      "features": [
+        "assists_p90",
+        "goals_p90",
+        "shots_p90",
+        "crosses_p90"
+      ],
+      "archetypes": {
+        "1": "👤 섀도 스트라이커",
+        "0": "🔟 클래식 10번"
+      },
+      "2024_25_dist": {
+        "👤 섀도 스트라이커": 14,
+        "🔟 클래식 10번": 9
+      }
+    },
+    "WG": {
+      "best_k": 3,
+      "silhouette": 0.3256,
+      "k_scores": {
+        "2": 0.3044,
+        "3": 0.3256
+      },
+      "features": [
+        "crosses_p90",
+        "shots_p90",
+        "goals_p90",
+        "assists_p90"
+      ],
+      "archetypes": {
+        "0": "↩️ 인버티드 윙어",
+        "1": "🚩 클래식 윙어",
+        "2": "🚩 클래식 윙어"
+      },
+      "2024_25_dist": {
+        "🚩 클래식 윙어": 40,
+        "↩️ 인버티드 윙어": 12
+      }
+    },
+    "CF": {
+      "best_k": 3,
+      "silhouette": 0.4522,
+      "k_scores": {
+        "3": 0.4522,
+        "4": 0.301,
+        "5": 0.2908
+      },
+      "features": [
+        "goals_p90",
+        "shots_p90",
+        "fouls_drawn_p90",
+        "offside_p90",
+        "assists_p90",
+        "shot_conversion"
+      ],
+      "archetypes": {
+        "0": "🎯 포처",
+        "1": "🗼 타겟맨",
+        "2": "🌟 컴플리트 포워드"
+      },
+      "2024_25_dist": {
+        "🎯 포처": 19,
+        "🗼 타겟맨": 17
       }
     }
   }
