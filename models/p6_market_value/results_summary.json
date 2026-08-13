@@ -1,11 +1,11 @@
 {
   "pipeline": "P6 - Player Market Value Prediction",
-  "created": "2026-03-22 19:58:17",
+  "created": "2026-08-13 11:40:41",
   "data": {
-    "total_rows_with_value": 11244,
-    "train_size": 8800,
-    "val_size": 1210,
-    "test_size": 1234,
+    "total_rows_with_value": 11926,
+    "train_size": 8799,
+    "val_size": 1249,
+    "test_size": 1878,
     "num_features": 41,
     "feature_columns": [
       "age_used",
@@ -55,77 +55,37 @@
   "best_model": "XGBoost",
   "model_metrics": {
     "Ridge": {
-      "test_MAE": 9535316.0,
-      "test_RMSE": 16124693.0,
-      "test_R2": 0.4386,
-      "test_MAPE": 147.81
+      "test_MAE": 10383498.0,
+      "test_RMSE": 16944632.0,
+      "test_R2": 0.3844,
+      "test_MAPE": 143.97
     },
     "XGBoost": {
-      "test_MAE": 3281636.0,
-      "test_RMSE": 7657708.0,
-      "test_R2": 0.8734,
-      "test_MAPE": 33.68
+      "test_MAE": 3397946.0,
+      "test_RMSE": 8014042.0,
+      "test_R2": 0.8623,
+      "test_MAPE": 31.12
     },
     "RandomForest": {
-      "test_MAE": 7182547.0,
-      "test_RMSE": 14039259.0,
-      "test_R2": 0.5744,
-      "test_MAPE": 54.65
+      "test_MAE": 7773233.0,
+      "test_RMSE": 14821850.0,
+      "test_R2": 0.529,
+      "test_MAPE": 54.83
     },
     "MLP": {
-      "test_MAE": 4833512.0,
-      "test_RMSE": 9075911.0,
-      "test_R2": 0.8221,
-      "test_MAPE": 58.57
+      "test_MAE": 4229107.0,
+      "test_RMSE": 8206963.0,
+      "test_R2": 0.8556,
+      "test_MAPE": 47.71
     }
   },
   "value_analysis": {
-    "significantly_undervalued_count": 112,
-    "significantly_overvalued_count": 184,
+    "significantly_undervalued_count": 143,
+    "significantly_overvalued_count": 286,
     "undervalued_threshold": ">1.5x",
     "overvalued_threshold": "<0.7x"
   },
   "top20_undervalued": [
-    {
-      "player": "Oliver Arblaster",
-      "season": "2023/24",
-      "team": "Sheffield United",
-      "position": "MF",
-      "age": 20,
-      "actual_market_value": 450000,
-      "predicted_market_value": 4395806,
-      "value_score": 9.768
-    },
-    {
-      "player": "Jakub Stolarczyk",
-      "season": "2024/25",
-      "team": "Leicester",
-      "position": "GK",
-      "age": 24,
-      "actual_market_value": 1000000,
-      "predicted_market_value": 9031263,
-      "value_score": 9.031
-    },
-    {
-      "player": "Massimo Luongo",
-      "season": "2024/25",
-      "team": "Ipswich",
-      "position": "MF",
-      "age": 32,
-      "actual_market_value": 400000,
-      "predicted_market_value": 3434768,
-      "value_score": 8.587
-    },
-    {
-      "player": "Jake Evans",
-      "season": "2024/25",
-      "team": "Leicester",
-      "position": "MF",
-      "age": 16,
-      "actual_market_value": 150000,
-      "predicted_market_value": 1210978,
-      "value_score": 8.073
-    },
     {
       "player": "Asher Agbinone",
       "season": "2024/25",
@@ -133,18 +93,18 @@
       "position": "MF",
       "age": 19,
       "actual_market_value": 75000,
-      "predicted_market_value": 594043,
-      "value_score": 7.921
+      "predicted_market_value": 732834,
+      "value_score": 9.771
     },
     {
-      "player": "Fred Onyedinma",
+      "player": "Oliver Arblaster",
       "season": "2023/24",
-      "team": "Luton",
+      "team": "Sheffield United",
       "position": "MF",
-      "age": 27,
-      "actual_market_value": 500000,
-      "predicted_market_value": 3844242,
-      "value_score": 7.688
+      "age": 20,
+      "actual_market_value": 450000,
+      "predicted_market_value": 4395822,
+      "value_score": 9.768
     },
     {
       "player": "Tawanda Chirewa",
@@ -153,28 +113,48 @@
       "position": "FW",
       "age": 20,
       "actual_market_value": 500000,
-      "predicted_market_value": 3544077,
-      "value_score": 7.088
+      "predicted_market_value": 4705395,
+      "value_score": 9.411
     },
     {
-      "player": "Sam Morsy",
-      "season": "2024/25",
-      "team": "Ipswich",
-      "position": "MF",
-      "age": 33,
-      "actual_market_value": 500000,
-      "predicted_market_value": 3197870,
-      "value_score": 6.396
-    },
-    {
-      "player": "Luke Berry",
+      "player": "Fred Onyedinma",
       "season": "2023/24",
       "team": "Luton",
       "position": "MF",
-      "age": 31,
+      "age": 27,
+      "actual_market_value": 500000,
+      "predicted_market_value": 4673486,
+      "value_score": 9.347
+    },
+    {
+      "player": "Jake Evans",
+      "season": "2024/25",
+      "team": "Leicester",
+      "position": "MF",
+      "age": 16,
+      "actual_market_value": 150000,
+      "predicted_market_value": 1342792,
+      "value_score": 8.952
+    },
+    {
+      "player": "Jakub Stolarczyk",
+      "season": "2024/25",
+      "team": "Leicester",
+      "position": "GK",
+      "age": 24,
+      "actual_market_value": 1000000,
+      "predicted_market_value": 8768197,
+      "value_score": 8.768
+    },
+    {
+      "player": "Massimo Luongo",
+      "season": "2024/25",
+      "team": "Ipswich",
+      "position": "MF",
+      "age": 32,
       "actual_market_value": 400000,
-      "predicted_market_value": 2494459,
-      "value_score": 6.236
+      "predicted_market_value": 3334003,
+      "value_score": 8.335
     },
     {
       "player": "Zack Nelson",
@@ -183,8 +163,68 @@
       "position": "MF",
       "age": 19,
       "actual_market_value": 100000,
-      "predicted_market_value": 497779,
-      "value_score": 4.978
+      "predicted_market_value": 733674,
+      "value_score": 7.337
+    },
+    {
+      "player": "Tom Edozie",
+      "season": "2025/26",
+      "team": "Wolves",
+      "position": "MF",
+      "age": 20,
+      "actual_market_value": 200000,
+      "predicted_market_value": 1456619,
+      "value_score": 7.283
+    },
+    {
+      "player": "Temple Ojinnaka",
+      "season": "2025/26",
+      "team": "Wolves",
+      "position": "MF",
+      "age": 21,
+      "actual_market_value": 50000,
+      "predicted_market_value": 354765,
+      "value_score": 7.095
+    },
+    {
+      "player": "Sam Morsy",
+      "season": "2024/25",
+      "team": "Ipswich",
+      "position": "MF",
+      "age": 33,
+      "actual_market_value": 500000,
+      "predicted_market_value": 3545990,
+      "value_score": 7.092
+    },
+    {
+      "player": "Joe Knight",
+      "season": "2025/26",
+      "team": "Brighton",
+      "position": "MF",
+      "age": 20,
+      "actual_market_value": 100000,
+      "predicted_market_value": 624169,
+      "value_score": 6.242
+    },
+    {
+      "player": "Luke Berry",
+      "season": "2023/24",
+      "team": "Luton",
+      "position": "MF",
+      "age": 31,
+      "actual_market_value": 400000,
+      "predicted_market_value": 2315410,
+      "value_score": 5.789
+    },
+    {
+      "player": "Mohamadou Kant\u00e9",
+      "season": "2025/26",
+      "team": "West Ham",
+      "position": "MF",
+      "age": 20,
+      "actual_market_value": 1000000,
+      "predicted_market_value": 5240620,
+      "value_score": 5.241
     },
     {
       "player": "Alex Palmer",
@@ -193,58 +233,28 @@
       "position": "GK",
       "age": 28,
       "actual_market_value": 1000000,
-      "predicted_market_value": 4479031,
-      "value_score": 4.479
+      "predicted_market_value": 5113507,
+      "value_score": 5.114
     },
     {
-      "player": "Michael Olakigbe",
-      "season": "2023/24",
-      "team": "Brentford",
+      "player": "Jack Moorhouse",
+      "season": "2025/26",
+      "team": "Man United",
       "position": "MF",
-      "age": 20,
-      "actual_market_value": 600000,
-      "predicted_market_value": 2680181,
-      "value_score": 4.467
-    },
-    {
-      "player": "David Ozoh",
-      "season": "2023/24",
-      "team": "Crystal Palace",
-      "position": "MF",
-      "age": 19,
-      "actual_market_value": 700000,
-      "predicted_market_value": 3026106,
-      "value_score": 4.323
-    },
-    {
-      "player": "Vitinho",
-      "season": "2023/24",
-      "team": "Burnley",
-      "position": "DF,MF",
-      "age": 24,
-      "actual_market_value": 5000000,
-      "predicted_market_value": 19937692,
-      "value_score": 3.988
-    },
-    {
-      "player": "Vincent Angelini",
-      "season": "2023/24",
-      "team": "Brentford",
-      "position": "GK",
       "age": 20,
       "actual_market_value": 100000,
-      "predicted_market_value": 395843,
-      "value_score": 3.958
+      "predicted_market_value": 488250,
+      "value_score": 4.883
     },
     {
-      "player": "Archie Harris",
+      "player": "Daniel Adu-Adjei",
       "season": "2024/25",
       "team": "Bournemouth",
-      "position": "DF",
+      "position": "FW",
       "age": 20,
-      "actual_market_value": 100000,
-      "predicted_market_value": 394940,
-      "value_score": 3.949
+      "actual_market_value": 150000,
+      "predicted_market_value": 714019,
+      "value_score": 4.76
     },
     {
       "player": "Billy Blacker",
@@ -253,8 +263,18 @@
       "position": "FW",
       "age": 18,
       "actual_market_value": 100000,
-      "predicted_market_value": 389621,
-      "value_score": 3.896
+      "predicted_market_value": 438606,
+      "value_score": 4.386
+    },
+    {
+      "player": "James Shea",
+      "season": "2023/24",
+      "team": "Luton",
+      "position": "GK",
+      "age": 33,
+      "actual_market_value": 200000,
+      "predicted_market_value": 809737,
+      "value_score": 4.049
     },
     {
       "player": "Gabriel Osho",
@@ -263,31 +283,21 @@
       "position": "DF",
       "age": 25,
       "actual_market_value": 3000000,
-      "predicted_market_value": 11273920,
-      "value_score": 3.758
-    },
-    {
-      "player": "Pelly Ruddock Mpanzu",
-      "season": "2023/24",
-      "team": "Luton",
-      "position": "MF",
-      "age": 30,
-      "actual_market_value": 1500000,
-      "predicted_market_value": 5415712,
-      "value_score": 3.61
-    },
-    {
-      "player": "Val Adedokun",
-      "season": "2023/24",
-      "team": "Brentford",
-      "position": "FW",
-      "age": 21,
-      "actual_market_value": 150000,
-      "predicted_market_value": 531289,
-      "value_score": 3.542
+      "predicted_market_value": 12092337,
+      "value_score": 4.031
     }
   ],
   "top20_overvalued": [
+    {
+      "player": "Giovanni Leoni",
+      "season": "2025/26",
+      "team": "Liverpool",
+      "position": "DF",
+      "age": 19,
+      "actual_market_value": 25000000,
+      "predicted_market_value": 394411,
+      "value_score": 0.016
+    },
     {
       "player": "Vitor Reis",
       "season": "2024/25",
@@ -295,48 +305,18 @@
       "position": "DF",
       "age": 19,
       "actual_market_value": 30000000,
-      "predicted_market_value": 573805,
-      "value_score": 0.019
+      "predicted_market_value": 648591,
+      "value_score": 0.022
     },
     {
-      "player": "Claudio Echeverri",
-      "season": "2024/25",
-      "team": "Man City",
+      "player": "Antoni Milambo",
+      "season": "2025/26",
+      "team": "Brentford",
       "position": "MF",
-      "age": 19,
-      "actual_market_value": 18000000,
-      "predicted_market_value": 549404,
-      "value_score": 0.031
-    },
-    {
-      "player": "Mathis Amougou",
-      "season": "2024/25",
-      "team": "Chelsea",
-      "position": "MF",
-      "age": 19,
-      "actual_market_value": 10000000,
-      "predicted_market_value": 367012,
-      "value_score": 0.037
-    },
-    {
-      "player": "Andrey Santos",
-      "season": "2023/24",
-      "team": "Chelsea",
-      "position": "MF",
-      "age": 20,
+      "age": 21,
       "actual_market_value": 15000000,
-      "predicted_market_value": 602494,
-      "value_score": 0.04
-    },
-    {
-      "player": "Chadi Riad",
-      "season": "2024/25",
-      "team": "Crystal Palace",
-      "position": "DF",
-      "age": 22,
-      "actual_market_value": 15000000,
-      "predicted_market_value": 669108,
-      "value_score": 0.045
+      "predicted_market_value": 455643,
+      "value_score": 0.03
     },
     {
       "player": "Jurri\u00ebn Timber",
@@ -345,18 +325,68 @@
       "position": "DF",
       "age": 23,
       "actual_market_value": 38000000,
-      "predicted_market_value": 1984758,
-      "value_score": 0.052
+      "predicted_market_value": 1224638,
+      "value_score": 0.032
     },
     {
-      "player": "Ben Gannon-Doak",
-      "season": "2023/24",
-      "team": "Liverpool",
+      "player": "Claudio Echeverri",
+      "season": "2024/25",
+      "team": "Man City",
       "position": "MF",
-      "age": 18,
+      "age": 19,
+      "actual_market_value": 18000000,
+      "predicted_market_value": 598841,
+      "value_score": 0.033
+    },
+    {
+      "player": "Mathis Amougou",
+      "season": "2024/25",
+      "team": "Chelsea",
+      "position": "MF",
+      "age": 19,
       "actual_market_value": 10000000,
-      "predicted_market_value": 855298,
-      "value_score": 0.086
+      "predicted_market_value": 352309,
+      "value_score": 0.035
+    },
+    {
+      "player": "Andrey Santos",
+      "season": "2023/24",
+      "team": "Chelsea",
+      "position": "MF",
+      "age": 20,
+      "actual_market_value": 15000000,
+      "predicted_market_value": 723576,
+      "value_score": 0.048
+    },
+    {
+      "player": "Chadi Riad",
+      "season": "2024/25",
+      "team": "Crystal Palace",
+      "position": "DF",
+      "age": 22,
+      "actual_market_value": 15000000,
+      "predicted_market_value": 813918,
+      "value_score": 0.054
+    },
+    {
+      "player": "Alysson",
+      "season": "2025/26",
+      "team": "Aston Villa",
+      "position": "MF",
+      "age": 20,
+      "actual_market_value": 10000000,
+      "predicted_market_value": 553085,
+      "value_score": 0.055
+    },
+    {
+      "player": "Anthony Patterson",
+      "season": "2025/26",
+      "team": "Sunderland",
+      "position": "GK",
+      "age": 26,
+      "actual_market_value": 8000000,
+      "predicted_market_value": 447392,
+      "value_score": 0.056
     },
     {
       "player": "Altay Bay\u0131nd\u0131r",
@@ -365,118 +395,48 @@
       "position": "GK",
       "age": 26,
       "actual_market_value": 10000000,
-      "predicted_market_value": 862429,
-      "value_score": 0.086
+      "predicted_market_value": 580456,
+      "value_score": 0.058
     },
     {
-      "player": "Ronnie Edwards",
-      "season": "2024/25",
-      "team": "Southampton",
-      "position": "DF",
-      "age": 22,
-      "actual_market_value": 3800000,
-      "predicted_market_value": 339701,
-      "value_score": 0.089
-    },
-    {
-      "player": "\u00c1lvaro Carreras",
-      "season": "2023/24",
-      "team": "Man United",
-      "position": "DF,MF",
-      "age": 21,
-      "actual_market_value": 7000000,
-      "predicted_market_value": 706959,
-      "value_score": 0.101
-    },
-    {
-      "player": "Ayden Heaven",
-      "season": "2024/25",
-      "team": "Arsenal",
-      "position": "DF",
-      "age": 18,
-      "actual_market_value": 5000000,
-      "predicted_market_value": 537016,
-      "value_score": 0.107
-    },
-    {
-      "player": "Ian Maatsen",
-      "season": "2023/24",
+      "player": "Mamadou Sarr",
+      "season": "2025/26",
       "team": "Chelsea",
-      "position": "MF",
-      "age": 22,
-      "actual_market_value": 40000000,
-      "predicted_market_value": 4645142,
-      "value_score": 0.116
-    },
-    {
-      "player": "Deivid Washington",
-      "season": "2023/24",
-      "team": "Chelsea",
-      "position": "FW",
-      "age": 19,
-      "actual_market_value": 9000000,
-      "predicted_market_value": 1078199,
-      "value_score": 0.12
-    },
-    {
-      "player": "Jahmai Simpson-Pusey",
-      "season": "2024/25",
-      "team": "Man City",
-      "position": "DF",
-      "age": 19,
-      "actual_market_value": 5000000,
-      "predicted_market_value": 665150,
-      "value_score": 0.133
-    },
-    {
-      "player": "Julio Soler",
-      "season": "2024/25",
-      "team": "Bournemouth",
       "position": "DF",
       "age": 20,
-      "actual_market_value": 8000000,
-      "predicted_market_value": 1066475,
-      "value_score": 0.133
+      "actual_market_value": 22000000,
+      "predicted_market_value": 1502708,
+      "value_score": 0.068
     },
     {
-      "player": "Reuell Walters",
-      "season": "2023/24",
-      "team": "Arsenal",
+      "player": "Kaye Furo",
+      "season": "2025/26",
+      "team": "Brentford",
+      "position": "FW",
+      "age": 19,
+      "actual_market_value": 8000000,
+      "predicted_market_value": 555049,
+      "value_score": 0.069
+    },
+    {
+      "player": "Diego Le\u00f3n",
+      "season": "2025/26",
+      "team": "Man United",
       "position": "DF",
       "age": 19,
       "actual_market_value": 4000000,
-      "predicted_market_value": 544886,
-      "value_score": 0.136
+      "predicted_market_value": 293930,
+      "value_score": 0.073
     },
     {
-      "player": "Leny Yoro",
-      "season": "2024/25",
-      "team": "Man United",
+      "player": "Adam Aznou",
+      "season": "2025/26",
+      "team": "Everton",
       "position": "DF",
-      "age": 19,
-      "actual_market_value": 55000000,
-      "predicted_market_value": 7520528,
-      "value_score": 0.137
-    },
-    {
-      "player": "Abdukodir Khusanov",
-      "season": "2024/25",
-      "team": "Man City",
-      "position": "DF",
-      "age": 21,
-      "actual_market_value": 35000000,
-      "predicted_market_value": 4921210,
-      "value_score": 0.141
-    },
-    {
-      "player": "H\u00e1kon Valdimarsson",
-      "season": "2023/24",
-      "team": "Brentford",
-      "position": "GK",
-      "age": 22,
-      "actual_market_value": 2500000,
-      "predicted_market_value": 360017,
-      "value_score": 0.144
+      "age": 20,
+      "actual_market_value": 6000000,
+      "predicted_market_value": 450754,
+      "value_score": 0.075
     },
     {
       "player": "Ethan Nwaneri",
@@ -485,92 +445,132 @@
       "position": "MF",
       "age": 17,
       "actual_market_value": 8000000,
-      "predicted_market_value": 1166352,
-      "value_score": 0.146
+      "predicted_market_value": 647067,
+      "value_score": 0.081
+    },
+    {
+      "player": "Ronnie Edwards",
+      "season": "2024/25",
+      "team": "Southampton",
+      "position": "DF",
+      "age": 22,
+      "actual_market_value": 3800000,
+      "predicted_market_value": 319958,
+      "value_score": 0.084
+    },
+    {
+      "player": "\u00c1lvaro Carreras",
+      "season": "2023/24",
+      "team": "Man United",
+      "position": "DF,MF",
+      "age": 21,
+      "actual_market_value": 7000000,
+      "predicted_market_value": 606466,
+      "value_score": 0.087
+    },
+    {
+      "player": "Marli Salmon",
+      "season": "2025/26",
+      "team": "Arsenal",
+      "position": "DF",
+      "age": 16,
+      "actual_market_value": 5000000,
+      "predicted_market_value": 444610,
+      "value_score": 0.089
+    },
+    {
+      "player": "Christos Mandas",
+      "season": "2025/26",
+      "team": "Bournemouth",
+      "position": "GK",
+      "age": 24,
+      "actual_market_value": 8000000,
+      "predicted_market_value": 756606,
+      "value_score": 0.095
     }
   ],
   "feature_importance_xgb_top10": [
     {
-      "feature": "n_matches",
-      "importance": 0.24282445013523102
+      "feature": "log_mv_prev",
+      "importance": 0.164861261844635
     },
     {
-      "feature": "log_mv_prev",
-      "importance": 0.1501755714416504
+      "feature": "mp",
+      "importance": 0.09565609693527222
+    },
+    {
+      "feature": "n_matches",
+      "importance": 0.07766573876142502
     },
     {
       "feature": "g_a",
-      "importance": 0.06986363977193832
+      "importance": 0.07103433459997177
     },
     {
       "feature": "90s",
-      "importance": 0.047505978494882584
+      "importance": 0.07101958245038986
     },
     {
       "feature": "consistency_mean",
-      "importance": 0.04712916538119316
-    },
-    {
-      "feature": "log_minutes",
-      "importance": 0.0324539877474308
+      "importance": 0.052579402923583984
     },
     {
       "feature": "season_start",
-      "importance": 0.032207638025283813
-    },
-    {
-      "feature": "age_used",
-      "importance": 0.027993271127343178
-    },
-    {
-      "feature": "consistency_std",
-      "importance": 0.02672630548477173
+      "importance": 0.03492356836795807
     },
     {
       "feature": "starts",
-      "importance": 0.024490926414728165
+      "importance": 0.03441397845745087
+    },
+    {
+      "feature": "consistency_std",
+      "importance": 0.029766423627734184
+    },
+    {
+      "feature": "log_minutes",
+      "importance": 0.028674932196736336
     }
   ],
   "feature_importance_rf_top10": [
     {
       "feature": "log_mv_prev",
-      "importance": 0.2800451963850874
-    },
-    {
-      "feature": "n_matches",
-      "importance": 0.06482706361735117
+      "importance": 0.27869937344910284
     },
     {
       "feature": "mp",
-      "importance": 0.061005077027692575
+      "importance": 0.06615177724662835
     },
     {
       "feature": "min",
-      "importance": 0.05335811598457339
+      "importance": 0.05681557310543828
     },
     {
-      "feature": "season_start",
-      "importance": 0.04356127708470585
+      "feature": "n_matches",
+      "importance": 0.047432134104340766
     },
     {
       "feature": "age_used",
-      "importance": 0.043191582726534464
+      "importance": 0.04260512670742859
+    },
+    {
+      "feature": "season_start",
+      "importance": 0.04192109959774918
     },
     {
       "feature": "age_sq",
-      "importance": 0.04274649940874867
-    },
-    {
-      "feature": "consistency_mean",
-      "importance": 0.03536089965789134
+      "importance": 0.040973414705050795
     },
     {
       "feature": "minutes_share",
-      "importance": 0.03369245387452003
+      "importance": 0.03698954038640647
     },
     {
       "feature": "log_minutes",
-      "importance": 0.030154524635853705
+      "importance": 0.03576686213437057
+    },
+    {
+      "feature": "consistency_mean",
+      "importance": 0.034868747219415165
     }
   ]
 }

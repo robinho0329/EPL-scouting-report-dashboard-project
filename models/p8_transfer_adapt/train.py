@@ -310,11 +310,11 @@ best_xgb_params = {**study_xgb.best_params,
                    "verbosity": 0}
 logger.info(f"Optuna best val AUC={study_xgb.best_value:.4f}, params={study_xgb.best_params}")
 
-xgb_clf = xgb.XGBClassifier(**best_xgb_params)
+# XGBoost 2.x부터 early_stopping_rounds는 fit()이 아니라 생성자 인자다.
+xgb_clf = xgb.XGBClassifier(**best_xgb_params, early_stopping_rounds=50)
 xgb_clf.fit(
     X_train_sc, y_train,
     eval_set=[(X_test_sc, y_test)],
-    early_stopping_rounds=50,
     verbose=False,
 )
 

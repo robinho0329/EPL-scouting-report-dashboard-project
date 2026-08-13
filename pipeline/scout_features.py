@@ -238,10 +238,55 @@ def build_player_profiles(pss, pml, mr, tss):
         np.nan,
     )
     df = df.merge(
-        bg[["player", "team", "season", "big_game_performance"]],
+        bg[["player", "team", "season", "big_game_performance", "big_game_ga_per90"]],
         on=["player", "team", "season"],
         how="left",
     )
+    # s2는 상위 6팀 상대 90분당 공격 기여를 비율이 아니라 절대값으로 쓴다.
+    df["big6_contribution_p90"] = df["big_game_ga_per90"]
+
+    # ── 선수 유무별 팀 승률 ──────────────────────────────────────────────
+    # "이 선수가 뛸 때 팀이 실제로 더 이기는가" — 영입 판단에서 바로 나오는 질문이다.
+    # 매치로그의 result 첫 글자(W/D/L)로 판정한다.
+    _pm = pml_copy.copy()
+    _pm["is_win"] = _pm["result"].astype(str).str.strip().str[:1].eq("W")
+
+    with_player = (
+        _pm.groupby(["player", "team", "season"])
+        .agg(win_rate_with_player=("is_win", "mean"), _apps=("is_win", "size"))
+        .reset_index()
+    )
+    # 팀-시즌 전체 경기(선수 무관) — 같은 팀 로그에서 경기 단위로 중복 제거
+    team_games = (
+        _pm.drop_duplicates(subset=["team", "season", "date"])
+        .groupby(["team", "season"])
+        .agg(_team_wins=("is_win", "sum"), _team_games=("is_win", "size"))
+        .reset_index()
+    )
+    wr = with_player.merge(team_games, on=["team", "season"], how="left")
+    _games_without = wr["_team_games"] - wr["_apps"]
+    _wins_without = wr["_team_wins"] - (wr["win_rate_with_player"] * wr["_apps"])
+    wr["win_rate_without_player"] = np.where(
+        _games_without > 0, _wins_without / _games_without, np.nan
+    )
+    df = df.merge(
+        wr[["player", "team", "season", "win_rate_with_player", "win_rate_without_player"]],
+        on=["player", "team", "season"],
+        how="left",
+    )
+
+    # ── 시즌 대비 성장률 ─────────────────────────────────────────────────
+    # 직전 시즌 대비 90분당 공격 기여 증감. market_value_momentum의 성과판이다.
+    df = df.sort_values(["player", "season"])
+    _ga90 = np.where(df["min"] > 0, df["g_a"].fillna(0) / (df["min"] / 90.0), np.nan)
+    df["_ga_p90"] = _ga90
+    df["_prev_ga_p90"] = df.groupby("player")["_ga_p90"].shift(1)
+    df["season_improvement_rate"] = np.where(
+        (df["_prev_ga_p90"] > 0) & df["_prev_ga_p90"].notna(),
+        (df["_ga_p90"] - df["_prev_ga_p90"]) / df["_prev_ga_p90"],
+        np.nan,
+    )
+    df = df.drop(columns=["_ga_p90", "_prev_ga_p90"])
 
     # ── Form Index (last 5 matches, exponential decay) ───────────────────
     def compute_form(group):
@@ -362,6 +407,28 @@ def build_player_profiles(pss, pml, mr, tss):
     # Rename basic columns for scout readability
     df.rename(columns={"height_cm": "height", "90s": "nineties"}, inplace=True)
 
+    # s2가 같은 값을 다른 이름으로 요구한다. 기존 이름을 바꾸면 다른 소비자가
+    # 깨지므로 별칭을 함께 실어 둘 다 만족시킨다.
+    for _dst, _src in (
+        ("war_rating", "war"),
+        ("consistency_score", "consistency_index"),
+        ("team_dependency_score", "team_dependency"),
+        ("value_momentum", "market_value_momentum"),
+        # FBref squad_stats의 뒤쪽 블록(_1 접미사)이 90분당 값이다.
+        # s5도 gls_p90_old를 gls_1에서 읽고 있어 대응이 확인된다.
+        ("gls_p90", "gls_1"),
+        ("ast_p90", "ast_1"),
+        ("g_a_p90", "g_a_1"),
+    ):
+        if _src in df.columns:
+            df[_dst] = df[_src]
+
+    # 출전 점유율 — 팀 전체 출전시간 중 이 선수 몫. 이적 후 입지 변화를
+    # 판정하는 기준이라 s5가 성공/실패 라벨에 직접 쓴다.
+    if "min" in df.columns:
+        _team_min = df.groupby(["team", "season"])["min"].transform("sum")
+        df["minutes_share"] = (df["min"] / _team_min.replace(0, np.nan)).fillna(0).round(5)
+
     return df
 
 
@@ -433,6 +500,29 @@ def build_team_profiles(pss, pml, tss, player_profiles):
     tf = tf.merge(depth, on=["team", "season"], how="left")
     tf["squad_depth_900plus"] = tf["squad_depth_900plus"].fillna(0).astype(int)
 
+    # 300분 이상 출전 인원 — 900분 기준은 주전만 세지만, 로테이션까지 포함한
+    # 실질 가용 인원을 봐야 이적 후 출전 기회를 가늠할 수 있다(s5가 쓴다).
+    depth300 = (
+        pss[pss["min"] >= 300]
+        .groupby(["team", "season"])["player"]
+        .nunique()
+        .reset_index(name="squad_depth_300min")
+    )
+    tf = tf.merge(depth300, on=["team", "season"], how="left")
+    tf["squad_depth_300min"] = tf["squad_depth_300min"].fillna(0).astype(int)
+
+    # 23세 이하가 스쿼드 출전 시간에서 차지하는 비중 — 유스에 기회를 주는 팀인지.
+    _young = pss[pss["age"] <= 23].groupby(["team", "season"])["min"].sum()
+    _total = pss.groupby(["team", "season"])["min"].sum()
+    youth = (_young / _total.replace(0, np.nan)).reset_index(name="youth_development_score")
+    tf = tf.merge(youth, on=["team", "season"], how="left")
+    tf["youth_development_score"] = tf["youth_development_score"].fillna(0).round(4)
+
+    # 공격 대 수비 균형 — 1보다 크면 득점이 실점보다 많은 팀.
+    tf["attack_defense_ratio"] = (
+        tf["goals_per_game"] / tf["goals_conceded_per_game"].replace(0, np.nan)
+    ).fillna(0).round(3)
+
     # ── ELO rating (simple cumulative points-based proxy) ────────────────
     tf = tf.sort_values(["team", "season"])
     tf["elo_rating"] = 1500.0  # starting
@@ -481,6 +571,17 @@ def build_team_profiles(pss, pml, tss, player_profiles):
     )
     tf = tf.merge(transfer_agg, on=["team", "season"], how="left")
     tf["num_new_signings"] = tf["num_new_signings"].fillna(0).astype(int)
+
+    # 스쿼드 회전율 — 신규 영입이 스쿼드에서 차지하는 비중.
+    tf["squad_turnover_rate"] = (
+        tf["num_new_signings"] / tf["squad_size"].replace(0, np.nan)
+    ).fillna(0).round(4)
+
+    # s5는 같은 값을 다른 이름으로 부른다. 모델 쪽 이름을 바꾸면 기존 산출물과
+    # 어긋나므로 별칭 컬럼을 함께 실어 둘 다 만족시킨다.
+    tf["squad_depth_900min"] = tf["squad_depth_900plus"]
+    tf["avg_squad_age"] = tf["avg_age"]
+    tf["new_players_count"] = tf["num_new_signings"]
 
     return tf
 

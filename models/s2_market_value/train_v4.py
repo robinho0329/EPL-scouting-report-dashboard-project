@@ -496,7 +496,9 @@ print(f"  → 최종 Undervalued: {len(undervalued_df)}명")
 # 2024/25 시즌은 리그 전반적으로 시장가치가 인상되어 1.5x 기준을 충족하는
 # 저평가 선수가 구조적으로 적음. 스카우트 실무에서는 상대적 저평가 개념을
 # 활용하여 해당 시즌 상위 백분위수 기준으로 영입 타겟을 식별함.
-scouted_2025 = scouted_df[scouted_df["season"] == "2024/25"].copy()
+# 최신 시즌을 박아두면 새 시즌 수집 후에도 타겟 목록이 옛 시즌에 머문다.
+_latest_season = sorted(scouted_df["season"].astype(str).unique())[-1]
+scouted_2025 = scouted_df[scouted_df["season"] == _latest_season].copy()
 if len(scouted_2025) > 0:
     # 2024/25 시즌 내 value_ratio 상위 15% 임계값 (동적 기준)
     # ※ 90th percentile(상위10%)은 너무 엄격하여 FW/MF 후보가 9명에 불과.

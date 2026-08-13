@@ -507,6 +507,24 @@ imp_df.to_csv(MODEL_DIR / "xgb_feature_importance.csv", index=False)
 rf_imp_df.to_csv(MODEL_DIR / "rf_feature_importance.csv", index=False)
 
 # ---------------------------------------------------------------------------
+# 대시보드용 예측 결과 저장
+# ---------------------------------------------------------------------------
+# 선수 분석 페이지가 이 파일을 읽는데 지금까지 어떤 스크립트도 만들지 않아
+# 2026-04-05에 생성된 파일이 그대로 남아 있었다. 크롤링·재학습을 해도
+# 화면은 옛 예측을 보여준다. 학습 결과를 여기서 직접 내보낸다.
+_pred_out = DATA_DIR / "scout" / "p6_market_value_predictions.parquet"
+_pred_out.parent.mkdir(parents=True, exist_ok=True)
+_pred_df = test_df[["player", "team", "pos_group", "season"]].copy()
+_pred_df["actual_market_value"] = test_df["market_value"].values
+_pred_df["predicted_market_value"] = test_df["predicted_value"].values
+_pred_df["value_diff"] = _pred_df["predicted_market_value"] - _pred_df["actual_market_value"]
+_pred_df["undervalued_ratio"] = test_df["value_score"].values
+_pred_df["undervalued"] = _pred_df["undervalued_ratio"] > 1.5
+_pred_df.to_parquet(_pred_out, index=False)
+print(f"  Saved: {_pred_out.name}  ({len(_pred_df):,}행, "
+      f"시즌 {_pred_df['season'].nunique()}개)")
+
+# ---------------------------------------------------------------------------
 # 10. Scatter plot: Predicted vs Actual
 # ---------------------------------------------------------------------------
 print("\nGenerating figures...")

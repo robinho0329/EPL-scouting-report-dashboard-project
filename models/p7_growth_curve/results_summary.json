@@ -1,236 +1,108 @@
 {
-  "model": "P7 Growth Curve (v5: v3 Stacking + v4 Features + GroupKFold OOF)",
+  "model": "P7 Growth Curve (v5.1: LinearRegression(positive=True) + Optuna 100trials + 인터랙션 피처)",
   "status": "완료",
-  "version": "v5",
-  "best_model_name": "lgbm",
+  "version": "v5.1",
+  "best_model_name": "xgb",
   "metrics": {
-    "mae": 1.1619,
-    "r2": 0.586,
+    "mae": 1.1607,
+    "r2": 0.5818,
     "train_size": 5405,
     "val_size": 245,
     "test_size": 262
   },
-  "val_test_gap": 0.055,
+  "val_test_gap": 0.0579,
   "goal_met": false,
   "stacking_metrics": {
-    "val_r2": 0.6302,
-    "test_r2": 0.5752,
-    "gap": 0.055,
+    "val_r2": 0.638,
+    "test_r2": 0.5801,
+    "gap": 0.0579,
     "cv_method": "GroupKFold(n=5, groups=season_year)"
-  },
-  "step_progression": {
-    "v2_baseline_test_r2": 0.54,
-    "v3_stacking_test_r2": 0.6089,
-    "v4_delta_test_r2": 0.5477,
-    "v5_feature_baseline_xgb_val_r2": 0.6037,
-    "v5_stacking_val_r2": 0.6302,
-    "v5_stacking_test_r2": 0.5752,
-    "v5_final_best_test_r2": 0.586
   },
   "model_comparison": {
     "ridge": {
       "val": {
-        "mae": 1.3425,
-        "r2": 0.4617
+        "mae": 1.2807,
+        "r2": 0.4994
       },
       "test": {
-        "mae": 1.4332,
-        "r2": 0.4299
+        "mae": 1.3655,
+        "r2": 0.4788
       }
     },
     "gbr": {
       "val": {
-        "mae": 1.0593,
-        "r2": 0.633
+        "mae": 1.0504,
+        "r2": 0.6369
       },
       "test": {
-        "mae": 1.1729,
-        "r2": 0.5748
+        "mae": 1.1772,
+        "r2": 0.5696
       }
     },
     "xgb": {
       "val": {
-        "mae": 1.064,
-        "r2": 0.6347
+        "mae": 1.0359,
+        "r2": 0.6467
       },
       "test": {
-        "mae": 1.1782,
-        "r2": 0.5706
+        "mae": 1.1607,
+        "r2": 0.5818
       }
     },
     "lgbm": {
       "val": {
-        "mae": 1.0615,
-        "r2": 0.6395
+        "mae": 1.0463,
+        "r2": 0.6513
       },
       "test": {
-        "mae": 1.1619,
-        "r2": 0.586
+        "mae": 1.1631,
+        "r2": 0.5785
       }
     },
     "ensemble": {
       "val": {
-        "mae": 1.0794,
-        "r2": 0.6275
+        "mae": 1.0639,
+        "r2": 0.6358
       },
       "test": {
-        "mae": 1.1852,
-        "r2": 0.5739
+        "mae": 1.1761,
+        "r2": 0.5763
       },
       "weights": {
-        "ridge": 0.1949,
-        "gbr": 0.2672,
-        "xgb": 0.2679,
-        "lgbm": 0.2699
+        "ridge": 0.2051,
+        "gbr": 0.2616,
+        "xgb": 0.2657,
+        "lgbm": 0.2676
       }
     },
     "stacking": {
       "val": {
-        "mae": 1.0705,
-        "r2": 0.6302
+        "mae": 1.053,
+        "r2": 0.638
       },
       "test": {
-        "mae": 1.1731,
-        "r2": 0.5752
+        "mae": 1.1642,
+        "r2": 0.5801
       },
       "meta_coefs": {
-        "ridge": 0.0928,
-        "gbr": 0.814,
-        "xgb": -0.157,
-        "lgbm": 0.2213
+        "ridge": 0.1698,
+        "gbr": 0.0708,
+        "xgb": 0.4255,
+        "lgbm": 0.3487
       },
-      "meta_intercept": 0.0849,
+      "meta_intercept": -0.0322,
       "cv_method": "GroupKFold(n_splits=5, groups=season_year)"
     }
   },
-  "features_used": [
-    "age_clean",
-    "age2",
-    "age_vs_peak",
-    "age_vs_peak2",
-    "age_vs_peak_abs",
-    "pos_code",
-    "career_stage_code",
-    "goals_p90",
-    "assists_p90",
-    "goal_contributions_p90",
-    "tackles_p90",
-    "interceptions_p90",
-    "minutes_share",
-    "epl_experience",
-    "market_value",
-    "ac_z",
-    "ac_z_lag1",
-    "ac_z_trend",
-    "delta_war",
-    "war_ma3",
-    "prev_season_goals_p90",
-    "prev_season_assists_p90",
-    "shots_p90",
-    "sot_p90",
-    "consistency_cv",
-    "mv_change_pct",
-    "transfer_flag",
-    "starts",
-    "goal_contribution_rate",
-    "goals_p90_lag2",
-    "assists_p90_lag2",
-    "ac_z_lag2",
-    "goals_p90_lag3",
-    "assists_p90_lag3",
-    "ac_z_lag3",
-    "attack_contribution_lag2",
-    "attack_contribution_lag3",
-    "minutes_share_lag2",
-    "minutes_share_lag3",
-    "ac_z_trend2",
-    "goals_p90_lag4",
-    "assists_p90_lag4",
-    "ac_z_lag4",
-    "attack_contribution_lag4",
-    "minutes_share_lag4",
-    "ac_z_trend3",
-    "war_ma4",
-    "age_vs_peak_lag1",
-    "gc_trend_3yr",
-    "war_ratio"
-  ],
-  "n_features": 50,
-  "feature_additions_v5_from_v3": [
-    "goals_p90_lag4",
-    "assists_p90_lag4",
-    "ac_z_lag4",
-    "attack_contribution_lag4",
-    "minutes_share_lag4",
-    "ac_z_trend3",
-    "war_ma4",
-    "age_vs_peak_lag1",
-    "gc_trend_3yr",
-    "war_ratio"
-  ],
-  "optuna_trials_per_model": 35,
-  "best_hyperparams": {
-    "gbr": {
-      "n_estimators": 636,
-      "max_depth": 4,
-      "learning_rate": 0.01294080454405871,
-      "subsample": 0.6284340069435541,
-      "min_samples_leaf": 30
-    },
-    "xgb": {
-      "n_estimators": 492,
-      "max_depth": 6,
-      "learning_rate": 0.01309430200414042,
-      "subsample": 0.7239498176573883,
-      "colsample_bytree": 0.7431112214919919,
-      "min_child_weight": 3,
-      "reg_alpha": 8.945239748571879,
-      "reg_lambda": 0.4496576076972145
-    },
-    "lgbm": {
-      "n_estimators": 482,
-      "num_leaves": 66,
-      "max_depth": 6,
-      "learning_rate": 0.015930597272664746,
-      "subsample": 0.9483188464457354,
-      "colsample_bytree": 0.8289446895776453,
-      "min_child_samples": 37,
-      "reg_alpha": 0.049024729495057616,
-      "reg_lambda": 0.20180617085797017
-    },
-    "ridge_alpha": 100.0
-  },
-  "pos_peak_ages": {
-    "FWD": 28,
-    "MID": 24,
-    "DEF": 26,
-    "GK": 30
-  },
-  "pos_decline_ages": {
-    "FWD": 29,
-    "MID": 25,
-    "DEF": 27,
-    "GK": 31
-  },
-  "legacy_v1_ridge": {
-    "r2": 0.1735,
-    "mae": 0.5955
-  },
-  "legacy_v2": {
-    "r2": 0.54,
-    "mae": 1.24
-  },
-  "legacy_v3": {
-    "r2": 0.6089,
-    "mae": 1.1312,
-    "note": "v3 스태킹 (KFold shuffle)"
-  },
-  "legacy_v4": {
-    "r2": 0.5477,
-    "mae": 1.1944,
-    "note": "v4 delta+포지션별 (성능 퇴보 확인)"
-  },
-  "scout_validation": "v5는 v3 스태킹 복원 + v4 피처 확장 + GroupKFold(n=5) 시간순 CV 결합. v4 delta 학습이 노이즈 증폭 확인 → 절대값 타겟으로 복원. test R²=0.5860, val-test 갭=0.0550. 김태현 스카우트: 'GroupKFold로 시즌 경계를 존중한 CV가 더 신뢰할 수 있는 선수 성장 예측을 만든다.'",
-  "output_file": "/home/runner/work/EPL-scouting-report-dashboard-project/EPL-scouting-report-dashboard-project/data/scout/growth_predictions.parquet",
-  "row_count": 894
+  "n_features": 56,
+  "n_trials": 100,
+  "meta_learner": "LinearRegression(positive=True)",
+  "step_progression": {
+    "v2_baseline_test_r2": 0.54,
+    "v3_stacking_test_r2": 0.6089,
+    "v4_delta_test_r2": 0.5477,
+    "v5_stacking_test_r2": 0.586,
+    "v5_1_stacking_test_r2": 0.5801,
+    "v5_1_best_test_r2": 0.5818
+  }
 }

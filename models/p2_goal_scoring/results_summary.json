@@ -4,7 +4,7 @@
   "target": "gls (시즌 총 득점 수)",
   "goal_target": "R² ≥ 0.65 / MAE ≤ 3.5골",
   "goal_met": true,
-  "best_model": "XGBoost",
+  "best_model": "LightGBM",
   "features_used": [
     "age_clean",
     "epl_experience",
@@ -23,57 +23,101 @@
   ],
   "n_features": 14,
   "splits": {
-    "train": 5843,
-    "val": 608,
-    "test": 577
+    "train": 5844,
+    "val": 630,
+    "test": 914
   },
   "metrics": {
     "lightgbm": {
       "val": {
-        "r2": 0.9131,
-        "mae": 0.7758
+        "r2": 0.9136,
+        "mae": 0.7679
       },
       "test": {
-        "r2": 0.8876,
-        "mae": 0.9546
+        "r2": 0.8789,
+        "mae": 0.908
       }
     },
     "xgboost": {
       "val": {
-        "r2": 0.9062,
-        "mae": 0.8033
+        "r2": 0.9168,
+        "mae": 0.7523
       },
       "test": {
-        "r2": 0.8877,
-        "mae": 0.9566
+        "r2": 0.8737,
+        "mae": 0.9271
       }
     }
   },
   "best_metrics": {
-    "val_r2": 0.9062,
-    "val_mae": 0.8033,
-    "test_r2": 0.8877,
-    "test_mae": 0.9566,
-    "val_test_gap_r2": 0.0185
+    "val_r2": 0.9136,
+    "val_mae": 0.7679,
+    "test_r2": 0.8789,
+    "test_mae": 0.908,
+    "val_test_gap_r2": 0.0347
   },
   "optuna_trials": 50,
   "cv_strategy": "GroupKFold(n=5, groups=season_year)",
   "min_minutes_filter": 500,
   "feature_importance_top15": {
-    "goal_contribution_rate": 0.312,
-    "prev_goals_p90": 0.198,
-    "prev_gls": 0.187,
-    "minutes_share": 0.094,
-    "prev2_gls": 0.071,
-    "market_value": 0.048,
-    "prev_assists_p90": 0.032,
-    "prev_minutes_share": 0.021,
-    "age_clean": 0.014,
-    "epl_experience": 0.011,
-    "pos_FWD": 0.006,
-    "pos_MID": 0.003,
-    "pos_DEF": 0.002,
-    "pos_GK": 0.001
+    "goal_contribution_rate": 2363,
+    "minutes_share": 1653,
+    "prev_goals_p90": 812,
+    "prev_assists_p90": 748,
+    "prev_minutes_share": 554,
+    "market_value": 501,
+    "prev2_gls": 484,
+    "pos_FWD": 313,
+    "epl_experience": 265,
+    "prev_gls": 251,
+    "age_clean": 237,
+    "pos_DEF": 108,
+    "pos_MID": 17,
+    "pos_GK": 0
   },
-  "notes": "feature_importance 값은 JSON 복구 시 추정값 (원본 truncated)"
+  "scout_validation": [
+    {
+      "player": "Mohamed Salah",
+      "season": "2024/25",
+      "actual_goals": 29,
+      "pred_goals": 27.6,
+      "abs_error": 1.4
+    },
+    {
+      "player": "Erling Haaland",
+      "season": "2024/25",
+      "actual_goals": 22,
+      "pred_goals": 18.9,
+      "abs_error": 3.1
+    },
+    {
+      "player": "Alexander Isak",
+      "season": "2024/25",
+      "actual_goals": 23,
+      "pred_goals": 22.0,
+      "abs_error": 1.0
+    },
+    {
+      "player": "Bryan Mbeumo",
+      "season": "2024/25",
+      "actual_goals": 20,
+      "pred_goals": 19.2,
+      "abs_error": 0.8
+    },
+    {
+      "player": "Ollie Watkins",
+      "season": "2023/24",
+      "actual_goals": 19,
+      "pred_goals": 24.3,
+      "abs_error": 5.3
+    },
+    {
+      "player": "Cole Palmer",
+      "season": "2023/24",
+      "actual_goals": 22,
+      "pred_goals": null,
+      "abs_error": null
+    }
+  ],
+  "output_file": "D:\\workspace\\EPL project\\data\\scout\\goal_predictions.parquet"
 }

@@ -34,6 +34,9 @@ from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+# sklearn 1.6에서 cv='prefit'이 제거됐다. 이미 학습된 추정기는
+# FrozenEstimator로 감싸 재학습 없이 보정만 걸어야 한다.
+from sklearn.frozen import FrozenEstimator
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
     classification_report, confusion_matrix,
@@ -589,7 +592,7 @@ xgb_base.fit(X_train, y_train, sample_weight=sample_weights,
              eval_set=[(X_val, y_val)], verbose=False)
 
 # Platt scaling via sigmoid calibration on validation set
-xgb_cal = CalibratedClassifierCV(xgb_base, method='sigmoid', cv='prefit')
+xgb_cal = CalibratedClassifierCV(FrozenEstimator(xgb_base), method='sigmoid')
 xgb_cal.fit(X_val, y_val)
 
 # ── Random Forest ─────────────────────────────
@@ -602,7 +605,7 @@ rf_base = RandomForestClassifier(
     n_jobs=-1,
 )
 rf_base.fit(X_train, y_train)
-rf_cal = CalibratedClassifierCV(rf_base, method='sigmoid', cv='prefit')
+rf_cal = CalibratedClassifierCV(FrozenEstimator(rf_base), method='sigmoid')
 rf_cal.fit(X_val, y_val)
 
 # ── Logistic Regression ───────────────────────
@@ -615,7 +618,7 @@ lr_base = LogisticRegression(
 )
 lr_base.fit(X_train_sc, y_train)
 # LR is already well-calibrated but apply isotonic on val for consistency
-lr_cal = CalibratedClassifierCV(lr_base, method='isotonic', cv='prefit')
+lr_cal = CalibratedClassifierCV(FrozenEstimator(lr_base), method='isotonic')
 lr_cal.fit(X_val_sc, y_val)
 
 # ── GBM ──────────────────────────────────────
@@ -627,7 +630,7 @@ gbm_base = GradientBoostingClassifier(
     random_state=42,
 )
 gbm_base.fit(X_train, y_train, sample_weight=sample_weights)
-gbm_cal = CalibratedClassifierCV(gbm_base, method='sigmoid', cv='prefit')
+gbm_cal = CalibratedClassifierCV(FrozenEstimator(gbm_base), method='sigmoid')
 gbm_cal.fit(X_val, y_val)
 
 print("  All models trained and calibrated.")

@@ -287,6 +287,15 @@ test_df[[c for c in save_cols if c in test_df.columns]].to_parquet(SCOUT_OUT, in
 joblib.dump(best_model, OUT_DIR / "model_best.pkl")
 joblib.dump({"features": FEATURE_COLS}, OUT_DIR / "meta.pkl")
 
+def _json_default(o):
+    """numpy 스칼라·배열을 json이 다룰 수 있는 파이썬 기본형으로 변환."""
+    if isinstance(o, np.generic):
+        return o.item()
+    if isinstance(o, np.ndarray):
+        return o.tolist()
+    raise TypeError(f"직렬화할 수 없는 타입: {type(o).__name__}")
+
+
 summary = {
     "task":        "P2 Season Goals Prediction v2 (LightGBM + XGBoost Optuna + GroupKFold)",
     "version":     "v2",
@@ -317,7 +326,9 @@ summary = {
 }
 
 with open(OUT_DIR / "results_summary.json", "w", encoding="utf-8") as f:
-    json.dump(summary, f, ensure_ascii=False, indent=2)
+    # numpy 스칼라(float32 등)는 json이 직렬화하지 못한다. 피처 중요도·지표가
+    # numpy에서 나오므로 파이썬 기본형으로 낮춰서 저장한다.
+    json.dump(summary, f, ensure_ascii=False, indent=2, default=_json_default)
 
 logger.info("results_summary.json 저장 완료")
 logger.info("=" * 60)

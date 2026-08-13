@@ -57,7 +57,14 @@ MODEL_DIR = Path(__file__).resolve().parent
 SCOUT_DIR.mkdir(parents=True, exist_ok=True)
 FIG_DIR.mkdir(parents=True, exist_ok=True)
 
-CURRENT_SEASON = "2024/25"
+# 시즌을 박아두면 새 시즌을 크롤링해도 산출물이 옛 시즌에 머문다.
+# 실제로 2025/26 수집 후에도 유사도 매트릭스가 2024/25까지만 나왔다.
+# config의 SEASONS 마지막 값을 기준으로 삼는다.
+_PROFILES_PATH = SCOUT_DIR / "scout_player_profiles.parquet"
+_ALL_SEASONS = sorted(
+    pd.read_parquet(_PROFILES_PATH, columns=["season"])["season"].astype(str).unique()
+)
+CURRENT_SEASON = _ALL_SEASONS[-1]
 MIN_MINUTES    = 900   # 스타일 피처 통계적 안정성 확보
 
 
@@ -397,7 +404,8 @@ def build_similarity_matrix(df: pd.DataFrame) -> pd.DataFrame:
     """
     print("\n[3/6] 포지션 내 유사도 매트릭스 생성...")
 
-    recent_seasons = {'2022/23', '2023/24', '2024/25'}
+    # 최신 3시즌 — 하드코딩 대신 CURRENT_SEASON에서 역산한다.
+    recent_seasons = set(_ALL_SEASONS[-3:])
     sim_rows = []
 
     for pos in ['FW', 'MID', 'DEF', 'GK']:
