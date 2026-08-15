@@ -1,0 +1,23 @@
+{
+  "date": "2026-08-15",
+  "results": [
+    {
+      "item": "P1 경기 결과 무승부 클래스 복구 (10회차, 요구사항 1개): 어제와 글자 단위로 동일",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P8 이적 적응 AUC 교차검증 재측정 (5회차, 요구사항 1개): `models/p8_t",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "S6 쇠퇴 감지 임계값 표 산출 (5회차, 재학습 없음, 요구사항 1개): `models/",
+      "script": "models/s6_decline/train_v4.py",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
