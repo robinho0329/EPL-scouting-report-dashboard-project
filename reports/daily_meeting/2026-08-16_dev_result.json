@@ -1,0 +1,23 @@
+{
+  "date": "2026-08-16",
+  "results": [
+    {
+      "item": "S6 쇠퇴 감지 임계값 표 산출 (6회차, 재학습 없음, 요구사항 1개): `models/",
+      "script": "models/s6_decline/train_v4.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P8 이적 적응 AUC 5-fold 재측정 (6회차, 요구사항 1개): `models/p8",
+      "script": "models/p8_transfer_adapt/train.py",
+      "success": true,
+      "error": ""
+    },
+    {
+      "item": "P1 경기 결과 무승부 클래스 복구 (11회차, 파일 존재만으로 완료 인정): `model",
+      "script": "models/p1_match_result/train_pipeline.py",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
