@@ -1360,9 +1360,13 @@ def render():
         if len(transfers) == 0:
             st.info("transfer_predictions_v3.parquet 데이터가 없습니다.")
         else:
-            recent_transfers = transfers[transfers["season_new"] == "2024/25"].copy() if "season_new" in transfers.columns else pd.DataFrame()
+            if "season_new" in transfers.columns:
+                _ls = transfers["season_new"].astype(str).max()
+                recent_transfers = transfers[transfers["season_new"].astype(str) == _ls].copy()
+            else:
+                _ls, recent_transfers = "-", pd.DataFrame()
             if recent_transfers.empty:
-                st.info("2024/25 시즌 이적 데이터가 없습니다.")
+                st.info(f"{_ls} 시즌 이적 데이터가 없습니다.")
             else:
                 # prob_failure 기준 컬러 코딩
                 def _transfer_risk_icon(prob_failure):

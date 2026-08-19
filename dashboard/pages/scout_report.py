@@ -746,7 +746,8 @@ def render():
 
         # ① 시즌
         with sel_col1:
-            seasons = sorted(ratings["season"].unique().tolist(), reverse=True) if "season" in ratings.columns else ["2024/25"]
+            seasons = (sorted(ratings["season"].astype(str).unique().tolist(), reverse=True)
+                       if "season" in ratings.columns else [])
             selected_season = st.selectbox("① 시즌 선택", seasons, key="report_season")
 
         season_ratings_dd = ratings[ratings["season"] == selected_season] if "season" in ratings.columns else ratings

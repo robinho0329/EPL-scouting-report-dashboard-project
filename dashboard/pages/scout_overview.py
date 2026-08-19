@@ -164,9 +164,9 @@ def render():
     # ── Top PIS 선수 (최신 시즌) ──
     if len(ratings):
         st.subheader("Top PIS 선수 (맞춤 필터 적용)")
-        latest = ratings[ratings["season"] == "2024/25"].copy()
-        if len(latest) == 0:
-            latest = ratings[ratings["season"] == ratings["season"].max()].copy()
+        # 최신 시즌 기준. 시즌을 박아두면 새 시즌 수집 후에도 옛 시즌이 뜬다.
+        _latest_season = ratings["season"].astype(str).max()
+        latest = ratings[ratings["season"].astype(str) == _latest_season].copy()
 
         # 맞춤 필터 연동
         if pos_filter:

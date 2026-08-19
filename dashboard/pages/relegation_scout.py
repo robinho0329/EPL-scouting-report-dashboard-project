@@ -59,11 +59,12 @@ def render():
         st.error("선수 평가 데이터(scout_ratings_v3.parquet)를 불러올 수 없습니다.")
         return
 
-    # 2024/25 시즌 필터링 (없으면 최신 시즌)
+    # 최신 시즌을 쓴다. 예전에는 "2024/25"를 박아둬서 새 시즌을 수집해도
+    # 이 페이지만 옛 시즌에 머물렀다.
     if "season" in ratings.columns:
-        available_seasons = sorted(ratings["season"].unique(), reverse=True)
-        target_season = "2024/25" if "2024/25" in available_seasons else available_seasons[0]
-        season_data = ratings[ratings["season"] == target_season].copy()
+        available_seasons = sorted(ratings["season"].astype(str).unique(), reverse=True)
+        target_season = available_seasons[0]
+        season_data = ratings[ratings["season"].astype(str) == target_season].copy()
     else:
         season_data = ratings.copy()
         target_season = "전체"
